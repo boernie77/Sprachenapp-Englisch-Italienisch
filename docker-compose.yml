@@ -5,7 +5,7 @@ services:
     build: ./server
     restart: always
     ports:
-      - "${APP_PORT:-9010}:3001"
+      - "${APP_PORT:-9011}:3001"
     environment:
       - DATABASE_URL=postgres://appuser:${DB_PASSWORD:-dbpass_test}@db:5432/${DB_NAME:-sprachen_db_test}
       - JWT_SECRET=${JWT_SECRET:-#!Alex2019_TEST_ONLY}
