@@ -29,7 +29,7 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD:-dbpass_test}
       - POSTGRES_DB=${DB_NAME:-sprachen_db_test}
     ports:
-      - "${DB_PORT:-5435}:5432"
+      - "${DB_PORT:-5436}:5432"
     volumes:
       - sprachen_db_data:/var/lib/postgresql/data
 
