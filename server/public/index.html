@@ -7652,7 +7652,7 @@
             }
 
             const forms = typ.toLowerCase().includes('verb') ? generateVerbForms(itWord) : {};
-            const payload = { de: deWord, it: itWord, typ, emoji, grammatica, ...forms };
+            const payload = { de: deWord, it: itWord, typ, emoji, grammatica, language: CURRENT_LANG, ...forms };
 
             const clearFields = () => {
                 vocabInput.value = '';
@@ -7699,6 +7699,9 @@
         // --- Admin Dashboard Script ---
         const adminModal = document.getElementById('adminModal');
         const adminUserList = document.getElementById('adminUserList');
+        const openAdminDashboardBtn = document.getElementById('openAdminDashboardBtn');
+        const closeAdminModalBtn = document.getElementById('closeAdminModalBtn');
+        
         setupModal(
             adminModal,
             openAdminDashboardBtn,

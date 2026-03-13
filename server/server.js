@@ -121,6 +121,7 @@ app.post('/api/auth/login', async (req, res) => {
     await user.save();
 
     const token = jwt.sign({ id: user.id, email: user.email, isAdmin: user.isAdmin }, JWT_SECRET, { expiresIn: '24h' });
+    if (user.isAdmin) console.log(`[AUTH] Admin login: ${user.email}`);
     res.json({ token, isAdmin: user.isAdmin, name: user.name, dailyActivity: user.dailyActivity || {} });
   } else {
     res.status(401).json({ error: 'Invalid credentials' });
@@ -295,7 +296,8 @@ app.get('/api/vocab', authenticateToken, asyncHandler(async (req, res) => {
 
 app.post('/api/vocab', authenticateToken, asyncHandler(async (req, res) => {
     const { de, it, typ, emoji, grammatica, isActive, isMarked, language } = req.body;
-    const vocab = await Vocabulary.create({ de, it, typ, emoji, grammatica, isActive: isActive !== false, isMarked: isMarked === true, language: language || 'it', UserId: req.user.id });
+    const finalLang = language || req.query.language || 'it';
+    const vocab = await Vocabulary.create({ de, it, typ, emoji, grammatica, isActive: isActive !== false, isMarked: isMarked === true, language: finalLang, UserId: req.user.id });
     const stats = await Stats.create({ VocabularyId: vocab.id });
     res.status(201).json({ ...vocab.toJSON(), Stat: stats });
 }));
@@ -309,7 +311,7 @@ app.post('/api/vocab/bulk', authenticateToken, asyncHandler(async (req, res) => 
         de, it, typ, emoji, grammatica, 
         isActive: isActive !== false, 
         isMarked: isMarked === true, 
-        language: language || word.language || 'it',
+        language: language || req.body.language || req.query.language || word.language || 'it',
         UserId: req.user.id 
       });
       const stats = await Stats.create({ VocabularyId: vocab.id });
