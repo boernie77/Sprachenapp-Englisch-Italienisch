@@ -282,26 +282,36 @@ app.post('/api/contact', authenticateToken, upload.single('attachment'), asyncHa
 
 // Vocabulary Routes
 app.get('/api/vocab', authenticateToken, asyncHandler(async (req, res) => {
+  const { language } = req.query;
+  const where = { UserId: req.user.id };
+  if (language) where.language = language;
+  
   const vocab = await Vocabulary.findAll({
-    where: { UserId: req.user.id },
+    where,
     include: [{ model: Stats }]
   });
   res.json(vocab);
 }));
 
 app.post('/api/vocab', authenticateToken, asyncHandler(async (req, res) => {
-    const { de, it, typ, emoji, grammatica, isActive, isMarked } = req.body;
-    const vocab = await Vocabulary.create({ de, it, typ, emoji, grammatica, isActive: isActive !== false, isMarked: isMarked === true, UserId: req.user.id });
+    const { de, it, typ, emoji, grammatica, isActive, isMarked, language } = req.body;
+    const vocab = await Vocabulary.create({ de, it, typ, emoji, grammatica, isActive: isActive !== false, isMarked: isMarked === true, language: language || 'it', UserId: req.user.id });
     const stats = await Stats.create({ VocabularyId: vocab.id });
     res.status(201).json({ ...vocab.toJSON(), Stat: stats });
 }));
 
 app.post('/api/vocab/bulk', authenticateToken, asyncHandler(async (req, res) => {
-    const { words } = req.body;
+    const { words, language } = req.body;
     const createdWords = [];
     for (const word of words) {
       const { de, it, typ, emoji, grammatica, isActive, isMarked } = word;
-      const vocab = await Vocabulary.create({ de, it, typ, emoji, grammatica, isActive: isActive !== false, isMarked: isMarked === true, UserId: req.user.id });
+      const vocab = await Vocabulary.create({ 
+        de, it, typ, emoji, grammatica, 
+        isActive: isActive !== false, 
+        isMarked: isMarked === true, 
+        language: language || word.language || 'it',
+        UserId: req.user.id 
+      });
       const stats = await Stats.create({ VocabularyId: vocab.id });
       createdWords.push({ ...vocab.toJSON(), Stat: stats });
     }
@@ -336,8 +346,11 @@ app.delete('/api/vocab/:id', authenticateToken, asyncHandler(async (req, res) =>
 }));
 
 app.delete('/api/vocab/clear/all', authenticateToken, asyncHandler(async (req, res) => {
-    await Vocabulary.destroy({ where: { UserId: req.user.id } });
-    res.json({ message: 'All vocabulary cleared' });
+    const { language } = req.query;
+    const where = { UserId: req.user.id };
+    if (language) where.language = language;
+    await Vocabulary.destroy({ where });
+    res.json({ message: `Vocabulary cleared${language ? ' for ' + language : ''}` });
 }));
 
 app.put('/api/vocab/stats/reset', authenticateToken, asyncHandler(async (req, res) => {
@@ -437,13 +450,21 @@ app.get('/api/admin/users', authenticateToken, requireAdmin, async (req, res) =>
       const u = user.toJSON();
       let lastActivity = user.lastLogin;
       const vocabWithStats = u.Vocabularies || [];
-      const totalVocab = vocabWithStats.length;
-      let learnedVocab = 0;
+      
+      const stats = {
+          it: { total: 0, learned: 0 },
+          en: { total: 0, learned: 0 }
+      };
       
       vocabWithStats.forEach(v => {
+          const lang = v.language || 'it';
+          if (!stats[lang]) stats[lang] = { total: 0, learned: 0 };
+          
+          stats[lang].total++;
+          
           const stat = v.Stat || v.Statistic || v.Stats || v.Statistics;
           if (stat) {
-              if (stat.correct > 0) learnedVocab++;
+              if (stat.correct > 0) stats[lang].learned++;
               if (stat.lastReviewedDate) {
                   const reviewDate = new Date(stat.lastReviewedDate);
                   if (!lastActivity || reviewDate > new Date(lastActivity)) {
@@ -454,7 +475,7 @@ app.get('/api/admin/users', authenticateToken, requireAdmin, async (req, res) =>
       });
 
       delete u.Vocabularies;
-      return { ...u, totalVocab, learnedVocab, lastActivity };
+      return { ...u, stats, lastActivity };
     });
 
     res.json(usersData);
@@ -506,9 +527,17 @@ app.put('/api/admin/users/:id/password', authenticateToken, requireAdmin, async 
 });
 
 app.post('/api/admin/base-vocab/bulk', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
+    const { words, language } = req.body;
+    if (!language) return res.status(400).json({ error: 'Language required' });
+    
     const transaction = await sequelize.transaction();
     try {
-        await handleBulkUpload(BaseVocabulary, req.body.words, res, transaction);
+        // Only clear vocab for the specific language
+        await BaseVocabulary.destroy({ where: { language }, transaction });
+        const data = words.map(w => ({ ...w, language }));
+        const created = await BaseVocabulary.bulkCreate(data, { transaction });
+        await transaction.commit();
+        res.json(created);
     } catch (error) {
         await transaction.rollback();
         throw error;
@@ -516,9 +545,16 @@ app.post('/api/admin/base-vocab/bulk', authenticateToken, requireAdmin, asyncHan
 }));
 
 app.post('/api/admin/grammar-sentences/bulk', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
+    const { sentences, language } = req.body;
+    if (!language) return res.status(400).json({ error: 'Language required' });
+
     const transaction = await sequelize.transaction();
     try {
-        await handleBulkUpload(GrammarSentence, req.body.sentences, res, transaction);
+        await GrammarSentence.destroy({ where: { language }, transaction });
+        const data = sentences.map(s => ({ ...s, language }));
+        const created = await GrammarSentence.bulkCreate(data, { transaction });
+        await transaction.commit();
+        res.json(created);
     } catch (error) {
         await transaction.rollback();
         throw error;
@@ -526,12 +562,18 @@ app.post('/api/admin/grammar-sentences/bulk', authenticateToken, requireAdmin, a
 }));
 
 app.get('/api/grammar-sentences', authenticateToken, asyncHandler(async (req, res) => {
-    const sentences = await GrammarSentence.findAll();
+    const { language } = req.query;
+    const where = {};
+    if (language) where.language = language;
+    const sentences = await GrammarSentence.findAll({ where });
     res.json(sentences);
 }));
 
 app.get('/api/base-vocab', authenticateToken, asyncHandler(async (req, res) => {
-    const baseVocab = await BaseVocabulary.findAll();
+    const { language } = req.query;
+    const where = {};
+    if (language) where.language = language;
+    const baseVocab = await BaseVocabulary.findAll({ where });
     res.json(baseVocab);
 }));
 

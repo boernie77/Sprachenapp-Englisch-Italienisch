@@ -5,9 +5,9 @@ services:
     build: ./server
     restart: always
     ports:
-      - "${APP_PORT:-9009}:3001"
+      - "${APP_PORT:-9010}:3001"
     environment:
-      - DATABASE_URL=postgres://appuser:${DB_PASSWORD:-dbpass_test}@db:5432/${DB_NAME:-italian_db_test}
+      - DATABASE_URL=postgres://appuser:${DB_PASSWORD:-dbpass_test}@db:5432/${DB_NAME:-sprachen_db_test}
       - JWT_SECRET=${JWT_SECRET:-#!Alex2019_TEST_ONLY}
       - NODE_ENV=production
       # --- E-Mail (SMTP) Einstellungen via GMX ---
@@ -27,13 +27,13 @@ services:
     environment:
       - POSTGRES_USER=appuser
       - POSTGRES_PASSWORD=${DB_PASSWORD:-dbpass_test}
-      - POSTGRES_DB=${DB_NAME:-italian_db_test}
+      - POSTGRES_DB=${DB_NAME:-sprachen_db_test}
     ports:
-      - "${DB_PORT:-5434}:5432"
+      - "${DB_PORT:-5435}:5432"
     volumes:
       - db_volume:/var/lib/postgresql/data
 
 volumes:
   db_volume:
     external: true
-    name: ${DB_VOLUME:-postgres_data}
+    name: ${DB_VOLUME:-postgres_data_test}

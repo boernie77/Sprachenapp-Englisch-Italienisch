@@ -52,17 +52,22 @@ const User = sequelize.define('User', {
   lastResetAt: {
     type: DataTypes.DATE,
     allowNull: true
+  },
+  selectedLanguage: {
+    type: DataTypes.STRING,
+    defaultValue: 'it'
   }
 });
 
 const Vocabulary = sequelize.define('Vocabulary', {
   de: { type: DataTypes.STRING, allowNull: false },
-  it: { type: DataTypes.STRING, allowNull: false },
+  it: { type: DataTypes.STRING, allowNull: false }, // Will be used for EN as well or treated as 'foreign'
   typ: { type: DataTypes.STRING },
   emoji: { type: DataTypes.STRING },
   grammatica: { type: DataTypes.STRING, allowNull: true },
   isActive: { type: DataTypes.BOOLEAN, defaultValue: true },
-  isMarked: { type: DataTypes.BOOLEAN, defaultValue: false }
+  isMarked: { type: DataTypes.BOOLEAN, defaultValue: false },
+  language: { type: DataTypes.STRING, defaultValue: 'it' }
 });
 
 const Stats = sequelize.define('Stats', {
@@ -79,13 +84,15 @@ const BaseVocabulary = sequelize.define('BaseVocabulary', {
   it: { type: DataTypes.STRING, allowNull: false },
   typ: { type: DataTypes.STRING },
   emoji: { type: DataTypes.STRING },
-  grammatica: { type: DataTypes.STRING, allowNull: true }
+  grammatica: { type: DataTypes.STRING, allowNull: true },
+  language: { type: DataTypes.STRING, defaultValue: 'it' }
 });
 
 const GrammarSentence = sequelize.define('GrammarSentence', {
   it: { type: DataTypes.STRING, allowNull: false },
   de: { type: DataTypes.STRING, allowNull: false },
-  category: { type: DataTypes.STRING, allowNull: true }
+  category: { type: DataTypes.STRING, allowNull: true },
+  language: { type: DataTypes.STRING, defaultValue: 'it' }
 });
 
 const InviteCode = sequelize.define('InviteCode', {

@@ -1306,11 +1306,21 @@
         </div>
     </div>
 
-    <!-- User Name Display -->
+    <!-- User Name Display & Language Switcher -->
     <div id="userDisplay"
-        class="hidden absolute top-2 left-2 md:top-4 md:left-4 z-50 flex items-center gap-2 bg-white px-5 py-2.5 rounded-2xl shadow-lg border border-slate-200">
-        <span class="text-green-600 font-bold text-xl md:text-2xl">Ciao,</span>
-        <span id="userName" class="font-extrabold text-slate-800 text-xl md:text-2xl">Gast</span>
+        class="hidden absolute top-2 left-2 md:top-4 md:left-4 z-50 flex items-center gap-4 bg-white px-5 py-2.5 rounded-2xl shadow-lg border border-slate-200">
+        <div class="flex items-center gap-2">
+            <span id="welcomePrefix" class="text-green-600 font-bold text-xl md:text-2xl">Ciao,</span>
+            <span id="userName" class="font-extrabold text-slate-800 text-xl md:text-2xl">Gast</span>
+        </div>
+        <div class="flex items-center gap-2 pl-4 border-l border-slate-100" id="langSwitcher">
+            <button id="langItBtn" class="opacity-100 transition-all hover:scale-110 active:scale-95 grayscale-0" title="Italienisch">
+                <svg class="w-7 h-7 rounded shadow-sm" viewBox="0 0 3 2"><rect width="3" height="2" fill="#ed2939"/><rect width="2" height="2" fill="#fff"/><rect width="1" height="2" fill="#009246"/></svg>
+            </button>
+            <button id="langEnBtn" class="opacity-50 transition-all hover:scale-110 active:scale-95 grayscale" title="English">
+                <svg class="w-7 h-7 rounded shadow-sm" viewBox="0 0 60 30"><clipPath id="s_sw"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="t_sw"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#s_sw)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4" clip-path="url(#t_sw)"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg>
+            </button>
+        </div>
     </div>
 
     <!-- Onboarding Modal -->
@@ -2905,7 +2915,7 @@
 
             <!-- Tab Content: Users -->
             <div id="adminUserTabContent" class="flex flex-col flex-1 min-h-0">
-                <div class="grid grid-cols-3 gap-2 mb-4 shrink-0">
+                <div class="grid grid-cols-2 gap-2 mb-4 shrink-0">
                     <div class="bg-blue-50 rounded-xl p-3 text-center border border-blue-100">
                         <p class="text-[10px] text-blue-500 font-bold uppercase tracking-wide">Nutzer</p>
                         <p id="kpiTotalUsers" class="text-lg font-black text-blue-800">-</p>
@@ -2914,9 +2924,16 @@
                         <p class="text-[10px] text-purple-500 font-bold uppercase tracking-wide">Offene Codes</p>
                         <p id="kpiOpenInviteCodes" class="text-lg font-black text-purple-800">-</p>
                     </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-2 mb-4 shrink-0">
+                    <div class="bg-emerald-50 rounded-xl p-3 text-center border border-emerald-100">
+                        <p class="text-[10px] text-emerald-600 font-bold uppercase tracking-wide">Gelernt (IT)</p>
+                        <p id="kpiLearnedVocabIt" class="text-lg font-black text-emerald-800">-</p>
+                    </div>
                     <div class="bg-amber-50 rounded-xl p-3 text-center border border-amber-100">
-                        <p class="text-[10px] text-amber-600 font-bold uppercase tracking-wide">Gelernt</p>
-                        <p id="kpiLearnedVocab" class="text-lg font-black text-amber-800">-</p>
+                        <p class="text-[10px] text-amber-600 font-bold uppercase tracking-wide">Gelernt (EN)</p>
+                        <p id="kpiLearnedVocabEn" class="text-lg font-black text-amber-800">-</p>
                     </div>
                 </div>
 
@@ -2925,50 +2942,89 @@
                 </div>
             </div>
 
-            <!-- Tab Content: Excel Lists -->
-            <div id="adminExcelTabContent" class="hidden flex flex-col flex-1 min-h-0 overflow-y-auto pr-2">
                 <!-- Global Base Vocabulary Management -->
                 <div class="mb-6 p-4 bg-slate-50 rounded-2xl border border-slate-100">
                     <h3 class="text-sm font-bold text-slate-700 mb-3 flex items-center justify-between">
                         <span>📚 Basis-Vokabeln verwalten</span>
-                        <span id="adminBaseVocabCount" class="text-[10px] font-normal text-slate-400">Lädt...</span>
                     </h3>
-                    <div class="flex gap-2">
-                        <input type="file" id="adminBaseVocabUpload" class="hidden" accept=".xlsx">
-                        <button id="adminBaseVocabBtn"
-                            class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl text-sm transition-all shadow-md active:scale-95 flex items-center justify-center gap-2">
-                            📥 Basis-Liste laden (Excel)
-                        </button>
-                        <button id="adminBaseVocabDownloadBtn"
-                            class="w-12 bg-white hover:bg-slate-50 text-slate-600 rounded-xl flex items-center justify-center border border-slate-200"
-                            title="Aktuelle Basis-Liste exportieren">
-                            📤
-                        </button>
+                    
+                    <div class="space-y-4">
+                        <!-- Italienisch -->
+                        <div class="p-3 bg-white rounded-xl border border-slate-200">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs font-bold text-slate-600">Italienisch</span>
+                                <span id="adminBaseVocabCountIt" class="text-[10px] text-slate-400">- Vokabeln</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <input type="file" id="adminBaseVocabUploadIt" class="hidden" accept=".xlsx" onchange="uploadBaseVocab('it')">
+                                <button onclick="document.getElementById('adminBaseVocabUploadIt').click()"
+                                    class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded-lg text-xs transition-all shadow-sm">
+                                    📥 Italienisch laden
+                                </button>
+                                <button onclick="downloadBaseVocab('it')"
+                                    class="w-10 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg flex items-center justify-center border border-slate-200"
+                                    title="Italienisch Liste exportieren">
+                                    📤
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Englisch -->
+                        <div class="p-3 bg-white rounded-xl border border-slate-200">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs font-bold text-slate-600">Englisch</span>
+                                <span id="adminBaseVocabCountEn" class="text-[10px] text-slate-400">- Vokabeln</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <input type="file" id="adminBaseVocabUploadEn" class="hidden" accept=".xlsx" onchange="uploadBaseVocab('en')">
+                                <button onclick="document.getElementById('adminBaseVocabUploadEn').click()"
+                                    class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg text-xs transition-all shadow-sm">
+                                    📥 Englisch laden
+                                </button>
+                                <button onclick="downloadBaseVocab('en')"
+                                    class="w-10 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg flex items-center justify-center border border-slate-200"
+                                    title="Englisch Liste exportieren">
+                                    📤
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <p class="text-[10px] text-slate-400 mt-2 text-center italic">Das Hochladen ersetzt die aktuelle
-                        globale Basisliste.</p>
                 </div>
 
                 <!-- Grammar Sentence Management -->
                 <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
                     <h3 class="text-sm font-bold text-slate-700 mb-3 flex items-center justify-between">
                         <span>📝 Grammatik-Sätze verwalten</span>
-                        <span id="adminGrammarCount" class="text-[10px] font-normal text-slate-400">Lädt...</span>
                     </h3>
-                    <div class="flex gap-2">
-                        <input type="file" id="adminGrammarUpload" class="hidden" accept=".xlsx">
-                        <button id="adminGrammarBtn"
-                            class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2.5 px-4 rounded-xl text-sm transition-all shadow-md active:scale-95 flex items-center justify-center gap-2">
-                            📥 Grammatik-Liste laden (Excel)
-                        </button>
-                        <button id="adminGrammarDownloadBtn"
-                            class="w-12 bg-white hover:bg-slate-50 text-slate-600 rounded-xl flex items-center justify-center border border-slate-200"
-                            title="Aktuelle Grammatik-Liste exportieren">
-                            📤
-                        </button>
+                    <div class="space-y-4">
+                        <!-- Italienisch (Grammar) -->
+                        <div class="p-3 bg-white rounded-xl border border-slate-200">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs font-bold text-slate-600">Italienisch</span>
+                                <span id="adminGrammarCountIt" class="text-[10px] text-slate-400">- Sätze</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <input type="file" id="adminGrammarUploadIt" class="hidden" accept=".xlsx" onchange="uploadGrammar('it')">
+                                <button onclick="document.getElementById('adminGrammarUploadIt').click()"
+                                    class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-lg text-xs transition-all shadow-sm">
+                                    📥 Grammatik laden (IT)
+                                </button>
+                                <button onclick="downloadGrammar('it')"
+                                    class="w-10 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg flex items-center justify-center border border-slate-200"
+                                    title="Grammatik Liste exportieren">
+                                    📤
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Englisch (Grammar - Placeholder) -->
+                        <div class="p-3 bg-white rounded-xl border border-slate-200 opacity-60">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs font-bold text-slate-600">Englisch (Demnächst)</span>
+                                <span class="text-[10px] text-slate-400">- Sätze</span>
+                            </div>
+                        </div>
                     </div>
-                    <p class="text-[10px] text-slate-400 mt-2 text-center italic">Verwende Spalten: Italienisch (A),
-                        Deutsch (B), Kategorie (C).</p>
                 </div>
             </div>
 
@@ -3418,6 +3474,7 @@
 
         // SVG Icons instead of Emojis to prevent rendering issues on mobile
         const itFlagSVG = `<svg class="w-5 h-5 inline-block align-middle mr-1 rounded-sm shadow-sm" style="margin-top:-2px" viewBox="0 0 3 2"><rect width="3" height="2" fill="#ed2939"/><rect width="2" height="2" fill="#fff"/><rect width="1" height="2" fill="#009246"/></svg>`;
+        const gbFlagSVG = `<svg class="w-5 h-5 inline-block align-middle mr-1 rounded-sm shadow-sm" style="margin-top:-2px" viewBox="0 0 60 30"><clipPath id="s"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="t"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#s)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4" clip-path="url(#t)"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg>`;
         const deFlagSVG = `<svg class="w-5 h-5 inline-block align-middle mr-1 rounded-sm shadow-sm" style="margin-top:-2px" viewBox="0 0 5 3"><rect width="5" height="3" fill="#ffce00"/><rect width="5" height="2" fill="#d00"/><rect width="5" height="1" fill="#000"/></svg>`;
         const arrowSVG = `<svg class="w-4 h-4 inline-block mx-1 align-middle opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>`;
         const checkSVG = `<svg class="w-5 h-5 inline-block mr-1" fill="none" stroke="#10b981" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>`;
@@ -3454,100 +3511,159 @@
         let API_TOKEN = localStorage.getItem('ita-token');
         let IS_ADMIN = localStorage.getItem('ita-admin') === 'true';
         let CURRENT_USER_NAME = localStorage.getItem('ita-user-name');
+        let CURRENT_LANG = localStorage.getItem('ita-lang') || 'it';
+
+        const translations = {
+            it: {
+                welcome: "Benvenuto!",
+                learn: "Italienisch Lernen",
+                header: "Italienisch Lernen",
+                grammar: "Grammatica Italiana",
+                vocabList: "Vollständige Vokabelliste",
+                addVocab: "Vokabel hinzufügen",
+                direction: "Italienisch",
+                welcomePrefix: "Ciao,",
+                statsTitle: "Lern-Statistik"
+            },
+            en: {
+                welcome: "Welcome!",
+                learn: "Englisch Lernen",
+                header: "Englisch Lernen",
+                grammar: "English Grammar",
+                vocabList: "Complete Vocabulary List",
+                addVocab: "Add Vocabulary",
+                direction: "Englisch",
+                welcomePrefix: "Hello,",
+                statsTitle: "Learning Statistics"
+            }
+        };
+
         let fullDictionary = [];
         let wordStats = {};
 
-        // Initalize Labels with SVGs to fix "?" rendering issues
-        window.addEventListener('DOMContentLoaded', () => {
+        function renderAllLabels() {
+            const t = translations[CURRENT_LANG];
+            const currentFlag = CURRENT_LANG === 'it' ? itFlagSVG : gbFlagSVG;
+            const langName = translations[CURRENT_LANG].direction;
+
             const dLabel = document.getElementById('directionFilterLabel');
-            if (dLabel) dLabel.innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${itFlagSVG} Italienisch`;
+            if (dLabel) dLabel.innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${currentFlag} ${langName}`;
 
             const dOptions = document.getElementById('directionFilterList').querySelectorAll('.cs-opt');
             if (dOptions.length >= 2) {
-                dOptions[0].innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${itFlagSVG} Italienisch`;
-                dOptions[1].innerHTML = `${itFlagSVG} Italienisch ${arrowSVG} ${deFlagSVG} Deutsch`;
+                dOptions[0].innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${currentFlag} ${langName}`;
+                dOptions[1].innerHTML = `${currentFlag} ${langName} ${arrowSVG} ${deFlagSVG} Deutsch`;
             }
 
-            // Vocab List Modal Icons
             const vTitle = document.getElementById('vocabListModalTitle');
-            if (vTitle) vTitle.innerHTML = `${listSVG} Vollständige Vokabelliste`;
+            if (vTitle) vTitle.innerHTML = `${listSVG} ${t.vocabList}`;
 
             const vSortLabel = document.getElementById('vocabListSortDirLabel');
-            if (vSortLabel) vSortLabel.innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${itFlagSVG} Italienisch`;
+            if (vSortLabel) vSortLabel.innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${currentFlag} ${langName}`;
 
             const vSortDeOpt = document.getElementById('vocabListSortDeOpt');
-            if (vSortDeOpt) vSortDeOpt.innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${itFlagSVG} Italienisch`;
+            if (vSortDeOpt) vSortDeOpt.innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${currentFlag} ${langName}`;
 
             const vSortItOpt = document.getElementById('vocabListSortItOpt');
-            if (vSortItOpt) vSortItOpt.innerHTML = `${itFlagSVG} Italienisch ${arrowSVG} ${deFlagSVG} Deutsch`;
+            if (vSortItOpt) vSortItOpt.innerHTML = `${currentFlag} ${langName} ${arrowSVG} ${deFlagSVG} Deutsch`;
 
-            // Welcome screen
             const wTitle = document.getElementById('welcomeTitle');
-            if (wTitle) wTitle.innerHTML = `Benvenuto! ${itFlagSVG}`;
+            if (wTitle) wTitle.innerHTML = `${t.welcome} ${currentFlag}`;
 
-            // DragDrop Headers
             const drHeader = document.getElementById('dragColHeader');
             const dpHeader = document.getElementById('dropColHeader');
             if (drHeader) drHeader.innerHTML = `${deFlagSVG} Deutsch (Ziehen)`;
-            if (dpHeader) dpHeader.innerHTML = `${itFlagSVG} Italienisch (Ablegen)`;
+            if (dpHeader) dpHeader.innerHTML = `${currentFlag} ${langName} (Ablegen)`;
 
-            // Common labels
-            document.querySelectorAll('.vocab-btn-arrow').forEach(el => el.innerHTML = arrowSVG);
-
-            // Header
             const appHeader = document.querySelector('header h1');
-            if (appHeader) appHeader.innerHTML = `${itFlagSVG} Italienisch Lernen`;
+            if (appHeader) appHeader.innerHTML = `${currentFlag} ${t.header}`;
 
-            // Grammar Header
             const gHeader = document.querySelector('#grammarSection h2');
-            if (gHeader) gHeader.innerHTML = `${itFlagSVG} Grammatica Italiana`;
+            if (gHeader) gHeader.innerHTML = `${currentFlag} ${t.grammar}`;
+            
+            const wPrefix = document.getElementById('welcomePrefix');
+            if (wPrefix) wPrefix.innerText = t.welcomePrefix;
 
-            // Button cleanup
-            const qNext = document.getElementById('quizNextBtn');
-            if (qNext) qNext.innerHTML = `Neues Wort spielen ${arrowSVG}`;
+            // Mode buttons
+            const gBtn = document.getElementById('modeGrammarBtn');
+            const iBtn = document.getElementById('modeInfoBtn');
+            if (CURRENT_LANG === 'en') {
+                if (gBtn) gBtn.classList.add('hidden');
+                if (iBtn) iBtn.classList.add('hidden');
+                // If current mode is one of these, switch back to dragdrop
+                if (currentMode === 'grammar' || currentMode === 'info') switchMode('dragdrop');
+            } else {
+                if (gBtn) gBtn.classList.remove('hidden');
+                if (iBtn) iBtn.classList.remove('hidden');
+            }
 
-            const nBtn = document.getElementById('nextBtn');
-            if (nBtn) nBtn.innerHTML = `Nächste Runde ${arrowSVG}`;
+            // Sync Flag Switcher Opacity
+            const itBtn = document.getElementById('langItBtn');
+            const enBtn = document.getElementById('langEnBtn');
+            if (itBtn && enBtn) {
+                itBtn.style.opacity = CURRENT_LANG === 'it' ? '1' : '0.5';
+                itBtn.style.filter = CURRENT_LANG === 'it' ? 'grayscale(0)' : 'grayscale(1)';
+                enBtn.style.opacity = CURRENT_LANG === 'en' ? '1' : '0.5';
+                enBtn.style.filter = CURRENT_LANG === 'en' ? 'grayscale(0)' : 'grayscale(1)';
+            }
 
-            // Final sweep of all IDs
+            // Other dynamic IDs
             const setIc = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
             setIc('onboardingVocabTitle', `Vokabeln eintragen! ${booksSVG}`);
             setIc('choiceAddIcon', pencilSVG);
             setIc('onboardingSuccessFire', fireSVG);
             setIc('onboardingRocketIcon', rocketSVG);
-            setIc('appHeaderIcon', itFlagSVG);
+            setIc('appHeaderIcon', currentFlag);
             setIc('grammarBulbIcon', bulbSVG);
             setIc('successSparkleIcon', sparkleSVG);
             setIc('infoBulbIcon', bulbSVG);
-            setIc('grammarHeaderIcon', itFlagSVG);
+            setIc('grammarHeaderIcon', currentFlag);
             setIc('grammarFireIcon', fireSVG);
             setIc('grammarWarningIcon', warningSVG);
             setIc('vocabAutoSparkle', sparkleSVG);
             setIc('vocabWarningIcon', warningSVG);
-
-            // Modal Headers (those not yet handled)
-            setIc('statsModalTitle', `${chartSVG} Lern-Statistik`);
+            setIc('statsModalTitle', `${chartSVG} ${t.statsTitle}`);
             setIc('excelModalTitle', `${folderSVG} Excel-Liste verwalten`);
-            setIc('vocabModalTitle', `${pencilSVG} Vokabel hinzufügen`);
-
-            // Excel Icons
+            setIc('vocabModalTitle', `${pencilSVG} ${t.addVocab}`);
             setIc('excelImportIcon', importSVG);
             setIc('excelExportIcon', exportSVG);
             setIc('excelTrashIcon', trashSVG);
             setIc('excelBooksIcon', booksSVG);
             setIc('excelBulbFormat', bulbSVG);
-
             setIc('vocabLangDeBtn', `${deFlagSVG} Deutsch`);
-            setIc('vocabLangItBtn', `${itFlagSVG} Italienisch`);
-
-            // Guide Section Headers
+            setIc('vocabLangItBtn', `${currentFlag} ${langName}`);
             setIc('guideFolderHeader', `${folderSVG} Vokabellistenverwaltung`);
-            setIc('guideListHeader', `${listSVG} Vollständige Vokabelliste`);
+            setIc('guideListHeader', `${listSVG} ${t.vocabList}`);
             setIc('guideRocketHeader', `${rocketSVG} Die 5 Lernbereiche`);
+
+            document.querySelectorAll('.vocab-btn-arrow').forEach(el => el.innerHTML = arrowSVG);
+        }
+
+        async function switchLanguage(lang) {
+            if (CURRENT_LANG === lang) return;
+            CURRENT_LANG = lang;
+            localStorage.setItem('ita-lang', lang);
+            renderAllLabels();
+            
+            // Reload data
+            showToast(translations[lang].welcome, 'info');
+            await loadVocabulary();
+            if (lang === 'it') await loadGrammarSentences();
+            
+            if (currentMode === 'dragdrop' || currentMode === 'quiz' || currentMode === 'write') {
+                startNewRound();
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderAllLabels();
+            
+            document.getElementById('langItBtn')?.addEventListener('click', () => switchLanguage('it'));
+            document.getElementById('langEnBtn')?.addEventListener('click', () => switchLanguage('en'));
         });
-        let dailyActivity = JSON.parse(localStorage.getItem('ita-daily-activity') || '{}');
-        let grammarActivityCount = parseInt(localStorage.getItem('ita-grammar-stats') || '0');
-        let lastStreakPopupDate = localStorage.getItem('ita-last-streak-popup-date') || '';
+        let dailyActivity = JSON.parse(localStorage.getItem(`ita-daily-activity-${CURRENT_LANG}`) || '{}');
+        let grammarActivityCount = parseInt(localStorage.getItem(`ita-grammar-stats-${CURRENT_LANG}`) || '0');
+        let lastStreakPopupDate = localStorage.getItem(`ita-last-streak-popup-date-${CURRENT_LANG}`) || '';
         let currentPairs = [];
         let score = 0;
         let currentRoundMistakes = new Set();
@@ -3677,7 +3793,8 @@
 
             headers['Authorization'] = `Bearer ${API_TOKEN}`;
 
-            const fullUrl = `${API_BASE_URL}/api${endpoint}`;
+            let separator = endpoint.includes('?') ? '&' : '?';
+            const fullUrl = `${API_BASE_URL}/api${endpoint}${separator}language=${CURRENT_LANG}`;
             if (isCapacitor) console.log(`[API FETCH] ${options.method || 'GET'} ${fullUrl}`);
 
             try {
@@ -3723,15 +3840,15 @@
         async function loadDataFromServer(isSilent = false) {
             // Load from Cache FIRST (skip if silent background pull)
             if (!isSilent) {
-                const cachedVocab = localStorage.getItem('ita-full-dictionary');
+                const cachedVocab = localStorage.getItem(`ita-full-dictionary-${CURRENT_LANG}`);
                 if (cachedVocab) {
                     try {
                         fullDictionary = JSON.parse(cachedVocab);
-                        const cachedStats = localStorage.getItem('ita-word-stats');
+                        const cachedStats = localStorage.getItem(`ita-word-stats-${CURRENT_LANG}`);
                         if (cachedStats) wordStats = JSON.parse(cachedStats);
                         
                         // Load Grammar Sentences from cache
-                        const cachedGrammar = localStorage.getItem('ita-grammar-sentences');
+                        const cachedGrammar = localStorage.getItem(`ita-grammar-sentences-${CURRENT_LANG}`);
                         if (cachedGrammar) {
                             grammarSentences = JSON.parse(cachedGrammar);
                             updateGrammarFocusOptions();
@@ -3815,7 +3932,7 @@
                 buildVerbReverseMap();
                 await updateAdminGrammarCount(); // Ensure grammar is loaded before sync finish / render
 
-                const localActivity = JSON.parse(localStorage.getItem('ita-daily-activity') || '{}');
+                const localActivity = JSON.parse(localStorage.getItem(`ita-daily-activity-${CURRENT_LANG}`) || '{}');
                 const reconstructed = reconstructActivityHistory();
 
                 // Robust merge: Take the maximum for each day across all sources
@@ -3866,7 +3983,7 @@
                         now.getMinutes().toString().padStart(2, '0') + ':' +
                         now.getSeconds().toString().padStart(2, '0');
                     lastSyncTimeEl.textContent = timeStr;
-                    localStorage.setItem('ita-last-sync', timeStr);
+                    localStorage.setItem(`ita-last-sync-${CURRENT_LANG}`, timeStr);
                 }
 
                 saveAllDataLocally();
@@ -4647,12 +4764,12 @@
 
         // Prevent crashes by stubbing out old local storage variables if they are used elsewhere
         function saveAllDataLocally() {
-            localStorage.setItem('ita-full-dictionary', JSON.stringify(fullDictionary));
-            localStorage.setItem('ita-word-stats', JSON.stringify(wordStats));
-            localStorage.setItem('ita-daily-activity', JSON.stringify(dailyActivity));
-            localStorage.setItem('ita-grammar-stats', grammarActivityCount.toString());
-            localStorage.setItem('ita-grammar-sentences', JSON.stringify(grammarSentences || []));
-            localStorage.setItem('ita-last-streak-popup-date', lastStreakPopupDate);
+            localStorage.setItem(`ita-full-dictionary-${CURRENT_LANG}`, JSON.stringify(fullDictionary));
+            localStorage.setItem(`ita-word-stats-${CURRENT_LANG}`, JSON.stringify(wordStats));
+            localStorage.setItem(`ita-daily-activity-${CURRENT_LANG}`, JSON.stringify(dailyActivity));
+            localStorage.setItem(`ita-grammar-stats-${CURRENT_LANG}`, grammarActivityCount.toString());
+            localStorage.setItem(`ita-grammar-sentences-${CURRENT_LANG}`, JSON.stringify(grammarSentences || []));
+            localStorage.setItem(`ita-last-streak-popup-date-${CURRENT_LANG}`, lastStreakPopupDate);
         }
 
         function shuffleArray(array) {
@@ -7755,15 +7872,18 @@
                 return;
             }
 
-            let tVocab = 0;
-            let lVocab = 0;
+            let lVocabIt = 0;
+            let lVocabEn = 0;
             users.forEach(u => {
-                tVocab += (u.totalVocab || 0);
-                lVocab += (u.learnedVocab || 0);
+                lVocabIt += (u.stats?.it?.learned || 0);
+                lVocabEn += (u.stats?.en?.learned || 0);
             });
 
             if (kpiTotalUsers) kpiTotalUsers.textContent = users.length;
-            if (kpiLearnedVocab) kpiLearnedVocab.textContent = lVocab;
+            const kpiLearnedVocabIt = document.getElementById('kpiLearnedVocabIt');
+            const kpiLearnedVocabEn = document.getElementById('kpiLearnedVocabEn');
+            if (kpiLearnedVocabIt) kpiLearnedVocabIt.textContent = lVocabIt;
+            if (kpiLearnedVocabEn) kpiLearnedVocabEn.textContent = lVocabEn;
 
             // Fetch invite codes to show "Offene Codes"
             apiFetch('/admin/invite-codes').then(codes => {
@@ -7772,6 +7892,7 @@
             }).catch(e => console.warn("Could not fetch invite count for KPI", e));
 
             updateAdminBaseVocabCount();
+            updateAdminGrammarCount();
 
             adminUserList.innerHTML = users.map(u => {
                 const isActive = u.isActive !== false;
@@ -7789,7 +7910,8 @@
                             ID: ${u.id} | Reg: ${new Date(u.createdAt).toLocaleDateString()}<br/>
                             Logins: ${u.loginCount || 0} | Zuletzt: ${lastLoginStr}<br/>
                             Letzte Übung: <span class="text-blue-600 font-medium">${lastActivityStr}</span><br/>
-                            Vokabeln: ${u.totalVocab || 0} (davon ${u.learnedVocab || 0} gelernt)
+                            Vokabeln (IT): ${u.stats?.it?.total || 0} (${u.stats?.it?.learned || 0} gelernt)<br/>
+                            Vokabeln (EN): ${u.stats?.en?.total || 0} (${u.stats?.en?.learned || 0} gelernt)
                         </p>
                     </div>
                     <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
