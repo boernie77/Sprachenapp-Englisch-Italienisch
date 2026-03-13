@@ -3574,6 +3574,7 @@
                 }
             }
 
+
             const dLabel = document.getElementById('directionFilterLabel');
             if (dLabel) dLabel.innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${currentFlag} ${langName}`;
 
@@ -5852,17 +5853,19 @@
 
             // Common resets for filters
             if (mode === 'dragdrop' || mode === 'write') {
-                verbformenOption.hidden = true;
-                verbformenCustomOption.hidden = true;
+                if (verbformenOption) verbformenOption.hidden = true;
+                if (verbformenCustomOption) verbformenCustomOption.hidden = true;
                 if (typeFilterEl.value === 'Verb') {
                     typeFilterEl.value = 'Alle';
-                    document.getElementById('typeFilterLabel').textContent = 'Alle mischen';
+                    const tLabel = document.getElementById('typeFilterLabel');
+                    if (tLabel) tLabel.textContent = 'Alle mischen';
                     document.querySelectorAll('#typeFilterList .cs-opt').forEach(o => o.classList.remove('selected'));
-                    document.querySelector('#typeFilterList [data-value="Alle"]').classList.add('selected');
+                    const allOpt = document.querySelector('#typeFilterList [data-value="Alle"]');
+                    if (allOpt) allOpt.classList.add('selected');
                 }
             } else if (mode === 'quiz') {
-                verbformenOption.hidden = false;
-                verbformenCustomOption.hidden = false;
+                if (verbformenOption) verbformenOption.hidden = false;
+                if (verbformenCustomOption) verbformenCustomOption.hidden = false;
             }
 
             updateTabStyles(mode);
