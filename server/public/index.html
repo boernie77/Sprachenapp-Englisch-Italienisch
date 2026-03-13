@@ -4547,6 +4547,8 @@
                     adminBtn.classList.remove('hidden');
                     adminBtn.style.setProperty('display', 'block', 'important');
                     if (openContactBtn) openContactBtn.classList.add('hidden'); 
+                    // Re-run admin trigger setup whenever we show the app to ensure listeners are fresh
+                    if (typeof setupAdminTrigger === 'function') setupAdminTrigger();
                 } else {
                     adminBtn.classList.add('hidden');
                     adminBtn.style.setProperty('display', 'none', 'important');
@@ -5912,6 +5914,21 @@
 
         function switchMode(mode) {
             currentMode = mode; successText.classList.add('hidden');
+            
+            if (mode === 'add-vocab') {
+                isPaused = true;
+                vocabModal.classList.remove('hidden');
+                vocabModal.classList.add('flex');
+                
+                // FORCE: Initialize directions based on language
+                vocabInputLang = CURRENT_LANG === 'it' ? 'it' : 'en';
+                vocabOutputLang = 'de';
+                vocabInput.placeholder = CURRENT_LANG === 'it' ? 'z.B. mangiare' : 'e.g. eat';
+                
+                renderAllLabels(); // Refresh labels
+                vocabInput.focus();
+                return;
+            }
 
             // Common resets for filters
             if (mode === 'dragdrop' || mode === 'write') {
