@@ -3573,7 +3573,13 @@
             const drHeader = document.getElementById('dragColHeader');
             const dpHeader = document.getElementById('dropColHeader');
             if (drHeader) drHeader.innerHTML = `${deFlagSVG} Deutsch (Ziehen)`;
-            if (dpHeader) dpHeader.innerHTML = `${currentFlag} ${langName} (Ablegen)`;
+            if (dpHeader) {
+                if (CURRENT_LANG === 'en') {
+                    dpHeader.innerHTML = `${gbFlagSVG} Englisch (Ablegen)`;
+                } else {
+                    dpHeader.innerHTML = `${itFlagSVG} Italienisch (Ablegen)`;
+                }
+            }
 
             const appHeader = document.querySelector('header h1');
             if (appHeader) appHeader.innerHTML = `${currentFlag} ${t.header}`;
@@ -3637,24 +3643,24 @@
             setIc('guideRocketHeader', `${rocketSVG} Die 5 LernBereiche`);
 
             // Language specific UI adjustments
-            const dropColHeader = document.getElementById('dropColHeader');
             const infoSection = document.getElementById('infoSection');
             const infoModeToggle = document.getElementById('infoModeToggle');
             const modeInfoBtn = document.getElementById('modeInfoBtn');
             const modeGrammarBtn = document.getElementById('modeGrammarBtn');
+            const tabInfoBtn = document.getElementById('tabInfoBtn');
 
             if (CURRENT_LANG === 'en') {
-                if (dropColHeader) dropColHeader.innerHTML = `${gbFlagSVG} Englisch (Ablegen)`;
                 if (infoSection) infoSection.classList.add('hidden');
                 if (infoModeToggle) infoModeToggle.classList.add('hidden');
                 if (modeInfoBtn) modeInfoBtn.classList.add('hidden');
                 if (modeGrammarBtn) modeGrammarBtn.classList.add('hidden');
+                if (tabInfoBtn) tabInfoBtn.classList.add('hidden');
             } else {
-                if (dropColHeader) dropColHeader.innerHTML = `${itFlagSVG} Italienisch (Ablegen)`;
                 if (infoSection) infoSection.classList.remove('hidden');
                 if (infoModeToggle) infoModeToggle.classList.remove('hidden');
                 if (modeInfoBtn) modeInfoBtn.classList.remove('hidden');
                 if (modeGrammarBtn) modeGrammarBtn.classList.remove('hidden');
+                if (tabInfoBtn) tabInfoBtn.classList.remove('hidden');
             }
 
             document.querySelectorAll('.vocab-btn-arrow').forEach(el => el.innerHTML = arrowSVG);
@@ -3923,6 +3929,7 @@
                     grammatica: v.grammatica,
                     isActive: v.isActive !== false,
                     isMarked: v.isMarked === true,
+                    language: v.language || (v.it ? 'it' : 'en'), // Fallback to 'it'
                     ... (v.typ === 'Verb' ? generateVerbForms(v.it) : {})
                 }));
 
@@ -4895,7 +4902,10 @@
 
         function getAvailableWords() {
             const filterValue = typeFilterEl.value;
-            let availableWords = fullDictionary.filter(word => word.isActive !== false && word.language === CURRENT_LANG);
+            let availableWords = fullDictionary.filter(word => {
+                const wLang = word.language || 'it';
+                return word.isActive !== false && wLang === CURRENT_LANG;
+            });
 
             if (filterValue === 'Markiert' || filterValue === 'Favoriten') {
                 availableWords = availableWords.filter(word => word.isMarked === true);
@@ -4930,11 +4940,17 @@
 
 
 
-            // Ensure wide layout and visible info section regardless of filter
+            // Ensure layout and info section visibility based on language
             dragDropContainer.classList.add('lg:grid-cols-3', 'max-w-7xl');
             dragDropContainer.classList.remove('lg:grid-cols-2', 'max-w-5xl');
-            infoSection.classList.remove('hidden');
-            infoSection.classList.add('flex');
+            
+            if (CURRENT_LANG === 'en') {
+                infoSection.classList.add('hidden');
+                infoSection.classList.remove('flex');
+            } else {
+                infoSection.classList.remove('hidden');
+                infoSection.classList.add('flex');
+            }
 
             if (typeFilterEl.value === 'Verb' || typeFilterEl.value === 'VerbInfinitiv') {
                 infoColHeader.innerHTML = 'ℹ️ Verbformen';
@@ -4949,11 +4965,15 @@
 
             if (directionFilterEl.value === 'de-it') {
                 const isMobile = window.innerWidth <= 640;
+                const targetFlag = CURRENT_LANG === 'it' ? itFlagSVG : gbFlagSVG;
+                const targetName = CURRENT_LANG === 'it' ? 'Italienisch' : 'Englisch';
                 dragColHeader.innerHTML = isMobile ? `${deFlagSVG} Deutsch` : `${deFlagSVG} Deutsch (Ziehen)`;
-                dropColHeader.innerHTML = isMobile ? `${itFlagSVG} Italienisch` : `${itFlagSVG} Italienisch (Ablegen)`;
+                dropColHeader.innerHTML = isMobile ? `${targetFlag} ${targetName}` : `${targetFlag} ${targetName} (Ablegen)`;
             } else {
                 const isMobile = window.innerWidth <= 640;
-                dragColHeader.innerHTML = isMobile ? `${itFlagSVG} Italienisch` : `${itFlagSVG} Italienisch (Ziehen)`;
+                const targetFlag = CURRENT_LANG === 'it' ? itFlagSVG : gbFlagSVG;
+                const targetName = CURRENT_LANG === 'it' ? 'Italienisch' : 'Englisch';
+                dragColHeader.innerHTML = isMobile ? `${targetFlag} ${targetName}` : `${targetFlag} ${targetName} (Ziehen)`;
                 dropColHeader.innerHTML = isMobile ? `${deFlagSVG} Deutsch` : `${deFlagSVG} Deutsch (Ablegen)`;
             }
 
@@ -7718,21 +7738,27 @@
         });
 
         // --- Admin Dashboard Script ---
-        const adminModal = document.getElementById('adminModal');
-        const adminUserList = document.getElementById('adminUserList');
-        const openAdminDashboardBtn = document.getElementById('openAdminDashboardBtn');
-        const closeAdminModalBtn = document.getElementById('closeAdminModalBtn');
-        
-        setupModal(
-            adminModal,
-            openAdminDashboardBtn,
-            closeAdminModalBtn,
-            () => {
-                switchAdminTab('users');
-                fetchAdminUsers();
-                updateAdminGrammarCount();
+        try {
+            const adminModal = document.getElementById('adminModal');
+            const adminUserList = document.getElementById('adminUserList');
+            const openAdminDashboardBtn = document.getElementById('openAdminDashboardBtn');
+            const closeAdminModalBtn = document.getElementById('closeAdminModalBtn');
+            
+            if (adminModal && openAdminDashboardBtn && closeAdminModalBtn) {
+                setupModal(
+                    adminModal,
+                    openAdminDashboardBtn,
+                    closeAdminModalBtn,
+                    () => {
+                        switchAdminTab('users');
+                        fetchAdminUsers();
+                        updateAdminGrammarCount();
+                    }
+                );
             }
-        );
+        } catch (adminErr) {
+            console.warn("Admin initialization failed", adminErr);
+        }
 
         function switchAdminTab(tabName) {
             const userTab = document.getElementById('adminUserTabContent');
@@ -8209,7 +8235,7 @@
 
         function startCardsRound() {
             const filterValue = typeFilterEl.value;
-            let words = fullDictionary;
+            let words = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG);
             if (filterValue === 'VerbInfinitiv') {
                 words = words.filter(word => word.typ && word.typ.toLowerCase().includes('verb'));
             } else if (filterValue === 'Favoriten' || filterValue === 'Markiert') {
