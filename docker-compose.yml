@@ -18,8 +18,8 @@ services:
       - SMTP_PASS=Gmxsindbadistvega#1160
     depends_on:
       - db
-    volumes:
-      - ./server/public:/app/public
+#    volumes:
+#      - ./server/public:/app/public
 
   db:
     image: postgres:15-alpine
