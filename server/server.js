@@ -311,7 +311,7 @@ app.post('/api/vocab/bulk', authenticateToken, asyncHandler(async (req, res) => 
         de, it, typ, emoji, grammatica, 
         isActive: isActive !== false, 
         isMarked: isMarked === true, 
-        language: language || req.body.language || req.query.language || word.language || 'it',
+        language: language || word.language || req.query.language || 'it',
         UserId: req.user.id 
       });
       const stats = await Stats.create({ VocabularyId: vocab.id });

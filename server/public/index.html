@@ -527,7 +527,7 @@
             #vocabModal,
             #vocabListModal,
             #excelModal,
-            #adminDashboardModal,
+            #adminModal,
             #impressumModal,
             #guideModal,
             #infoModal {
@@ -3634,7 +3634,28 @@
             setIc('vocabLangItBtn', `${currentFlag} ${langName}`);
             setIc('guideFolderHeader', `${folderSVG} Vokabellistenverwaltung`);
             setIc('guideListHeader', `${listSVG} ${t.vocabList}`);
-            setIc('guideRocketHeader', `${rocketSVG} Die 5 Lernbereiche`);
+            setIc('guideRocketHeader', `${rocketSVG} Die 5 LernBereiche`);
+
+            // Language specific UI adjustments
+            const dropColHeader = document.getElementById('dropColHeader');
+            const infoSection = document.getElementById('infoSection');
+            const infoModeToggle = document.getElementById('infoModeToggle');
+            const modeInfoBtn = document.getElementById('modeInfoBtn');
+            const modeGrammarBtn = document.getElementById('modeGrammarBtn');
+
+            if (CURRENT_LANG === 'en') {
+                if (dropColHeader) dropColHeader.innerHTML = `${gbFlagSVG} Englisch (Ablegen)`;
+                if (infoSection) infoSection.classList.add('hidden');
+                if (infoModeToggle) infoModeToggle.classList.add('hidden');
+                if (modeInfoBtn) modeInfoBtn.classList.add('hidden');
+                if (modeGrammarBtn) modeGrammarBtn.classList.add('hidden');
+            } else {
+                if (dropColHeader) dropColHeader.innerHTML = `${itFlagSVG} Italienisch (Ablegen)`;
+                if (infoSection) infoSection.classList.remove('hidden');
+                if (infoModeToggle) infoModeToggle.classList.remove('hidden');
+                if (modeInfoBtn) modeInfoBtn.classList.remove('hidden');
+                if (modeGrammarBtn) modeGrammarBtn.classList.remove('hidden');
+            }
 
             document.querySelectorAll('.vocab-btn-arrow').forEach(el => el.innerHTML = arrowSVG);
         }
@@ -3647,7 +3668,7 @@
             
             // Reload data
             showToast(translations[lang].welcome, 'info');
-            await loadVocabulary();
+            await loadDataFromServer();
             if (lang === 'it') await loadGrammarSentences();
             
             if (currentMode === 'dragdrop' || currentMode === 'quiz' || currentMode === 'write') {
@@ -4874,7 +4895,7 @@
 
         function getAvailableWords() {
             const filterValue = typeFilterEl.value;
-            let availableWords = fullDictionary.filter(word => word.isActive !== false);
+            let availableWords = fullDictionary.filter(word => word.isActive !== false && word.language === CURRENT_LANG);
 
             if (filterValue === 'Markiert' || filterValue === 'Favoriten') {
                 availableWords = availableWords.filter(word => word.isMarked === true);
@@ -6369,7 +6390,7 @@
                             grammatica = autoDetectGrammatica(italWord);
                         }
 
-                        return { de: deWord, it: italWord, typ: typ, emoji: row.Emoji || row.emoji || null, grammatica: grammatica || null };
+                        return { de: deWord, it: italWord, typ: typ, emoji: row.Emoji || row.emoji || null, grammatica: grammatica || null, language: CURRENT_LANG };
                     }).filter(item => item.de && item.it);
 
                     if (wordsToUpload.length > 0) {
