@@ -3208,6 +3208,12 @@
             }, finalDuration);
         }
 
+        // --- Global UI Elements (Moved for scope & stability) ---
+        let dropdownMenu;
+        let menuBtn;
+        let verbformenOption;
+        let verbformenCustomOption;
+
         // --- Helper: Set Icon/Content safely ---
         function setIc(id, html) {
             const el = document.getElementById(id);
@@ -3286,8 +3292,6 @@
         }
 
         // --- Global UI Elements (Declarations moved for scope) ---
-        let dropdownMenu;
-        let menuBtn;
 
         /**
          * Choice Modal (Replace, Add, Cancel)
@@ -3556,6 +3560,19 @@
             const t = translations[CURRENT_LANG];
             const currentFlag = CURRENT_LANG === 'it' ? itFlagSVG : gbFlagSVG;
             const langName = translations[CURRENT_LANG].direction;
+
+            // Update Add Vocabulary Modal Labels
+            const vInputLabel = document.getElementById('vocabInputLabel');
+            const vTransLabel = document.getElementById('vocabTranslationLabel');
+            if (vInputLabel && vTransLabel) {
+                if (CURRENT_LANG === 'en') {
+                    vInputLabel.textContent = "Englisches Wort";
+                    vTransLabel.textContent = "Deutsche Übersetzung";
+                } else {
+                    vInputLabel.textContent = "Italienisches Wort";
+                    vTransLabel.textContent = "Deutsche Übersetzung";
+                }
+            }
 
             const dLabel = document.getElementById('directionFilterLabel');
             if (dLabel) dLabel.innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${currentFlag} ${langName}`;
@@ -4695,7 +4712,8 @@
 
         function getFullIt(pair) {
             const isNoun = pair.typ && (pair.typ.toLowerCase().includes('substantiv') || pair.typ.toLowerCase().includes('nomen'));
-            if (isNoun && pair.grammatica) {
+            // Only apply Italian articles if CURRENT_LANG is 'it'
+            if (isNoun && pair.grammatica && CURRENT_LANG === 'it') {
                 return (getArticle(pair.it, pair.grammatica) + pair.it);
             }
             return pair.it;
@@ -5456,8 +5474,9 @@
 
         quizNextBtn.addEventListener('click', startQuizRound);
 
-        const verbformenOption = typeFilterEl.querySelector('option[value="Verb"]');
-        const verbformenCustomOption = document.querySelector('#typeFilterList [data-value="Verb"]');
+        // (Declarations moved to top)
+        verbformenOption = typeFilterEl.querySelector('option[value="Verb"]');
+        verbformenCustomOption = document.querySelector('#typeFilterList [data-value="Verb"]');
 
         setupCustomDropdown('directionFilterBtn', 'directionFilterList', 'directionFilterLabel', 'directionFilter');
         setupCustomDropdown('typeFilterBtn', 'typeFilterList', 'typeFilterLabel', 'typeFilter');
