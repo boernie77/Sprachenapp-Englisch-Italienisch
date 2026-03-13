@@ -2665,10 +2665,10 @@
                     <span id="excelBulbFormat"></span> Erforderliches Excel-Format:
                 </p>
                 <ul class="text-[10px] text-amber-700 space-y-1">
-                    <li>• <strong>Spalte 1:</strong> Italienische Wörter</li>
-                    <li>• <strong>Spalte 2:</strong> Deutsche Wörter</li>
-                    <li>• <strong>Spalte 3:</strong> Wortart (z.B. Substantive, Verb)</li>
-                    <li>• <strong>Spalte 4:</strong> Emoji (optional)</li>
+                    <li>• <strong id="excelCol1Header">Spalte 1:</strong> <span id="excelCol1Desc">Italienische Wörter</span></li>
+                    <li>• <strong id="excelCol2Header">Spalte 2:</strong> <span id="excelCol2Desc">Deutsche Übersetzung</span></li>
+                    <li>• <strong id="excelCol3Header">Spalte 3:</strong> <span id="excelCol3Desc">Wortart (z.B. Substantiv, Verb)</span></li>
+                    <li>• <strong id="excelCol4Header">Spalte 4:</strong> <span id="excelCol4Desc">Emoji (optional)</span></li>
                 </ul>
             </div>
 
@@ -3671,6 +3671,7 @@
             setIc('excelExportIcon', exportSVG);
             setIc('excelTrashIcon', trashSVG);
             setIc('excelBooksIcon', booksSVG);
+            setIc('excelCol1Desc', CURRENT_LANG === 'it' ? 'Italienische Wörter' : 'Englische Wörter');
             setIc('excelBulbFormat', bulbSVG);
             setIc('vocabLangDeBtn', `${deFlagSVG} Deutsch`);
             setIc('vocabLangItBtn', `${currentFlag} ${langName}`);
@@ -3686,14 +3687,14 @@
             const tabInfoBtn = document.getElementById('tabInfoBtn');
 
             if (CURRENT_LANG === 'en') {
-                if (infoSection) infoSection.classList.add('hidden');
-                if (infoModeToggle) infoModeToggle.classList.add('hidden');
-                if (modeInfoBtn) modeInfoBtn.classList.add('hidden');
-                if (modeGrammarBtn) modeGrammarBtn.classList.add('hidden');
-                if (tabInfoBtn) tabInfoBtn.classList.add('hidden');
+                if (infoSection) { infoSection.classList.add('hidden'); infoSection.style.setProperty('display', 'none', 'important'); }
+                if (infoModeToggle) { infoModeToggle.classList.add('hidden'); infoModeToggle.style.setProperty('display', 'none', 'important'); }
+                if (modeInfoBtn) { modeInfoBtn.classList.add('hidden'); modeInfoBtn.style.setProperty('display', 'none', 'important'); }
+                if (modeGrammarBtn) { modeGrammarBtn.classList.add('hidden'); modeGrammarBtn.style.setProperty('display', 'none', 'important'); }
+                if (tabInfoBtn) { tabInfoBtn.classList.add('hidden'); tabInfoBtn.style.setProperty('display', 'none', 'important'); }
             } else {
-                // Info section is only shown in dragdrop mode normally, but here we decide based on language
                 if (infoSection) {
+                    infoSection.style.removeProperty('display');
                     if (currentMode === 'dragdrop') {
                         infoSection.classList.remove('hidden');
                         infoSection.classList.add('flex');
@@ -3701,10 +3702,10 @@
                         infoSection.classList.add('hidden');
                     }
                 }
-                if (infoModeToggle) infoModeToggle.classList.remove('hidden');
-                if (modeInfoBtn) modeInfoBtn.classList.remove('hidden');
-                if (modeGrammarBtn) modeGrammarBtn.classList.remove('hidden');
-                if (tabInfoBtn) tabInfoBtn.classList.remove('hidden');
+                if (infoModeToggle) { infoModeToggle.classList.remove('hidden'); infoModeToggle.style.removeProperty('display'); }
+                if (modeInfoBtn) { modeInfoBtn.classList.remove('hidden'); modeInfoBtn.style.removeProperty('display'); }
+                if (modeGrammarBtn) { modeGrammarBtn.classList.remove('hidden'); modeGrammarBtn.style.removeProperty('display'); }
+                if (tabInfoBtn) { tabInfoBtn.classList.remove('hidden'); tabInfoBtn.style.removeProperty('display'); }
             }
 
             document.querySelectorAll('.vocab-btn-arrow').forEach(el => el.innerHTML = arrowSVG);
@@ -4530,13 +4531,16 @@
             }
 
             const adminBtn = document.getElementById('openAdminDashboardBtn');
+            const openContactBtn = document.getElementById('openContactModalBtn');
             if (adminBtn) {
                 if (IS_ADMIN) {
                     adminBtn.classList.remove('hidden');
-                    openContactModalBtn.classList.add('hidden'); // Verstecken für Admin
+                    adminBtn.style.setProperty('display', 'block', 'important');
+                    if (openContactBtn) openContactBtn.classList.add('hidden'); 
                 } else {
                     adminBtn.classList.add('hidden');
-                    openContactModalBtn.classList.remove('hidden'); // Anzeigen für normale Nutzer
+                    adminBtn.style.setProperty('display', 'none', 'important');
+                    if (openContactBtn) openContactBtn.classList.remove('hidden');
                 }
             }
 
@@ -4555,6 +4559,30 @@
                 });
 
                 CURRENT_USER_NAME = data.name;
+                // Reset directions based on current language
+                vocabInputLang = CURRENT_LANG === 'it' ? 'it' : 'en';
+                vocabOutputLang = 'de';
+                
+                // Update direction buttons UI if they exist
+                const btnDe = document.getElementById('vocabLangDeBtn');
+                const btnTarget = document.getElementById('vocabLangItBtn');
+                if (btnDe && btnTarget) {
+                    const deFlagSVG = `
+                        <svg class="w-5 h-5 rounded-full shadow-sm" viewBox="0 0 640 480">
+                            <path fill="#fff" d="M0 0h640v480H0z"/><path fill="#000" d="M0 0h640v160H0z"/><path fill="#d00" d="M0 160h640v160H0z"/><path fill="#ffce00" d="M0 320h640v160H0z"/>
+                        </svg>`;
+                    const targetFlagSVG = CURRENT_LANG === 'it' ? `
+                        <svg class="w-5 h-5 rounded-full shadow-sm" viewBox="0 0 640 480">
+                            <path fill="#009246" d="M0 0h213.3v480H0z"/><path fill="#fff" d="M213.3 0h213.4v480H213.3z"/><path fill="#ce2b37" d="M426.7 0H640v480H426.7z"/>
+                        </svg>` : `
+                        <svg class="w-5 h-5 rounded-full shadow-sm" viewBox="0 0 640 480">
+                            <path fill="#00247d" d="M0 0h640v480H0z"/><path d="M75 0l245 184L565 0h75v56L376 240l264 198v42h-75L320 296 75 480H0v-56l264-198L0 56V0h75z" fill="#fff"/><path d="M424 286l216 162v32L377 286h47zM640 32v18L445 190l-47-35L604 32h36zm-640 0l239 179-47 35L0 58V32zm0 416l216-162 47 35L47 480H0v-32z" fill="#cf142b"/><path d="M0 192h640v96H0z" fill="#fff"/><path d="M272 0h96v480h-96z" fill="#fff"/><path d="M0 208h640v64H0z" fill="#cf142b"/><path d="M304 0h32v480h-32z" fill="#cf142b"/>
+                        </svg>`;
+                    btnDe.innerHTML = `${deFlagSVG} Deutsch`;
+                    btnTarget.innerHTML = `${targetFlagSVG} ${CURRENT_LANG === 'it' ? 'Italienisch' : 'Englisch'}`;
+                    btnDe.classList.add('bg-blue-50', 'border-blue-200');
+                    btnTarget.classList.remove('bg-blue-50', 'border-blue-200');
+                }
                 localStorage.setItem('ita-user-name', CURRENT_USER_NAME);
 
                 // Transition to Step 2
@@ -6453,13 +6481,13 @@
                     const workbook = XLSX.read(data, { type: 'array' });
                     const json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
                     const wordsToUpload = json.map((row) => {
-                        let italWord = (row.Italienisch || row.italienisch || row.IT || '').toString().trim();
+                        let italWord = (row.Italienisch || row.italienisch || row.IT || row.EN || row.English || row.Englisch || row.englisch || '').toString().trim();
                         let deWord = (row.Deutsch || row.deutsch || row.DE || '').toString().trim();
                         let typ = (row.Wortart || row.wortart || row.Typ || row.typ || 'Sonstiges').toString().trim();
                         let grammatica = (row.Grammatik || row.grammatica || row.Grammatica || row.grammata || row.E || '').toString().trim();
 
-                        // Auto-detect if empty and it's a noun
-                        if (!grammatica && typ.toLowerCase().includes('substantiv') && italWord) {
+                        // Auto-detect if empty and it's a noun (only for Italian)
+                        if (CURRENT_LANG === 'it' && !grammatica && typ.toLowerCase().includes('substantiv') && italWord) {
                             grammatica = autoDetectGrammatica(italWord);
                         }
 
@@ -7487,7 +7515,9 @@
             vocabAutoTag.textContent = '⏳ Suche online…';
             vocabAutoTag.classList.remove('hidden');
             try {
-                const langpair = vocabInputLang === 'it' ? 'it|de' : 'de|it';
+                const langpair = CURRENT_LANG === 'it' 
+                    ? (vocabInputLang === 'it' ? 'it|de' : 'de|it') 
+                    : (vocabInputLang === 'en' ? 'en|de' : 'de|en');
                 const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(vocabInput.value.trim())}&langpair=${langpair}`;
                 const res = await fetch(url);
                 const data = await res.json();
@@ -7503,9 +7533,11 @@
                         }
                     }
                     vocabTranslation.value = translated;
-                    if (vocabTyp.value === 'Substantiv') {
-                        const itWord = vocabInputLang === 'it' ? vocabInput.value : translated;
-                        setVocabGrammaticaUI(autoDetectGrammatica(itWord));
+                    if ((vocabInputLang === 'it' || vocabInputLang === 'en') && vocabTyp.value === 'Substantiv') {
+                        const targetWord = vocabInputLang === 'it' || vocabInputLang === 'en' ? vocabInput.value : translated;
+                        if (CURRENT_LANG === 'it') {
+                            setVocabGrammaticaUI(autoDetectGrammatica(targetWord));
+                        }
                     }
                     Object.assign(vocabAutoTag.style, { color: '#16a34a', background: '#f0fdf4', borderColor: '#bbf7d0' });
                     vocabAutoTag.textContent = '🌐 Online';
