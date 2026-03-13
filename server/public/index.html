@@ -1251,11 +1251,12 @@
                         Lizenz: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"
                             class="text-blue-600 hover:underline">CC BY-SA 4.0</a>
                     </p>
+                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.0.0 Stable</p>
                     <p class="text-[10px] text-slate-400">© 2026 Christian Bernauer. Alle Rechte vorbehalten.</p>
                 </div>
             </div>
             <div class="mt-8 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version v.1.0.4</p>
+                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.0.0 Stable</p>
             </div>
         </div>
     </div>
@@ -5925,7 +5926,33 @@
                 vocabOutputLang = 'de';
                 vocabInput.placeholder = CURRENT_LANG === 'it' ? 'z.B. mangiare' : 'e.g. eat';
                 
-                renderAllLabels(); // Refresh labels
+                // Reset directions based on current language
+                vocabInputLang = CURRENT_LANG === 'it' ? 'it' : 'en';
+                vocabOutputLang = 'de';
+                vocabInput.placeholder = CURRENT_LANG === 'it' ? 'z.B. mangiare' : 'e.g. eat';
+                vocabTranslation.value = '';
+                
+                // Update direction buttons UI if they exist
+                const btnDe = document.getElementById('vocabLangDeBtn');
+                const btnTarget = document.getElementById('vocabLangItBtn');
+                if (btnDe && btnTarget) {
+                    const deFlagSVG = `
+                        <svg class="w-5 h-5 rounded-full shadow-sm" viewBox="0 0 640 480">
+                            <path fill="#fff" d="M0 0h640v480H0z"/><path fill="#000" d="M0 0h640v160H0z"/><path fill="#d00" d="M0 160h640v160H0z"/><path fill="#ffce00" d="M0 320h640v160H0z"/>
+                        </svg>`;
+                    const targetFlagSVG = CURRENT_LANG === 'it' ? `
+                        <svg class="w-5 h-5 rounded-full shadow-sm" viewBox="0 0 640 480">
+                            <path fill="#009246" d="M0 0h213.3v480H0z"/><path fill="#fff" d="M213.3 0h213.4v480H213.3z"/><path fill="#ce2b37" d="M426.7 0H640v480H426.7z"/>
+                        </svg>` : `
+                        <svg class="w-5 h-5 rounded-full shadow-sm" viewBox="0 0 640 480">
+                            <path fill="#00247d" d="M0 0h640v480H0z"/><path d="M75 0l245 184L565 0h75v56L376 240l264 198v42h-75L320 296 75 480H0v-56l264-198L0 56V0h75z" fill="#fff"/><path d="M424 286l216 162v32L377 286h47zM640 32v18L445 190l-47-35L604 32h36zm-640 0l239 179-47 35L0 58V32zm0 416l216-162 47 35L47 480H0v-32z" fill="#cf142b"/><path d="M0 192h640v96H0z" fill="#fff"/><path d="M272 0h96v480h-96z" fill="#fff"/><path d="M0 208h640v64H0z" fill="#cf142b"/><path d="M304 0h32v480h-32z" fill="#cf142b"/>
+                        </svg>`;
+                    btnDe.innerHTML = `${deFlagSVG} Deutsch`;
+                    btnTarget.innerHTML = `${targetFlagSVG} ${CURRENT_LANG === 'it' ? 'Italienisch' : 'Englisch'}`;
+                    btnDe.classList.add('bg-blue-50', 'border-blue-200');
+                    btnTarget.classList.remove('bg-blue-50', 'border-blue-200');
+                }
+                renderAllLabels();
                 vocabInput.focus();
                 return;
             }
@@ -7559,9 +7586,9 @@
             vocabAutoTag.textContent = '⏳ Suche online…';
             vocabAutoTag.classList.remove('hidden');
             try {
-                const langpair = CURRENT_LANG === 'it' 
-                    ? (vocabInputLang === 'it' ? 'it|de' : 'de|it') 
-                    : (vocabInputLang === 'en' ? 'en|de' : 'de|en');
+                const langpair = (CURRENT_LANG === 'en' || CURRENT_LANG === 'gb')
+                    ? (vocabInputLang === 'en' ? 'en|de' : 'de|en')
+                    : (vocabInputLang === 'it' ? 'it|de' : 'de|it');
                 const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(vocabInput.value.trim())}&langpair=${langpair}`;
                 const res = await fetch(url);
                 const data = await res.json();
@@ -7873,20 +7900,23 @@
                 const adminBtn = document.getElementById('openAdminDashboardBtn');
                 const closeBtn = document.getElementById('closeAdminModalBtn');
                 if (adminModal && adminBtn && closeBtn) {
-                     // Remove old listener to avoid double triggers if setupAdminTrigger is called multiple times
+                    // Remove old listener to avoid double triggers
                     const newBtn = adminBtn.cloneNode(true);
                     adminBtn.parentNode.replaceChild(newBtn, adminBtn);
 
-                    setupModal(
-                        adminModal,
-                        newBtn,
-                        closeBtn,
-                        () => {
-                            switchAdminTab('users');
-                            fetchAdminUsers();
-                            updateAdminGrammarCount();
-                        }
-                    );
+                    newBtn.addEventListener('click', () => {
+                        adminModal.classList.remove('hidden');
+                        adminModal.classList.add('flex');
+                        switchAdminTab('users');
+                        fetchAdminUsers();
+                        updateAdminGrammarCount();
+                        dropdownMenu.classList.add('hidden'); // Close menu
+                    });
+
+                    closeBtn.addEventListener('click', () => {
+                        adminModal.classList.add('hidden');
+                        adminModal.classList.remove('flex');
+                    });
                 }
             }
             setupAdminTrigger();
