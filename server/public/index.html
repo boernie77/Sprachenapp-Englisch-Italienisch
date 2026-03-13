@@ -3183,6 +3183,7 @@
             const finalDuration = isMobile ? 1500 : duration;
 
             const container = document.getElementById('toastContainer');
+            if (!container) return; // Guard
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
             let icon = '';
@@ -3205,6 +3206,12 @@
                 toast.classList.remove('show');
                 setTimeout(() => toast.remove(), 400);
             }, finalDuration);
+        }
+
+        // --- Helper: Set Icon/Content safely ---
+        function setIc(id, html) {
+            const el = document.getElementById(id);
+            if (el) el.innerHTML = html;
         }
 
         /**
@@ -3277,6 +3284,10 @@
                 inputEl.addEventListener('keypress', onKeypress);
             });
         }
+
+        // --- Global UI Elements (Declarations moved for scope) ---
+        let dropdownMenu;
+        let menuBtn;
 
         /**
          * Choice Modal (Replace, Add, Cancel)
@@ -3656,7 +3667,15 @@
                 if (modeGrammarBtn) modeGrammarBtn.classList.add('hidden');
                 if (tabInfoBtn) tabInfoBtn.classList.add('hidden');
             } else {
-                if (infoSection) infoSection.classList.remove('hidden');
+                // Info section is only shown in dragdrop mode normally, but here we decide based on language
+                if (infoSection) {
+                    if (currentMode === 'dragdrop') {
+                        infoSection.classList.remove('hidden');
+                        infoSection.classList.add('flex');
+                    } else {
+                        infoSection.classList.add('hidden');
+                    }
+                }
                 if (infoModeToggle) infoModeToggle.classList.remove('hidden');
                 if (modeInfoBtn) modeInfoBtn.classList.remove('hidden');
                 if (modeGrammarBtn) modeGrammarBtn.classList.remove('hidden');
@@ -3929,7 +3948,7 @@
                     grammatica: v.grammatica,
                     isActive: v.isActive !== false,
                     isMarked: v.isMarked === true,
-                    language: v.language || (v.it ? 'it' : 'en'), // Fallback to 'it'
+                    language: v.language || (v.it ? 'it' : 'en'),
                     ... (v.typ === 'Verb' ? generateVerbForms(v.it) : {})
                 }));
 
@@ -5926,10 +5945,15 @@
         typeFilterEl.addEventListener('change', handleFilterChange);
         directionFilterEl.addEventListener('change', handleFilterChange);
 
-        const menuBtn = document.getElementById('menuBtn');
-        const dropdownMenu = document.getElementById('dropdownMenu');
-        menuBtn.addEventListener('click', () => dropdownMenu.classList.toggle('hidden'));
-        document.addEventListener('click', (e) => { if (!menuBtn.contains(e.target) && !dropdownMenu.contains(e.target)) dropdownMenu.classList.add('hidden'); });
+        menuBtn = document.getElementById('menuBtn');
+        dropdownMenu = document.getElementById('dropdownMenu');
+        if (menuBtn && dropdownMenu) {
+            menuBtn.addEventListener('click', () => dropdownMenu.classList.toggle('hidden'));
+            document.addEventListener('click', (e) => { 
+                if (!menuBtn.contains(e.target) && !dropdownMenu.contains(e.target)) 
+                    dropdownMenu.classList.add('hidden'); 
+            });
+        }
 
         // --- Setup close all dropdowns on outside click ---
         document.addEventListener('click', (e) => {
@@ -6202,7 +6226,7 @@
             const catFilter = document.getElementById('vocabListCatFilter').value;
             const searchVal = document.getElementById('vocabListSearch').value.toLowerCase().trim();
 
-            let words = fullDictionary.slice();
+            let words = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG);
 
             // Category filter
             if (catFilter === 'Favoriten') {
