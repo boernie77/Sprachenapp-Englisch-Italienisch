@@ -7564,9 +7564,19 @@
             }
 
             // 1) Offline-Suche
-            const offlineResult = vocabInputLang === 'it' ? itToDeMap[q] : deToItMap[q];
+            let offlineResult = null;
+            if (CURRENT_LANG === 'it') {
+                offlineResult = vocabInputLang === 'it' ? itToDeMap[q] : deToItMap[q];
+            } else {
+                // In English mode, we use the same maps if they were populated, but for 'en' specifically
+                // NOTE: If there are separate enToDeMap / deToEnMap, they should be used.
+                // For now, it seems itToDeMap[q] might be used or it's empty.
+                // If it's empty, it falls back to online.
+                offlineResult = vocabInputLang === 'en' ? (window.enToDeMap ? enToDeMap[q] : null) : (window.deToEnMap ? deToEnMap[q] : null);
+            }
+            
             if (offlineResult) {
-                vocabTranslation.value = vocabInputLang === 'it' ? offlineResult.de : offlineResult.it;
+                vocabTranslation.value = (vocabInputLang === 'it' || vocabInputLang === 'en') ? offlineResult.de : (offlineResult.it || offlineResult.en);
                 const detectedTyp = offlineResult.typ || 'Substantiv';
                 setVocabTypUI(detectedTyp);
                 if (detectedTyp === 'Substantiv') {
@@ -7595,7 +7605,7 @@
                 const t = data?.responseData?.translatedText || '';
                 if (t && !t.toUpperCase().includes('MYMEMORY') && !t.includes('QUERY LENGTH')) {
                     let translated = t;
-                    if (vocabInputLang === 'it' && vocabTyp.value === 'Substantiv') {
+                    if (CURRENT_LANG === 'it' && vocabInputLang === 'it' && vocabTyp.value === 'Substantiv') {
                         // If it's a German result and missing an article, try to detect it
                         const existingArt = ['der ', 'die ', 'das '].find(a => translated.toLowerCase().startsWith(a));
                         if (!existingArt) {
@@ -7604,10 +7614,13 @@
                         }
                     }
                     vocabTranslation.value = translated;
-                    if ((vocabInputLang === 'it' || vocabInputLang === 'en') && vocabTyp.value === 'Substantiv') {
-                        const targetWord = vocabInputLang === 'it' || vocabInputLang === 'en' ? vocabInput.value : translated;
+                    if (vocabTyp.value === 'Substantiv') {
+                        const targetWord = (vocabInputLang === 'it' || vocabInputLang === 'en') ? vocabInput.value : translated;
                         if (CURRENT_LANG === 'it') {
                             setVocabGrammaticaUI(autoDetectGrammatica(targetWord));
+                        } else {
+                            // Clear Italian grammar UI in English mode
+                            setVocabGrammaticaUI('');
                         }
                     }
                     Object.assign(vocabAutoTag.style, { color: '#16a34a', background: '#f0fdf4', borderColor: '#bbf7d0' });
