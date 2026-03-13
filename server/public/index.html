@@ -3636,10 +3636,17 @@
             const itBtn = document.getElementById('langItBtn');
             const enBtn = document.getElementById('langEnBtn');
             if (itBtn && enBtn) {
-                itBtn.style.opacity = CURRENT_LANG === 'it' ? '1' : '0.5';
-                itBtn.style.filter = CURRENT_LANG === 'it' ? 'grayscale(0)' : 'grayscale(1)';
-                enBtn.style.opacity = CURRENT_LANG === 'en' ? '1' : '0.5';
-                enBtn.style.filter = CURRENT_LANG === 'en' ? 'grayscale(0)' : 'grayscale(1)';
+                if (CURRENT_LANG === 'it') {
+                    itBtn.classList.add('opacity-100', 'grayscale-0');
+                    itBtn.classList.remove('opacity-50', 'grayscale');
+                    enBtn.classList.add('opacity-50', 'grayscale');
+                    enBtn.classList.remove('opacity-100', 'grayscale-0');
+                } else {
+                    enBtn.classList.add('opacity-100', 'grayscale-0');
+                    enBtn.classList.remove('opacity-50', 'grayscale');
+                    itBtn.classList.add('opacity-50', 'grayscale');
+                    itBtn.classList.remove('opacity-100', 'grayscale-0');
+                }
             }
 
             // Other dynamic IDs
