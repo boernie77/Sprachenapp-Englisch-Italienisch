@@ -5818,52 +5818,12 @@
 
         // --- Admin Grammar Logic ---
 
-        if (adminGrammarBtn) adminGrammarBtn.addEventListener('click', () => adminGrammarUpload.click());
-
-        if (adminGrammarUpload) {
-            adminGrammarUpload.addEventListener('change', async e => {
-                const file = e.target.files[0]; if (!file) return;
-                const reader = new FileReader();
-                reader.onload = async (event) => {
-                    try {
-                        const data = new Uint8Array(event.target.result);
-                        const workbook = XLSX.read(data, { type: 'array' });
-                        const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                        const json = XLSX.utils.sheet_to_json(sheet);
-
-                        if (json.length === 0) return showToast("Die Datei ist leer.", "warning");
-
-                        const sentences = json.map(row => {
-                            // Flexibles Mapping: Suche nach bekannten Keys
-                            const it = row.Italienisch || row.italienisch || row.IT || row.it || row.Sentence || row.sentence || '';
-                            const de = row.Deutsch || row.deutsch || row.DE || row.de || row.Translation || row.translation || '';
-                            const cat = row.Kategorie || row.kategorie || row.Category || row.category || row.Fokus || row.fokus || row.Type || row.type || "Allgemein";
-
-                            return {
-                                it: it ? String(it).trim() : null,
-                                de: de ? String(de).trim() : null,
-                                category: String(cat).trim()
-                            };
-                        }).filter(s => s.it && s.de && isNaN(s.it)); // Added isNaN(s.it) to filter out ID columns
-
-
-                        if (sentences.length === 0) return showToast("Keine gültigen Sätze gefunden (IT & DE Spalten prüfen).", "warning");
-
-                        if (await showConfirm(`Diese Aktion ersetzt die gesamte Grammatik-Liste durch ${sentences.length} neue Sätze. Fortfahren?`, "Grammatik-Liste ersetzen")) {
-                            await apiFetch('/admin/grammar-sentences/bulk', { method: 'POST', body: JSON.stringify({ sentences }) });
-                            showToast(`${sentences.length} Grammatik-Sätze importiert!`, "success");
-                            updateAdminGrammarCount();
-                            if (currentMode === 'grammar') startGrammarRound();
-                        }
-                    } catch (err) {
-                        console.error(err);
-                        showToast("Grammatik-Import-Fehler: " + err.message, "error");
-                    }
-                };
-                reader.readAsArrayBuffer(file);
-                e.target.value = '';
-            });
-        }
+        if (adminGrammarBtn) adminGrammarBtn.addEventListener('click', () => {
+            const lang = CURRENT_LANG || 'it';
+            const inputId = `adminGrammarUpload${lang.charAt(0).toUpperCase() + lang.slice(1)}`;
+            const input = document.getElementById(inputId);
+            if (input) input.click();
+        });
 
         async function updateAdminGrammarCount() {
             try {
@@ -7912,17 +7872,24 @@
                     const data = new Uint8Array(event.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
                     const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                    // Use header-based JSON instead of positional arrays
+                    const json = XLSX.utils.sheet_to_json(sheet);
 
-                    const sentencesSubset = json.slice(1).filter(row => row[0] && row[1]);
-                    const sentencesToUpload = sentencesSubset.map(row => ({
-                        it: (row[0] || "").toString().trim(),
-                        de: (row[1] || "").toString().trim(),
-                        category: (row[2] || "Allgemein").toString().trim(),
-                        language: lang
-                    }));
+                    const sentencesToUpload = json.map(row => {
+                        // Robust header mapping
+                        const it = row.Italienisch || row.italienisch || row.IT || row.it || row.Sentence || row.sentence || '';
+                        const de = row.Deutsch || row.deutsch || row.DE || row.de || row.Translation || row.translation || '';
+                        const cat = row.Kategorie || row.kategorie || row.Category || row.category || row.Fokus || row.fokus || row.Type || row.type || "Allgemein";
 
-                    if (sentencesToUpload.length === 0) return showToast("Keine gültigen Sätze gefunden.", "warning");
+                        return {
+                            it: it ? String(it).trim() : null,
+                            de: de ? String(de).trim() : null,
+                            category: String(cat).trim(),
+                            language: lang
+                        };
+                    }).filter(s => s.it && s.de && isNaN(s.it)); // Filter out empty or numeric ID columns
+
+                    if (sentencesToUpload.length === 0) return showToast("Keine gültigen Sätze gefunden (Spalten Italienisch & Deutsch prüfen).", "warning");
 
                     if (await showConfirm(`Die ${lang.toUpperCase()}-Grammatikliste mit ${sentencesToUpload.length} Sätzen ÜBERSCHREIBEN?`, "Import bestätigen")) {
                         const res = await fetch(`${API_BASE_URL}/api/admin/grammar-sentences/bulk`, {
@@ -7935,13 +7902,14 @@
                         });
                         if (res.ok) {
                             showToast(`${sentencesToUpload.length} Sätze importiert.`, "success");
-                            updateAdminBaseVocabCount();
+                            updateAdminGrammarCount();
+                            if (currentMode === 'grammar') startGrammarRound();
                         } else {
                             const errData = await res.json();
                             throw new Error(errData.error || "Serverfehler");
                         }
-                        input.value = '';
                     }
+                    input.value = '';
                 } catch (err) {
                     console.error(err);
                     showToast("Fehler: " + err.message, "error");
