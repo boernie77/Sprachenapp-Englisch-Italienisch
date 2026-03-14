@@ -2,6 +2,14 @@
 <html lang="de">
 
 <head>
+    <!-- Native App Detection Script for spacing overrides -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.Capacitor && window.Capacitor.isNative) {
+                document.body.classList.add('is-native-app');
+            }
+        });
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -997,9 +1005,14 @@
                 }
                 
                 header .flex.justify-center.items-center {
-                    margin-top: calc(env(safe-area-inset-top, 20px) + 10px) !important;
+                    margin-top: 5px !important; /* Gentle margin for generic mobile web */
                     margin-bottom: 0px !important;
                     padding-bottom: 0px !important;
+                }
+                
+                /* EXCLUSIVE NATIVE APP SPACING OVERRIDES */
+                .is-native-app header .flex.justify-center.items-center {
+                    margin-top: calc(env(safe-area-inset-top, 20px) + 7px) !important; /* Exactly 7px per user request */
                 }
 
                 header h1 {
