@@ -986,7 +986,7 @@
 
                 /* Push everything below the notch - Significantly increased for iOS stability */
                 #mainAppContent {
-                    padding-top: calc(env(safe-area-inset-top, 20px) + 60px) !important;
+                    padding-top: calc(env(safe-area-inset-top, 20px) + 30px) !important;
                 }
 
                 header h1 {
@@ -1622,14 +1622,15 @@
         </div>
 
         <!-- Header Bereich -->
-        <header class="text-center mb-2 md:mb-4 w-full max-w-7xl flex-shrink-0 mx-auto">
+        <header class="text-center mb-1 md:mb-4 w-full max-w-7xl flex-shrink-0 mx-auto">
             <h1
-                class="text-2xl md:text-4xl font-bold text-slate-800 mb-1 md:mb-2 flex items-center justify-center gap-2">
-                <span id="appHeaderIcon"></span> <span id="appHeaderTitle">Italienisch Lernen</span> <span class="text-[10px] font-normal text-slate-400 align-top mt-1 ml-1" id="appVersionMain">2.0.0 Stable</span>
+                class="text-2xl md:text-4xl font-bold text-slate-800 mb-0 flex items-center justify-center gap-2">
+                <span id="appHeaderIcon"></span> 
+                <span id="appHeaderTitle">Lernen</span> 
+                <span class="text-[10px] font-normal text-slate-400 align-top mt-1 ml-1" id="appVersionMain">2.0.0 Stable</span>
             </h1>
 
-
-            <div class="flex justify-center items-center gap-2 mt-2 md:mt-4 mb-2">
+            <div class="flex justify-center items-center gap-1 mt-1 mb-1">
                 <div
                     class="bg-slate-200 p-1 md:p-1.5 rounded-xl inline-flex gap-1 shadow-inner text-xs md:text-sm w-full sm:w-auto">
                     <button id="modeDragDropBtn"
@@ -1857,9 +1858,9 @@
 
         <!-- === SCHREIB BEREICH === -->
         <main id="writeContainer"
-            class="w-full max-w-4xl flex-1 min-h-0 hidden flex-col items-center justify-start gap-3 md:gap-4 overflow-y-auto pb-4 mx-auto">
+            class="w-full max-w-4xl flex-1 min-h-0 hidden flex-col items-center justify-start gap-2 md:gap-4 overflow-y-auto pb-4 mx-auto">
             <div id="writeTopBox"
-                class="bg-white p-4 md:p-8 rounded-3xl shadow-sm border border-slate-200 w-full text-center flex flex-col items-center justify-center flex-shrink-0 min-h-[160px] md:min-h-[220px] relative">
+                class="bg-white p-3 md:p-8 rounded-3xl shadow-sm border border-slate-200 w-full text-center flex flex-col items-center justify-center flex-shrink-0 min-h-[120px] md:min-h-[220px] relative">
                 <div id="writeControls" class="absolute top-2 right-2 md:top-4 md:right-4 flex items-center gap-3"></div>
                 <!-- State 1: Question -->
                 <div id="writeQuestionArea" class="w-full">
@@ -5091,10 +5092,10 @@
 
             const isDeToIt = (directionFilterEl.value === 'de-it');
             if (isDeToIt) {
-                writeQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${currentWriteTarget.de}</div></div>`;
-                writeSubtext.textContent = `Auf ${CURRENT_LANG === 'en' ? 'Englisch' : 'Italienisch'}?`;
+                writeQuestionDisplay.innerHTML = `<div class="pt-6 pb-2 px-2 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${currentWriteTarget.de}</div></div>`;
+                writeSubtext.textContent = CURRENT_LANG === 'en' ? 'Auf Englisch?' : 'Auf Italienisch?';
             } else {
-                writeQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${getFullIt(currentWriteTarget)}</div></div>`;
+                writeQuestionDisplay.innerHTML = `<div class="pt-6 pb-2 px-2 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${getFullIt(currentWriteTarget)}</div></div>`;
                 writeSubtext.textContent = "Auf Deutsch?";
             }
 
@@ -5723,7 +5724,7 @@
                         verbOptions.forEach(opt => createQuizButton(opt.id, opt.text));
                     }
                 } else {
-                    if (isDeToIt) { quizQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${currentQuizTarget.de}</div></div>`; quizSubtext.textContent = `Was heißt das auf ${CURRENT_LANG === 'en' ? 'Englisch' : 'Italienisch'}?`; options.forEach(opt => createQuizButton(opt.id, opt.it)); }
+                    if (isDeToIt) { quizQuestionDisplay.innerHTML = `<div class="pt-6 pb-2 px-2 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${currentQuizTarget.de}</div></div>`; quizSubtext.textContent = `Was heißt das auf ${CURRENT_LANG === 'en' ? 'Englisch' : 'Italienisch'}?`; options.forEach(opt => createQuizButton(opt.id, opt.it)); }
                     else { quizQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${currentQuizTarget.it}</div></div>`; quizSubtext.textContent = `Was heißt das auf Deutsch?`; options.forEach(opt => createQuizButton(opt.id, opt.de)); }
                 }
             }
