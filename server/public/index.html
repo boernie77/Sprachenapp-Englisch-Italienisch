@@ -3018,21 +3018,43 @@
                                 <input type="file" id="adminGrammarUploadIt" class="hidden" accept=".xlsx" onchange="uploadGrammar('it')">
                                 <button onclick="document.getElementById('adminGrammarUploadIt').click()"
                                     class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-lg text-xs transition-all shadow-sm">
-                                    📥 Grammatik laden (IT)
+                                    📥 Laden (IT)
                                 </button>
                                 <button onclick="downloadGrammar('it')"
                                     class="w-10 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg flex items-center justify-center border border-slate-200"
-                                    title="Grammatik Liste exportieren">
+                                    title="Italienisch Liste exportieren">
                                     📤
+                                </button>
+                                <button onclick="deleteAdminGrammar('it')"
+                                    class="w-10 bg-red-50 hover:bg-red-100 text-red-500 rounded-lg flex items-center justify-center border border-red-100"
+                                    title="Italienisch Liste leeren">
+                                    🗑️
                                 </button>
                             </div>
                         </div>
                         
-                        <!-- Englisch (Grammar - Placeholder) -->
-                        <div class="p-3 bg-white rounded-xl border border-slate-200 opacity-60">
+                        <!-- Englisch (Grammar) -->
+                        <div class="p-3 bg-white rounded-xl border border-slate-200">
                             <div class="flex justify-between items-center mb-2">
-                                <span class="text-xs font-bold text-slate-600">Englisch (Demnächst)</span>
-                                <span class="text-[10px] text-slate-400">- Sätze</span>
+                                <span class="text-xs font-bold text-slate-600">Englisch</span>
+                                <span id="adminGrammarCountEn" class="text-[10px] text-slate-400">- Sätze</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <input type="file" id="adminGrammarUploadEn" class="hidden" accept=".xlsx" onchange="uploadGrammar('en')">
+                                <button onclick="document.getElementById('adminGrammarUploadEn').click()"
+                                    class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-lg text-xs transition-all shadow-sm">
+                                    📥 Laden (EN)
+                                </button>
+                                <button onclick="downloadGrammar('en')"
+                                    class="w-10 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg flex items-center justify-center border border-slate-200"
+                                    title="Englisch Liste exportieren">
+                                    📤
+                                </button>
+                                <button onclick="deleteAdminGrammar('en')"
+                                    class="w-10 bg-red-50 hover:bg-red-100 text-red-500 rounded-lg flex items-center justify-center border border-red-100"
+                                    title="Englisch Liste leeren">
+                                    🗑️
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -8496,6 +8518,25 @@
             } catch (err) {
                 console.error(err);
                 showToast("Export-Fehler.", "error");
+            }
+        };
+
+        window.deleteAdminGrammar = async function(lang) {
+            if (!(await showConfirm(`Möchtest du wirklich die gesamte globale GRAMMATIK-LISTE (${lang.toUpperCase()}) vom Server löschen?`, "Liste leeren?"))) return;
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/grammar-sentences?language=${lang}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${API_TOKEN}` }
+                });
+                if (res.ok) {
+                    showToast(`${lang.toUpperCase()}-Grammatikliste gelöscht`, "success");
+                    updateAdminGrammarCount();
+                } else {
+                    const data = await res.json();
+                    showToast("Fehler: " + (data.error || 'Unbekannt'), "error");
+                }
+            } catch (err) {
+                showToast("Serverfehler beim Löschen", "error");
             }
         };
 
