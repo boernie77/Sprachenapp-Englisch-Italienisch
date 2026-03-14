@@ -440,7 +440,7 @@ app.get('/api/admin/users', authenticateToken, requireAdmin, async (req, res) =>
       attributes: ['id', 'email', 'name', 'isAdmin', 'isActive', 'lastLogin', 'loginCount', 'createdAt'],
       include: [{
         model: Vocabulary,
-        attributes: ['id'],
+        attributes: ['id', 'language'],
         include: [{
           model: Stats,
           attributes: ['presented', 'correct', 'lastReviewedDate']
