@@ -1603,7 +1603,7 @@
         <header class="text-center mb-2 md:mb-4 w-full max-w-7xl flex-shrink-0 mx-auto">
             <h1
                 class="text-2xl md:text-4xl font-bold text-slate-800 mb-1 md:mb-2 flex items-center justify-center gap-2">
-                <span id="appHeaderIcon"></span> Italienisch Lernen <span class="text-xs font-normal text-slate-400 align-top mt-1 ml-1" id="appVersionMain">2.0.0 Stable</span>
+                <span id="appHeaderIcon"></span> Italienisch Lernen <span class="text-[10px] font-normal text-slate-400 align-top mt-1 ml-1" id="appVersionMain">2.0.0 Stable</span>
             </h1>
 
             <div class="flex justify-center items-center gap-2 mt-2 md:mt-4 mb-2">
@@ -3718,6 +3718,9 @@
                 if (modeGrammarBtn) { modeGrammarBtn.classList.remove('hidden'); modeGrammarBtn.style.removeProperty('display'); }
                 if (tabInfoBtn) { tabInfoBtn.classList.remove('hidden'); tabInfoBtn.style.removeProperty('display'); }
             }
+
+            const vMain = document.getElementById('appVersionMain');
+            if (vMain) vMain.textContent = "2.0.0 Stable";
 
             document.querySelectorAll('.vocab-btn-arrow').forEach(el => el.innerHTML = arrowSVG);
         }
