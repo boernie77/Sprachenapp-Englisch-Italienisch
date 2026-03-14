@@ -3883,15 +3883,14 @@
             const iIcon = document.getElementById('infoIconBtn');
 
             if (CURRENT_LANG === 'en') {
-                if (gBtn) gBtn.classList.add('hidden');
-                if (iIcon) iIcon.classList.add('hidden');  // Hide Info Icon in EN
-                if (iTab) iTab.style.display = 'flex';     // Show Info Tab in EN
-                // If current mode is one of these, switch back to dragdrop
+                if (gBtn) { gBtn.classList.add('hidden'); gBtn.style.setProperty('display', 'none', 'important'); }
+                if (iIcon) { iIcon.classList.add('hidden'); iIcon.style.setProperty('display', 'none', 'important'); }
+                if (iTab) { iTab.classList.remove('hidden'); iTab.style.removeProperty('display'); iTab.style.setProperty('display', 'flex', 'important'); }
                 if (currentMode === 'grammar') switchMode('dragdrop');
             } else {
-                if (gBtn) gBtn.classList.remove('hidden');
-                if (iIcon) iIcon.classList.remove('hidden'); // Show Info Icon in IT
-                if (iTab) iTab.style.display = 'none';       // Hide Info Tab in IT
+                if (gBtn) { gBtn.classList.remove('hidden'); gBtn.style.removeProperty('display'); }
+                if (iIcon) { iIcon.classList.remove('hidden'); iIcon.style.removeProperty('display'); }
+                if (iTab) { iTab.classList.add('hidden'); iTab.style.setProperty('display', 'none', 'important'); }
                 if (currentMode === 'info') switchMode('dragdrop');
             }
 
@@ -3949,15 +3948,11 @@
             // Language specific UI adjustments
             const infoSection = document.getElementById('infoSection');
             const infoModeToggle = document.getElementById('infoModeToggle');
-            const modeInfoBtn = document.getElementById('modeInfoBtn');
-            const modeGrammarBtn = document.getElementById('modeGrammarBtn');
             const tabInfoBtn = document.getElementById('tabInfoBtn');
 
             if (CURRENT_LANG === 'en') {
                 if (infoSection) { infoSection.classList.add('hidden'); infoSection.style.setProperty('display', 'none', 'important'); }
                 if (infoModeToggle) { infoModeToggle.classList.add('hidden'); infoModeToggle.style.setProperty('display', 'none', 'important'); }
-                if (modeInfoBtn) { modeInfoBtn.classList.add('hidden'); modeInfoBtn.style.setProperty('display', 'none', 'important'); }
-                if (modeGrammarBtn) { modeGrammarBtn.classList.add('hidden'); modeGrammarBtn.style.setProperty('display', 'none', 'important'); }
                 if (tabInfoBtn) { tabInfoBtn.classList.add('hidden'); tabInfoBtn.style.setProperty('display', 'none', 'important'); }
             } else {
                 if (infoSection) {
@@ -3970,8 +3965,6 @@
                     }
                 }
                 if (infoModeToggle) { infoModeToggle.classList.remove('hidden'); infoModeToggle.style.removeProperty('display'); }
-                if (modeInfoBtn) { modeInfoBtn.classList.remove('hidden'); modeInfoBtn.style.removeProperty('display'); }
-                if (modeGrammarBtn) { modeGrammarBtn.classList.remove('hidden'); modeGrammarBtn.style.removeProperty('display'); }
                 if (tabInfoBtn) { tabInfoBtn.classList.remove('hidden'); tabInfoBtn.style.removeProperty('display'); }
             }
 
