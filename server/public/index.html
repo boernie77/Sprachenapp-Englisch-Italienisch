@@ -5834,17 +5834,18 @@
                         if (json.length === 0) return showToast("Die Datei ist leer.", "warning");
 
                         const sentences = json.map(row => {
-                            // Flexibles Mapping: Suche nach bekannten Keys oder nutze Index-Fallback
-                            const it = row.Italienisch || row.italienisch || row.IT || row.it || Object.values(row)[0];
-                            const de = row.Deutsch || row.deutsch || row.DE || row.de || Object.values(row)[1];
-                            const cat = row.Kategorie || row.kategorie || row.Category || row.category || row.Fokus || row.fokus || Object.values(row)[2] || "Allgemein";
+                            // Flexibles Mapping: Suche nach bekannten Keys
+                            const it = row.Italienisch || row.italienisch || row.IT || row.it || row.Sentence || row.sentence || '';
+                            const de = row.Deutsch || row.deutsch || row.DE || row.de || row.Translation || row.translation || '';
+                            const cat = row.Kategorie || row.kategorie || row.Category || row.category || row.Fokus || row.fokus || row.Type || row.type || "Allgemein";
 
                             return {
                                 it: it ? String(it).trim() : null,
                                 de: de ? String(de).trim() : null,
                                 category: String(cat).trim()
                             };
-                        }).filter(s => s.it && s.de);
+                        }).filter(s => s.it && s.de && isNaN(s.it)); // Added isNaN(s.it) to filter out ID columns
+
 
                         if (sentences.length === 0) return showToast("Keine gültigen Sätze gefunden (IT & DE Spalten prüfen).", "warning");
 
