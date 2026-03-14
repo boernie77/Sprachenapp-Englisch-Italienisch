@@ -994,8 +994,8 @@
 
                 /* Push everything below the notch - Balanced for iOS stability */
                 #mainAppContent {
-                    padding-top: calc(env(safe-area-inset-top, 20px) + 22px) !important;
-                    gap: 2px !important; /* 2px gap per user request */
+                    padding-top: calc(env(safe-area-inset-top, 20px) + 60px) !important;
+                    gap: 5px !important; /* 5px gap for all components per user request */
                 }
 
                 /* Eliminate all margins around the tabs and header text */
@@ -1012,7 +1012,7 @@
                 
                 /* EXCLUSIVE NATIVE APP SPACING OVERRIDES */
                 .is-native-app header .flex.justify-center.items-center {
-                    margin-top: calc(env(safe-area-inset-top, 20px) + 7px) !important; /* Exactly 7px per user request */
+                    margin-top: 7px !important; /* Exactly 7px per user request */
                 }
 
                 header h1 {
@@ -1061,11 +1061,6 @@
                     border: 1px solid rgba(255, 255, 255, 0.3) !important;
                 }
 
-                /* Mode specific mobile spacing adjustments */
-                #cardsContainer, #writeContainer, #quizContainer {
-                    padding-top: 2.5rem !important;
-                    padding-bottom: 3rem !important;
-                }
                 #dropdownMenu button {
                     color: #ffffff !important;
                     border-color: rgba(255, 255, 255, 0.1) !important;
