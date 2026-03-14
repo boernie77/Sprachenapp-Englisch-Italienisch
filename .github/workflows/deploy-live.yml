@@ -1,0 +1,26 @@
+name: Deploy to Production (Live)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Update and Restart App (Live)
+        run: |
+          cd /home/systemv/lernapp
+          
+          if [ ! -d ".git" ]; then
+            git clone https://github.com/boernie77/Lernapp-Italienisch.git .
+          fi
+          
+          git fetch origin main
+          git reset --hard origin/main
+          
+          docker-compose down --remove-orphans
+          docker-compose build --no-cache
+          docker-compose up -d --force-recreate --remove-orphans

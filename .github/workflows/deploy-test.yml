@@ -1,4 +1,4 @@
-name: Deploy Multi-Language App to Test Environment
+name: Deploy to Test Environment
 
 on:
   push:
@@ -13,13 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Update and Restart App
+      - name: Update and Restart App (Test)
         run: |
-          # Pfad auf dem Server für die neue App (muss ggf. einmalig angelegt werden)
           mkdir -p /home/systemv/multilang-test
           cd /home/systemv/multilang-test
           
-          # Git initialisieren falls noch nicht geschehen
           if [ ! -d ".git" ]; then
             git clone https://github.com/boernie77/Sprachenapp-Englisch-Italienisch.git .
           fi
@@ -27,7 +25,6 @@ jobs:
           git fetch origin main
           git reset --hard origin/main
           
-          # Docker Container neu bauen und starten
           docker-compose down --remove-orphans
           docker-compose build --no-cache
           docker-compose up -d --force-recreate --remove-orphans
