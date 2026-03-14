@@ -986,8 +986,8 @@
 
                 /* Push everything below the notch - Balanced for iOS stability */
                 #mainAppContent {
-                    padding-top: calc(env(safe-area-inset-top, 20px) + 55px) !important;
-                    gap: 0px !important; /* Eliminate gap */
+                    padding-top: calc(env(safe-area-inset-top, 20px) + 22px) !important;
+                    gap: 2px !important; /* 2px gap per user request */
                 }
 
                 /* Eliminate all margins around the tabs and header text */
@@ -997,7 +997,7 @@
                 }
                 
                 header .flex.justify-center.items-center {
-                    margin-top: calc(env(safe-area-inset-top, 20px) + 38px) !important;
+                    margin-top: calc(env(safe-area-inset-top, 20px) + 10px) !important;
                     margin-bottom: 0px !important;
                     padding-bottom: 0px !important;
                 }
