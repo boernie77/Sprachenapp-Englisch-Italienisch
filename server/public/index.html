@@ -1878,10 +1878,12 @@
             </div>
             <div class="w-full relative mt-4">
                 <input type="text" id="writeInput" autocomplete="off" placeholder="Deine Antwort..."
-                    class="w-full p-3 md:p-4 text-lg md:text-xl pl-4 pr-16 md:pr-20 text-left border-2 border-slate-300 rounded-xl focus:outline-none focus:border-blue-500 shadow-sm bg-white text-slate-800 transition-colors">
+                    class="w-full p-4 md:p-5 text-xl md:text-2xl pl-4 pr-16 md:pr-20 text-left border-2 border-slate-300 rounded-xl focus:outline-none focus:border-blue-500 shadow-sm bg-white text-slate-800 transition-colors">
                 <button id="writeSubmitBtn" title="Prüfen"
-                    class="absolute right-2 top-2 bottom-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm transition-all active:transform active:scale-95 flex items-center justify-center px-4 md:px-5">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    class="write-inline-btn border-none outline-none absolute right-2 top-2 bottom-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-sm transition-all active:transform active:scale-95 flex items-center justify-center px-4 md:px-5">
+                    <span class="btn-text hidden md:inline-block mr-2">Prüfen</span>
+                    <svg class="w-6 h-6 btn-icon-check" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <svg class="w-6 h-6 btn-icon-next hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </button>
             </div>
         </main>
@@ -5056,9 +5058,13 @@
             writeFeedbackArea.classList.add('hidden');
             writeInput.value = ''; writeInput.disabled = false;
             writeSubmitBtn.disabled = false;
-            writeSubmitBtn.textContent = 'Prüfen';
-            writeSubmitBtn.className = "mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 md:py-4 px-6 rounded-xl shadow-md transition-all active:transform active:scale-95 text-lg";
-            writeSubmitBtn.classList.remove('btn-next');
+            writeSubmitBtn.setAttribute('data-state', 'check');
+            writeSubmitBtn.querySelector('.btn-text').textContent = 'Prüfen';
+            writeSubmitBtn.querySelector('.btn-icon-check').classList.remove('hidden');
+            writeSubmitBtn.querySelector('.btn-icon-next').classList.add('hidden');
+            writeSubmitBtn.classList.remove('btn-next', 'bg-slate-700', 'hover:bg-slate-800');
+            writeSubmitBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            
             let availableWords = getAvailableWords();
             if (availableWords.length === 0) return;
             const { due, future } = getDueWords(availableWords);
@@ -5107,7 +5113,7 @@
         }
 
         function handleWriteSubmit() {
-            if (writeSubmitBtn.textContent === 'Nächstes Wort') {
+            if (writeSubmitBtn.getAttribute('data-state') === 'next') {
                 startWriteRound();
                 return;
             }
@@ -5152,10 +5158,14 @@
             writeFeedbackArea.classList.add('flex');
 
             // Toggle button to "Next"
-            writeSubmitBtn.textContent = 'Nächstes Wort';
+            writeSubmitBtn.setAttribute('data-state', 'next');
+            writeSubmitBtn.querySelector('.btn-text').textContent = 'Weiter';
+            writeSubmitBtn.querySelector('.btn-icon-check').classList.add('hidden');
+            writeSubmitBtn.querySelector('.btn-icon-next').classList.remove('hidden');
             writeSubmitBtn.disabled = false;
+            
             writeSubmitBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
-            writeSubmitBtn.classList.add('btn-next');
+            writeSubmitBtn.classList.add('btn-next', 'bg-slate-700', 'hover:bg-slate-800');
             writeSubmitBtn.focus();
         }
 
