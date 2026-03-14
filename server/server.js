@@ -439,6 +439,7 @@ app.get('/api/admin/users', authenticateToken, requireAdmin, async (req, res) =>
   try {
     const users = await User.findAll({ 
       attributes: ['id', 'email', 'name', 'isAdmin', 'isActive', 'lastLogin', 'loginCount', 'createdAt'],
+      order: [['id', 'ASC']],
       include: [{
         model: Vocabulary,
         attributes: ['id', 'language'],
