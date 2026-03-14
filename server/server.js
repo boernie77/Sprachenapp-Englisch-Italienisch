@@ -563,6 +563,13 @@ app.post('/api/admin/grammar-sentences/bulk', authenticateToken, requireAdmin, a
     }
 }));
 
+app.delete('/api/admin/grammar-sentences', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
+    const { language } = req.query;
+    if (!language) return res.status(400).json({ error: 'Language required' });
+    await GrammarSentence.destroy({ where: { language } });
+    res.json({ message: 'Grammar sentences deleted' });
+}));
+
 app.get('/api/grammar-sentences', authenticateToken, asyncHandler(async (req, res) => {
     const { language } = req.query;
     const where = {};
