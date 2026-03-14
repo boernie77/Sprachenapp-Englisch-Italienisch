@@ -69,7 +69,7 @@ const handleBulkUpload = async (Model, data, res, transaction) => {
 };
 
 // Health Check
-app.get('/api/health', (req, res) => res.json({ status: 'ok', version: '1.0.4', timestamp: new Date() }));
+app.get('/api/health', (req, res) => res.json({ status: 'ok', version: '2.0.1', timestamp: new Date() }));
 
 // Auth Routes
 app.post('/api/auth/register', async (req, res) => {
