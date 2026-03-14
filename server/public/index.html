@@ -7640,8 +7640,8 @@
                 const isActive = u.isActive !== false;
                 const isPowerUser = u.loginCount && u.loginCount >= 5;
                 const powerIcon = isPowerUser ? '🔥' : '';
-                const lastLoginStr = u.lastLogin ? new Date(u.lastLogin).toLocaleString() : 'Nie';
-                const lastActivityStr = u.lastActivity ? new Date(u.lastActivity).toLocaleString() : 'Nie';
+                const lastLoginStr = u.lastLogin ? new Date(u.lastLogin).toLocaleString('de-DE') : 'Nie';
+                const lastActivityStr = u.lastActivity ? new Date(u.lastActivity).toLocaleString('de-DE') : 'Nie';
 
                 return `
                 <div class="bg-slate-50 border ${isActive ? 'border-slate-200' : 'border-red-300 opacity-75'} rounded-xl p-4 mb-3 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
@@ -7649,7 +7649,7 @@
                         <p class="font-bold text-slate-800 break-all">${powerIcon} ${u.email} ${u.isAdmin ? '👑' : ''} ${!isActive ? '<span class="text-red-500 text-xs ml-2">(Gesperrt)</span>' : ''}</p>
                         ${u.name ? `<p class="text-xs text-blue-600 font-semibold mt-0.5">Name: ${u.name}</p>` : ''}
                         <p class="text-[11px] text-slate-500 mt-1">
-                            ID: ${u.id} | Reg: ${new Date(u.createdAt).toLocaleDateString()}<br/>
+                            ID: ${u.id} | Reg: ${new Date(u.createdAt).toLocaleDateString('de-DE')}<br/>
                             Logins: ${u.loginCount || 0} | Zuletzt: ${lastLoginStr}<br/>
                             Letzte Übung: <span class="text-blue-600 font-medium">${lastActivityStr}</span><br/>
                             Vokabeln (IT): ${u.stats?.it?.total || 0} (${u.stats?.it?.learned || 0} gelernt)<br/>
@@ -7702,8 +7702,8 @@
                     u.isAdmin ? "Ja" : "Nein",
                     u.isActive !== false ? "Ja" : "Nein",
                     u.loginCount || 0,
-                    new Date(u.createdAt).toLocaleDateString(),
-                    u.lastLogin ? new Date(u.lastLogin).toLocaleString() : "Nie",
+                    new Date(u.createdAt).toLocaleDateString('de-DE'),
+                    u.lastLogin ? new Date(u.lastLogin).toLocaleString('de-DE') : "Nie",
                     u.stats?.it?.total || 0,
                     u.stats?.it?.learned || 0,
                     u.stats?.en?.total || 0,
