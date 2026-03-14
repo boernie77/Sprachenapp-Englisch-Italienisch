@@ -2969,6 +2969,11 @@
                                     title="Italienisch Liste exportieren">
                                     📤
                                 </button>
+                                <button onclick="deleteAdminBaseVocab('it')"
+                                    class="w-10 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg flex items-center justify-center border border-red-100"
+                                    title="Italienisch Liste leeren">
+                                    🗑️
+                                </button>
                             </div>
                         </div>
 
@@ -2988,6 +2993,11 @@
                                     class="w-10 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg flex items-center justify-center border border-slate-200"
                                     title="Englisch Liste exportieren">
                                     📤
+                                </button>
+                                <button onclick="deleteAdminBaseVocab('en')"
+                                    class="w-10 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg flex items-center justify-center border border-red-100"
+                                    title="Englisch Liste leeren">
+                                    🗑️
                                 </button>
                             </div>
                         </div>
@@ -3738,6 +3748,9 @@
             await loadDataFromServer();
             if (lang === 'it') await loadGrammarSentences();
             
+            // Refresh administration/modal stats if needed
+            if (typeof updateAdminBaseVocabCount === 'function') updateAdminBaseVocabCount();
+
             if (currentMode === 'dragdrop' || currentMode === 'quiz' || currentMode === 'write') {
                 startNewRound();
             }
@@ -3881,8 +3894,11 @@
 
             headers['Authorization'] = `Bearer ${API_TOKEN}`;
 
-            let separator = endpoint.includes('?') ? '&' : '?';
-            const fullUrl = `${API_BASE_URL}/api${endpoint}${separator}language=${CURRENT_LANG}`;
+            let fullUrl = `${API_BASE_URL}/api${endpoint}`;
+            if (!endpoint.includes('language=')) {
+                let separator = endpoint.includes('?') ? '&' : '?';
+                fullUrl += `${separator}language=${CURRENT_LANG}`;
+            }
             if (isCapacitor) console.log(`[API FETCH] ${options.method || 'GET'} ${fullUrl}`);
 
             try {
@@ -6484,11 +6500,11 @@
 
         loadBaseVocabArea.addEventListener('click', async () => {
             try {
-                // 1. Fetch from server
+                // 1. Fetch from server based on CURRENT_LANG
                 let serverBase = [];
                 let fetchError = null;
                 try {
-                    const result = await apiFetch('/base-vocab');
+                    const result = await apiFetch(`/base-vocab?language=${CURRENT_LANG}`);
                     if (result) serverBase = result;
                 } catch (e) {
                     fetchError = e.message;
@@ -6499,29 +6515,35 @@
                 let sourceLabel = "";
 
                 if (serverBase.length > 0) {
-                    const loadConfirmed = await showConfirm(`Basis-Liste auf dem Server gefunden (${serverBase.length} Vokabeln). Möchtest du diese laden?`, "Basis-Liste laden");
+                    const loadConfirmed = await showConfirm(`Basis-Liste (${CURRENT_LANG.toUpperCase()}) auf dem Server gefunden (${serverBase.length} Vokabeln). Möchtest du diese laden?`, "Basis-Liste laden");
                     if (!loadConfirmed) return;
                     wordsToUpload = serverBase.map(v => ({
-                        de: v.de, it: v.it, typ: v.typ, emoji: v.emoji, grammatica: v.grammatica
+                        de: v.de, it: v.it, typ: v.typ, emoji: v.emoji, grammatica: v.grammatica, language: CURRENT_LANG
                     }));
-                    sourceLabel = "Server-Basisliste";
+                    sourceLabel = `${CURRENT_LANG.toUpperCase()}-Server-Basisliste`;
                 } else {
                     // Inform user WHY fallback is offered
-                    let msg = "Keine Basis-Liste auf dem Server hinterlegt.";
+                    let msg = `Keine Basis-Liste (${CURRENT_LANG.toUpperCase()}) auf dem Server hinterlegt.`;
                     if (fetchError) msg = `Fehler beim Abrufen der Basis-Liste vom Server: ${fetchError}.`;
 
-                    const fallbackConfirmed = await showConfirm(`${msg}\n\nMöchtest du stattdessen die Standard-Offline-Liste (~700 Vokabeln) laden?`, "Standard-Liste laden?");
+                    const fallbackConfirmed = await showConfirm(`${msg}\n\nMöchtest du stattdessen die Standard-Offline-Liste laden?`, "Standard-Liste laden?");
                     if (!fallbackConfirmed) return;
 
-                    wordsToUpload = offlineDictionary.map(item => {
+                    const dictToUse = CURRENT_LANG === 'en' ? (window.offlineDictionaryEn || []) : offlineDictionary;
+                    
+                    if (dictToUse.length === 0) {
+                        return showToast(`Keine Offline-Liste für ${CURRENT_LANG.toUpperCase()} verfügbar.`, "warning");
+                    }
+
+                    wordsToUpload = dictToUse.map(item => {
                         let grammatica = item.grammatica || '';
                         const isNoun = item.typ && (item.typ.toLowerCase().includes('substantiv') || item.typ.toLowerCase().includes('nomen'));
-                        if (!grammatica && isNoun) {
+                        if (!grammatica && isNoun && CURRENT_LANG === 'it') {
                             grammatica = autoDetectGrammatica(item.it);
                         }
-                        return { ...item, grammatica: grammatica || null };
+                        return { ...item, language: CURRENT_LANG, grammatica: grammatica || null };
                     });
-                    sourceLabel = "Standard-Liste";
+                    sourceLabel = `${CURRENT_LANG.toUpperCase()}-Standard-Liste`;
                 }
 
                 // 2. Choice Modal for Add vs Replace
@@ -6529,12 +6551,12 @@
                 if (!choice) return; // Cancel
 
                 if (choice === 'replace') {
-                    await apiFetch('/vocab/clear/all', { method: 'DELETE' });
+                    await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}`, { method: 'DELETE' });
                 }
 
                 const result = await apiFetch('/vocab/bulk', {
                     method: 'POST',
-                    body: JSON.stringify({ words: wordsToUpload })
+                    body: JSON.stringify({ words: wordsToUpload, language: CURRENT_LANG })
                 });
 
                 if (result) {
@@ -6874,7 +6896,7 @@
             { it: 'uomo', de: 'Mann', typ: 'Substantiv' }, { it: 'donna', de: 'Frau', typ: 'Substantiv' },
             { it: 'bambino', de: 'Kind', typ: 'Substantiv' }, { it: 'ragazzo', de: 'Junge', typ: 'Substantiv' },
             { it: 'ragazza', de: 'Mädchen', typ: 'Substantiv' }, { it: 'famiglia', de: 'Familie', typ: 'Substantiv', emoji: '👨‍👩‍👧' },
-            { it: 'padre', de: 'Vater', typ: 'Substantiv' }, { it: 'madre', de: 'Mutter', typ: 'Substantiv' },
+            { it: 'padre', de: 'Vater', typ: 'Substantiv', grammatica: 'm-sg' }, { it: 'madre', de: 'Mutter', typ: 'Substantiv' },
             { it: 'figlio', de: 'Sohn', typ: 'Substantiv' }, { it: 'figlia', de: 'Tochter', typ: 'Substantiv' },
             { it: 'fratello', de: 'Bruder', typ: 'Substantiv' }, { it: 'sorella', de: 'Schwester', typ: 'Substantiv' },
             { it: 'nonno', de: 'Großvater', typ: 'Substantiv' }, { it: 'nonna', de: 'Großmutter', typ: 'Substantiv' },
@@ -7410,6 +7432,9 @@
             if (itWord.endsWith('i')) return 'm-pl';
             if (itWord.endsWith('e')) {
                 if (itWord.endsWith('ie')) return 'f-pl';
+                // Common masculine nouns ending in 'e'
+                const mascE = ['padre', 'cane', 'ponte', 'sole', 'mare', 'fiore', 'pesce', 'stivale', 'cuore', 'piede', 'latte'];
+                if (mascE.includes(itWord)) return 'm-sg';
                 return 'f-sg';
             }
             if (itWord.endsWith('a')) return 'f-sg';
@@ -8216,28 +8241,39 @@
 
         async function updateAdminBaseVocabCount() {
             try {
-                const result = await apiFetch('/base-vocab');
-                const count = (result && result.length) || 0;
+                // Fetch counts for both languages
+                const [itRes, enRes] = await Promise.all([
+                    apiFetch('/base-vocab?language=it'),
+                    apiFetch('/base-vocab?language=en')
+                ]);
+                const countIt = (itRes && itRes.length) || 0;
+                const countEn = (enRes && enRes.length) || 0;
 
-                // Admin UI
-                const adminCountEl = document.getElementById('adminBaseVocabCount');
-                if (adminCountEl) adminCountEl.textContent = `${count} Einträge vorhanden`;
+                // Admin Dashboard counts
+                const elIt = document.getElementById('adminBaseVocabCountIt');
+                if (elIt) elIt.textContent = `${countIt} Vokabeln`;
+                const elEn = document.getElementById('adminBaseVocabCountEn');
+                if (elEn) elEn.textContent = `${countEn} Vokabeln`;
 
-                // User UI (Excel Modal)
+                // Grammar counts (IT)
+                const grammarItRes = await apiFetch('/grammar-sentences?language=it');
+                const elGrammarIt = document.getElementById('adminGrammarCountIt');
+                if (elGrammarIt) elGrammarIt.textContent = `${(grammarItRes && grammarItRes.length) || 0} Sätze`;
+
+                // Update User Modal (Excel Modal) dynamically
                 const userCountEl = document.getElementById('baseVocabUserCountDesc');
                 if (userCountEl) {
-                    if (count > 0) {
-                        userCountEl.textContent = `Importiert eine kuratierte Liste von derzeit ${count} Basis-Vokabeln`;
+                    // Force a re-fetch of current lang count specifically to avoid stale UI state
+                    const targetCount = CURRENT_LANG === 'en' ? countEn : countIt;
+                    if (targetCount > 0) {
+                        userCountEl.textContent = `Importiert eine kuratierte Liste von derzeit ${targetCount} Basis-Vokabeln (${CURRENT_LANG.toUpperCase()})`;
                     } else {
-                        userCountEl.textContent = `Importiert eine kuratierte Liste von derzeit ~700 Basis-Vokabeln (Offline-Fallback)`;
+                        const fallbackCount = CURRENT_LANG === 'en' ? "~500" : "~700";
+                        userCountEl.textContent = `Importiert eine kuratierte Liste von derzeit ${fallbackCount} Basis-Vokabeln (Offline-Fallback ${CURRENT_LANG.toUpperCase()})`;
                     }
                 }
             } catch (err) {
-                console.warn("Could not update base vocab count", err);
-                const adminCountEl = document.getElementById('adminBaseVocabCount');
-                if (adminCountEl) adminCountEl.textContent = "Fehler beim Laden";
-                const userCountEl = document.getElementById('baseVocabUserCountDesc');
-                if (userCountEl) userCountEl.textContent = "Importiert Basis-Vokabeln (Offline-Fallback)";
+                console.warn("Could not update base vocab counts", err);
             }
         }
 
@@ -8276,102 +8312,254 @@
             } catch (err) { showToast("Verbindungsfehler", "error"); }
         }
 
-        // --- Admin Base Vocab Logic ---
-        const adminBaseVocabBtn = document.getElementById('adminBaseVocabBtn');
-        const adminBaseVocabUpload = document.getElementById('adminBaseVocabUpload');
-        const adminBaseVocabDownloadBtn = document.getElementById('adminBaseVocabDownloadBtn');
-        const adminGrammarDownloadBtn = document.getElementById('adminGrammarDownloadBtn');
+        // --- Admin Excel/Grammar Logic ---
+        window.uploadBaseVocab = async function(lang) {
+            const inputId = `adminBaseVocabUpload${lang.charAt(0).toUpperCase() + lang.slice(1)}`;
+            const input = document.getElementById(inputId);
+            if (!input) return;
 
-        if (adminBaseVocabBtn) {
-            adminBaseVocabBtn.addEventListener('click', () => adminBaseVocabUpload.click());
-
-            adminBaseVocabUpload.addEventListener('change', async e => {
-                const file = e.target.files[0]; if (!file) return;
-                const reader = new FileReader();
-                reader.onload = async (event) => {
-                    try {
-                        const data = new Uint8Array(event.target.result);
-                        const workbook = XLSX.read(data, { type: 'array' });
-                        const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                        const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-
-                        const wordsSubset = json.slice(1).filter(row => row[0] && row[1]);
-                        const wordsToUpload = wordsSubset.map(row => {
-                            const italWord = (row[0] || "").toString().trim();
-                            const deWord = (row[1] || "").toString().trim();
-                            const typRaw = (row[2] || "Sonstiges").toString().trim();
-                            const emoji = (row[3] || "").toString().trim();
-
-                            let grammatica = null;
-                            if (typRaw.toLowerCase().includes('substantiv') || typRaw.toLowerCase().includes('nomen')) {
-                                grammatica = autoDetectGrammatica(italWord);
-                            }
-
-                            return { it: italWord, de: deWord, typ: typRaw, emoji: emoji || null, grammatica };
-                        });
-
-                        if (wordsToUpload.length === 0) {
-                            return showToast("Die Datei enthält keine gültigen Vokabeln (Spalte 1 & 2 prüfen).", "warning");
-                        }
-
-                        if (await showConfirm(`Diese Aktion ersetzt die gesamte globale Basisliste durch ${wordsToUpload.length} neue Einträge. Fortfahren?`, "Basisliste ersetzen")) {
-                            const result = await apiFetch('/admin/base-vocab/bulk', {
-                                method: 'POST',
-                                body: JSON.stringify({ words: wordsToUpload })
-                            });
-                            showToast(`${result.length} Basis-Vokabeln wurden global aktualisiert.`, "success");
-                            updateAdminBaseVocabCount();
-                            adminBaseVocabUpload.value = '';
-                        }
-                    } catch (err) {
-                        console.error(err);
-                        showToast("Fehler: " + err.message, "error");
-                    }
-                };
-                reader.readAsArrayBuffer(file);
-            });
-        }
-
-        if (adminBaseVocabDownloadBtn) {
-            adminBaseVocabDownloadBtn.addEventListener('click', async () => {
+            const file = input.files[0]; if (!file) return;
+            console.log(`[ADMIN] Starting upload for ${lang.toUpperCase()}...`);
+            
+            const reader = new FileReader();
+            reader.onload = async (event) => {
                 try {
-                    const baseVocab = await apiFetch('/base-vocab');
-                    if (!baseVocab || baseVocab.length === 0) return showToast("Die Basisliste ist aktuell leer.", "info");
+                    const data = new Uint8Array(event.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const sheetName = workbook.SheetNames[0];
+                    const sheet = workbook.Sheets[sheetName];
+                    const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-                    const wsData = [
-                        ["Italienisch", "Deutsch", "Wortart", "Emoji", "Grammatik"],
-                        ...baseVocab.map(v => [v.it, v.de, v.typ, v.emoji || "", v.grammatica || ""])
-                    ];
-                    const ws = XLSX.utils.aoa_to_sheet(wsData);
-                    const wb = XLSX.utils.book_new();
-                    XLSX.utils.book_append_sheet(wb, ws, "BaseVocab");
-                    XLSX.writeFile(wb, "Basis_Vokabeln_Global.xlsx");
+                    if (!json || json.length < 2) return showToast("Datei ist leer oder hat kein Header-Format.", "warning");
+
+                    const wordsToUpload = json.slice(1).filter(row => row[0] && row[1]).map(row => {
+                        const word1 = String(row[0] || "").trim();
+                        const word2 = String(row[1] || "").trim();
+                        const typRaw = String(row[2] || "Sonstiges").trim();
+                        const emoji = String(row[3] || "").trim();
+
+                        let grammatica = null;
+                        if (lang === 'it' && (typRaw.toLowerCase().includes('substantiv') || typRaw.toLowerCase().includes('nomen'))) {
+                            grammatica = autoDetectGrammatica(word1);
+                        }
+                        return { it: word1, de: word2, typ: typRaw, emoji: emoji || null, grammatica, language: lang };
+                    });
+
+                    if (wordsToUpload.length === 0) return showToast("Keine gültigen Zeilen (Spalte 1 & 2 nötig) gefunden.", "warning");
+
+                    const confirmMsg = `Möchtest du wirklich die ${lang.toUpperCase()}-Basisliste mit ${wordsToUpload.length} neuen Einträgen ÜBERSCHREIBEN?`;
+                    if (await showConfirm(confirmMsg, "Import bestätigen")) {
+                        const res = await fetch(`${API_BASE_URL}/api/admin/base-vocab/bulk`, {
+                            method: 'POST',
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${API_TOKEN}`
+                            },
+                            body: JSON.stringify({ words: wordsToUpload, language: lang })
+                        });
+                        
+                        if (res.ok) {
+                            showToast(`${wordsToUpload.length} ${lang.toUpperCase()}-Basis-Vokabeln erfolgreich importiert.`, "success");
+                            updateAdminBaseVocabCount();
+                        } else {
+                            const errData = await res.json();
+                            throw new Error(errData.error || "Serverfehler beim Import");
+                        }
+                        input.value = '';
+                    }
+                } catch (err) {
+                    console.error("[UPLOAD ERROR]", err);
+                    showToast("Import-Fehler: " + err.message, "error");
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        };
+
+        window.downloadBaseVocab = async function(lang) {
+            try {
+                console.log(`[ADMIN] Starting download for ${lang.toUpperCase()}...`);
+                const res = await fetch(`${API_BASE_URL}/api/base-vocab?language=${lang}`, {
+                    headers: { 'Authorization': `Bearer ${API_TOKEN}` }
+                });
+                if (!res.ok) throw new Error("Serverfehler beim Abrufen");
+                const baseVocab = await res.json();
+
+                if (!baseVocab || baseVocab.length === 0) return showToast(`Die ${lang.toUpperCase()}-Basisliste ist leer.`, "info");
+
+                const wsData = [
+                    [lang === 'it' ? "Italienisch" : "Englisch", "Deutsch", "Wortart", "Emoji", "Grammatik"],
+                    ...baseVocab.map(v => [v.it, v.de, v.typ, v.emoji || "", v.grammatica || ""])
+                ];
+                const ws = XLSX.utils.aoa_to_sheet(wsData);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, `BaseVocab_${lang}`);
+                XLSX.writeFile(wb, `Basis_Vokabeln_${lang.toUpperCase()}_Global.xlsx`);
+            } catch (err) {
+                console.error("[DOWNLOAD ERROR]", err);
+                showToast("Export-Fehler: " + err.message, "error");
+            }
+        };
+
+        window.deleteAdminBaseVocab = async function(lang) {
+            if (!(await showConfirm(`Möchtest du wirklich die gesamte globale BASIS-LISTE (${lang.toUpperCase()}) vom Server löschen?`, "Liste leeren?"))) return;
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/base-vocab/bulk`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_TOKEN}`
+                    },
+                    body: JSON.stringify({ words: [], language: lang })
+                });
+                if (res.ok) {
+                    showToast(`${lang.toUpperCase()}-Basisliste geleert.`, "success");
+                    updateAdminBaseVocabCount();
+                }
+            } catch (err) { showToast("Fehler beim Leeren.", "error"); }
+        };
+
+        window.uploadGrammar = async function(lang) {
+            const inputId = `adminGrammarUpload${lang.charAt(0).toUpperCase() + lang.slice(1)}`;
+            const input = document.getElementById(inputId);
+            if (!input) return;
+
+            const file = input.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                try {
+                    const data = new Uint8Array(event.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+                    const sentencesSubset = json.slice(1).filter(row => row[0] && row[1]);
+                    const sentencesToUpload = sentencesSubset.map(row => ({
+                        it: (row[0] || "").toString().trim(),
+                        de: (row[1] || "").toString().trim(),
+                        category: (row[2] || "Allgemein").toString().trim(),
+                        language: lang
+                    }));
+
+                    if (sentencesToUpload.length === 0) return showToast("Keine gültigen Sätze gefunden.", "warning");
+
+                    if (await showConfirm(`Die ${lang.toUpperCase()}-Grammatikliste mit ${sentencesToUpload.length} Sätzen ÜBERSCHREIBEN?`, "Import bestätigen")) {
+                        const res = await fetch(`${API_BASE_URL}/api/admin/grammar-sentences/bulk`, {
+                            method: 'POST',
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${API_TOKEN}`
+                            },
+                            body: JSON.stringify({ sentences: sentencesToUpload, language: lang })
+                        });
+                        if (res.ok) {
+                            showToast(`${sentencesToUpload.length} Sätze importiert.`, "success");
+                            updateAdminBaseVocabCount();
+                        } else {
+                            const errData = await res.json();
+                            throw new Error(errData.error || "Serverfehler");
+                        }
+                        input.value = '';
+                    }
                 } catch (err) {
                     console.error(err);
-                    showToast("Fehler beim Exportieren.", "error");
+                    showToast("Fehler: " + err.message, "error");
                 }
-            });
+            };
+            reader.readAsArrayBuffer(file);
+        };
 
-            if (adminGrammarDownloadBtn) {
-                adminGrammarDownloadBtn.addEventListener('click', async () => {
-                    try {
-                        const sentences = await apiFetch('/grammar-sentences');
-                        if (!sentences || sentences.length === 0) return showToast("Die Grammatikliste ist aktuell leer.", "info");
-
-                        const wsData = [
-                            ["ID", "Italienisch", "Deutsch", "Fokus"],
-                            ...sentences.map(s => [s.id, s.it, s.de, s.category || "Allgemein"])
-                        ];
-                        const ws = XLSX.utils.aoa_to_sheet(wsData);
-                        const wb = XLSX.utils.book_new();
-                        XLSX.utils.book_append_sheet(wb, ws, "GrammarSentences");
-                        XLSX.writeFile(wb, "Grammatik_Saetze_Export.xlsx");
-                    } catch (err) {
-                        console.error(err);
-                        showToast("Fehler beim Exportieren der Grammatikliste.", "error");
-                    }
+        window.downloadGrammar = async function(lang) {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/grammar-sentences?language=${lang}`, {
+                    headers: { 'Authorization': `Bearer ${API_TOKEN}` }
                 });
+                if (!res.ok) throw new Error("Serverfehler");
+                const sentences = await res.json();
+                
+                if (!sentences || sentences.length === 0) return showToast(`Die ${lang.toUpperCase()}-Grammatikliste ist leer.`, "info");
+
+                const wsData = [
+                    [lang === 'it' ? "Italienisch" : "Englisch", "Deutsch", "Kategorie"],
+                    ...sentences.map(s => [s.it, s.de, s.category || "Allgemein"])
+                ];
+                const ws = XLSX.utils.aoa_to_sheet(wsData);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, `Grammar_${lang}`);
+                XLSX.writeFile(wb, `Grammatik_Saetze_${lang.toUpperCase()}_Global.xlsx`);
+            } catch (err) {
+                console.error(err);
+                showToast("Export-Fehler.", "error");
             }
+        };
+
+        window.offlineDictionaryEn = [
+            { it: 'be', de: 'sein', typ: 'Verb' }, { it: 'have', de: 'haben', typ: 'Verb' }, { it: 'do', de: 'tun', typ: 'Verb' }, { it: 'say', de: 'sagen', typ: 'Verb' }, { it: 'go', de: 'gehen', typ: 'Verb' },
+            { it: 'get', de: 'bekommen', typ: 'Verb' }, { it: 'make', de: 'machen', typ: 'Verb' }, { it: 'know', de: 'wissen', typ: 'Verb' }, { it: 'think', de: 'denken', typ: 'Verb' }, { it: 'take', de: 'nehmen', typ: 'Verb' },
+            { it: 'see', de: 'sehen', typ: 'Verb' }, { it: 'come', de: 'kommen', typ: 'Verb' }, { it: 'want', de: 'wollen', typ: 'Verb' }, { it: 'use', de: 'benutzen', typ: 'Verb' }, { it: 'find', de: 'finden', typ: 'Verb' },
+            { it: 'give', de: 'geben', typ: 'Verb' }, { it: 'tell', de: 'erzählen', typ: 'Verb' }, { it: 'work', de: 'arbeiten', typ: 'Verb' }, { it: 'call', de: 'anrufen', typ: 'Verb' }, { it: 'try', de: 'versuchen', typ: 'Verb' },
+            { it: 'ask', de: 'fragen', typ: 'Verb' }, { it: 'need', de: 'brauchen', typ: 'Verb' }, { it: 'feel', de: 'fühlen', typ: 'Verb' }, { it: 'become', de: 'werden', typ: 'Verb' }, { it: 'leave', de: 'verlassen', typ: 'Verb' },
+            { it: 'put', de: 'stellen/legen', typ: 'Verb' }, { it: 'mean', de: 'bedeuten', typ: 'Verb' }, { it: 'keep', de: 'behalten', typ: 'Verb' }, { it: 'let', de: 'lassen', typ: 'Verb' }, { it: 'begin', de: 'beginnen', typ: 'Verb' },
+            { it: 'seem', de: 'scheinen', typ: 'Verb' }, { it: 'help', de: 'helfen', typ: 'Verb' }, { it: 'talk', de: 'reden', typ: 'Verb' }, { it: 'turn', de: 'drehen', typ: 'Verb' }, { it: 'start', de: 'starten', typ: 'Verb' },
+            { it: 'show', de: 'zeigen', typ: 'Verb' }, { it: 'hear', de: 'hören', typ: 'Verb' }, { it: 'play', de: 'spielen', typ: 'Verb' }, { it: 'run', de: 'laufen', typ: 'Verb' }, { it: 'move', de: 'bewegen', typ: 'Verb' },
+            { it: 'live', de: 'leben', typ: 'Verb' }, { it: 'believe', de: 'glauben', typ: 'Verb' }, { it: 'bring', de: 'bringen', typ: 'Verb' }, { it: 'happen', de: 'passieren', typ: 'Verb' }, { it: 'write', de: 'schreiben', typ: 'Verb' },
+            { it: 'sit', de: 'sitzen', typ: 'Verb' }, { it: 'stand', de: 'stehen', typ: 'Verb' }, { it: 'lose', de: 'verlieren', typ: 'Verb' }, { it: 'pay', de: 'bezahlen', typ: 'Verb' }, { it: 'meet', de: 'treffen', typ: 'Verb' },
+            { it: 'include', de: 'beinhalten', typ: 'Verb' }, { it: 'continue', de: 'fortfahren', typ: 'Verb' }, { it: 'set', de: 'setzen', typ: 'Verb' }, { it: 'learn', de: 'lernen', typ: 'Verb' }, { it: 'change', de: 'ändern', typ: 'Verb' },
+            { it: 'lead', de: 'führen', typ: 'Verb' }, { it: 'understand', de: 'verstehen', typ: 'Verb' }, { it: 'watch', de: 'beobachten', typ: 'Verb' }, { it: 'follow', de: 'folgen', typ: 'Verb' }, { it: 'stop', de: 'stoppen', typ: 'Verb' },
+            { it: 'create', de: 'erstellen', typ: 'Verb' }, { it: 'speak', de: 'sprechen', typ: 'Verb' }, { it: 'read', de: 'lesen', typ: 'Verb' }, { it: 'allow', de: 'erlauben', typ: 'Verb' }, { it: 'add', de: 'hinzufügen', typ: 'Verb' },
+            { it: 'spend', de: 'ausgeben', typ: 'Verb' }, { it: 'grow', de: 'wachsen', typ: 'Verb' }, { it: 'open', de: 'öffnen', typ: 'Verb' }, { it: 'walk', de: 'gehen', typ: 'Verb' }, { it: 'win', de: 'gewinnen', typ: 'Verb' },
+            { it: 'offer', de: 'anbieten', typ: 'Verb' }, { it: 'remember', de: 'erinnern', typ: 'Verb' }, { it: 'love', de: 'lieben', typ: 'Verb' }, { it: 'consider', de: 'betrachten', typ: 'Verb' }, { it: 'appear', de: 'erscheinen', typ: 'Verb' },
+            { it: 'buy', de: 'kaufen', typ: 'Verb' }, { it: 'wait', de: 'warten', typ: 'Verb' }, { it: 'serve', de: 'servieren', typ: 'Verb' }, { it: 'die', de: 'sterben', typ: 'Verb' }, { it: 'send', de: 'senden', typ: 'Verb' },
+            { it: 'expect', de: 'erwarten', typ: 'Verb' }, { it: 'build', de: 'bauen', typ: 'Verb' }, { it: 'stay', de: 'bleiben', typ: 'Verb' }, { it: 'fall', de: 'fallen', typ: 'Verb' }, { it: 'cut', de: 'schneiden', typ: 'Verb' },
+            { it: 'reach', de: 'erreichen', typ: 'Verb' }, { it: 'kill', de: 'töten', typ: 'Verb' }, { it: 'remain', de: 'bleiben', typ: 'Verb' }, { it: 'suggest', de: 'vorschlagen', typ: 'Verb' }, { it: 'raise', de: 'erhöhen', typ: 'Verb' },
+            { it: 'pass', de: 'bestehen', typ: 'Verb' }, { it: 'sell', de: 'verkaufen', typ: 'Verb' }, { it: 'decide', de: 'entscheiden', typ: 'Verb' }, { it: 'return', de: 'zurückkehren', typ: 'Verb' }, { it: 'explain', de: 'erklären', typ: 'Verb' },
+            { it: 'hope', de: 'hoffen', typ: 'Verb' }, { it: 'develop', de: 'entwickeln', typ: 'Verb' }, { it: 'carry', de: 'tragen', typ: 'Verb' }, { it: 'break', de: 'brechen', typ: 'Verb' }, { it: 'receive', de: 'erhalten', typ: 'Verb' },
+            { it: 'agree', de: 'zustimmen', typ: 'Verb' }, { it: 'support', de: 'unterstützen', typ: 'Verb' }, { it: 'hit', de: 'treffen', typ: 'Verb' }, { it: 'produce', de: 'produzieren', typ: 'Verb' }, { it: 'eat', de: 'essen', typ: 'Verb' },
+            { it: 'face', de: 'gegenüberstehen', typ: 'Verb' }, { it: 'cover', de: 'abdecken', typ: 'Verb' }, { it: 'catch', de: 'fangen', typ: 'Verb' }, { it: 'draw', de: 'zeichnen', typ: 'Verb' }, { it: 'choose', de: 'wählen', typ: 'Verb' },
+            { it: 'time', de: 'Zeit', typ: 'Substantiv' }, { it: 'year', de: 'Jahr', typ: 'Substantiv' }, { it: 'people', de: 'Leute', typ: 'Substantiv' }, { it: 'way', de: 'Weg', typ: 'Substantiv' }, { it: 'day', de: 'Tag', typ: 'Substantiv' },
+            { it: 'man', de: 'Mann', typ: 'Substantiv' }, { it: 'thing', de: 'Ding', typ: 'Substantiv' }, { it: 'woman', de: 'Frau', typ: 'Substantiv' }, { it: 'life', de: 'Leben', typ: 'Substantiv' }, { it: 'child', de: 'Kind', typ: 'Substantiv' },
+            { it: 'world', de: 'Welt', typ: 'Substantiv' }, { it: 'school', de: 'Schule', typ: 'Substantiv' }, { it: 'state', de: 'Staat', typ: 'Substantiv' }, { it: 'family', de: 'Familie', typ: 'Substantiv' }, { it: 'student', de: 'Student', typ: 'Substantiv' },
+            { it: 'group', de: 'Gruppe', typ: 'Substantiv' }, { it: 'country', de: 'Land', typ: 'Substantiv' }, { it: 'problem', de: 'Problem', typ: 'Substantiv' }, { it: 'hand', de: 'Hand', typ: 'Substantiv' }, { it: 'part', de: 'Teil', typ: 'Substantiv' },
+            { it: 'place', de: 'Platz', typ: 'Substantiv' }, { it: 'case', de: 'Fall', typ: 'Substantiv' }, { it: 'week', de: 'Woche', typ: 'Substantiv' }, { it: 'company', de: 'Firma', typ: 'Substantiv' }, { it: 'system', de: 'System', typ: 'Substantiv' },
+            { it: 'program', de: 'Programm', typ: 'Substantiv' }, { it: 'question', de: 'Frage', typ: 'Substantiv' }, { it: 'work', de: 'Arbeit', typ: 'Substantiv' }, { it: 'government', de: 'Regierung', typ: 'Substantiv' }, { it: 'number', de: 'Nummer', typ: 'Substantiv' },
+            { it: 'night', de: 'Nacht', typ: 'Substantiv' }, { it: 'mr', de: 'Herr', typ: 'Substantiv' }, { it: 'point', de: 'Punkt', typ: 'Substantiv' }, { it: 'home', de: 'Heim', typ: 'Substantiv' }, { it: 'water', de: 'Wasser', typ: 'Substantiv' },
+            { it: 'room', de: 'Raum', typ: 'Substantiv' }, { it: 'mother', de: 'Mutter', typ: 'Substantiv' }, { it: 'area', de: 'Bereich', typ: 'Substantiv' }, { it: 'money', de: 'Geld', typ: 'Substantiv' }, { it: 'story', de: 'Geschichte', typ: 'Substantiv' },
+            { it: 'fact', de: 'Fakt', typ: 'Substantiv' }, { it: 'month', de: 'Monat', typ: 'Substantiv' }, { it: 'lot', de: 'Menge', typ: 'Substantiv' }, { it: 'right', de: 'Recht', typ: 'Substantiv' }, { it: 'study', de: 'Studie', typ: 'Substantiv' },
+            { it: 'book', de: 'Buch', typ: 'Substantiv' }, { it: 'eye', de: 'Auge', typ: 'Substantiv' }, { it: 'job', de: 'Job', typ: 'Substantiv' }, { it: 'word', de: 'Wort', typ: 'Substantiv' }, { it: 'business', de: 'Geschäft', typ: 'Substantiv' },
+            { it: 'issue', de: 'Thema', typ: 'Substantiv' }, { it: 'side', de: 'Seite', typ: 'Substantiv' }, { it: 'kind', de: 'Art', typ: 'Substantiv' }, { it: 'head', de: 'Kopf', typ: 'Substantiv' }, { it: 'house', de: 'Haus', typ: 'Substantiv' },
+            { it: 'service', de: 'Service', typ: 'Substantiv' }, { it: 'friend', de: 'Freund', typ: 'Substantiv' }, { it: 'father', de: 'Vater', typ: 'Substantiv' }, { it: 'power', de: 'Macht', typ: 'Substantiv' }, { it: 'hour', de: 'Stunde', typ: 'Substantiv' },
+            { it: 'game', de: 'Spiel', typ: 'Substantiv' }, { it: 'line', de: 'Linie', typ: 'Substantiv' }, { it: 'end', de: 'Ende', typ: 'Substantiv' }, { it: 'member', de: 'Mitglied', typ: 'Substantiv' }, { it: 'law', de: 'Gesetz', typ: 'Substantiv' },
+            { it: 'car', de: 'Auto', typ: 'Substantiv' }, { it: 'city', de: 'Stadt', typ: 'Substantiv' }, { it: 'community', de: 'Gemeinschaft', typ: 'Substantiv' }, { it: 'name', de: 'Name', typ: 'Substantiv' }, { it: 'president', de: 'Präsident', typ: 'Substantiv' },
+            { it: 'team', de: 'Team', typ: 'Substantiv' }, { it: 'minute', de: 'Minute', typ: 'Substantiv' }, { it: 'idea', de: 'Idee', typ: 'Substantiv' }, { it: 'kid', de: 'Kind', typ: 'Substantiv' }, { it: 'body', de: 'Körper', typ: 'Substantiv' },
+            { it: 'information', de: 'Information', typ: 'Substantiv' }, { it: 'back', de: 'Rücken', typ: 'Substantiv' }, { it: 'parent', de: 'Elternteil', typ: 'Substantiv' }, { it: 'face', de: 'Gesicht', typ: 'Substantiv' }, { it: 'others', de: 'Andere', typ: 'Substantiv' },
+            { it: 'level', de: 'Level', typ: 'Substantiv' }, { it: 'office', de: 'Büro', typ: 'Substantiv' }, { it: 'door', de: 'Tür', typ: 'Substantiv' }, { it: 'health', de: 'Gesundheit', typ: 'Substantiv' }, { it: 'person', de: 'Person', typ: 'Substantiv' },
+            { it: 'art', de: 'Kunst', typ: 'Substantiv' }, { it: 'war', de: 'Krieg', typ: 'Substantiv' }, { it: 'history', de: 'Geschichte', typ: 'Substantiv' }, { it: 'party', de: 'Partei', typ: 'Substantiv' }, { it: 'result', de: 'Resultat', typ: 'Substantiv' },
+            { it: 'change', de: 'Veränderung', typ: 'Substantiv' }, { it: 'morning', de: 'Morgen', typ: 'Substantiv' }, { it: 'reason', de: 'Grund', typ: 'Substantiv' }, { it: 'low', de: 'Tief', typ: 'Substantiv' }, { it: 'girl', de: 'Mädchen', typ: 'Substantiv' },
+            { it: 'guy', de: 'Typ', typ: 'Substantiv' }, { it: 'moment', de: 'Moment', typ: 'Substantiv' }, { it: 'air', de: 'Luft', typ: 'Substantiv' }, { it: 'teacher', de: 'Lehrer', typ: 'Substantiv' }, { it: 'force', de: 'Kraft', typ: 'Substantiv' },
+            { it: 'education', de: 'Bildung', typ: 'Substantiv' }, { it: 'food', de: 'Essen', typ: 'Substantiv' }, { it: 'good', de: 'gut', typ: 'Adjektiv' }, { it: 'new', de: 'neu', typ: 'Adjektiv' }, { it: 'first', de: 'erstes', typ: 'Adjektiv' },
+            { it: 'last', de: 'letztes', typ: 'Adjektiv' }, { it: 'long', de: 'lang', typ: 'Adjektiv' }, { it: 'great', de: 'großartig', typ: 'Adjektiv' }, { it: 'little', de: 'klein', typ: 'Adjektiv' }, { it: 'own', de: 'eigenes', typ: 'Adjektiv' },
+            { it: 'other', de: 'anderes', typ: 'Adjektiv' }, { it: 'old', de: 'alt', typ: 'Adjektiv' }, { it: 'right', de: 'richtig', typ: 'Adjektiv' }, { it: 'big', de: 'groß', typ: 'Adjektiv' }, { it: 'high', de: 'hoch', typ: 'Adjektiv' },
+            { it: 'different', de: 'anders', typ: 'Adjektiv' }, { it: 'small', de: 'klein', typ: 'Adjektiv' }, { it: 'large', de: 'groß', typ: 'Adjektiv' }, { it: 'next', de: 'nächstes', typ: 'Adjektiv' }, { it: 'early', de: 'früh', typ: 'Adjektiv' },
+            { it: 'young', de: 'jung', typ: 'Adjektiv' }, { it: 'important', de: 'wichtig', typ: 'Adjektiv' }, { it: 'few', de: 'wenige', typ: 'Adjektiv' }, { it: 'public', de: 'öffentlich', typ: 'Adjektiv' }, { it: 'bad', de: 'schlecht', typ: 'Adjektiv' },
+            { it: 'same', de: 'gleiche', typ: 'Adjektiv' }, { it: 'able', de: 'fähig', typ: 'Adjektiv' }, { it: 'real', de: 'echt', typ: 'Adjektiv' }, { it: 'best', de: 'bestes', typ: 'Adjektiv' }, { it: 'social', de: 'sozial', typ: 'Adjektiv' },
+            { it: 'only', de: 'einzig', typ: 'Adjektiv' }, { it: 'likely', de: 'wahrscheinlich', typ: 'Adjektiv' }, { it: 'political', de: 'politisch', typ: 'Adjektiv' }, { it: 'local', de: 'lokal', typ: 'Adjektiv' }, { it: 'economic', de: 'ökonomisch', typ: 'Adjektiv' },
+            { it: 'above', de: 'über', typ: 'Präposition' }, { it: 'across', de: 'quer durch', typ: 'Präposition' }, { it: 'after', de: 'nach', typ: 'Präposition' }, { it: 'against', de: 'gegen', typ: 'Präposition' }, { it: 'along', de: 'entlang', typ: 'Präposition' },
+            { it: 'among', de: 'unter', typ: 'Präposition' }, { it: 'around', de: 'um', typ: 'Präposition' }, { it: 'at', de: 'an', typ: 'Präposition' }, { it: 'before', de: 'vor', typ: 'Präposition' }, { it: 'behind', de: 'hinter', typ: 'Präposition' },
+            { it: 'below', de: 'unter', typ: 'Präposition' }, { it: 'beside', de: 'neben', typ: 'Präposition' }, { it: 'between', de: 'zwischen', typ: 'Präposition' }, { it: 'beyond', de: 'jenseits', typ: 'Präposition' }, { it: 'by', de: 'bei', typ: 'Präposition' },
+            { it: 'during', de: 'während', typ: 'Präposition' }, { it: 'for', de: 'für', typ: 'Präposition' }, { it: 'from', de: 'von', typ: 'Präposition' }, { it: 'in', de: 'in', typ: 'Präposition' }, { it: 'inside', de: 'innerhalb', typ: 'Präposition' },
+            { it: 'into', de: 'hinein', typ: 'Präposition' }, { it: 'near', de: 'nahe', typ: 'Präposition' }, { it: 'of', de: 'von', typ: 'Präposition' }, { it: 'off', de: 'ab', typ: 'Präposition' }, { it: 'on', de: 'auf', typ: 'Präposition' },
+            { it: 'onto', de: 'auf ... hinauf', typ: 'Präposition' }, { it: 'outside', de: 'außerhalb', typ: 'Präposition' }, { it: 'over', de: 'über', typ: 'Präposition' }, { it: 'past', de: 'vorbei an', typ: 'Präposition' }, { it: 'through', de: 'durch', typ: 'Präposition' },
+            { it: 'to', de: 'zu', typ: 'Präposition' }, { it: 'toward', de: 'Richtung', typ: 'Präposition' }, { it: 'under', de: 'unter', typ: 'Präposition' }, { it: 'until', de: 'bis', typ: 'Präposition' }, { it: 'up', de: 'auf', typ: 'Präposition' },
+            { it: 'with', de: 'mit', typ: 'Präposition' }, { it: 'within', de: 'innerhalb', typ: 'Präposition' }, { it: 'without', de: 'ohne', typ: 'Präposition' }, { it: 'always', de: 'immer', typ: 'Adverb' }, { it: 'never', de: 'nie', typ: 'Adverb' },
+            { it: 'often', de: 'oft', typ: 'Adverb' }, { it: 'sometimes', de: 'manchmal', typ: 'Adverb' }, { it: 'usually', de: 'gewöhnlich', typ: 'Adverb' }, { it: 'very', de: 'sehr', typ: 'Adverb' }, { it: 'well', de: 'gut', typ: 'Adverb' },
+            { it: 'already', de: 'schon', typ: 'Adverb' }, { it: 'still', de: 'immer noch', typ: 'Adverb' }, { it: 'soon', de: 'bald', typ: 'Adverb' }, { it: 'today', de: 'heute', typ: 'Adverb' }, { it: 'yesterday', de: 'gestern', typ: 'Adverb' },
+            { it: 'tomorrow', de: 'morgen', typ: 'Adverb' }, { it: 'here', de: 'hier', typ: 'Adverb' }, { it: 'there', de: 'dort', typ: 'Adverb' }, { it: 'where', de: 'wo', typ: 'Adverb' }, { it: 'how', de: 'wie', typ: 'Adverb' },
+            { it: 'apple', de: 'Apfel', typ: 'Substantiv', emoji: '🍎' }, { it: 'banana', de: 'Banane', typ: 'Substantiv', emoji: '🍌' }, { it: 'bread', de: 'Brot', typ: 'Substantiv', emoji: '🍞' }, { it: 'water', de: 'Wasser', typ: 'Substantiv', emoji: '💧' }, { it: 'coffee', de: 'Kaffee', typ: 'Substantiv', emoji: '☕' },
+            { it: 'tea', de: 'Tee', typ: 'Substantiv', emoji: '🍵' }, { it: 'milk', de: 'Milch', typ: 'Substantiv', emoji: '🥛' }, { it: 'cheese', de: 'Käse', typ: 'Substantiv', emoji: '🧀' }, { it: 'meat', de: 'Fleisch', typ: 'Substantiv', emoji: '🥩' }, { it: 'egg', de: 'Ei', typ: 'Substantiv', emoji: '🥚' },
+            { it: 'house', de: 'Haus', typ: 'Substantiv', emoji: '🏠' }, { it: 'car', de: 'Auto', typ: 'Substantiv', emoji: '🚗' }, { it: 'bike', de: 'Fahrrad', typ: 'Substantiv', emoji: '🚲' }, { it: 'book', de: 'Buch', typ: 'Substantiv', emoji: '📖' }, { it: 'pen', de: 'Stift', typ: 'Substantiv', emoji: '🖊️' },
+            { it: 'computer', de: 'Computer', typ: 'Substantiv', emoji: '💻' }, { it: 'phone', de: 'Telefon', typ: 'Substantiv', emoji: '📱' }, { it: 'sun', de: 'Sonne', typ: 'Substantiv', emoji: '☀️' }, { it: 'moon', de: 'Mond', typ: 'Substantiv', emoji: '🌙' }, { it: 'star', de: 'Stern', typ: 'Substantiv', emoji: '⭐' },
+            { it: 'cat', de: 'Katze', typ: 'Substantiv', emoji: '🐱' }, { it: 'dog', de: 'Hund', typ: 'Substantiv', emoji: '🐶' }, { it: 'bird', de: 'Vogel', typ: 'Substantiv', emoji: '🐦' }, { it: 'fish', de: 'Fisch', typ: 'Substantiv', emoji: '🐟' }, { it: 'flower', de: 'Blume', typ: 'Substantiv', emoji: '🌸' },
+            { it: 'red', de: 'rot', typ: 'Adjektiv', emoji: '🔴' }, { it: 'blue', de: 'blau', typ: 'Adjektiv', emoji: '🔵' }, { it: 'green', de: 'grün', typ: 'Adjektiv', emoji: '🟢' }, { it: 'yellow', de: 'gelb', typ: 'Adjektiv', emoji: '🟡' }, { it: 'black', de: 'schwarz', typ: 'Adjektiv', emoji: '⚫' }
+        ];
 
             // Re-bind info toggle listener for mobile
             const infoModeBtn = document.getElementById('infoModeToggle');
@@ -8404,7 +8592,6 @@
                 infoIconBtn.parentNode.replaceChild(newIconBtn, infoIconBtn);
                 newIconBtn.addEventListener('click', (e) => handleInfoToggle(e, newIconBtn));
             }
-        }
 
         // --- Karteikarten Logic ---
 
