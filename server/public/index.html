@@ -4879,23 +4879,6 @@
                     btnDe.classList.add('bg-blue-50', 'border-blue-200');
                     btnTarget.classList.remove('bg-blue-50', 'border-blue-200');
                 }
-                // This block is assumed to be part of a switchMode function, based on the instruction.
-                // Since the full switchMode function is not provided, I'm placing it here as per the instruction's context.
-                // If this is incorrect, please provide the full switchMode function.
-                if (newMode === 'add-vocab') {
-                    isPaused = true;
-                    vocabModal.classList.remove('hidden');
-                    vocabModal.classList.add('flex');
-                    
-                    // Initialize directions based on language
-                    vocabInputLang = CURRENT_LANG === 'it' ? 'it' : 'en';
-                    vocabOutputLang = 'de';
-                    vocabInput.placeholder = CURRENT_LANG === 'it' ? 'z.B. mangiare' : 'e.g. eat';
-                    
-                    renderAllLabels(); // Refresh labels
-                    vocabInput.focus();
-                    return;
-                }
                 localStorage.setItem('ita-user-name', CURRENT_USER_NAME);
 
                 // Transition to Step 2
