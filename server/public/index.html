@@ -1308,8 +1308,9 @@
     </div>
 
     <!-- Left Navigation: Language Switcher & User Display -->
+    <!-- Left Navigation: Language Switcher & User Display -->
     <div id="userDisplay"
-        class="hidden absolute top-2 left-2 md:top-4 md:left-4 z-50 flex items-center gap-1">
+        class="hidden absolute top-[calc(env(safe-area-inset-top,0px)+8px)] left-2 md:top-4 md:left-4 z-[1000] flex items-center gap-1">
         
         <!-- Compact Language Buttons -->
         <div class="flex items-center gap-[2px]" id="langSwitcher">
@@ -1553,7 +1554,7 @@
 
     <!-- Burgermenü & Filter -->
     <div id="mainAppContent" class="hidden flex flex-col items-center w-full">
-        <div class="top-nav-container absolute top-2 right-2 md:top-4 md:right-4 z-50 flex items-center gap-[2px]">
+        <div class="top-nav-container absolute top-[calc(env(safe-area-inset-top,0px)+8px)] right-2 md:top-4 md:right-4 z-[1000] flex items-center gap-[2px]">
             <button id="openFilterModalBtn"
                 class="mobile-filter-btn p-2 bg-blue-600 text-white rounded-xl shadow-sm active:scale-95 flex items-center justify-center w-[38px] h-[38px] border border-blue-600">
                 <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -4597,16 +4598,18 @@
             authOverlay.classList.add('hidden');
             mainAppContent.classList.remove('hidden');
 
-            if (CURRENT_USER_NAME) {
+            if (userDisplay) {
                 userDisplay.classList.remove('hidden');
-                userNameEl.textContent = CURRENT_USER_NAME;
-                onboardingModal.classList.add('hidden');
-                onboardingModal.classList.remove('flex');
-            } else {
-                userDisplay.classList.add('hidden');
-                onboardingNameInput.value = '';
-                onboardingModal.classList.remove('hidden');
-                onboardingModal.classList.add('flex');
+                userDisplay.style.setProperty('display', 'flex', 'important');
+                if (CURRENT_USER_NAME) {
+                    userNameEl.textContent = CURRENT_USER_NAME;
+                    onboardingModal.classList.add('hidden');
+                    onboardingModal.classList.remove('flex');
+                } else {
+                    onboardingNameInput.value = '';
+                    onboardingModal.classList.remove('hidden');
+                    onboardingModal.classList.add('flex');
+                }
             }
 
             const adminBtn = document.getElementById('openAdminDashboardBtn');
