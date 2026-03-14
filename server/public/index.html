@@ -8214,7 +8214,7 @@
             let csvContent = "\ufeff";
 
             // Header
-            const headers = ["ID", "Email", "Name", "Admin", "Aktiv", "Logins", "Registriert_Seit", "Zuletzt_Eingeloggt", "Vokabeln_Gesamt", "Vokabeln_Gelernt"];
+            const headers = ["ID", "Email", "Name", "Admin", "Aktiv", "Logins", "Reg_Seit", "Zuletzt_Login", "Vokabeln_IT", "Gelernt_IT", "Vokabeln_EN", "Gelernt_EN"];
             csvContent += headers.join(";") + "\n";
 
             currentAdminUsers.forEach(u => {
@@ -8227,14 +8227,15 @@
                     u.loginCount || 0,
                     new Date(u.createdAt).toLocaleDateString(),
                     u.lastLogin ? new Date(u.lastLogin).toLocaleString() : "Nie",
-                    u.totalVocab || 0,
-                    u.learnedVocab || 0
+                    u.stats?.it?.total || 0,
+                    u.stats?.it?.learned || 0,
+                    u.stats?.en?.total || 0,
+                    u.stats?.en?.learned || 0
                 ];
                 // Quote entries to support semicolons in data
                 const quotedRow = row.map(val => `"${String(val).replace(/"/g, '""')}"`);
                 csvContent += quotedRow.join(";") + "\n";
             });
-
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
