@@ -36,6 +36,7 @@ jobs:
           echo "APP_PORT=$APP_PORT" > .env
           echo "DB_PORT=$DB_PORT" >> .env
           echo "DB_NAME=$DB_NAME" >> .env
+          echo "DB_PASSWORD=dbpass_test" >> .env
           echo "DB_VOLUME=$DB_VOLUME" >> .env
           
           # AGGRESSIVER CLEANUP: Stoppe alles, was Port 3001 belegt
