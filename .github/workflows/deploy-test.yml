@@ -19,7 +19,7 @@ jobs:
           mkdir -p /home/systemv/multilang-9009
           cd /home/systemv/multilang-9009
           
-          # Wir nutzen hier das Sprachenapp-Repo als Basis
+          # Wir nutzen hier das Sprachenapp-Repo als Basis (Gold-Repo)
           if [ ! -d ".git" ]; then
             git clone https://github.com/boernie77/Sprachenapp-Englisch-Italienisch.git .
           fi
@@ -28,6 +28,7 @@ jobs:
           git reset --hard origin/main
           
           # Umgebungsvariablen für Test 9009
+          PROJECT_NAME="multilang-9009"
           export APP_PORT=9009
           export DB_PORT=5439
           export DB_NAME=multilang_9009_db
@@ -42,6 +43,8 @@ jobs:
           echo "DB_NAME=$DB_NAME" >> .env
           echo "DB_VOLUME=$DB_VOLUME" >> .env
           
-          docker-compose down --remove-orphans
-          docker-compose build --no-cache
-          docker-compose up -d --force-recreate --remove-orphans
+          # Robuster Cleanup vor dem Start (verhindert Name-Conflicts)
+          docker-compose -p $PROJECT_NAME down --remove-orphans || true
+          
+          docker-compose -p $PROJECT_NAME build --no-cache
+          docker-compose -p $PROJECT_NAME up -d --force-recreate --remove-orphans
