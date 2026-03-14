@@ -21,6 +21,21 @@ jobs:
           git fetch origin main
           git reset --hard origin/main
           
+          # Umgebungsvariablen für Live
+          export APP_PORT=3001
+          export DB_PORT=5432
+          export DB_NAME=italian_db_test
+          export DB_VOLUME=postgres_data
+          
+          # Sicherstellen, dass das Volume existiert (sollte bei Live ja schon da sein)
+          docker volume create $DB_VOLUME || true
+          
+          # .env Datei für Docker Compose erstellen
+          echo "APP_PORT=$APP_PORT" > .env
+          echo "DB_PORT=$DB_PORT" >> .env
+          echo "DB_NAME=$DB_NAME" >> .env
+          echo "DB_VOLUME=$DB_VOLUME" >> .env
+          
           docker-compose down --remove-orphans
           docker-compose build --no-cache
           docker-compose up -d --force-recreate --remove-orphans
