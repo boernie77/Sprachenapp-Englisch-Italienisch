@@ -26,7 +26,7 @@ jobs:
           PROJECT_NAME="lernapp"
           export APP_PORT=3001
           export DB_PORT=5432
-          export DB_NAME=italian_db_live
+          export DB_NAME=italian_db
           export DB_VOLUME=lernapp_postgres_data_v4
           
           # Sicherstellen, dass das Volume existiert
