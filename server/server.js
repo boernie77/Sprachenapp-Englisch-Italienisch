@@ -467,9 +467,13 @@ app.get('/api/admin/users', authenticateToken, requireAdmin, async (req, res) =>
           
           stats[lang].total++;
           
-          const stat = v.Stat || v.Statistic || v.Stats || v.Statistics;
+          // Check for any variant of the stat property (Stat, Stats, Statistic, Statistics)
+          // and also check if it's nested or directly available
+          const stat = v.Stat || v.Stats || v.Statistic || v.Statistics;
           if (stat) {
+              // A word is considered "learned" if it has been answered correctly at least once
               if (stat.correct > 0) stats[lang].learned++;
+              
               if (stat.lastReviewedDate) {
                   const reviewDate = new Date(stat.lastReviewedDate);
                   if (!lastActivity || reviewDate > new Date(lastActivity)) {
