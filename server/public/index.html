@@ -1307,20 +1307,28 @@
         </div>
     </div>
 
-    <!-- User Name Display & Language Switcher -->
+    <!-- Left Navigation: Language Switcher & User Display -->
     <div id="userDisplay"
-        class="hidden absolute top-2 left-2 md:top-4 md:left-4 z-50 flex items-center gap-4 bg-white px-5 py-2.5 rounded-2xl shadow-lg border border-slate-200">
-        <div class="flex items-center gap-2">
-            <span id="welcomePrefix" class="text-green-600 font-bold text-xl md:text-2xl">Ciao,</span>
-            <span id="userName" class="font-extrabold text-slate-800 text-xl md:text-2xl">Gast</span>
-        </div>
-        <div class="flex items-center gap-2 pl-4 border-l border-slate-100" id="langSwitcher">
-            <button id="langItBtn" class="opacity-100 transition-all hover:scale-110 active:scale-95 grayscale-0" title="Italienisch">
+        class="hidden absolute top-2 left-2 md:top-4 md:left-4 z-50 flex items-center gap-1">
+        
+        <!-- Compact Language Buttons -->
+        <div class="flex items-center gap-[2px]" id="langSwitcher">
+            <button id="langItBtn" 
+                class="p-0 bg-white rounded-xl shadow-sm border border-slate-200 hover:bg-slate-50 focus:outline-none transition-all flex items-center justify-center w-[38px] h-[38px] overflow-hidden active:scale-95" 
+                title="Italienisch">
                 <svg class="w-7 h-7 rounded shadow-sm" viewBox="0 0 3 2"><rect width="3" height="2" fill="#ed2939"/><rect width="2" height="2" fill="#fff"/><rect width="1" height="2" fill="#009246"/></svg>
             </button>
-            <button id="langEnBtn" class="opacity-50 transition-all hover:scale-110 active:scale-95 grayscale" title="English">
-                <svg class="w-7 h-7 rounded shadow-sm" viewBox="0 0 60 30"><clipPath id="s_sw"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="t_sw"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#s_sw)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4" clip-path="url(#t_sw)"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg>
+            <button id="langEnBtn" 
+                class="p-0 bg-white rounded-xl shadow-sm border border-slate-200 hover:bg-slate-50 focus:outline-none transition-all flex items-center justify-center w-[38px] h-[38px] overflow-hidden active:scale-95" 
+                title="English">
+                <svg class="w-7 h-7 rounded shadow-sm" viewBox="0 0 60 30"><clipPath id="s_sw_sm"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="t_sw_sm"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#s_sw_sm)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4" clip-path="url(#t_sw_sm)"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg>
             </button>
+        </div>
+
+        <!-- User Name (hidden on small screens if needed, or compact) -->
+        <div class="hidden sm:flex items-center gap-1.5 bg-white/90 backdrop-blur-sm px-3 py-2 rounded-xl shadow-sm border border-slate-200 ml-1">
+            <span id="welcomePrefix" class="text-green-600 font-bold text-sm md:text-base">Ciao,</span>
+            <span id="userName" class="font-bold text-slate-800 text-sm md:text-base">Gast</span>
         </div>
     </div>
 
@@ -1606,18 +1614,6 @@
                 <span id="appHeaderIcon"></span> <span id="appHeaderTitle">Italienisch Lernen</span> <span class="text-[10px] font-normal text-slate-400 align-top mt-1 ml-1" id="appVersionMain">2.0.0 Stable</span>
             </h1>
 
-            <!-- New Prominent Language Switcher for Mobile -->
-            <div id="dashboardLangSwitcher" class="flex justify-center items-center gap-4 py-3 px-4 bg-white rounded-2xl shadow-sm border border-slate-100 mb-2 max-w-xs mx-auto">
-                <button id="dashLangItBtn" class="flex flex-col items-center gap-1 transition-all active:scale-95">
-                    <svg class="w-10 h-10 rounded-lg shadow-sm" viewBox="0 0 3 2"><rect width="3" height="2" fill="#ed2939"/><rect width="2" height="2" fill="#fff"/><rect width="1" height="2" fill="#009246"/></svg>
-                    <span class="text-[10px] font-bold text-slate-600">Italiano</span>
-                </button>
-                <div class="h-8 w-[1px] bg-slate-100"></div>
-                <button id="dashLangEnBtn" class="flex flex-col items-center gap-1 transition-all active:scale-95 grayscale opacity-50">
-                    <svg class="w-10 h-10 rounded-lg shadow-sm" viewBox="0 0 60 30"><clipPath id="s_sw2"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="t_sw2"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#s_sw2)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4" clip-path="url(#t_sw2)"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg>
-                    <span class="text-[10px] font-bold text-slate-600">English</span>
-                </button>
-            </div>
 
             <div class="flex justify-center items-center gap-2 mt-2 md:mt-4 mb-2">
                 <div
@@ -3699,26 +3695,23 @@
             // Sync Flag Switcher Opacity
             const itBtn = document.getElementById('langItBtn');
             const enBtn = document.getElementById('langEnBtn');
-            const dItBtn = document.getElementById('dashLangItBtn');
-            const dEnBtn = document.getElementById('dashLangEnBtn');
             
             const updateFlags = (it, en, lang) => {
                 if (!it || !en) return;
                 if (lang === 'it') {
-                    it.classList.add('opacity-100', 'grayscale-0');
-                    it.classList.remove('opacity-50', 'grayscale');
-                    en.classList.add('opacity-50', 'grayscale');
-                    en.classList.remove('opacity-100', 'grayscale-0');
+                    it.classList.add('opacity-100', 'grayscale-0', 'border-blue-500', 'bg-blue-50');
+                    it.classList.remove('opacity-50', 'grayscale', 'border-slate-200', 'bg-white');
+                    en.classList.add('opacity-50', 'grayscale', 'border-slate-200', 'bg-white');
+                    en.classList.remove('opacity-100', 'grayscale-0', 'border-blue-500', 'bg-blue-50');
                 } else {
-                    en.classList.add('opacity-100', 'grayscale-0');
-                    en.classList.remove('opacity-50', 'grayscale');
-                    it.classList.add('opacity-50', 'grayscale');
-                    it.classList.remove('opacity-100', 'grayscale-0');
+                    en.classList.add('opacity-100', 'grayscale-0', 'border-blue-500', 'bg-blue-50');
+                    en.classList.remove('opacity-50', 'grayscale', 'border-slate-200', 'bg-white');
+                    it.classList.add('opacity-50', 'grayscale', 'border-slate-200', 'bg-white');
+                    it.classList.remove('opacity-100', 'grayscale-0', 'border-blue-500', 'bg-blue-50');
                 }
             };
 
             updateFlags(itBtn, enBtn, CURRENT_LANG);
-            updateFlags(dItBtn, dEnBtn, CURRENT_LANG);
 
             // Other dynamic IDs
             const setIc = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
@@ -3809,8 +3802,6 @@
             
             document.getElementById('langItBtn')?.addEventListener('click', () => switchLanguage('it'));
             document.getElementById('langEnBtn')?.addEventListener('click', () => switchLanguage('en'));
-            document.getElementById('dashLangItBtn')?.addEventListener('click', () => switchLanguage('it'));
-            document.getElementById('dashLangEnBtn')?.addEventListener('click', () => switchLanguage('en'));
         });
         let dailyActivity = JSON.parse(localStorage.getItem(`ita-daily-activity-${CURRENT_LANG}`) || '{}');
         let grammarActivityCount = parseInt(localStorage.getItem(`ita-grammar-stats-${CURRENT_LANG}`) || '0');
