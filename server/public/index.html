@@ -1603,7 +1603,7 @@
         <header class="text-center mb-2 md:mb-4 w-full max-w-7xl flex-shrink-0 mx-auto">
             <h1
                 class="text-2xl md:text-4xl font-bold text-slate-800 mb-1 md:mb-2 flex items-center justify-center gap-2">
-                <span id="appHeaderIcon"></span> Italienisch Lernen <span class="text-[10px] font-normal text-slate-400 align-top mt-1 ml-1" id="appVersionMain">2.0.0 Stable</span>
+                <span id="appHeaderIcon"></span> <span id="appHeaderTitle">Italienisch Lernen</span> <span class="text-[10px] font-normal text-slate-400 align-top mt-1 ml-1" id="appVersionMain">2.0.0 Stable</span>
             </h1>
 
             <div class="flex justify-center items-center gap-2 mt-2 md:mt-4 mb-2">
@@ -1639,7 +1639,7 @@
                         </select>
                         <div style="position:relative">
                             <button type="button" class="cs-btn" id="directionFilterBtn">
-                                <span id="directionFilterLabel">Deutsch &rarr; Italienisch</span>
+                                <span id="directionFilterLabel">Deutsch &rarr; ...</span>
                                 <svg class="cs-chevron" width="16" height="16" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1647,8 +1647,8 @@
                                 </svg>
                             </button>
                             <div class="cs-list" id="directionFilterList">
-                                <div class="cs-opt selected" data-value="de-it">Deutsch &rarr; Italienisch</div>
-                                <div class="cs-opt" data-value="it-de">Italienisch &rarr; Deutsch</div>
+                                <div class="cs-opt selected" data-value="de-it" id="directionFilterDeItOpt">Deutsch &rarr; ...</div>
+                                <div class="cs-opt" data-value="it-de" id="directionFilterItDeOpt">... &rarr; Deutsch</div>
                             </div>
                         </div>
                     </div>
@@ -1820,8 +1820,7 @@
                 class="bg-white p-4 md:p-8 rounded-3xl shadow-sm border border-slate-200 w-full text-center flex flex-col items-center justify-center flex-shrink-0 relative">
                 <div id="quizControls" class="absolute top-2 right-2 md:top-4 md:right-4 flex items-center gap-3"></div>
                 <div id="quizQuestionDisplay" class="mb-2 transition-all w-full overflow-hidden"></div>
-                <div id="quizSubtext" class="text-slate-500 font-medium text-xs md:text-sm mt-1">Was heißt das auf
-                    Italienisch?</div>
+                <div id="quizSubtext" class="text-slate-500 font-medium text-xs md:text-sm mt-1">Lade...</div>
             </div>
             <div id="quizOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full flex-shrink-0"></div>
             <div id="quizFeedback"
@@ -1842,8 +1841,7 @@
                 <!-- State 1: Question -->
                 <div id="writeQuestionArea" class="w-full">
                     <div id="writeQuestionDisplay" class="mb-2 transition-all w-full overflow-hidden"></div>
-                    <div id="writeSubtext" class="text-slate-500 font-medium text-xs md:text-sm mt-1">Was heißt das auf
-                        Italienisch?</div>
+                    <div id="writeSubtext" class="text-slate-500 font-medium text-xs md:text-sm mt-1">Lade...</div>
                 </div>
                 <!-- State 2: Feedback -->
                 <div id="writeFeedbackArea" class="hidden w-full flex-col items-center">
@@ -2722,7 +2720,7 @@
                         <option value="it">Italienisch Deutsch</option>
                     </select>
                     <button type="button" class="cs-btn w-full" id="vocabListSortDirBtn">
-                        <span id="vocabListSortDirLabel">Deutsch Italienisch</span>
+                        <span id="vocabListSortDirLabel">Deutsch ...</span>
                         <svg class="cs-chevron" width="16" height="16" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -3578,22 +3576,15 @@
             const vInputLabel = document.getElementById('vocabInputLabel');
             const vTransLabel = document.getElementById('vocabTranslationLabel');
             if (vInputLabel && vTransLabel) {
-                if (CURRENT_LANG === 'en') {
-                    if (vocabInputLang === 'en') {
-                        vInputLabel.textContent = "Englisches Wort";
-                        vTransLabel.textContent = "Deutsche Übersetzung";
-                    } else {
-                        vInputLabel.textContent = "Deutsches Wort";
-                        vTransLabel.textContent = "Englische Übersetzung";
-                    }
+                const targetName = CURRENT_LANG === 'en' ? 'Englisches' : 'Italienisches';
+                const transName = CURRENT_LANG === 'en' ? 'Englische' : 'Italienische';
+                
+                if (vocabInputLang === CURRENT_LANG) {
+                    vInputLabel.textContent = `${targetName} Wort`;
+                    vTransLabel.textContent = "Deutsche Übersetzung";
                 } else {
-                    if (vocabInputLang === 'it') {
-                        vInputLabel.textContent = "Italienisches Wort";
-                        vTransLabel.textContent = "Deutsche Übersetzung";
-                    } else {
-                        vInputLabel.textContent = "Deutsches Wort";
-                        vTransLabel.textContent = "Italienische Übersetzung";
-                    }
+                    vInputLabel.textContent = "Deutsches Wort";
+                    vTransLabel.textContent = `${transName} Übersetzung`;
                 }
             }
 
@@ -3633,14 +3624,29 @@
                 }
             }
 
-            const appHeader = document.querySelector('header h1');
-            if (appHeader) appHeader.innerHTML = `${currentFlag} ${t.header}`;
+            const appHeaderTitle = document.getElementById('appHeaderTitle');
+            if (appHeaderTitle) appHeaderTitle.textContent = t.header;
+            const appHeaderIcon = document.getElementById('appHeaderIcon');
+            if (appHeaderIcon) appHeaderIcon.innerHTML = currentFlag;
 
             const gHeader = document.querySelector('#grammarSection h2');
             if (gHeader) gHeader.innerHTML = `${currentFlag} ${t.grammar}`;
             
             const wPrefix = document.getElementById('welcomePrefix');
             if (wPrefix) wPrefix.innerText = t.welcomePrefix;
+
+            // Excel & Admin Hints
+            const excelCol1Desc = document.getElementById('excelCol1Desc');
+            if (excelCol1Desc) excelCol1Desc.textContent = CURRENT_LANG === 'en' ? 'Englische Wörter' : 'Italienische Wörter';
+
+            const grammarInfolabel = document.querySelector('#grammarSection .bg-amber-50 b + span') || document.querySelector('#grammarContainer .bg-amber-50 b + span');
+            if (grammarInfolabel) {
+                if (CURRENT_LANG === 'en') {
+                    grammarInfolabel.textContent = grammarInfolabel.textContent.replace('italienische', 'englische');
+                } else {
+                    grammarInfolabel.textContent = grammarInfolabel.textContent.replace('englische', 'italienische');
+                }
+            }
 
             // Mode buttons
             const gBtn = document.getElementById('modeGrammarBtn');
@@ -4841,7 +4847,7 @@
             const isDeToIt = (directionFilterEl.value === 'de-it');
             if (isDeToIt) {
                 writeQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${currentWriteTarget.de}</div></div>`;
-                writeSubtext.textContent = "Auf Italienisch?";
+                writeSubtext.textContent = `Auf ${CURRENT_LANG === 'en' ? 'Englisch' : 'Italienisch'}?`;
             } else {
                 writeQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${getFullIt(currentWriteTarget)}</div></div>`;
                 writeSubtext.textContent = "Auf Deutsch?";
@@ -5436,7 +5442,7 @@
             if (isVerb && (isVerbInfinitivMode || isFavoritenMode || !isVerbConjugationMode)) {
                 if (isDeToIt) {
                     quizQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${currentQuizTarget.de}</div></div>`;
-                    quizSubtext.textContent = 'Was ist der Infinitiv auf Italienisch?';
+                    quizSubtext.textContent = `Was ist der Infinitiv auf ${CURRENT_LANG === 'en' ? 'Englisch' : 'Italienisch'}?`;
                     options.forEach(opt => createQuizButton(opt.id, opt.it));
                 } else {
                     quizQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${currentQuizTarget.it}</div></div>`;
@@ -5468,7 +5474,7 @@
                         verbOptions.forEach(opt => createQuizButton(opt.id, opt.text));
                     }
                 } else {
-                    if (isDeToIt) { quizQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${currentQuizTarget.de}</div></div>`; quizSubtext.textContent = `Was heißt das auf Italienisch?`; options.forEach(opt => createQuizButton(opt.id, opt.it)); }
+                    if (isDeToIt) { quizQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${currentQuizTarget.de}</div></div>`; quizSubtext.textContent = `Was heißt das auf ${CURRENT_LANG === 'en' ? 'Englisch' : 'Italienisch'}?`; options.forEach(opt => createQuizButton(opt.id, opt.it)); }
                     else { quizQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${currentQuizTarget.it}</div></div>`; quizSubtext.textContent = `Was heißt das auf Deutsch?`; options.forEach(opt => createQuizButton(opt.id, opt.de)); }
                 }
             }
@@ -5478,7 +5484,7 @@
                     quizQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full">
                         <div class="text-xl md:text-3xl font-bold break-words">${currentQuizTarget.de}</div>
                     </div>`;
-                    quizSubtext.textContent = "Auf Italienisch?";
+                    quizSubtext.textContent = `Auf ${CURRENT_LANG === 'en' ? 'Englisch' : 'Italienisch'}?`;
                     options.forEach(opt => createQuizButton(opt.id, getFullIt(opt)));
                 } else {
                     quizQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full">
@@ -7513,13 +7519,13 @@
                 vocabLangDeBtn.classList.add('bg-white', 'shadow-sm', 'font-semibold', 'text-slate-800'); vocabLangDeBtn.classList.remove('text-slate-500', 'font-medium');
                 vocabLangItBtn.classList.remove('bg-white', 'shadow-sm', 'font-semibold', 'text-slate-800'); vocabLangItBtn.classList.add('text-slate-500', 'font-medium');
                 vocabInputLabel.textContent = 'Deutsches Wort';
-                vocabTranslationLabel.textContent = 'Italienische Übersetzung';
+                vocabTranslationLabel.textContent = `${CURRENT_LANG === 'en' ? 'Englische' : 'Italienische'} Übersetzung`;
                 vocabInput.placeholder = 'z.B. trinken';
                 vocabTranslation.placeholder = 'Automatisch oder manuell eingeben';
             } else {
                 vocabLangItBtn.classList.add('bg-white', 'shadow-sm', 'font-semibold', 'text-slate-800'); vocabLangItBtn.classList.remove('text-slate-500', 'font-medium');
                 vocabLangDeBtn.classList.remove('bg-white', 'shadow-sm', 'font-semibold', 'text-slate-800'); vocabLangDeBtn.classList.add('text-slate-500', 'font-medium');
-                vocabInputLabel.textContent = 'Italienisches Wort';
+                vocabInputLabel.textContent = `${CURRENT_LANG === 'en' ? 'Englisches' : 'Italienisches'} Wort`;
                 vocabTranslationLabel.textContent = 'Deutsche Übersetzung';
                 vocabInput.placeholder = 'z.B. bere';
                 vocabTranslation.placeholder = 'Automatisch oder manuell eingeben';
