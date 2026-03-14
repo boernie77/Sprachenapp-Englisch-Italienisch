@@ -1,4 +1,4 @@
-name: Deploy to Test Environment
+name: Deploy to Test Environment (Automated Port 9009)
 
 on:
   push:
@@ -13,11 +13,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Update and Restart App (Test)
+      - name: Update and Restart App (Port 9009)
         run: |
-          mkdir -p /home/systemv/multilang-test
-          cd /home/systemv/multilang-test
+          # Separates Verzeichnis für die 9009-Instanz
+          mkdir -p /home/systemv/multilang-9009
+          cd /home/systemv/multilang-9009
           
+          # Wir nutzen hier das Sprachenapp-Repo als Basis
           if [ ! -d ".git" ]; then
             git clone https://github.com/boernie77/Sprachenapp-Englisch-Italienisch.git .
           fi
@@ -25,11 +27,11 @@ jobs:
           git fetch origin main
           git reset --hard origin/main
           
-          # Umgebungsvariablen für Test 9011
-          export APP_PORT=9011
-          export DB_PORT=5436
-          export DB_NAME=multilang_test_db
-          export DB_VOLUME=multilang_test_data
+          # Umgebungsvariablen für Test 9009
+          export APP_PORT=9009
+          export DB_PORT=5439
+          export DB_NAME=multilang_9009_db
+          export DB_VOLUME=multilang_9009_data
           
           # Sicherstellen, dass das Volume existiert
           docker volume create $DB_VOLUME || true

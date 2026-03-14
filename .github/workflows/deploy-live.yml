@@ -15,7 +15,7 @@ jobs:
           cd /home/systemv/lernapp
           
           if [ ! -d ".git" ]; then
-            git clone https://github.com/boernie77/Lernapp-Italienisch.git .
+            git clone https://github.com/boernie77/Sprachenapp-Englisch-Italienisch.git .
           fi
           
           git fetch origin main
