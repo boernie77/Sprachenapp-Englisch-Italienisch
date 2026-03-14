@@ -43,7 +43,15 @@ jobs:
           echo "DB_NAME=$DB_NAME" >> .env
           echo "DB_VOLUME=$DB_VOLUME" >> .env
           
-          # Robuster Cleanup vor dem Start (verhindert Name-Conflicts)
+          # AGGRESSIVER CLEANUP: Stoppe alles, was Port 9009 belegt (auch fremde Projekte)
+          CONF_CONTAINER=$(docker ps --filter "publish=$APP_PORT" -q)
+          if [ ! -z "$CONF_CONTAINER" ]; then
+            echo "Stoppe kollidierenden Container auf Port $APP_PORT: $CONF_CONTAINER"
+            docker stop $CONF_CONTAINER || true
+            docker rm $CONF_CONTAINER || true
+          fi
+
+          # Normaler Projekt-Cleanup
           docker-compose -p $PROJECT_NAME down --remove-orphans || true
           
           docker-compose -p $PROJECT_NAME build --no-cache
