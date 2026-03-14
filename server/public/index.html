@@ -3248,6 +3248,9 @@
 
     <!-- App Logik -->
     <script>
+        // --- 1. Global State & App Detection ---
+        const isCapacitor = window.location.protocol === 'capacitor:' || (typeof window.Capacitor !== 'undefined' && window.Capacitor.platform !== 'web');
+
         // --- Toast Notification System ---
         let isInfoModeActive = false;
         let currentQuizTarget = null;
@@ -3583,7 +3586,6 @@
         const listSVG = `<svg class="w-5 h-5 text-blue-500 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>`;
 
         // --- 2. Backend API Integration ---
-        const isCapacitor = window.location.protocol === 'capacitor:' || (typeof window.Capacitor !== 'undefined' && window.Capacitor.platform !== 'web');
         const isProdDomain = !window.location.hostname.includes('localhost') && !window.location.hostname.match(/^\d+\.\d+\.\d+\.\d+$/);
         
         const API_BASE_URL = (isCapacitor || isProdDomain)
@@ -3905,9 +3907,19 @@
                 if (currentMode === 'grammar' || currentMode === 'info') switchMode('dragdrop');
             } else {
                 if (gBtn) { gBtn.classList.remove('hidden'); gBtn.style.removeProperty('display'); }
-                if (iIcon) { iIcon.classList.remove('hidden'); iIcon.style.removeProperty('display'); }
-                if (iTab) { iTab.classList.add('hidden'); iTab.style.setProperty('display', 'none', 'important'); }
-                if (currentMode === 'info') switchMode('dragdrop');
+                
+                // Platform specific Info visibility (Italian)
+                if (isCapacitor) {
+                    // App: Icon top-right, Tab hidden
+                    if (iIcon) { iIcon.classList.remove('hidden'); iIcon.style.removeProperty('display'); }
+                    if (iTab) { iTab.classList.add('hidden'); iTab.style.setProperty('display', 'none', 'important'); }
+                } else {
+                    // Desktop/Web: Icon hidden, Tab visible
+                    if (iIcon) { iIcon.classList.add('hidden'); iIcon.style.setProperty('display', 'none', 'important'); }
+                    if (iTab) { iTab.classList.remove('hidden'); iTab.style.removeProperty('display'); }
+                }
+
+                if (currentMode === 'info' && isCapacitor) switchMode('dragdrop');
             }
 
             // Sync Flag Switcher Opacity
@@ -3969,7 +3981,6 @@
             if (CURRENT_LANG === 'en') {
                 if (infoSection) { infoSection.classList.add('hidden'); infoSection.style.setProperty('display', 'none', 'important'); }
                 if (infoModeToggle) { infoModeToggle.classList.add('hidden'); infoModeToggle.style.setProperty('display', 'none', 'important'); }
-                if (tabInfoBtn) { tabInfoBtn.classList.add('hidden'); tabInfoBtn.style.setProperty('display', 'none', 'important'); }
             } else {
                 if (infoSection) {
                     infoSection.style.removeProperty('display');
@@ -3981,7 +3992,6 @@
                     }
                 }
                 if (infoModeToggle) { infoModeToggle.classList.remove('hidden'); infoModeToggle.style.removeProperty('display'); }
-                if (tabInfoBtn) { tabInfoBtn.classList.remove('hidden'); tabInfoBtn.style.removeProperty('display'); }
             }
 
             const vMain = document.getElementById('appVersionMain');
