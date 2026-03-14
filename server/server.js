@@ -81,7 +81,8 @@ app.post('/api/auth/register', async (req, res) => {
     const isAdmin = userCount === 0;
 
     // Check invite code
-    if (!isAdmin && inviteCode !== 'START-ITA-24') {
+    const staticBypassCodes = ['START-ITA-24', 'APP-MOBIL-2026'];
+    if (!isAdmin && !staticBypassCodes.includes(inviteCode)) {
       if (!inviteCode) return res.status(400).json({ error: 'Einladungscode erforderlich' });
       const codeObj = await InviteCode.findOne({ where: { code: inviteCode, isUsed: false } });
       if (!codeObj) return res.status(400).json({ error: 'Ungültiger oder bereits verwendeter Einladungscode' });
