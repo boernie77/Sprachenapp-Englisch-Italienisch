@@ -1,5 +1,5 @@
 {
-  "appId": "com.bernauer24.vokabeln",
-  "appName": "Vokabeln",
+  "appId": "com.bernauer24.vokabeln.multi",
+  "appName": "Vokabeln Multi",
   "webDir": "server/public"
 }
