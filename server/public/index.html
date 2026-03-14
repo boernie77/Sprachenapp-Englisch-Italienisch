@@ -3027,8 +3027,7 @@
                                 <span class="text-[10px] text-slate-400">- Sätze</span>
                             </div>
                         </div>
-                    </div>
-                </div>
+                        </div>
             </div>
 
             <!-- Tab Content: Invites -->
@@ -8119,8 +8118,10 @@
 
             // Fetch invite codes to show "Offene Codes"
             apiFetch('/admin/invite-codes').then(codes => {
-                const openCount = codes.filter(c => !c.isUsed).length;
-                if (kpiOpenInviteCodes) kpiOpenInviteCodes.textContent = openCount;
+                if (Array.isArray(codes)) {
+                    const openCount = codes.filter(c => !c.isUsed).length;
+                    if (kpiOpenInviteCodes) kpiOpenInviteCodes.textContent = openCount;
+                }
             }).catch(e => console.warn("Could not fetch invite count for KPI", e));
 
             updateAdminBaseVocabCount();
