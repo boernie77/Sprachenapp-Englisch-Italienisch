@@ -7,7 +7,7 @@ services:
     ports:
       - "${APP_PORT:-9011}:3001"
     environment:
-      - DATABASE_URL=postgres://appuser:${DB_PASSWORD:-dbpass_test}@db:5432/${DB_NAME:-sprachen_db_test}
+      - DATABASE_URL=postgres://appuser:${DB_PASSWORD:-dbpass_test}@db:5432/${DB_NAME:-italian_db_test}
       - JWT_SECRET=${JWT_SECRET:-#!Alex2019_TEST_ONLY}
       - NODE_ENV=production
       # --- E-Mail (SMTP) Einstellungen via GMX ---
@@ -27,13 +27,13 @@ services:
     environment:
       - POSTGRES_USER=appuser
       - POSTGRES_PASSWORD=${DB_PASSWORD:-dbpass_test}
-      - POSTGRES_DB=${DB_NAME:-sprachen_db_test}
+      - POSTGRES_DB=${DB_NAME:-italian_db_test}
     ports:
       - "${DB_PORT:-5436}:5432"
     volumes:
-      - sprachen_db_data:/var/lib/postgresql/data
+      - db_volume:/var/lib/postgresql/data
 
 volumes:
-  sprachen_db_data:
-    # Hinweis: Falls du ein externes Volume nutzt, stelle sicher, dass es existiert.
-    # Hier nutzen wir nun ein Standard-Volume für die Testumgebung.
+  db_volume:
+    external: true
+    name: ${DB_VOLUME:-postgres_data}
