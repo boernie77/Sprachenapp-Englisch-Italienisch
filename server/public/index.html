@@ -4372,6 +4372,12 @@
             }
         });
 
+        // Pre-fill invite code for Mobile Apps
+        if (isCapacitor) {
+            const inviteInp = document.getElementById('authInviteCode');
+            if (inviteInp) inviteInp.value = 'APP-MOBIL-2026';
+        }
+
         authToggleBtn.addEventListener('click', () => {
             isLoginMode = !isLoginMode;
             authTitle.textContent = isLoginMode ? 'Willkommen!' : 'Konto erstellen';
