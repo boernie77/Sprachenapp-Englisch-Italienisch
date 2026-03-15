@@ -5320,11 +5320,28 @@
 
             if (filterValue === 'Markiert' || filterValue === 'Favoriten') {
                 availableWords = availableWords.filter(word => word.isMarked === true);
-            } else if (filterValue === 'VerbInfinitiv') {
-                availableWords = availableWords.filter(word => word.typ && word.typ.toLowerCase().includes('verb'));
-            } else if (filterValue !== 'Alle') {
-                availableWords = availableWords.filter(word => word.typ && word.typ.toLowerCase().includes(filterValue.toLowerCase()));
+            } else if (filterValue === 'Verb' || filterValue === 'VerbInfinitiv') {
+                availableWords = availableWords.filter(word => word.typ && /\bverb\b/i.test(word.typ));
+            } else if (filterValue === 'Substantiv') {
+                availableWords = availableWords.filter(word => {
+                    if (!word.typ) return false;
+                    const typLower = word.typ.toLowerCase();
+                    return typLower.includes('substantiv') || typLower.includes('nomen') || typLower.includes('pronomen');
+                });
+            } else if (filterValue === 'Adjektiv') {
+                availableWords = availableWords.filter(word => word.typ && /\badjektiv\b/i.test(word.typ));
+            } else if (filterValue === 'Sonstiges') {
+                // Catch-all for things that are NOT Verbs, Nouns/Pronouns, or Adjectives
+                availableWords = availableWords.filter(word => {
+                    if (!word.typ) return true; // Empty type goes to Sonstiges
+                    const typLower = word.typ.toLowerCase();
+                    const isVerb = /\bverb\b/i.test(typLower);
+                    const isNoun = typLower.includes('substantiv') || typLower.includes('nomen') || typLower.includes('pronomen');
+                    const isAdj = /\badjektiv\b/i.test(typLower);
+                    return !isVerb && !isNoun && !isAdj;
+                });
             }
+            // If filterValue is 'Alle', we do nothing and return all availableWords
             return availableWords;
         }
 
