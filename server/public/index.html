@@ -8188,7 +8188,10 @@
                         };
                     }).filter(s => s.it && s.de && isNaN(s.it)); // Filter out empty or numeric ID columns
 
-                    if (sentencesToUpload.length === 0) return showToast("Keine gültigen Sätze gefunden (Spalten Italienisch & Deutsch prüfen).", "warning");
+                    if (sentencesToUpload.length === 0) {
+                        const langName = lang === 'en' ? 'Englisch' : 'Italienisch';
+                        return showToast(`Keine gültigen Sätze gefunden (Spalten ${langName} & Deutsch prüfen).`, "warning");
+                    }
 
                     if (await showConfirm(`Die ${lang.toUpperCase()}-Grammatikliste mit ${sentencesToUpload.length} Sätzen ÜBERSCHREIBEN?`, "Import bestätigen")) {
                         const res = await fetch(`${API_BASE_URL}/api/admin/grammar-sentences/bulk`, {
