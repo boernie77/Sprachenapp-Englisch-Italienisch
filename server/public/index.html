@@ -4080,18 +4080,8 @@
             // Switch out of info if it shouldn't be visible (e.g. mobile grammar)
             // But actually we want it to work on mobile too if they click the 'i'
             
-            // Show/Hide language specific info content
-            const infoIt = document.getElementById('infoContentIt');
-            const infoEn = document.getElementById('infoContentEn');
-            if (infoIt && infoEn) {
-                if (CURRENT_LANG === 'it') {
-                    infoIt.classList.remove('hidden');
-                    infoEn.classList.add('hidden');
-                } else {
-                    infoIt.classList.add('hidden');
-                    infoEn.classList.remove('hidden');
-                }
-            }
+            // Show/Hide language specific info content handled below in dynamic section
+
 
             // Sync Flag Switcher Opacity
             const itBtn = document.getElementById('langItBtn');
@@ -4147,6 +4137,8 @@
             // Language specific UI adjustments
             const infoSection = document.getElementById('infoSection');
             const infoModeToggle = document.getElementById('infoModeToggle');
+            const infoIt = document.getElementById('infoContentIt');
+            const infoEn = document.getElementById('infoContentEn');
             const tabInfoBtn = document.getElementById('tabInfoBtn');
 
             if (CURRENT_LANG === 'en') {
@@ -4164,6 +4156,8 @@
                     infoModeToggle.classList.remove('hidden'); 
                     infoModeToggle.style.removeProperty('display'); 
                 }
+                if (infoIt) { infoIt.classList.add('hidden'); infoIt.classList.remove('flex'); }
+                if (infoEn) { infoEn.classList.remove('hidden'); infoEn.classList.add('flex'); }
                 setIc('infoTitleText', 'English Grammar Index');
                 setIc('infoDescText', 'Overview of the most important rules and tenses.');
             } else {
@@ -4177,6 +4171,8 @@
                     }
                 }
                 if (infoModeToggle) { infoModeToggle.classList.remove('hidden'); infoModeToggle.style.removeProperty('display'); }
+                if (infoEn) { infoEn.classList.add('hidden'); infoEn.classList.remove('flex'); }
+                if (infoIt) { infoIt.classList.remove('hidden'); infoIt.classList.add('flex'); }
                 setIc('infoTitleText', 'Grammatica Italiana');
                 setIc('infoDescText', 'Index der wichtigsten Regeln und Konjugationstabellen.');
             }
@@ -6713,7 +6709,8 @@
                 grammarContainer.classList.remove('hidden'); grammarContainer.classList.add('flex');
                 startGrammarRound();
             } else if (mode === 'info') {
-                infoTabContainer.classList.remove('hidden'); infoTabContainer.classList.add('flex');
+                infoTabContainer.classList.add('flex'); infoTabContainer.classList.remove('hidden');
+                renderAllLabels(); // Ensure content is correctly shown for language
             }
         }
 
