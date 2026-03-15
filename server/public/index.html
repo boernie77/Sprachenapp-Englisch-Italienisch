@@ -6375,7 +6375,8 @@
                 grammarActivityCount++;
                 recordDailyActivity();
                 saveAllDataLocally();
-                grammarFeedback.textContent = "Bravissimo! ✨";
+                const successMsg = CURRENT_LANG === 'en' ? "Well done! ✨" : "Bravissimo! ✨";
+                grammarFeedback.textContent = successMsg;
                 grammarFeedback.classList.add('bg-green-50', 'text-green-700');
                 grammarSubmitBtn.classList.add('hidden');
                 grammarNextBtn.classList.remove('hidden');
@@ -7971,10 +7972,15 @@
                 const elEn = document.getElementById('adminBaseVocabCountEn');
                 if (elEn) elEn.textContent = `${countEn} Vokabeln`;
 
-                // Grammar counts (IT)
-                const grammarItRes = await apiFetch('/grammar-sentences?language=it');
+                // Grammar counts (IT & EN)
+                const [grammarItRes, grammarEnRes] = await Promise.all([
+                    apiFetch('/grammar-sentences?language=it'),
+                    apiFetch('/grammar-sentences?language=en')
+                ]);
                 const elGrammarIt = document.getElementById('adminGrammarCountIt');
                 if (elGrammarIt) elGrammarIt.textContent = `${(grammarItRes && grammarItRes.length) || 0} Sätze`;
+                const elGrammarEn = document.getElementById('adminGrammarCountEn');
+                if (elGrammarEn) elGrammarEn.textContent = `${(grammarEnRes && grammarEnRes.length) || 0} Sätze`;
 
                 // Update User Modal (Excel Modal) dynamically
                 const userCountEl = document.getElementById('baseVocabUserCountDesc');
@@ -8204,7 +8210,8 @@
                         });
                         if (res.ok) {
                             showToast(`${sentencesToUpload.length} Sätze importiert.`, "success");
-                            updateAdminGrammarCount();
+                            if (lang === CURRENT_LANG) updateAdminGrammarCount();
+                            updateAdminBaseVocabCount();
                             if (currentMode === 'grammar') startGrammarRound();
                         } else {
                             const errData = await res.json();
@@ -8253,7 +8260,8 @@
                 });
                 if (res.ok) {
                     showToast(`${lang.toUpperCase()}-Grammatikliste gelöscht`, "success");
-                    updateAdminGrammarCount();
+                    if (lang === CURRENT_LANG) updateAdminGrammarCount();
+                    updateAdminBaseVocabCount();
                 } else {
                     const data = await res.json();
                     showToast("Fehler: " + (data.error || 'Unbekannt'), "error");
