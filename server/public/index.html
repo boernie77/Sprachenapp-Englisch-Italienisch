@@ -6079,6 +6079,7 @@
 
         function deriveInfinitiveEn(word) {
             const clean = word.toLowerCase().trim();
+            if (clean === 'will') return 'Future';
             if (GRAMMAR_RULES_EN.modals.has(clean)) return clean;
             
             // Basic irregulars
