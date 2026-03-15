@@ -8153,7 +8153,19 @@
                         // Robust header mapping
                         const it = row.Italienisch || row.italienisch || row.IT || row.it || row.Englisch || row.englisch || row.EN || row.en || row.Sentence || row.sentence || '';
                         const de = row.Deutsch || row.deutsch || row.DE || row.de || row.Translation || row.translation || '';
-                        const cat = row.Kategorie || row.kategorie || row.Category || row.category || row.Fokus || row.fokus || row.Type || row.type || "Allgemein";
+                        let cat = row.Kategorie || row.kategorie || row.Category || row.category || row.Fokus || row.fokus || row.Type || row.type || "Allgemein";
+                        
+                        // Standardize categories for English based on keyword matches
+                        if (lang === 'en') {
+                             const lowerCat = String(cat).toLowerCase();
+                             if (lowerCat.includes('present simple') || lowerCat.includes('simple present')) cat = 'Simple Present';
+                             else if (lowerCat.includes('present continuous') || lowerCat.includes('present progressive')) cat = 'Present Continuous';
+                             else if (lowerCat.includes('past simple') || lowerCat.includes('simple past')) cat = 'Simple Past';
+                             else if (lowerCat.includes('present perfect')) cat = 'Present Perfect';
+                             else if (lowerCat.includes('future')) cat = 'Future';
+                             else if (lowerCat.includes('imperative') || lowerCat.includes('imperativ')) cat = 'Imperativ';
+                             else if (lowerCat.includes('conditional')) cat = 'Conditional';
+                        }
 
                         return {
                             it: it ? String(it).trim() : null, // The db column is named 'it' globally, so we save English text here too
