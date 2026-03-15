@@ -3915,8 +3915,13 @@
                     if (iTab) { iTab.classList.add('hidden'); iTab.style.setProperty('display', 'none', 'important'); }
                 } else {
                     // Desktop/Web: Icon hidden, Tab visible
+                    // Fix: Ensure Info tab is actually visible on Desktop/Web for Italian
                     if (iIcon) { iIcon.classList.add('hidden'); iIcon.style.setProperty('display', 'none', 'important'); }
-                    if (iTab) { iTab.classList.remove('hidden'); iTab.style.removeProperty('display'); }
+                    if (iTab) { 
+                        iTab.classList.remove('hidden'); 
+                        iTab.style.removeProperty('display');
+                        iTab.classList.add('sm:flex'); // Reset responsive flex if it was changed
+                    }
                 }
 
                 if (currentMode === 'info' && isCapacitor) switchMode('dragdrop');
@@ -5832,7 +5837,14 @@
 
 
         function updateTabStyles(activeMode) {
-            const tabs = { 'dragdrop': modeDragDropBtn, 'quiz': modeQuizBtn, 'cards': modeCardsBtn, 'write': modeWriteBtn, 'grammar': modeGrammarBtn };
+            const tabs = { 
+                'dragdrop': modeDragDropBtn, 
+                'quiz': modeQuizBtn, 
+                'cards': modeCardsBtn, 
+                'write': modeWriteBtn, 
+                'grammar': modeGrammarBtn,
+                'info': modeInfoBtn 
+            };
             Object.keys(tabs).forEach(m => {
                 if (tabs[m]) {
                     if (m === activeMode) {
