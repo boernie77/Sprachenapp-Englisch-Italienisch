@@ -6364,10 +6364,18 @@
                                 inf = 'Future';
                             } else if (['am', 'is', 'are', 'was', 'were'].includes(w) && nextWord === 'going') {
                                 inf = 'Future';
+                            } else if (sentenceObj.category && sentenceObj.category.toLowerCase().includes('conditional') && (w === 'would' || w === 'could' || w === 'should')) {
+                                inf = 'Conditional';
+                            } else if (GRAMMAR_RULES_EN.modals.has(w) && inf === w) {
+                                inf = 'Modal';
                             }
                         }
+                        let displayInf = inf;
+                        if (CURRENT_LANG === 'en' && !['Future', 'Conditional', 'Modal'].includes(inf)) {
+                            displayInf = 'to ' + inf;
+                        }
                         const label = document.createElement('span');
-                        label.textContent = ` (${inf}) `;
+                        label.textContent = ` (${displayInf}) `;
                         label.className = 'text-sm md:text-base text-blue-500 font-medium ml-1';
                         span.appendChild(label);
                     } else if (CURRENT_LANG === 'en' && gap.type === 'comparative') {
