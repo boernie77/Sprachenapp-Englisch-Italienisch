@@ -4002,8 +4002,20 @@
             const tabInfoBtn = document.getElementById('tabInfoBtn');
 
             if (CURRENT_LANG === 'en') {
-                if (infoSection) { infoSection.classList.add('hidden'); infoSection.style.setProperty('display', 'none', 'important'); }
-                if (infoModeToggle) { infoModeToggle.classList.add('hidden'); infoModeToggle.style.setProperty('display', 'none', 'important'); }
+                if (infoSection) { 
+                    // English now has grammar, so we only handle info display if needed
+                    infoSection.style.removeProperty('display');
+                    if (currentMode === 'dragdrop') {
+                        infoSection.classList.remove('hidden');
+                        infoSection.classList.add('flex');
+                    } else {
+                        infoSection.classList.add('hidden');
+                    }
+                }
+                if (infoModeToggle) { 
+                    infoModeToggle.classList.remove('hidden'); 
+                    infoModeToggle.style.removeProperty('display'); 
+                }
             } else {
                 if (infoSection) {
                     infoSection.style.removeProperty('display');
@@ -4032,7 +4044,7 @@
             // Reload data
             showToast(translations[lang].welcome, 'info');
             await loadDataFromServer();
-            if (lang === 'it') await loadGrammarSentences();
+            await loadGrammarSentences(); // Now load for both IT and EN
             
             // Refresh administration/modal stats if needed
             if (typeof updateAdminBaseVocabCount === 'function') updateAdminBaseVocabCount();
@@ -6046,6 +6058,95 @@
             }
         };
 
+        const GRAMMAR_RULES_EN = {
+            possessives: new Set(['my', 'your', 'his', 'her', 'its', 'our', 'their']),
+            prepositions: new Set(['in', 'on', 'at', 'under']),
+            modals: new Set(['can', 'could', 'must', 'should', 'will', 'would', 'may', 'might', 'shall', 'ought to']),
+            nonVerbs: new Set(['the', 'a', 'an', 'and', 'or', 'but', 'so', 'because', 'although', 'if', 'when', 'while', 'to', 'for', 'with', 'by', 'about', 'as', 'than', 'this', 'that', 'these', 'those', 'it', 'he', 'she', 'they', 'you', 'i', 'we', 'me', 'him', 'us', 'them']),
+            adverbsTime: new Set(['always', 'never', 'often', 'sometimes', 'usually', 'rarely', 'seldom', 'already', 'yet', 'still', 'just', 'ever'])
+        };
+
+        function deriveInfinitiveEn(word) {
+            const clean = word.toLowerCase().trim();
+            if (GRAMMAR_RULES_EN.modals.has(clean)) return clean;
+            
+            // Basic irregulars
+            const irregulars = {
+                'am': 'be', 'is': 'be', 'are': 'be', 'was': 'be', 'were': 'be', 'been': 'be', 'being': 'be',
+                'has': 'have', 'had': 'have', 'having': 'have',
+                'does': 'do', 'did': 'do', 'done': 'do', 'doing': 'do',
+                'went': 'go', 'gone': 'go', 'going': 'go', 'goes': 'go',
+                'saw': 'see', 'seen': 'see', 'seeing': 'see', 'sees': 'see',
+                'took': 'take', 'taken': 'take', 'taking': 'take', 'takes': 'take',
+                'gave': 'give', 'given': 'give', 'giving': 'give', 'gives': 'give',
+                'made': 'make', 'making': 'make', 'makes': 'make',
+                'came': 'come', 'coming': 'come', 'comes': 'come',
+                'knew': 'know', 'known': 'know', 'knowing': 'know', 'knows': 'know',
+                'thought': 'think', 'thinking': 'think', 'thinks': 'think',
+                'brought': 'bring', 'bringing': 'bring', 'brings': 'bring',
+                'bought': 'buy', 'buying': 'buy', 'buys': 'buy',
+                'caught': 'catch', 'catching': 'catch', 'catches': 'catch',
+                'taught': 'teach', 'teaching': 'teach', 'teaches': 'teach',
+                'found': 'find', 'finding': 'find', 'finds': 'find',
+                'told': 'tell', 'telling': 'tell', 'tells': 'tell',
+                'said': 'say', 'saying': 'say', 'says': 'say',
+                'left': 'leave', 'leaving': 'leave', 'leaves': 'leave',
+                'felt': 'feel', 'feeling': 'feel', 'feels': 'feel',
+                'kept': 'keep', 'keeping': 'keep', 'keeps': 'keep',
+                'slept': 'sleep', 'sleeping': 'sleep', 'sleeps': 'sleep',
+                'spoke': 'speak', 'spoken': 'speak', 'speaking': 'speak', 'speaks': 'speak',
+                'wrote': 'write', 'written': 'write', 'writing': 'write', 'writes': 'write',
+                'ate': 'eat', 'eaten': 'eat', 'eating': 'eat', 'eats': 'eat',
+                'drank': 'drink', 'drunk': 'drink', 'drinking': 'drink', 'drinks': 'drink',
+                'sang': 'sing', 'sung': 'sing', 'singing': 'sing', 'sings': 'sing',
+                'swam': 'swim', 'swum': 'swim', 'swimming': 'swim', 'swims': 'swim',
+                'ran': 'run', 'running': 'run', 'runs': 'run',
+                'began': 'begin', 'begun': 'begin', 'beginning': 'begin', 'begins': 'begin',
+                'won': 'win', 'winning': 'win', 'wins': 'win',
+                'lost': 'lose', 'losing': 'lose', 'loses': 'lose',
+                'stood': 'stand', 'standing': 'stand', 'stands': 'stand',
+                'understood': 'understand', 'understanding': 'understand', 'understands': 'understand',
+                'sat': 'sit', 'sitting': 'sit', 'sits': 'sit',
+                'got': 'get', 'getting': 'get', 'gets': 'get', 'gotten': 'get'
+            };
+            
+            if (irregulars[clean]) return irregulars[clean];
+
+            // Regular endings
+            if (clean.endsWith('ing')) {
+                const root = clean.slice(0, -3);
+                // Double consonant (running -> run)
+                if (root.match(/([^aeiou])\1$/)) {
+                    return root.slice(0, -1);
+                }
+                // e-drop (making -> make) - tricky, guess 'e' if simple root
+                if (root.match(/[aeiou][^aeiou]$/)) {
+                     return root + 'e';
+                }
+                return root;
+            }
+            if (clean.endsWith('ed')) {
+                const root = clean.slice(0, -2);
+                 if (root.match(/([^aeiou])\1$/)) {
+                    return root.slice(0, -1);
+                }
+                // tried -> try
+                if (root.endsWith('i')) return root.slice(0, -1) + 'y';
+                // loved -> love
+                if (root.match(/[aeiou][^aeiou]$/)) return root + 'e';
+                return root;
+            }
+            if (clean.endsWith('s') && clean.length > 3 && !clean.endsWith('ss')) {
+                // tries -> try
+                if (clean.endsWith('ies')) return clean.slice(0, -3) + 'y';
+                // goes -> go
+                if (clean.endsWith('oes')) return clean.slice(0, -2);
+                return clean.slice(0, -1);
+            }
+
+            return word;
+        }
+
         function deriveInfinitive(word) {
             const clean = word.toLowerCase().trim();
             if (GRAMMAR_RULES.nonVerbs.has(clean)) return word;
@@ -6113,28 +6214,66 @@
 
             tokens.forEach((token, idx) => {
                 const clean = token.toLowerCase().trim();
-                if (!clean) return;
+                const cleanNoPunct = clean.replace(/[.,:;?!()]/g, '');
+                if (!cleanNoPunct) return;
 
-                // Check if this word is a known noun (Substantiv) in our dictionary
-                const isKnownNoun = fullDictionary.some(item =>
-                    item.it.toLowerCase() === clean && item.typ === 'Substantiv'
-                );
+                if (CURRENT_LANG === 'it') {
+                    // Check if this word is a known noun (Substantiv) in our dictionary
+                    const isKnownNoun = fullDictionary.some(item =>
+                        item.it.toLowerCase() === cleanNoPunct && item.typ === 'Substantiv'
+                    );
 
-                if (isKnownNoun) return; // Never make a gap for nouns
+                    if (isKnownNoun) return; // Never make a gap for nouns
+                    if (GRAMMAR_RULES.nonVerbs.has(cleanNoPunct)) return; // Ausschlussliste
 
-                if (GRAMMAR_RULES.nonVerbs.has(clean)) return; // Ausschlussliste
+                    if (GRAMMAR_RULES.articulatedPrepositions.has(cleanNoPunct)) {
+                        eligibleTokens.push({ idx, type: 'grammar', weight: 1.2 });
+                    } else if (GRAMMAR_RULES.articles.has(cleanNoPunct)) {
+                        eligibleTokens.push({ idx, type: 'grammar', weight: 1.0 });
+                    } else if (GRAMMAR_RULES.prepositions.has(cleanNoPunct)) {
+                        eligibleTokens.push({ idx, type: 'grammar', weight: 1.0 });
+                    } else if (verbReverseMap[cleanNoPunct] || GRAMMAR_RULES.commonVerbs[cleanNoPunct] ||
+                        cleanNoPunct.endsWith('ato') || cleanNoPunct.endsWith('ito') || cleanNoPunct.endsWith('uto') ||
+                        cleanNoPunct.endsWith('ando') || cleanNoPunct.endsWith('endo') || cleanNoPunct.match(/[aei]mo$/)) {
+                        eligibleTokens.push({ idx, type: 'verb', weight: 1.0 });
+                    }
+                } else if (CURRENT_LANG === 'en') {
+                    // Start of English Rules
+                    
+                    // Ignore common known non-verbs to prevent weird gaps
+                    if (GRAMMAR_RULES_EN.nonVerbs.has(cleanNoPunct)) return;
+                    
+                    // Check if known noun
+                    const isKnownNoun = fullDictionary.some(item =>
+                        (item.en && item.en.toLowerCase() === cleanNoPunct || item.it.toLowerCase() === cleanNoPunct) && item.typ === 'Substantiv'
+                    );
+                    if (isKnownNoun) return;
 
-                if (GRAMMAR_RULES.articulatedPrepositions.has(clean)) {
-                    eligibleTokens.push({ idx, type: 'grammar', weight: 1.2 });
-                } else if (GRAMMAR_RULES.articles.has(clean)) {
-                    eligibleTokens.push({ idx, type: 'grammar', weight: 1.0 });
-                } else if (GRAMMAR_RULES.prepositions.has(clean)) {
-                    eligibleTokens.push({ idx, type: 'grammar', weight: 1.0 });
-                } else if (verbReverseMap[clean] || GRAMMAR_RULES.commonVerbs[clean] ||
-                    clean.endsWith('ato') || clean.endsWith('ito') || clean.endsWith('uto') ||
-                    clean.endsWith('ando') || clean.endsWith('endo') || clean.match(/[aei]mo$/)) {
-                    // Final check: some nouns end in -ato/-ito, so we prefer the reverse map or strict common verbs
-                    eligibleTokens.push({ idx, type: 'verb', weight: 1.0 });
+                    if (GRAMMAR_RULES_EN.prepositions.has(cleanNoPunct)) {
+                         eligibleTokens.push({ idx, type: 'preposition', weight: 1.0 });
+                    } else if (GRAMMAR_RULES_EN.possessives.has(cleanNoPunct)) {
+                         eligibleTokens.push({ idx, type: 'possessive', weight: 1.0 });
+                    } else if (GRAMMAR_RULES_EN.modals.has(cleanNoPunct)) {
+                         eligibleTokens.push({ idx, type: 'verb', weight: 1.2 }); // Give modals high weight
+                    } else if (GRAMMAR_RULES_EN.adverbsTime.has(cleanNoPunct) || cleanNoPunct.endsWith('ly')) {
+                         // Very basic adverb check
+                         eligibleTokens.push({ idx, type: 'adverb', weight: 1.0 });
+                    } else if (cleanNoPunct.endsWith('est') || cleanNoPunct === 'most' || cleanNoPunct === 'best' || cleanNoPunct === 'worst') {
+                         eligibleTokens.push({ idx, type: 'superlative', weight: 1.1 });
+                    } else if (cleanNoPunct.endsWith('er') || cleanNoPunct === 'more' || cleanNoPunct === 'better' || cleanNoPunct === 'worse') {
+                         eligibleTokens.push({ idx, type: 'comparative', weight: 1.1 });
+                    } else {
+                         // Assume it could be a verb if it ends in ing, ed, s, or is in our verb dictionary
+                         const isKnownVerb = fullDictionary.some(item =>
+                             (item.en && item.en.toLowerCase() === cleanNoPunct || item.it.toLowerCase() === cleanNoPunct) && item.typ === 'Verb'
+                         );
+                         
+                         // We also have the deriveInfinitiveEn which catches irregulars
+                         const inf = deriveInfinitiveEn(cleanNoPunct);
+                         if (isKnownVerb || inf !== cleanNoPunct || cleanNoPunct.endsWith('ing') || cleanNoPunct.endsWith('ed')) {
+                              eligibleTokens.push({ idx, type: 'verb', weight: 1.0 });
+                         }
+                    }
                 }
             });
 
@@ -6170,10 +6309,21 @@
                     span.appendChild(input);
 
                     if (gap.type === 'verb') {
-                        const inf = deriveInfinitive(token);
+                        const cleanPunct = token.replace(/[.,:;?!()]/g, '');
+                        const inf = CURRENT_LANG === 'it' ? deriveInfinitive(cleanPunct) : deriveInfinitiveEn(cleanPunct);
                         const label = document.createElement('span');
                         label.textContent = ` (${inf}) `;
                         label.className = 'text-sm md:text-base text-blue-500 font-medium ml-1';
+                        span.appendChild(label);
+                    } else if (CURRENT_LANG === 'en' && gap.type === 'comparative') {
+                        const label = document.createElement('span');
+                        label.textContent = ` (Komparativ) `;
+                        label.className = 'text-sm md:text-base text-amber-500 font-medium ml-1';
+                        span.appendChild(label);
+                    } else if (CURRENT_LANG === 'en' && gap.type === 'superlative') {
+                        const label = document.createElement('span');
+                        label.textContent = ` (Superlativ) `;
+                        label.className = 'text-sm md:text-base text-purple-500 font-medium ml-1';
                         span.appendChild(label);
                     }
                     grammarQuestionDisplay.appendChild(span);
@@ -7990,12 +8140,12 @@
 
                     const sentencesToUpload = json.map(row => {
                         // Robust header mapping
-                        const it = row.Italienisch || row.italienisch || row.IT || row.it || row.Sentence || row.sentence || '';
+                        const it = row.Italienisch || row.italienisch || row.IT || row.it || row.Englisch || row.englisch || row.EN || row.en || row.Sentence || row.sentence || '';
                         const de = row.Deutsch || row.deutsch || row.DE || row.de || row.Translation || row.translation || '';
                         const cat = row.Kategorie || row.kategorie || row.Category || row.category || row.Fokus || row.fokus || row.Type || row.type || "Allgemein";
 
                         return {
-                            it: it ? String(it).trim() : null,
+                            it: it ? String(it).trim() : null, // The db column is named 'it' globally, so we save English text here too
                             de: de ? String(de).trim() : null,
                             category: String(cat).trim(),
                             language: lang
