@@ -6315,9 +6315,10 @@
                 });
             }
 
-            // Randomly pick max 2 gaps, weighted towards articulated prepositions
+            // Randomly pick max 2 gaps (or 3 for English Conditionals), weighted towards articulated prepositions
             eligibleTokens.sort((a, b) => (Math.random() * b.weight) - (Math.random() * a.weight));
-            const selected = eligibleTokens.slice(0, 2);
+            const maxGaps = (CURRENT_LANG === 'en' && sentenceObj.category && sentenceObj.category.toLowerCase().includes('conditional')) ? 3 : 2;
+            const selected = eligibleTokens.slice(0, maxGaps);
 
             grammarQuestionDisplay.innerHTML = '';
             grammarFeedback.classList.add('hidden');
