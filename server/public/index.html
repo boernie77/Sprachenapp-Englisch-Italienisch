@@ -3919,10 +3919,10 @@
             const iIcon = document.getElementById('infoIconBtn');
 
             if (CURRENT_LANG === 'en') {
-                if (gBtn) { gBtn.classList.add('hidden'); gBtn.style.setProperty('display', 'none', 'important'); }
+                if (gBtn) { gBtn.classList.remove('hidden'); gBtn.style.removeProperty('display'); } // Grammar is now supported in English
                 if (iIcon) { iIcon.classList.add('hidden'); iIcon.style.setProperty('display', 'none', 'important'); }
                 if (iTab) { iTab.classList.add('hidden'); iTab.style.setProperty('display', 'none', 'important'); }
-                if (currentMode === 'grammar' || currentMode === 'info') switchMode('dragdrop');
+                if (currentMode === 'info') switchMode('dragdrop'); // Only switch out if in Info mode, let them stay in grammar
             } else {
                 if (gBtn) { gBtn.classList.remove('hidden'); gBtn.style.removeProperty('display'); }
                 
