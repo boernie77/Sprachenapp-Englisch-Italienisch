@@ -6267,9 +6267,6 @@
                          eligibleTokens.push({ idx, type: 'possessive', weight: 1.0 });
                     } else if (GRAMMAR_RULES_EN.modals.has(cleanNoPunct)) {
                          eligibleTokens.push({ idx, type: 'verb', weight: 1.2 }); // Give modals high weight
-                    } else if (GRAMMAR_RULES_EN.adverbsTime.has(cleanNoPunct) || cleanNoPunct.endsWith('ly')) {
-                         // Very basic adverb check
-                         eligibleTokens.push({ idx, type: 'adverb', weight: 1.0 });
                     } else if (cleanNoPunct.endsWith('est') || cleanNoPunct === 'most' || cleanNoPunct === 'best' || cleanNoPunct === 'worst') {
                          eligibleTokens.push({ idx, type: 'superlative', weight: 1.1 });
                     } else if (cleanNoPunct.endsWith('er') || cleanNoPunct === 'more' || cleanNoPunct === 'better' || cleanNoPunct === 'worse') {
