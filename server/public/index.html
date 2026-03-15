@@ -5407,29 +5407,32 @@
             el.dataset.id = pair.id;
 
             // Content Container for text
-            const contentContainer = document.createElement('div');
-            contentContainer.className = 'flex items-center gap-2 overflow-hidden mr-2';
+            const textSpan = document.createElement('span');
+            textSpan.className = 'font-semibold text-slate-700 text-sm md:text-base truncate mr-2 pointer-events-none';
+            textSpan.textContent = textContent;
+            el.appendChild(textSpan);
 
+            // Controls Container (Star + Toggle)
+            const controlsWrapper = document.createElement('div');
+            controlsWrapper.className = 'flex items-center gap-3 ml-auto flex-shrink-0';
+
+            // Star Icon
             const starSvg = `
-                <svg class="star-icon w-5 h-5 flex-shrink-0 ${pair.isMarked ? 'marked' : ''}" 
+                <svg class="star-icon w-6 h-6 ${pair.isMarked ? 'marked' : ''}" 
                      data-mark-id="${pair.id}" 
                      onclick="event.stopPropagation(); toggleMark('${pair.id}', this)"
                      fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                 </svg>
             `;
-            contentContainer.innerHTML = starSvg;
+            const starContainer = document.createElement('div');
+            starContainer.innerHTML = starSvg;
+            controlsWrapper.appendChild(starContainer);
 
-            const textSpan = document.createElement('span');
-            textSpan.className = 'font-semibold text-slate-700 text-sm md:text-base truncate pointer-events-none';
-            textSpan.textContent = textContent;
-            contentContainer.appendChild(textSpan);
-            el.appendChild(contentContainer);
-
-            // Desktop Toggle (Far Right)
+            // Desktop Toggle
             if (!isMobile) {
                 const toggleLabel = document.createElement('label');
-                toggleLabel.className = 'relative inline-flex items-center cursor-pointer flex-shrink-0 ml-auto';
+                toggleLabel.className = 'relative inline-flex items-center cursor-pointer';
                 toggleLabel.innerHTML = `
                     <input type="checkbox" class="sr-only peer vocab-toggle" ${pair.isActive !== false ? 'checked' : ''}>
                     <div class="w-8 h-4 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-blue-600 shadow-inner"></div>
@@ -5441,14 +5444,12 @@
                     saveAllDataLocally();
                     saveStatToServer(pair.id);
 
-                    // Dynamic replacement if deactivated
                     if (!pair.isActive) {
                         const dropzone = document.querySelector(`#dropzones-container div[data-id="${pair.id}"]`);
                         if (dropzone) dropzone.remove();
                         el.remove();
                         currentPairs = currentPairs.filter(p => p.id !== pair.id);
 
-                        // Find a replacement word
                         let availableWords = getAvailableWords().filter(w =>
                             !currentPairs.some(cp => cp.id === w.id) &&
                             w.id !== pair.id
@@ -5461,8 +5462,9 @@
                         }
                     }
                 });
-                el.appendChild(toggleLabel);
+                controlsWrapper.appendChild(toggleLabel);
             }
+            el.appendChild(controlsWrapper);
 
             el.addEventListener('click', (e) => {
                 if (isMobile) {
@@ -5508,33 +5510,12 @@
             el.className = 'relative bg-slate-100 p-2 md:p-3 rounded-xl border-2 border-dashed border-slate-300 min-h-[45px] md:min-h-[50px] flex flex-col justify-center transition-colors no-select flex-shrink-0';
             el.dataset.id = pair.id;
             const rowWrapper = document.createElement('div');
-            rowWrapper.className = 'w-full flex items-center justify-between gap-1';
-            
-            const starWrapper = document.createElement('div');
-            starWrapper.className = 'flex items-center gap-2 overflow-hidden flex-1';
-            
-            const starSvg = `
-                <svg class="star-icon w-5 h-5 flex-shrink-0 ${pair.isMarked ? 'marked' : ''}" 
-                     data-mark-id="${pair.id}" 
-                     onclick="event.stopPropagation(); toggleMark('${pair.id}', this)"
-                     fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                </svg>
-            `;
-            starWrapper.innerHTML = starSvg;
-
+            rowWrapper.className = 'w-full flex items-center justify-between';
             const textSpan = document.createElement('span');
-            textSpan.className = 'font-semibold text-slate-800 text-sm md:text-base break-words'; 
-            textSpan.textContent = textContent;
-            starWrapper.appendChild(textSpan);
-
+            textSpan.className = 'font-semibold text-slate-800 text-sm md:text-base break-words max-w-[50%]'; textSpan.textContent = textContent;
             const dropSlot = document.createElement('div');
-            dropSlot.className = 'drop-slot flex-1 min-w-[60px] text-right text-slate-500 italic text-[11px] md:text-sm'; 
-            dropSlot.textContent = '';
-            
-            rowWrapper.appendChild(starWrapper); 
-            rowWrapper.appendChild(dropSlot); 
-            el.appendChild(rowWrapper);
+            dropSlot.className = 'drop-slot flex-1 ml-2 md:ml-4 text-right text-slate-500 italic text-[11px] md:text-sm'; dropSlot.textContent = '';
+            rowWrapper.appendChild(textSpan); rowWrapper.appendChild(dropSlot); el.appendChild(rowWrapper);
             el.addEventListener('dragover', handleDragOver);
             el.addEventListener('dragenter', handleDragEnter);
             el.addEventListener('dragleave', handleDragLeave);
