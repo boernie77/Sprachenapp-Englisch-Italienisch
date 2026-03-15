@@ -1,5 +1,10 @@
 {
   "appId": "com.bernauer24.vokabeln.multi",
   "appName": "Vokabeln Multi",
-  "webDir": "server/public"
+  "webDir": "server/public",
+  "plugins": {
+    "Keyboard": {
+      "resize": "body"
+    }
+  }
 }
