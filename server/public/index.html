@@ -4143,9 +4143,8 @@
 
             if (CURRENT_LANG === 'en') {
                 if (infoSection) { 
-                    // English now has grammar, so we only handle info display if needed
                     infoSection.style.removeProperty('display');
-                    if (currentMode === 'dragdrop') {
+                    if (currentMode === 'dragdrop' || currentMode === 'info') {
                         infoSection.classList.remove('hidden');
                         infoSection.classList.add('flex');
                     } else {
@@ -4163,7 +4162,7 @@
             } else {
                 if (infoSection) {
                     infoSection.style.removeProperty('display');
-                    if (currentMode === 'dragdrop') {
+                    if (currentMode === 'dragdrop' || currentMode === 'info') {
                         infoSection.classList.remove('hidden');
                         infoSection.classList.add('flex');
                     } else {
@@ -4192,7 +4191,7 @@
             // Reload data
             showToast(translations[lang].welcome, 'info');
             await loadDataFromServer();
-            await loadGrammarSentences(); // Now load for both IT and EN
+            await updateAdminGrammarCount(); // Now load for both IT and EN
             
             // Refresh administration/modal stats if needed
             if (typeof updateAdminBaseVocabCount === 'function') updateAdminBaseVocabCount();
