@@ -6256,10 +6256,18 @@
                     if (GRAMMAR_RULES_EN.nonVerbs.has(cleanNoPunct)) return;
                     
                     // Check if known noun
+                    let singular = cleanNoPunct;
+                    if (cleanNoPunct.endsWith('ies')) singular = cleanNoPunct.slice(0, -3) + 'y';
+                    else if (cleanNoPunct.endsWith('es')) singular = cleanNoPunct.slice(0, -2);
+                    else if (cleanNoPunct.endsWith('s') && cleanNoPunct.length > 3 && !cleanNoPunct.endsWith('ss')) singular = cleanNoPunct.slice(0, -1);
+
                     const isKnownNoun = fullDictionary.some(item =>
-                        (item.en && item.en.toLowerCase() === cleanNoPunct || item.it.toLowerCase() === cleanNoPunct) && item.typ === 'Substantiv'
+                        ((item.en && (item.en.toLowerCase() === cleanNoPunct || item.en.toLowerCase() === singular)) || 
+                         (item.it && (item.it.toLowerCase() === cleanNoPunct || item.it.toLowerCase() === singular))) && 
+                        item.typ === 'Substantiv'
                     );
-                    if (isKnownNoun) return;
+                    const isNounSuffix = /((tion|sion|ment|ness|ity|ance|ence|ship|hood)s?)$/.test(cleanNoPunct);
+                    if (isKnownNoun || isNounSuffix) return;
 
                     if (GRAMMAR_RULES_EN.prepositions.has(cleanNoPunct)) {
                          eligibleTokens.push({ idx, type: 'preposition', weight: 1.0 });
@@ -6279,7 +6287,14 @@
                          
                          // We also have the deriveInfinitiveEn which catches irregulars
                          const inf = deriveInfinitiveEn(cleanNoPunct);
-                         if (isKnownVerb || inf !== cleanNoPunct || cleanNoPunct.endsWith('ing') || cleanNoPunct.endsWith('ed')) {
+                         let isValidVerbGap = isKnownVerb || cleanNoPunct.endsWith('ing') || cleanNoPunct.endsWith('ed');
+                         if (!isValidVerbGap && inf !== cleanNoPunct) {
+                              const isJustStripped = cleanNoPunct.endsWith('s') && (inf === cleanNoPunct.slice(0, -1) || inf === cleanNoPunct.slice(0, -2) || inf === cleanNoPunct.slice(0, -3) + 'y');
+                              if (isJustStripped) {
+                                  isValidVerbGap = fullDictionary.some(item => ((item.en && item.en.toLowerCase() === inf) || (item.it && item.it.toLowerCase() === inf)) && item.typ === 'Verb');
+                              } else { isValidVerbGap = true; }
+                         }
+                         if (isValidVerbGap) {
                               eligibleTokens.push({ idx, type: 'verb', weight: 1.0 });
                          }
                     }
