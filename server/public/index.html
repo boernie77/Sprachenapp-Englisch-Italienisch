@@ -8146,14 +8146,27 @@
                     const data = new Uint8Array(event.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
                     const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                    // Use header-based JSON instead of positional arrays
-                    const json = XLSX.utils.sheet_to_json(sheet);
+                    // Extrahiere als 2D-Array (ignoriert kaputte Header-Namen)
+                    let rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                    
+                    // Leere Zeilen rausfiltern
+                    rows = rows.filter(row => row.length > 0 && row.some(cell => cell !== undefined && cell !== null && String(cell).trim() !== ''));
 
-                    const sentencesToUpload = json.map(row => {
-                        // Robust header mapping
-                        const it = row.Italienisch || row.italienisch || row.IT || row.it || row.Englisch || row.englisch || row.EN || row.en || row.Sentence || row.sentence || '';
-                        const de = row.Deutsch || row.deutsch || row.DE || row.de || row.Translation || row.translation || '';
-                        let cat = row.Kategorie || row.kategorie || row.Category || row.category || row.Fokus || row.fokus || row.Type || row.type || "Allgemein";
+                    if (rows.length === 0) return showToast("Datei ist leer.", "warning");
+
+                    // Prüfen ob die erste Zeile ein Header ist (enthält Schlüsselworte)
+                    const firstRowStr = String(rows[0].join(' ')).toLowerCase();
+                    const hasHeader = firstRowStr.includes('italienisch') || firstRowStr.includes('deutsch') || firstRowStr.includes('englisch') || firstRowStr.includes('sätze') || firstRowStr.includes('sentence') || firstRowStr.includes('kategorie') || firstRowStr.includes('fokus') || firstRowStr.includes('type');
+                    
+                    if (hasHeader) {
+                        rows.shift(); // Header entfernen
+                    }
+
+                    const sentencesToUpload = rows.map(row => {
+                        // Spalte A = Fremdsprache, Spalte B = Muttersprache, Spalte C = Kategorie
+                        const it = row[0] || ''; 
+                        const de = row[1] || '';
+                        let cat = row[2] || "Allgemein";
                         
                         // Standardize categories for English based on keyword matches
                         if (lang === 'en') {
