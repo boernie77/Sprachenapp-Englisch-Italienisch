@@ -6322,7 +6322,24 @@
 
                     if (gap.type === 'verb') {
                         const cleanPunct = token.replace(/[.,:;?!()]/g, '');
-                        const inf = CURRENT_LANG === 'it' ? deriveInfinitive(cleanPunct) : deriveInfinitiveEn(cleanPunct);
+                        let inf = CURRENT_LANG === 'it' ? deriveInfinitive(cleanPunct) : deriveInfinitiveEn(cleanPunct);
+                        
+                        // Handle "be going to" Future Hint
+                        if (CURRENT_LANG === 'en') {
+                            const w = cleanPunct.toLowerCase();
+                            let nextWord = '';
+                            for (let i = idx + 1; i < tokens.length; i++) {
+                                if (tokens[i].trim() && !/[.,:;?!()]/.test(tokens[i])) {
+                                    nextWord = tokens[i].trim().toLowerCase();
+                                    break;
+                                }
+                            }
+                            if (w === 'going' && nextWord === 'to') {
+                                inf = 'Future';
+                            } else if (['am', 'is', 'are', 'was', 'were'].includes(w) && nextWord === 'going') {
+                                inf = 'Future';
+                            }
+                        }
                         const label = document.createElement('span');
                         label.textContent = ` (${inf}) `;
                         label.className = 'text-sm md:text-base text-blue-500 font-medium ml-1';
