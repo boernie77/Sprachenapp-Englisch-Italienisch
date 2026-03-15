@@ -19,6 +19,9 @@ jobs:
             git clone https://github.com/boernie77/Sprachenapp-Englisch-Italienisch.git .
           fi
           
+          # SICHERSTELLEN, dass die Remote-URL korrekt auf das neue Repo zeigt!
+          git remote set-url origin https://github.com/boernie77/Sprachenapp-Englisch-Italienisch.git
+          
           # FORCIERE einen sauberen Pull vom Remote
           git clean -fd
           git fetch origin main
