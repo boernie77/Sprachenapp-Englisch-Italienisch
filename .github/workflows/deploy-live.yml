@@ -19,6 +19,8 @@ jobs:
             git clone https://github.com/boernie77/Sprachenapp-Englisch-Italienisch.git .
           fi
           
+          # FORCIERE einen sauberen Pull vom Remote
+          git clean -fd
           git fetch origin main
           git reset --hard origin/main
           
