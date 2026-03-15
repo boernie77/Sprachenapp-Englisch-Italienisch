@@ -5972,7 +5972,18 @@
             const btn = document.getElementById('grammarFocusFilterBtn');
             if (!sel || !list || !label || !btn) return;
 
-            const categories = [...new Set(grammarSentences.map(s => s.category).filter(Boolean))];
+            let categories = [...new Set(grammarSentences.map(s => s.category).filter(Boolean))];
+            
+            // Add default English tenses if they are not already in the categories 
+            if (CURRENT_LANG === 'en') {
+                const enTenses = ['Simple Present', 'Present Continuous', 'Simple Past', 'Future', 'Present Perfect'];
+                enTenses.forEach(tense => {
+                    if (!categories.includes(tense)) {
+                        categories.push(tense);
+                    }
+                });
+            }
+            
             categories.sort();
 
             const currentVal = sel.value;
