@@ -6029,6 +6029,7 @@
                     list.classList.remove('open');
                     btn.classList.remove('open');
                     sel.dispatchEvent(new Event('change'));
+                    if (currentMode === 'grammar') startGrammarRound();
                 });
             });
         }
