@@ -6303,10 +6303,18 @@
             });
 
             if (CURRENT_LANG === 'en' && sentenceObj.category && sentenceObj.category.toLowerCase().includes('conditional')) {
+                const ifIdx = tokens.findIndex(tk => tk.toLowerCase().replace(/[.,!?;:]/g, '').trim() === 'if');
+                let foundIfVerb = false;
+
                 eligibleTokens.forEach(t => {
                     if (t.type === 'verb') {
                         const tokenStr = tokens[t.idx].toLowerCase().replace(/[.,!?()[\]{}"']/g, '').trim();
-                        if (GRAMMAR_RULES_EN.modals.has(tokenStr)) {
+                        
+                        // Force the first verb after "if" to be a gap
+                        if (!foundIfVerb && ifIdx !== -1 && t.idx > ifIdx) {
+                            t.weight += 100.0; // Mandatory boost
+                            foundIfVerb = true;
+                        } else if (GRAMMAR_RULES_EN.modals.has(tokenStr)) {
                             t.weight += 50.0; // Extreme priority for modals (will, would, can, could, etc.)
                         } else {
                             t.weight += 10.0; // High priority for normal verbs
