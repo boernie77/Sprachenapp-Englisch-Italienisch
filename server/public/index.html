@@ -5066,10 +5066,21 @@
 
         function getFullIt(pair) {
             const isNoun = pair.typ && (pair.typ.toLowerCase().includes('substantiv') || pair.typ.toLowerCase().includes('nomen'));
+            const isVerb = pair.typ && pair.typ.toLowerCase().includes('verb');
+
             // Only apply Italian articles if CURRENT_LANG is 'it'
             if (isNoun && pair.grammatica && CURRENT_LANG === 'it') {
                 return (getArticle(pair.it, pair.grammatica) + pair.it);
             }
+            
+            // Apply "to " prefix for English verbs
+            if (isVerb && CURRENT_LANG === 'en') {
+                const word = pair.it.trim();
+                if (!word.toLowerCase().startsWith('to ')) {
+                    return 'to ' + word;
+                }
+            }
+
             return pair.it;
         }
 
