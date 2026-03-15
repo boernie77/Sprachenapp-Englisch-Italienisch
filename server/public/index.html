@@ -1943,12 +1943,14 @@
             <!-- Einleitung -->
             <div class="bg-white p-8 rounded-3xl w-full text-center border border-slate-200 shadow-xl mt-4">
                 <h2 class="text-3xl font-black mb-3 flex items-center justify-center gap-3">
-                    <span id="grammarHeaderIcon"></span> Grammatica Italiana
+                    <span id="grammarHeaderIcon"></span> <span id="infoTitleText">Grammatica Italiana</span>
                 </h2>
-                <p class="text-slate-600 text-lg font-medium">Index der wichtigsten Regeln und Konjugationstabellen.</p>
+                <p id="infoDescText" class="text-slate-600 text-lg font-medium">Index der wichtigsten Regeln und Konjugationstabellen.</p>
             </div>
 
-            <!-- Presente Indicativo (Regolare) -->
+            <!-- Language Specific Content Containers -->
+            <div id="infoContentIt" class="w-full flex flex-col gap-6">
+
             <div class="bg-white p-6 rounded-3xl w-full border border-slate-200 shadow-lg">
                 <h3 class="text-2xl font-bold mb-2 text-blue-600">1. Presente Indicativo (Regelmäßig)</h3>
                 <p class="text-sm text-slate-500 mb-6 italic">Das Präsens wird für regelmäßige Handlungen oder
@@ -2589,7 +2591,143 @@
                     💡 Hinweis: Pronomen stehen normalerweise <b>vor</b> dem konjugierten Verb (z.B. "Lo leggo"), außer
                     beim Imperativ und Infinitiv, wo sie angehängt werden.
                 </div>
-            </div>
+            </div><!-- #infoContentIt -->
+
+            <div id="infoContentEn" class="w-full hidden flex-col gap-6">
+                <!-- 1. Simple Present -->
+                <div class="bg-white p-6 rounded-3xl w-full border border-slate-200 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2 text-blue-600">1. Simple Present (Gegenwart)</h3>
+                    <p class="text-sm text-slate-500 mb-6 italic">Verwendung: Für Fakten, Gewohnheiten und regelmäßige Abläufe.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                            <h4 class="font-bold text-slate-800 mb-2">Bildung</h4>
+                            <p class="text-sm">Infinitiv (Grundform). <br><b>Achtung:</b> Bei <i>he/she/it</i> ein <b>-s</b> anhängen!</p>
+                            <p class="text-[10px] text-blue-600 mt-2 font-mono">I eat, you eat, he eat<b>s</b></p>
+                        </div>
+                        <div class="bg-blue-50/50 p-5 rounded-2xl border border-blue-100">
+                            <h4 class="font-bold text-blue-600 mb-2">Beispiel</h4>
+                            <p class="text-sm font-medium">"I <b>play</b> football every Friday."</p>
+                            <p class="text-sm font-medium">"He <b>works</b> in London."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Present Continuous -->
+                <div class="bg-white p-6 rounded-3xl w-full border border-slate-200 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2 text-indigo-600">2. Present Continuous (Verlaufsform)</h3>
+                    <p class="text-sm text-slate-500 mb-6 italic">Verwendung: Für Handlungen, die gerade in diesem Moment geschehen.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                            <h4 class="font-bold text-slate-800 mb-2">Bildung</h4>
+                            <p class="text-sm"><b>am / is / are</b> + Verb + <b>-ing</b></p>
+                        </div>
+                        <div class="bg-indigo-50/50 p-5 rounded-2xl border border-indigo-100">
+                            <h4 class="font-bold text-indigo-600 mb-2">Beispiel</h4>
+                            <p class="text-sm font-medium">"I <b>am reading</b> a book right now."</p>
+                            <p class="text-sm font-medium">"They <b>are watching</b> TV."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Simple Past -->
+                <div class="bg-white p-6 rounded-3xl w-full border border-slate-200 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2 text-red-600">3. Simple Past (Vergangenheit)</h3>
+                    <p class="text-sm text-slate-500 mb-6 italic">Verwendung: Für abgeschlossene Handlungen in der Vergangenheit.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                            <h4 class="font-bold text-slate-800 mb-2">Bildung</h4>
+                            <p class="text-sm">Regelmäßig: Infinitiv + <b>-ed</b><br>Unregelmäßig: 2. Verbform (siehe Liste)</p>
+                        </div>
+                        <div class="bg-red-50/50 p-5 rounded-2xl border border-red-100">
+                            <h4 class="font-bold text-red-600 mb-2">Beispiel</h4>
+                            <p class="text-sm font-medium">"We <b>visited</b> Berlin last year."</p>
+                            <p class="text-sm font-medium">"I <b>went</b> to the cinema." (go -> went)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Future (will & be going to) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-lg">
+                        <h3 class="text-2xl font-bold mb-2 text-emerald-600">4. Future (will)</h3>
+                        <p class="text-sm text-slate-500 mb-4 italic">Verwendung: Vorhersagen, Versprechen oder spontane Entschlüsse.</p>
+                        <div class="bg-slate-50 p-4 rounded-2xl mb-3">
+                            <p class="text-sm"><b>will</b> + Infinitiv</p>
+                        </div>
+                        <p class="text-sm font-medium text-emerald-700">"It <b>will rain</b> tomorrow."</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-lg">
+                        <h3 class="text-2xl font-bold mb-2 text-teal-600">5. Future (be going to)</h3>
+                        <p class="text-sm text-slate-500 mb-4 italic">Verwendung: Feste Pläne und Absichten für die Zukunft.</p>
+                        <div class="bg-slate-50 p-4 rounded-2xl mb-3">
+                            <p class="text-sm"><b>am/is/are going to</b> + Infinitiv</p>
+                        </div>
+                        <p class="text-sm font-medium text-teal-700">"I <b>am going to learn</b> Italian."</p>
+                    </div>
+                </div>
+
+                <!-- 6. Present Perfect -->
+                <div class="bg-white p-6 rounded-3xl w-full border border-slate-200 shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2 text-orange-600">6. Present Perfect</h3>
+                    <p class="text-sm text-slate-500 mb-6 italic">Verwendung: Handlungen, die in der Vergangenheit begannen und bis zur Gegenwart andauern oder deren Ergebnis wichtig ist.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                            <h4 class="font-bold text-slate-800 mb-2">Bildung</h4>
+                            <p class="text-sm"><b>have / has</b> + Partizip (3. Verbform)</p>
+                        </div>
+                        <div class="bg-orange-50/50 p-5 rounded-2xl border border-orange-100">
+                            <h4 class="font-bold text-orange-600 mb-2">Beispiel</h4>
+                            <p class="text-sm font-medium">"I <b>have lost</b> my keys."</p>
+                            <p class="text-sm font-medium">"She <b>has lived</b> here for 5 years."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. Imperativ, 8. Komparativ -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-lg">
+                        <h3 class="text-2xl font-bold mb-2 text-rose-600">7. Imperativ (Befehlsform)</h3>
+                        <p class="text-sm text-slate-500 mb-4">Grundform des Verbs ohne Subjekt.</p>
+                        <ul class="text-sm space-y-1">
+                            <li>"<b>Close</b> the door!" (Positiv)</li>
+                            <li>"<b>Don't touch</b> that!" (Negativ)</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-lg">
+                        <h3 class="text-2xl font-bold mb-2 text-amber-600">8. Komparativ & Superlativ</h3>
+                        <p class="text-sm text-slate-500 mb-4">Vergleich von Eigenschaftswörtern.</p>
+                        <div class="text-xs space-y-2">
+                            <div class="p-2 bg-slate-50 rounded">Kurz: fast - fast<b>er</b> - (the) fast<b>est</b></div>
+                            <div class="p-2 bg-slate-50 rounded">Lang: expensive - <b>more</b> exp. - <b>most</b> exp.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9. Conditionals -->
+                <div class="bg-white p-6 rounded-3xl w-full border border-slate-200 shadow-lg mb-10">
+                    <h3 class="text-2xl font-bold mb-6 text-purple-600">9. Conditionals (Bedingungssätze)</h3>
+                    <div class="space-y-6">
+                        <div class="border-l-4 border-blue-400 pl-4">
+                            <h4 class="font-bold text-lg">Conditional 1 (Possible)</h4>
+                            <p class="text-xs text-slate-500 mb-2">Realistische Bedingungen in der Zukunft.</p>
+                            <p class="text-sm"><b>If</b> + Simple Present ➔ <b>will</b> + Infinitiv</p>
+                            <p class="text-sm font-medium mt-1">"If it <b>rains</b>, I <b>will stay</b> at home."</p>
+                        </div>
+                        <div class="border-l-4 border-amber-400 pl-4">
+                            <h4 class="font-bold text-lg">Conditional 2 (Unlikely)</h4>
+                            <p class="text-xs text-slate-500 mb-2">Hypothetische Situationen (Träume/Unwahrscheinliches).</p>
+                            <p class="text-sm"><b>If</b> + Simple Past ➔ <b>would</b> + Infinitiv</p>
+                            <p class="text-sm font-medium mt-1">"If I <b>won</b> the lottery, I <b>would buy</b> a car."</p>
+                        </div>
+                        <div class="border-l-4 border-red-400 pl-4">
+                            <h4 class="font-bold text-lg">Conditional 3 (Impossible)</h4>
+                            <p class="text-xs text-slate-500 mb-2">Unmögliche Bedingungen (Vergangenheit).</p>
+                            <p class="text-sm"><b>If</b> + Past Perfect ➔ <b>would have</b> + Partizip</p>
+                            <p class="text-sm font-medium mt-1">"If I <b>had studied</b>, I <b>would have passed</b>."</p>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- #infoContentEn -->
         </main>
     </div><!-- #mainAppContent -->
 
@@ -3919,30 +4057,40 @@
             const iIcon = document.getElementById('infoIconBtn');
 
             if (CURRENT_LANG === 'en') {
-                if (gBtn) { gBtn.classList.remove('hidden'); gBtn.style.removeProperty('display'); } // Grammar is now supported in English
-                if (iIcon) { iIcon.classList.add('hidden'); iIcon.style.setProperty('display', 'none', 'important'); }
-                if (iTab) { iTab.classList.add('hidden'); iTab.style.setProperty('display', 'none', 'important'); }
-                if (currentMode === 'info') switchMode('dragdrop'); // Only switch out if in Info mode, let them stay in grammar
+                if (gBtn) { gBtn.classList.remove('hidden'); gBtn.style.removeProperty('display'); } 
             } else {
                 if (gBtn) { gBtn.classList.remove('hidden'); gBtn.style.removeProperty('display'); }
-                
-                // Platform specific Info visibility (Italian)
-                if (isCapacitor) {
-                    // App: Icon top-right, Tab hidden
-                    if (iIcon) { iIcon.classList.remove('hidden'); iIcon.style.removeProperty('display'); }
-                    if (iTab) { iTab.classList.add('hidden'); iTab.style.setProperty('display', 'none', 'important'); }
-                } else {
-                    // Desktop/Web: Icon hidden, Tab visible
-                    // Fix: Ensure Info tab is actually visible on Desktop/Web for Italian
-                    if (iIcon) { iIcon.classList.add('hidden'); iIcon.style.setProperty('display', 'none', 'important'); }
-                    if (iTab) { 
-                        iTab.classList.remove('hidden'); 
-                        iTab.style.removeProperty('display');
-                        iTab.classList.add('sm:flex'); // Reset responsive flex if it was changed
-                    }
-                }
+            }
 
-                if (currentMode === 'info' && isCapacitor) switchMode('dragdrop');
+            // Platform specific Info visibility (Both IT and EN)
+            if (isCapacitor) {
+                // App: Icon top-right, Tab hidden
+                if (iIcon) { iIcon.classList.remove('hidden'); iIcon.style.removeProperty('display'); }
+                if (iTab) { iTab.classList.add('hidden'); iTab.style.setProperty('display', 'none', 'important'); }
+            } else {
+                // Desktop/Web: Icon hidden, Tab visible
+                if (iIcon) { iIcon.classList.add('hidden'); iIcon.style.setProperty('display', 'none', 'important'); }
+                if (iTab) { 
+                    iTab.classList.remove('hidden'); 
+                    iTab.style.removeProperty('display');
+                    iTab.classList.add('sm:flex'); 
+                }
+            }
+
+            // Switch out of info if it shouldn't be visible (e.g. mobile grammar)
+            // But actually we want it to work on mobile too if they click the 'i'
+            
+            // Show/Hide language specific info content
+            const infoIt = document.getElementById('infoContentIt');
+            const infoEn = document.getElementById('infoContentEn');
+            if (infoIt && infoEn) {
+                if (CURRENT_LANG === 'it') {
+                    infoIt.classList.remove('hidden');
+                    infoEn.classList.add('hidden');
+                } else {
+                    infoIt.classList.add('hidden');
+                    infoEn.classList.remove('hidden');
+                }
             }
 
             // Sync Flag Switcher Opacity
@@ -4016,6 +4164,8 @@
                     infoModeToggle.classList.remove('hidden'); 
                     infoModeToggle.style.removeProperty('display'); 
                 }
+                setIc('infoTitleText', 'English Grammar Index');
+                setIc('infoDescText', 'Overview of the most important rules and tenses.');
             } else {
                 if (infoSection) {
                     infoSection.style.removeProperty('display');
@@ -4027,6 +4177,8 @@
                     }
                 }
                 if (infoModeToggle) { infoModeToggle.classList.remove('hidden'); infoModeToggle.style.removeProperty('display'); }
+                setIc('infoTitleText', 'Grammatica Italiana');
+                setIc('infoDescText', 'Index der wichtigsten Regeln und Konjugationstabellen.');
             }
 
             const vMain = document.getElementById('appVersionMain');
