@@ -5066,7 +5066,8 @@
 
         function getFullIt(pair) {
             const isNoun = pair.typ && (pair.typ.toLowerCase().includes('substantiv') || pair.typ.toLowerCase().includes('nomen'));
-            const isVerb = pair.typ && pair.typ.toLowerCase().includes('verb');
+            // Use regex strict boundary to avoid matching "Adverb"
+            const isVerb = pair.typ && /\bverb\b/i.test(pair.typ);
 
             // Only apply Italian articles if CURRENT_LANG is 'it'
             if (isNoun && pair.grammatica && CURRENT_LANG === 'it') {
