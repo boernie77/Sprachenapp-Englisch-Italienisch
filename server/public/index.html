@@ -2979,7 +2979,8 @@
             </div>
 
             <p class="text-center text-xs text-slate-400 mt-4">Aktuelle Liste: <span id="excelWordCount"
-                    class="font-semibold text-slate-600">0</span> Vokabeln</p>
+                    class="font-semibold text-slate-600">0</span> Vokabeln, <span id="excelSentenceCount"
+                    class="font-semibold text-slate-600">0</span> Sätze</p>
         </div>
     </div>
 
@@ -7487,7 +7488,12 @@
             openExcelModalBtn,
             closeExcelModalBtn,
             () => {
-                document.getElementById('excelWordCount').textContent = fullDictionary.length;
+                const wordCount = fullDictionary.filter(w => w.typ !== 'Satz').length;
+                const sentenceCount = fullDictionary.filter(w => w.typ === 'Satz').length;
+                document.getElementById('excelWordCount').textContent = wordCount;
+                if (document.getElementById('excelSentenceCount')) {
+                    document.getElementById('excelSentenceCount').textContent = sentenceCount;
+                }
                 updateAdminBaseVocabCount();
             }
         );
