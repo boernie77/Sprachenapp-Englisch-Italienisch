@@ -3459,9 +3459,9 @@
         let isInfoModeActive = false;
         let currentQuizTarget = null;
         let currentWriteTarget = null;
-        function showToast(message, type = 'info', duration = 4000) {
+        function showToast(message, type = 'info', duration = 6000) {
             const isMobile = window.innerWidth <= 640;
-            const finalDuration = isMobile ? 1500 : duration;
+            const finalDuration = isMobile ? 3500 : duration;
 
             const container = document.getElementById('toastContainer');
             if (!container) return; // Guard
@@ -4449,7 +4449,7 @@
 
         async function apiFetch(endpoint, options = {}) {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+            const timeoutId = setTimeout(() => controller.abort(), 20000); // 20 second timeout
 
             if (!navigator.onLine && options.method && options.method !== 'GET') {
                 clearTimeout(timeoutId);
