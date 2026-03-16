@@ -6463,39 +6463,46 @@
 
                     const isKnownNoun = fullDictionary.some(item =>
                         ((item.en && (item.en.toLowerCase() === cleanNoPunct || item.en.toLowerCase() === singular)) || 
-                         (item.it && (item.it.toLowerCase() === cleanNoPunct || item.it.toLowerCase() === singular))) && 
+                         (item.it && (item.it.toLowerCase() === cleanNoPunct || item.it.toLowerCase() === singular)) ||
+                         (CURRENT_LANG === 'en' && item.de && (item.de.toLowerCase() === cleanNoPunct || item.de.toLowerCase() === singular))) && 
                         item.typ === 'Substantiv'
                     );
-                    const isNounSuffix = /((tion|sion|ment|ness|ity|ance|ence|ship|hood)s?)$/.test(cleanNoPunct);
+                    const isNounSuffix = /((tion|sion|ment|ness|ity|ance|ence|ship|hood|er|or)s?)$/.test(cleanNoPunct);
                     if (isKnownNoun || isNounSuffix) return;
 
-                    if (GRAMMAR_RULES_EN.prepositions.has(cleanNoPunct)) {
+                    // 2. Check Modals and strong Verb clues first
+                    if (GRAMMAR_RULES_EN.modals.has(cleanNoPunct)) {
+                         eligibleTokens.push({ idx, type: 'verb', weight: 1.2 });
+                    } else if (GRAMMAR_RULES_EN.prepositions.has(cleanNoPunct)) {
                          eligibleTokens.push({ idx, type: 'preposition', weight: 1.0 });
                     } else if (GRAMMAR_RULES_EN.possessives.has(cleanNoPunct)) {
                          eligibleTokens.push({ idx, type: 'possessive', weight: 1.0 });
-                    } else if (GRAMMAR_RULES_EN.modals.has(cleanNoPunct)) {
-                         eligibleTokens.push({ idx, type: 'verb', weight: 1.2 }); // Give modals high weight
-                    } else if (cleanNoPunct.endsWith('est') || cleanNoPunct === 'most' || cleanNoPunct === 'best' || cleanNoPunct === 'worst') {
-                         eligibleTokens.push({ idx, type: 'superlative', weight: 1.1 });
-                    } else if (cleanNoPunct.endsWith('er') || cleanNoPunct === 'more' || cleanNoPunct === 'better' || cleanNoPunct === 'worse') {
-                         eligibleTokens.push({ idx, type: 'comparative', weight: 1.1 });
                     } else {
-                         // Assume it could be a verb if it ends in ing, ed, s, or is in our verb dictionary
                          const isKnownVerb = fullDictionary.some(item =>
                              (item.en && item.en.toLowerCase() === cleanNoPunct || item.it.toLowerCase() === cleanNoPunct) && item.typ === 'Verb'
                          );
-                         
-                         // We also have the deriveInfinitiveEn which catches irregulars
                          const inf = deriveInfinitiveEn(cleanNoPunct);
                          let isValidVerbGap = isKnownVerb || cleanNoPunct.endsWith('ing') || cleanNoPunct.endsWith('ed');
+                         
                          if (!isValidVerbGap && inf !== cleanNoPunct) {
                               const isJustStripped = cleanNoPunct.endsWith('s') && (inf === cleanNoPunct.slice(0, -1) || inf === cleanNoPunct.slice(0, -2) || inf === cleanNoPunct.slice(0, -3) + 'y');
                               if (isJustStripped) {
                                   isValidVerbGap = fullDictionary.some(item => ((item.en && item.en.toLowerCase() === inf) || (item.it && item.it.toLowerCase() === inf)) && item.typ === 'Verb');
                               } else { isValidVerbGap = true; }
                          }
+
                          if (isValidVerbGap) {
                               eligibleTokens.push({ idx, type: 'verb', weight: 1.0 });
+                         } else {
+                              // 3. Morphological guesses (Comparative/Superlative)
+                              // Only if length > 3 and not already identified as noun/verb
+                              if (cleanNoPunct.length > 3) {
+                                  if (cleanNoPunct.endsWith('est') || cleanNoPunct === 'most' || cleanNoPunct === 'best' || cleanNoPunct === 'worst') {
+                                       eligibleTokens.push({ idx, type: 'superlative', weight: 0.8 }); // Lower weight to prioritize verbs
+                                  } else if (cleanNoPunct.endsWith('er') || cleanNoPunct === 'more' || cleanNoPunct === 'better' || cleanNoPunct === 'worse') {
+                                       eligibleTokens.push({ idx, type: 'comparative', weight: 0.8 }); // Lower weight
+                                  }
+                              }
                          }
                     }
                 }
