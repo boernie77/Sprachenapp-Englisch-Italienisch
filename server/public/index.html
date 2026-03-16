@@ -3733,7 +3733,7 @@
 
             // 2. Process verbs from fullDictionary
             fullDictionary.forEach(item => {
-                if (item.typ === 'Verb') {
+                if (item.typ === 'Verb' && item.it) {
                     const forms = generateVerbForms(item.it);
                     addFormsToMap(item.it.toLowerCase().trim(), forms);
                 }
@@ -3742,7 +3742,7 @@
             // 3. Process verbs from offlineDictionary (Base vocabulary)
             if (typeof offlineDictionary !== 'undefined') {
                 offlineDictionary.forEach(item => {
-                    if (item.typ === 'Verb') {
+                    if (item.typ === 'Verb' && item.it) {
                         const forms = generateVerbForms(item.it);
                         addFormsToMap(item.it.toLowerCase().trim(), forms);
                     }
