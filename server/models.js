@@ -67,6 +67,7 @@ const Vocabulary = sequelize.define('Vocabulary', {
   grammatica: { type: DataTypes.STRING, allowNull: true },
   isActive: { type: DataTypes.BOOLEAN, defaultValue: true },
   isMarked: { type: DataTypes.BOOLEAN, defaultValue: false },
+  isOwn: { type: DataTypes.BOOLEAN, defaultValue: false },
   language: { type: DataTypes.STRING, defaultValue: 'it' }
 });
 
