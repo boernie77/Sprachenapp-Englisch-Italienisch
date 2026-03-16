@@ -6369,7 +6369,7 @@
             try {
                 const baseSentences = await apiFetch('/grammar-sentences');
                 const personalSentences = fullDictionary ? fullDictionary.filter(w => w.typ === 'Satz').map(v => ({
-                    id: v.id, de: v.de, it: v.it, category: v.grammatica || 'Eigene', level: 'Eigene'
+                    id: v.id, de: v.de, it: v.it, category: v.grammatica || 'Eigene Sätze', level: 'Eigene'
                 })) : [];
                 grammarSentences = [...baseSentences, ...personalSentences];
                 saveAllDataLocally(); // Save to cache after fetch
@@ -8327,7 +8327,7 @@
             const itSatz = sentenceInputIt.value.trim();
             if (!deSatz || !itSatz) { showToast('Bitte beide Felder ausfüllen.', 'warning'); return; }
 
-            const payload = { de: deSatz, it: itSatz, typ: 'Satz', emoji: '', grammatica: '', language: CURRENT_LANG };
+            const payload = { de: deSatz, it: itSatz, typ: 'Satz', emoji: '', grammatica: 'Eigene Sätze', language: CURRENT_LANG };
 
             const clearFields = () => {
                 sentenceInputDe.value = '';
