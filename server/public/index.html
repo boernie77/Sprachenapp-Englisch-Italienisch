@@ -1726,7 +1726,7 @@
                             <option value="Adjektiv">Adjektive</option>
                             <option value="Sonstiges">Sonstiges</option>
                             <option value="Favoriten">Favoriten</option>
-                            <option value="Satz">Sätze</option>
+                            <option value="Satz">Eigene Sätze</option>
                         </select>
                         <div style="position:relative">
                             <button type="button" class="cs-btn" id="typeFilterBtn">
@@ -1745,7 +1745,7 @@
                                 <div class="cs-opt" data-value="Adjektiv">Adjektive</div>
                                 <div class="cs-opt" data-value="Sonstiges">Sonstiges</div>
                                 <div class="cs-opt" data-value="Favoriten" title="Nur markierte Favoriten üben">Favoriten</div>
-                                <div class="cs-opt" data-value="Satz">Sätze</div>
+                                <div class="cs-opt" data-value="Satz">Eigene Sätze</div>
                             </div>
                         </div>
                     </div>
@@ -3048,7 +3048,7 @@
                         <option value="Adjektiv">Adjektive</option>
                         <option value="Sonstiges">Sonstiges</option>
                         <option value="Favoriten">Favoriten</option>
-                        <option value="Satz">Sätze</option>
+                        <option value="Satz">Eigene Sätze</option>
                     </select>
                     <button type="button" class="cs-btn w-full" id="vocabListCatFilterBtn">
                         <span id="vocabListCatFilterLabel">Alle Kategorien</span>
@@ -3064,7 +3064,7 @@
                         <div class="cs-opt" data-value="Adjektiv">Adjektive</div>
                         <div class="cs-opt" data-value="Sonstiges">Sonstiges</div>
                         <div class="cs-opt" data-value="Favoriten">Favoriten</div>
-                        <div class="cs-opt" data-value="Satz">Sätze</div>
+                        <div class="cs-opt" data-value="Satz">Eigene Sätze</div>
                     </div>
                 </div>
             </div>
@@ -6945,6 +6945,32 @@
         function switchMode(mode) {
             currentMode = mode; successText.classList.add('hidden');
             
+            // Toggle visibility of 'Satz' filter in Type selections
+            const satzFilterOptions = document.querySelectorAll('.cs-opt[data-value="Satz"]');
+            const satzSelectOptions = document.querySelectorAll('option[value="Satz"]');
+            
+            if (mode === 'dragDrop' || mode === 'quiz') {
+                satzFilterOptions.forEach(el => el.style.display = 'none');
+                satzSelectOptions.forEach(el => el.disabled = true);
+                
+                // If 'Satz' was selected, fallback to 'Alle' when switching to restricted tabs
+                if (typeFilterEl && typeFilterEl.value === 'Satz') {
+                    typeFilterEl.value = 'Alle';
+                    const listCustom = document.getElementById('typeFilterList');
+                    if (listCustom) {
+                        listCustom.querySelectorAll('.cs-opt').forEach(opt => opt.classList.remove('selected'));
+                        const alleOpt = listCustom.querySelector('.cs-opt[data-value="Alle"]');
+                        if (alleOpt) {
+                            alleOpt.classList.add('selected');
+                            document.getElementById('typeFilterLabel').textContent = alleOpt.textContent;
+                        }
+                    }
+                }
+            } else {
+                satzFilterOptions.forEach(el => el.style.display = 'block');
+                satzSelectOptions.forEach(el => el.disabled = false);
+            }
+            
             if (mode === 'add-vocab') {
                 isPaused = true;
                 vocabModal.classList.remove('hidden');
@@ -8366,6 +8392,7 @@
                     fullDictionary.push(result);
                     wordStats[result.id] = result.Stat || result.Statistic || result.Stats || { presented: 0, correct: 0, incorrect: 0, streak: 0 };
                     renderVocabList();
+                    updateAdminGrammarCount(); // Ensure the Grammar UI dropdown registers the new "Eigene Sätze" count
                     clearFields();
                     showToast(`Satz wurde zur Vokabelliste hinzugefügt!`, "success");
                 }
