@@ -7035,7 +7035,19 @@
 
                 // Clear modal and move content in
                 mobileFilterContent.innerHTML = '';
-                if (sourceContainer) {
+                
+                if (currentMode === 'grammar') {
+                    const focusWrap = document.getElementById('grammarFocusFilterWrapper');
+                    const levelWrap = document.getElementById('grammarLevelFilterWrapper');
+                    if (focusWrap) {
+                        while (focusWrap.firstChild) mobileFilterContent.appendChild(focusWrap.firstChild);
+                    }
+                    if (levelWrap) {
+                        // Language level filter might be hidden for Italian, but we move it anyway 
+                        // as its visibility is controlled by classes
+                        while (levelWrap.firstChild) mobileFilterContent.appendChild(levelWrap.firstChild);
+                    }
+                } else if (sourceContainer) {
                     while (sourceContainer.firstChild) {
                         mobileFilterContent.appendChild(sourceContainer.firstChild);
                     }
@@ -7051,16 +7063,21 @@
         }
 
         function restoreFilters() {
-            // Move everything back from modal content to its original placeholder
+            // Move everything back from modal content to its original placeholders
             const standardPlaceholder = document.getElementById('standardFiltersWrapper');
-            const grammarPlaceholder = document.getElementById('grammarFocusFilterWrapper');
+            const focusPlaceholder = document.getElementById('grammarFocusFilterWrapper');
+            const levelPlaceholder = document.getElementById('grammarLevelFilterWrapper');
 
             while (mobileFilterContent.firstChild) {
                 const child = mobileFilterContent.firstChild;
-                // Heuristic: If it's the grammar focus label/button, move it back to grammar
-                if (child.id === 'grammarFocusFilterLabelParent' ||
-                    (child.innerText && child.innerText.includes('Übungs-Focus'))) {
-                    grammarPlaceholder.appendChild(child);
+                
+                // Route children back based on their content/ID
+                if (child.id === 'grammarFocusFilterLabelParent' || 
+                    child.id === 'grammarFocusFilter' || 
+                    (child.querySelector && child.querySelector('#grammarFocusFilterBtn'))) {
+                    focusPlaceholder.appendChild(child);
+                } else if (child.innerHTML && (child.innerHTML.includes('grammarLevelFilter') || child.innerHTML.includes('Sprachniveau'))) {
+                    levelPlaceholder.appendChild(child);
                 } else {
                     standardPlaceholder.appendChild(child);
                 }
