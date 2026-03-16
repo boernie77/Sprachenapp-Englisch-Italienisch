@@ -3640,6 +3640,7 @@
         const essereVerbsList = ['partire', 'arrivare', 'entrare', 'tornare', 'restare', 'rimanere', 'nascere', 'morire', 'salire', 'scendere', 'cadere', 'diventare', 'durare', 'sembrare'];
 
         function generateVerbForms(verbInfinitive) {
+            if (!verbInfinitive) return {};
             let v = verbInfinitive.toLowerCase().trim();
 
             let isReflexive = false;
@@ -4587,7 +4588,7 @@
                     isActive: v.isActive !== false,
                     isMarked: v.isMarked === true,
                     language: v.language || (v.it ? 'it' : 'en'),
-                    ... (v.typ === 'Verb' ? generateVerbForms(v.it) : {})
+                    ... (v.typ === 'Verb' && v.it ? generateVerbForms(v.it) : {})
                 }));
 
                 // Merge wordStats instead of replacing
