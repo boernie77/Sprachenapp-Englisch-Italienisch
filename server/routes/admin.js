@@ -164,12 +164,14 @@ router.post('/base-vocab/bulk', authenticateToken, requireAdmin, asyncHandler(as
 }));
 
 router.post('/grammar-sentences/bulk', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
-    const { sentences, language } = req.body;
+    const { sentences, language, mode } = req.body;
     if (!language) return res.status(400).json({ error: 'Language required' });
 
     const transaction = await sequelize.transaction();
     try {
-        await GrammarSentence.destroy({ where: { language }, transaction });
+        if (mode !== 'append') {
+            await GrammarSentence.destroy({ where: { language }, transaction });
+        }
         const data = sentences.map(s => ({ ...s, language }));
         const created = await GrammarSentence.bulkCreate(data, { transaction });
         await transaction.commit();
