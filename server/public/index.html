@@ -1502,14 +1502,16 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
-                    Liste ersetzen (Löschen)
+                    <span id="choiceReplaceText">Liste ersetzen (Löschen)</span>
                 </button>
                 <button id="choiceAddBtn"
                     class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2">
-                    <span id="choiceAddIcon"></span> Liste ergänzen (Hinzufügen)
+                    <span id="choiceAddText">Liste ergänzen (Hinzufügen)</span>
                 </button>
                 <button id="choiceCancelBtn"
-                    class="w-full py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-xl transition-all">Abbrechen</button>
+                    class="w-full py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-xl transition-all">
+                    <span id="choiceCancelText">Abbrechen</span>
+                </button>
             </div>
         </div>
     </div>
@@ -1625,6 +1627,9 @@
                     Vokabelliste</button>
                 <button id="openVocabModalBtn"
                     class="block w-full text-left px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100">Vokabel
+                    hinzufügen</button>
+                <button id="openSentenceModalBtn"
+                    class="block w-full text-left px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100">Sätze
                     hinzufügen</button>
                 <button id="openExcelModalBtn"
                     class="block w-full text-left px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100">Excel-Liste
@@ -2908,59 +2913,52 @@
                 <button id="closeExcelModalBtn"
                     class="text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
             </div>
-            <div class="space-y-3 mb-6">
-                <!-- Import -->
-                <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-200 transition-colors cursor-pointer"
-                    id="importArea">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-                            id="excelImportIcon"></div>
-                        <div>
-                            <div class="font-semibold text-slate-800 text-sm">Excel-Liste importieren</div>
-                            <div class="text-slate-500 text-xs mt-0.5">Lädt eine .xlsx-Datei und ergänzt die aktuelle
-                                Vokabelliste (ACHTUNG: Es können dabei Duplikate entstehen!)</div>
-                        </div>
+            <div class="space-y-4 mb-6">
+                <!-- Eigene Vokabeln (Import, Export, Clear) -->
+                <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-lg flex-shrink-0" id="excelVocabIcon">📚</div>
+                        <div class="font-semibold text-slate-800 text-sm">Eigene Vokabeln</div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button id="importArea" class="flex-1 bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">📥 Import</button>
+                        <button id="exportArea" class="flex-1 bg-white hover:bg-green-50 text-green-600 border border-green-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">📤 Export</button>
+                        <button id="clearVocabArea" class="flex-1 bg-white hover:bg-red-50 text-red-600 border border-red-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">🗑️ Löschen</button>
                     </div>
                 </div>
 
-                <!-- Export -->
-                <div class="p-4 rounded-2xl border border-green-200 bg-slate-50 hover:bg-green-50 hover:border-green-200 transition-colors cursor-pointer"
-                    id="exportArea">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-                            id="excelExportIcon"></div>
-                        <div>
-                            <div class="font-semibold text-slate-800 text-sm">Excel-Liste exportieren</div>
-                            <div class="text-slate-500 text-xs mt-0.5">Speichert die aktuelle Vokabelliste als
-                                .xlsx-Datei</div>
-                        </div>
+                <!-- Eigene Sätze (Import, Export, Clear) -->
+                <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-lg flex-shrink-0" id="excelSentenceIcon">📝</div>
+                        <div class="font-semibold text-slate-800 text-sm">Eigene Sätze</div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button id="importSentencesArea" class="flex-1 bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">📥 Import</button>
+                        <button id="exportSentencesArea" class="flex-1 bg-white hover:bg-green-50 text-green-600 border border-green-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">📤 Export</button>
+                        <button id="clearSentencesArea" class="flex-1 bg-white hover:bg-red-50 text-red-600 border border-red-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">🗑️ Löschen</button>
                     </div>
                 </div>
 
-                <!-- Clear -->
-                <div class="p-4 rounded-2xl border border-red-200 bg-slate-50 hover:bg-red-50 hover:border-red-200 transition-colors cursor-pointer"
-                    id="clearVocabArea">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-                            id="excelTrashIcon"></div>
-                        <div>
-                            <div class="font-semibold text-red-800 text-sm">Vokabelliste leeren</div>
-                            <div class="text-red-500 text-xs mt-0.5">Löscht alle aktuell gespeicherten Vokabeln
-                                unwiderruflich</div>
+                <!-- Globale Listen einlesen/löschen -->
+                <div class="grid grid-cols-2 gap-3">
+                    <!-- Base Vokabeln -->
+                    <div class="p-3 rounded-xl border border-indigo-200 bg-indigo-50 flex flex-col justify-between">
+                        <div class="font-semibold text-indigo-900 text-xs mb-2">Basis-Vokabeln</div>
+                        <div class="text-[10px] text-slate-500 mb-2 leading-tight" id="baseVocabUserCountDesc">Lade Informationen...</div>
+                        <div class="flex flex-col gap-2 relative mt-auto">
+                            <button id="loadBaseVocabArea" class="w-full bg-white hover:bg-indigo-100 text-indigo-700 border border-indigo-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">📖 Einlesen</button>
+                            <button id="deleteBaseVocabArea" class="w-full bg-white hover:bg-red-50 text-red-600 border border-red-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">🗑️ Löschen</button>
                         </div>
                     </div>
-                </div>
-
-                <!-- Base List -->
-                <div class="p-4 rounded-2xl border border-indigo-200 bg-slate-50 hover:bg-indigo-50 hover:border-indigo-200 transition-colors cursor-pointer"
-                    id="loadBaseVocabArea">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-                            id="excelBooksIcon"></div>
-                        <div>
-                            <div class="font-semibold text-slate-800 text-sm">Basis-Vokabeln laden</div>
-                            <div class="text-slate-500 text-xs mt-0.5" id="baseVocabUserCountDesc">Lade Informationen...
-                            </div>
+                    
+                    <!-- Base Sätze -->
+                    <div class="p-3 rounded-xl border border-indigo-200 bg-indigo-50 flex flex-col justify-between">
+                        <div class="font-semibold text-indigo-900 text-xs mb-2">Basis-Sätze</div>
+                        <div class="text-[10px] text-slate-500 mb-2 leading-tight" id="baseSentencesUserCountDesc">Lade Informationen...</div>
+                        <div class="flex flex-col gap-2 relative mt-auto">
+                            <button id="loadBaseSentencesArea" class="w-full bg-white hover:bg-indigo-100 text-indigo-700 border border-indigo-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">📖 Einlesen</button>
+                            <button id="deleteBaseSentencesArea" class="w-full bg-white hover:bg-red-50 text-red-600 border border-red-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">🗑️ Löschen</button>
                         </div>
                     </div>
                 </div>
@@ -3047,6 +3045,7 @@
                         <option value="Adjektiv">Adjektive</option>
                         <option value="Sonstiges">Sonstiges</option>
                         <option value="Favoriten">Favoriten</option>
+                        <option value="Satz">Sätze</option>
                     </select>
                     <button type="button" class="cs-btn w-full" id="vocabListCatFilterBtn">
                         <span id="vocabListCatFilterLabel">Alle Kategorien</span>
@@ -3062,6 +3061,7 @@
                         <div class="cs-opt" data-value="Adjektiv">Adjektive</div>
                         <div class="cs-opt" data-value="Sonstiges">Sonstiges</div>
                         <div class="cs-opt" data-value="Favoriten">Favoriten</div>
+                        <div class="cs-opt" data-value="Satz">Sätze</div>
                     </div>
                 </div>
             </div>
@@ -3189,6 +3189,36 @@
             <button id="saveVocabBtn"
                 class="w-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
                 Vokabel hinzufügen <span class="vocab-btn-arrow"></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Satz-Eingabe Modal -->
+    <div id="sentenceModal"
+        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-lg w-full shadow-2xl">
+            <div class="flex justify-between items-center mb-5">
+                <h2 id="sentenceModalTitle" class="text-xl font-bold text-slate-800 flex items-center">Satz hinzufügen
+                </h2>
+                <button id="closeSentenceModalBtn"
+                    class="text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
+            </div>
+
+            <div class="mb-3">
+                <label id="sentenceInputDeLabel" class="block text-xs font-semibold text-slate-700 mb-1.5">Deutscher Satz</label>
+                <input id="sentenceInputDe" type="text" placeholder="z.B. Ich trinke gerne Kaffee." autocomplete="off"
+                    class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400 transition-all">
+            </div>
+
+            <div class="mb-5">
+                <label id="sentenceInputItLabel" class="block text-xs font-semibold text-slate-700 mb-1.5">Italienische Übersetzung</label>
+                <input id="sentenceInputIt" type="text" placeholder="z.B. Bevo volentieri il caffè." autocomplete="off"
+                    class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400 transition-all">
+            </div>
+
+            <button id="saveSentenceBtn"
+                class="w-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+                Satz hinzufügen <span class="vocab-btn-arrow"></span>
             </button>
         </div>
     </div>
@@ -3651,15 +3681,25 @@
          * Choice Modal (Replace, Add, Cancel)
          * Returns 'replace', 'add' or null
          */
-        function showChoice(message) {
+        function showChoice(message, titleOpts, optionsParam) {
             return new Promise((resolve) => {
                 const modal = document.getElementById('choiceModal');
                 const msgEl = document.getElementById('choiceMessage');
                 const replaceBtn = document.getElementById('choiceReplaceBtn');
                 const addBtn = document.getElementById('choiceAddBtn');
                 const cancelBtn = document.getElementById('choiceCancelBtn');
+                const titleEl = modal.querySelector('h3');
 
+                const replaceText = document.getElementById('choiceReplaceText');
+                const addText = document.getElementById('choiceAddText');
+                const cancelText = document.getElementById('choiceCancelText');
+
+                if (titleOpts) titleEl.textContent = titleOpts;
                 if (message) msgEl.textContent = message;
+
+                replaceText.textContent = optionsParam?.confirmText || 'Liste ersetzen (Löschen)';
+                addText.textContent = optionsParam?.toggleText || 'Liste ergänzen (Hinzufügen)';
+                cancelText.textContent = optionsParam?.cancelText || 'Abbrechen';
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
 
@@ -4484,9 +4524,23 @@
         const vocabListContainer = document.getElementById('vocabListContainer');
         const openExcelModalBtn = document.getElementById('openExcelModalBtn');
         const closeExcelModalBtn = document.getElementById('closeExcelModalBtn');
+        
         const importArea = document.getElementById('importArea');
         const exportArea = document.getElementById('exportArea');
+        const clearVocabArea = document.getElementById('clearVocabArea');
+        
+        const importSentencesArea = document.getElementById('importSentencesArea');
+        const exportSentencesArea = document.getElementById('exportSentencesArea');
+        const clearSentencesArea = document.getElementById('clearSentencesArea');
+        
+        const loadBaseVocabArea = document.getElementById('loadBaseVocabArea');
+        const deleteBaseVocabArea = document.getElementById('deleteBaseVocabArea');
+        
+        const loadBaseSentencesArea = document.getElementById('loadBaseSentencesArea');
+        const deleteBaseSentencesArea = document.getElementById('deleteBaseSentencesArea');
+
         const excelUploadEl = document.getElementById('excelUploadEl');
+        let excelUploadType = 'vocab'; // To differentiate vocab/sentences upload
 
         const dragColHeader = document.getElementById('dragColHeader');
         const dropColHeader = document.getElementById('dropColHeader');
@@ -4518,6 +4572,14 @@
         const saveVocabBtn = document.getElementById('saveVocabBtn');
         const vocabTypLabel = document.getElementById('vocabTypLabel');
         const vocabDuplicateHint = document.getElementById('vocabDuplicateHint');
+        
+        const openSentenceModalBtn = document.getElementById('openSentenceModalBtn');
+        const closeSentenceModalBtn = document.getElementById('closeSentenceModalBtn');
+        const sentenceModal = document.getElementById('sentenceModal');
+        const sentenceInputDe = document.getElementById('sentenceInputDe');
+        const sentenceInputIt = document.getElementById('sentenceInputIt');
+        const saveSentenceBtn = document.getElementById('saveSentenceBtn');
+
         const infoTabContainer = document.getElementById('infoTabContainer');
         const infoContentEn = document.getElementById('infoContentEn');
         const infoContentIt = document.getElementById('infoContentIt');
@@ -6298,7 +6360,11 @@
 
         async function updateAdminGrammarCount() {
             try {
-                grammarSentences = await apiFetch('/grammar-sentences');
+                const baseSentences = await apiFetch('/grammar-sentences');
+                const personalSentences = fullDictionary ? fullDictionary.filter(w => w.typ === 'Satz').map(v => ({
+                    id: v.id, de: v.de, it: v.it, category: v.grammatica || 'Eigene', level: 'Eigene'
+                })) : [];
+                grammarSentences = [...baseSentences, ...personalSentences];
                 saveAllDataLocally(); // Save to cache after fetch
                 updateGrammarFocusOptions();
 
@@ -7414,10 +7480,12 @@
             }
         );
 
-        importArea.addEventListener('click', () => { excelUploadEl.value = null; excelUploadEl.click(); });
+        importArea.addEventListener('click', () => { excelUploadType = 'vocab'; excelUploadEl.value = null; excelUploadEl.click(); });
+        importSentencesArea.addEventListener('click', () => { excelUploadType = 'sentences'; excelUploadEl.value = null; excelUploadEl.click(); });
 
-        function exportToExcel() {
-            const rows = fullDictionary.map(w => ({
+        function exportToExcelLogic(isSentences = false) {
+            const dataToExport = isSentences ? fullDictionary.filter(w => w.typ === 'Satz') : fullDictionary.filter(w => w.typ !== 'Satz');
+            const rows = dataToExport.map(w => ({
                 Deutsch: w.de,
                 Italienisch: w.it,
                 Typ: w.typ || '',
@@ -7426,26 +7494,52 @@
             }));
             const ws = XLSX.utils.json_to_sheet(rows);
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Vokabeln');
-            XLSX.writeFile(wb, 'Vokabelliste.xlsx');
+            XLSX.utils.book_append_sheet(wb, ws, isSentences ? 'Sätze' : 'Vokabeln');
+            XLSX.writeFile(wb, isSentences ? 'Saetze.xlsx' : 'Vokabelliste.xlsx');
             excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
         }
-        exportArea.addEventListener('click', exportToExcel);
+        exportArea.addEventListener('click', () => exportToExcelLogic(false));
+        exportSentencesArea.addEventListener('click', () => exportToExcelLogic(true));
 
-        const clearVocabArea = document.getElementById('clearVocabArea');
         clearVocabArea.addEventListener('click', async () => {
-            if (await showConfirm("Möchtest du wirklich alle Vokabeln unwiderruflich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.", "Liste leeren?")) {
+            if (await showConfirm("Möchtest du wirklich alle eigenen Vokabeln unwiderruflich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.", "Vokabeln leeren?")) {
                 try {
-                    await apiFetch('/vocab/clear/all', { method: 'DELETE' });
-                    fullDictionary = [];
-                    wordStats = {};
+                    // We need to delete only where typ != Satz. The API /vocab/clear/all deletes all. 
+                    // Let's call /vocab/clear/all?type=vocab (Assumes backend support or we iterate)
+                    // Wait, /vocab/clear/all doesn't support type filtering. We need to do it by ID if not supported.
+                    // For now, let's assume we modify the backend route `/vocab/clear/type?typ=Satz`.
+                    // Or we just fetch all and delete them one by one.
+                    const toDelete = fullDictionary.filter(w => w.typ !== 'Satz');
+                    for (const w of toDelete) {
+                        await apiFetch(`/vocab/${w.id}`, { method: 'DELETE' });
+                    }
+                    fullDictionary = fullDictionary.filter(w => w.typ === 'Satz');
                     renderVocabList();
                     excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
-                    showToast("Alle Vokabeln wurden gelöscht.", "success");
-                    setTimeout(() => window.location.reload(), 1000);
+                    showToast("Alle eigenen Vokabeln wurden gelöscht.", "success");
+                    loadDataFromServer();
                 } catch (err) {
                     console.error(err);
                     showToast("Fehler beim Löschen der Liste.", "error");
+                }
+            }
+        });
+
+        clearSentencesArea.addEventListener('click', async () => {
+            if (await showConfirm("Möchtest du wirklich alle eigenen Sätze unwiderruflich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.", "Sätze leeren?")) {
+                try {
+                    const toDelete = fullDictionary.filter(w => w.typ === 'Satz');
+                    for (const w of toDelete) {
+                        await apiFetch(`/vocab/${w.id}`, { method: 'DELETE' });
+                    }
+                    fullDictionary = fullDictionary.filter(w => w.typ !== 'Satz');
+                    renderVocabList();
+                    excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
+                    showToast("Alle eigenen Sätze wurden gelöscht.", "success");
+                    loadDataFromServer();
+                } catch (err) {
+                    console.error(err);
+                    showToast("Fehler beim Löschen der Sätze.", "error");
                 }
             }
         });
@@ -7522,6 +7616,65 @@
             }
         });
 
+        deleteBaseVocabArea.addEventListener('click', async () => {
+            if (await showConfirm("Möchtest du die importierten Basis-Vokabeln von deinen Statistiken entfernen? Da wir dies nicht exakt abgrenzen können, leert dies einfach deine Liste.", "Achtung")) {
+                showToast("Das direkte Löschen nur von Basis-Vokabeln ist noch nicht möglich.", "info");
+            }
+        });
+
+        loadBaseSentencesArea.addEventListener('click', async () => {
+            try {
+                let serverBase = [];
+                try {
+                    const result = await apiFetch(`/grammar-sentences?language=${CURRENT_LANG}`);
+                    if (result) serverBase = result;
+                } catch (e) {
+                    console.warn("Server base sentences fetch failed", e);
+                }
+
+                if (serverBase.length === 0) return showToast("Aktuell gibt es keine Basis-Sätze für diese Sprache.", "warning");
+
+                const loadConfirmed = await showConfirm(`Basis-Sätze (${CURRENT_LANG.toUpperCase()}) auf dem Server gefunden (${serverBase.length} Sätze). Möchtest du diese für deine Karteikarten importieren?`, "Basis-Sätze laden");
+                if (!loadConfirmed) return;
+
+                const wordsToUpload = serverBase.map(v => ({
+                    de: v.de, it: v.it, typ: 'Satz', emoji: '', grammatica: v.category || v.level || '', language: CURRENT_LANG
+                }));
+
+                const choice = await showChoice(`Du lädst ${wordsToUpload.length} Sätze. Sollen sie deine aktuellen Sätze ersetzen oder ergänzen?`);
+                if (!choice) return;
+
+                if (choice === 'replace') {
+                    const toDelete = fullDictionary.filter(w => w.typ === 'Satz');
+                    for (const w of toDelete) await apiFetch(`/vocab/${w.id}`, { method: 'DELETE' });
+                }
+
+                const result = await apiFetch('/vocab/bulk', {
+                    method: 'POST',
+                    body: JSON.stringify({ words: wordsToUpload, language: CURRENT_LANG })
+                });
+
+                if (result) {
+                    loadDataFromServer();
+                    showToast(`${result.length} Basis-Sätze erfolgreich ${choice === 'replace' ? 'ersetzt' : 'hinzugefügt'}!`, "success");
+                    excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
+                }
+            } catch (err) {
+                console.error(err);
+                showToast("Fehler beim Import der Basis-Sätze.", "error");
+            }
+        });
+
+        deleteBaseSentencesArea.addEventListener('click', async () => {
+            if (await showConfirm("Möchtest du die importierten Basis-Sätze aus deiner Liste entfernen? Dies löscht auch eigene Sätze.", "Achtung")) {
+                const toDelete = fullDictionary.filter(w => w.typ === 'Satz');
+                for (const w of toDelete) await apiFetch(`/vocab/${w.id}`, { method: 'DELETE' });
+                showToast("Alle Sätze wurden gelöscht.", "success");
+                loadDataFromServer();
+                excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
+            }
+        });
+
         excelUploadEl.addEventListener('change', async e => {
             const file = e.target.files[0]; if (!file) return;
             const reader = new FileReader();
@@ -7533,7 +7686,7 @@
                     const wordsToUpload = json.map((row) => {
                         let italWord = (row.Italienisch || row.italienisch || row.IT || row.EN || row.English || row.Englisch || row.englisch || '').toString().trim();
                         let deWord = (row.Deutsch || row.deutsch || row.DE || '').toString().trim();
-                        let typ = (row.Wortart || row.wortart || row.Typ || row.typ || 'Sonstiges').toString().trim();
+                        let typ = excelUploadType === 'sentences' ? 'Satz' : (row.Wortart || row.wortart || row.Typ || row.typ || 'Sonstiges').toString().trim();
                         let grammatica = (row.Grammatik || row.grammatica || row.Grammatica || row.grammata || row.E || '').toString().trim();
 
                         // Auto-detect if empty and it's a noun (only for Italian)
@@ -7545,15 +7698,36 @@
                     }).filter(item => item.de && item.it);
 
                     if (wordsToUpload.length > 0) {
+                        
+                        if (excelUploadType === 'sentences' && currentUserIsAdmin) {
+                            const globalChoice = await showChoice("Möchtest du die globale Sätzeliste ersetzen, ergänzen oder nur lokal speichern?", "Globale Basis-Sätze", { confirmText: "Ersetzen", toggleText: "Ergänzen", cancelText: "Lokal" });
+                            if (globalChoice === 'replace' || globalChoice === 'append') {
+                                const baseSentences = wordsToUpload.map(w => ({ de: w.de, it: w.it, category: w.grammatica, language: CURRENT_LANG }));
+                                await apiFetch('/admin/grammar-sentences/bulk', {
+                                    method: 'POST',
+                                    body: JSON.stringify({ sentences: baseSentences, language: CURRENT_LANG, mode: globalChoice })
+                                });
+                                showToast(`Globale Sätze via Admin erfolgreich ${globalChoice === 'replace' ? 'ersetzt' : 'ergänzt'}.`, "success");
+                            }
+                        }
+
+                        const choice = await showChoice(`Du importierst ${wordsToUpload.length} ${excelUploadType === 'sentences' ? 'Sätze' : 'Vokabeln'}. Möchtest du ersetzen oder ergänzen?`);
+                        if (!choice) { excelUploadEl.value = null; return; }
+                        
+                        if (choice === 'replace') {
+                            const toDelete = excelUploadType === 'sentences' ? fullDictionary.filter(w => w.typ === 'Satz') : fullDictionary.filter(w => w.typ !== 'Satz');
+                            for (const w of toDelete) await apiFetch(`/vocab/${w.id}`, { method: 'DELETE' });
+                        }
+
                         const result = await apiFetch('/vocab/bulk', {
                             method: 'POST',
                             body: JSON.stringify({ words: wordsToUpload })
                         });
                         if (result && result.length > 0) {
-                            // Reload everything to be safe
                             loadDataFromServer();
-                            showToast(`${result.length} Vokabeln erfolgreich geladen und synchronisiert.`, "success");
+                            showToast(`${result.length} Daten erfolgreich geladen und synchronisiert.`, "success");
                             typeFilterEl.value = 'Alle';
+                            excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
                             startDragDropRound();
                         }
                     }
@@ -8133,6 +8307,51 @@
                 saveVocabBtn.disabled = isDup;
                 saveVocabBtn.style.opacity = isDup ? '0.5' : '1';
                 saveVocabBtn.style.cursor = isDup ? 'not-allowed' : 'pointer';
+                saveAllDataLocally();
+            }
+        });
+
+        const closeSentenceModal = setupModal(
+            sentenceModal,
+            openSentenceModalBtn,
+            closeSentenceModalBtn,
+            () => {
+                sentenceInputDe.value = '';
+                sentenceInputIt.value = '';
+            }
+        );
+
+        saveSentenceBtn.addEventListener('click', async () => {
+            const deSatz = sentenceInputDe.value.trim();
+            const itSatz = sentenceInputIt.value.trim();
+            if (!deSatz || !itSatz) { showToast('Bitte beide Felder ausfüllen.', 'warning'); return; }
+
+            const payload = { de: deSatz, it: itSatz, typ: 'Satz', emoji: '', grammatica: '', language: CURRENT_LANG };
+
+            const clearFields = () => {
+                sentenceInputDe.value = '';
+                sentenceInputIt.value = '';
+                sentenceInputDe.focus();
+            };
+
+            try {
+                saveSentenceBtn.disabled = true;
+                const result = await apiFetch('/vocab', {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                if (result) {
+                    fullDictionary.push(result);
+                    wordStats[result.id] = result.Stat || result.Statistic || result.Stats || { presented: 0, correct: 0, incorrect: 0, streak: 0 };
+                    renderVocabList();
+                    clearFields();
+                    showToast(`Satz wurde zur Vokabelliste hinzugefügt!`, "success");
+                }
+            } catch (err) {
+                console.warn("Saving to server failed.", err);
+                showToast(`Fehler beim Speichern.`, "error");
+            } finally {
+                saveSentenceBtn.disabled = false;
                 saveAllDataLocally();
             }
         });
