@@ -4445,6 +4445,9 @@
         setupCustomDropdown('grammarFocusFilterBtn', 'grammarFocusFilterList', 'grammarFocusFilterLabel', 'grammarFocusFilter', () => {
             if (currentMode === 'grammar') startGrammarRound();
         });
+        setupCustomDropdown('grammarLevelFilterBtn', 'grammarLevelFilterList', 'grammarLevelFilterLabel', 'grammarLevelFilter', () => {
+            if (currentMode === 'grammar') startGrammarRound();
+        });
 
         // Modal & Management Elements
         const excelModal = document.getElementById('excelModal');
