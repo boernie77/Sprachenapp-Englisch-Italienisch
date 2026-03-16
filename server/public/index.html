@@ -4168,7 +4168,7 @@
         const booksSVG = `<svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>`;
         const bulbSVG = `<svg class="w-4 h-4 text-amber-600 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.674a1 1 0 01.707.293l1.414 1.414a1 1 0 01.293.707V20a1 1 0 01-1 1H8.324a1 1 0 01-1-1v-1a1 1 0 01.293-.707l1.414-1.414a1 1 0 01.707-.293V17zM12 3c-3.313 0-6 2.687-6 6 0 2.126 1.104 3.992 2.76 5.068A1 1 0 019 15h6a1 1 0 01.24-.668c1.656-1.076 2.76-2.942 2.76-5.068 0-3.313-2.687-6-6-6z"/></svg>`;
         const pencilSVG = `<svg class="w-6 h-6 text-blue-500 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>`;
-        const sparkleSVG = `<svg class="w-3 h-3 text-blue-500 inline-block mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 2a1 1 0 011 1v11a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1h1zm8 8a1 1 0 011 1v1a1 1 0 01-1 1h-1a1 1 0 01-1-1v-1a1 1 0 011-1h1z" clip-rule="evenodd"></path></svg>`;
+        const sparkleSVG = `✨`;
         const warningSVG = `<svg class="w-3 h-3 text-red-500 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`;
         const chartSVG = `<svg class="w-6 h-6 text-blue-500 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m0 0a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2v10m-6-8a2 2 0 00-2 2v8a2 2 0 01-2 2H3a2 2 0 01-2-2v-8a2 2 0 012-2h2a2 2 0 012 2z"/></svg>`;
         const listSVG = `<svg class="w-5 h-5 text-blue-500 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>`;
@@ -4440,7 +4440,7 @@
         // Bidirektionale Lookup-Maps aufbauen
         offlineDictionary.forEach(entry => {
             if (entry.it) itToDeMap[entry.it.toLowerCase()] = entry;
-            if (entry.de) {
+            if (entry.de && entry.it) {
                 const deKeys = entry.de.toLowerCase().split('/').map(w => w.trim());
                 deKeys.forEach(dk => { if (!deToItMap[dk]) deToItMap[dk] = entry; });
             }
@@ -8647,7 +8647,7 @@
                 // NOTE: If there are separate enToDeMap / deToEnMap, they should be used.
                 // For now, it seems itToDeMap[q] might be used or it's empty.
                 // If it's empty, it falls back to online.
-                offlineResult = vocabInputLang === 'en' ? (window.enToDeMap ? enToDeMap[q] : null) : (window.deToEnMap ? deToEnMap[q] : null);
+                offlineResult = vocabInputLang === 'en' ? (window.enToDeMap ? window.enToDeMap[q] : null) : (window.deToEnMap ? window.deToEnMap[q] : null);
             }
             
             if (offlineResult) {
@@ -8776,12 +8776,19 @@
             ];
 
             function getSuggestions() {
-                const itWord = (vocabInputLang === 'it' ? vocabInput.value : vocabTranslation.value).trim().toLowerCase();
+                const isEn = CURRENT_LANG === 'en';
+                const fWord = (vocabInputLang === CURRENT_LANG ? vocabInput.value : vocabTranslation.value).trim().toLowerCase(); // foreign word
                 const deWord = (vocabInputLang === 'de' ? vocabInput.value : vocabTranslation.value).trim().toLowerCase();
-                const combined = itWord + ' ' + deWord;
+                const combined = fWord + ' ' + deWord;
                 // Offline-Eintrag: dict-Emoji als Priorität
-                const offEntry = vocabInputLang === 'it' ? itToDeMap[itWord] : deToItMap[deWord];
+                let offEntry = null;
+                if (isEn) {
+                    offEntry = vocabInputLang === 'en' ? (window.enToDeMap ? window.enToDeMap[fWord] : null) : (window.deToEnMap ? window.deToEnMap[deWord] : null);
+                } else {
+                    offEntry = vocabInputLang === 'it' ? itToDeMap[fWord] : deToItMap[deWord];
+                }
                 const dictEmoji = offEntry && offEntry.emoji ? offEntry.emoji : null;
+
 
                 function dedupe(arr) {
                     const seen = new Set();
@@ -8922,7 +8929,7 @@
 
         saveVocabBtn.addEventListener('click', async () => {
             let deWord = (vocabInputLang === 'de' ? vocabInput.value : vocabTranslation.value).trim();
-            const itWord = (vocabInputLang === 'it' ? vocabInput.value : vocabTranslation.value).trim();
+            const itWord = (vocabInputLang === CURRENT_LANG ? vocabInput.value : vocabTranslation.value).trim();
             const typ = vocabTyp.value;
             const emoji = vocabEmoji.value.trim() || null;
             const grammatica = vocabGrammatica.value || null;
@@ -9661,73 +9668,83 @@
         };
 
         window.offlineDictionaryEn = [
-            { it: 'be', de: 'sein', typ: 'Verb' }, { it: 'have', de: 'haben', typ: 'Verb' }, { it: 'do', de: 'tun', typ: 'Verb' }, { it: 'say', de: 'sagen', typ: 'Verb' }, { it: 'go', de: 'gehen', typ: 'Verb' },
-            { it: 'get', de: 'bekommen', typ: 'Verb' }, { it: 'make', de: 'machen', typ: 'Verb' }, { it: 'know', de: 'wissen', typ: 'Verb' }, { it: 'think', de: 'denken', typ: 'Verb' }, { it: 'take', de: 'nehmen', typ: 'Verb' },
-            { it: 'see', de: 'sehen', typ: 'Verb' }, { it: 'come', de: 'kommen', typ: 'Verb' }, { it: 'want', de: 'wollen', typ: 'Verb' }, { it: 'use', de: 'benutzen', typ: 'Verb' }, { it: 'find', de: 'finden', typ: 'Verb' },
-            { it: 'give', de: 'geben', typ: 'Verb' }, { it: 'tell', de: 'erzählen', typ: 'Verb' }, { it: 'work', de: 'arbeiten', typ: 'Verb' }, { it: 'call', de: 'anrufen', typ: 'Verb' }, { it: 'try', de: 'versuchen', typ: 'Verb' },
-            { it: 'ask', de: 'fragen', typ: 'Verb' }, { it: 'need', de: 'brauchen', typ: 'Verb' }, { it: 'feel', de: 'fühlen', typ: 'Verb' }, { it: 'become', de: 'werden', typ: 'Verb' }, { it: 'leave', de: 'verlassen', typ: 'Verb' },
-            { it: 'put', de: 'stellen/legen', typ: 'Verb' }, { it: 'mean', de: 'bedeuten', typ: 'Verb' }, { it: 'keep', de: 'behalten', typ: 'Verb' }, { it: 'let', de: 'lassen', typ: 'Verb' }, { it: 'begin', de: 'beginnen', typ: 'Verb' },
-            { it: 'seem', de: 'scheinen', typ: 'Verb' }, { it: 'help', de: 'helfen', typ: 'Verb' }, { it: 'talk', de: 'reden', typ: 'Verb' }, { it: 'turn', de: 'drehen', typ: 'Verb' }, { it: 'start', de: 'starten', typ: 'Verb' },
-            { it: 'show', de: 'zeigen', typ: 'Verb' }, { it: 'hear', de: 'hören', typ: 'Verb' }, { it: 'play', de: 'spielen', typ: 'Verb' }, { it: 'run', de: 'laufen', typ: 'Verb' }, { it: 'move', de: 'bewegen', typ: 'Verb' },
-            { it: 'live', de: 'leben', typ: 'Verb' }, { it: 'believe', de: 'glauben', typ: 'Verb' }, { it: 'bring', de: 'bringen', typ: 'Verb' }, { it: 'happen', de: 'passieren', typ: 'Verb' }, { it: 'write', de: 'schreiben', typ: 'Verb' },
-            { it: 'sit', de: 'sitzen', typ: 'Verb' }, { it: 'stand', de: 'stehen', typ: 'Verb' }, { it: 'lose', de: 'verlieren', typ: 'Verb' }, { it: 'pay', de: 'bezahlen', typ: 'Verb' }, { it: 'meet', de: 'treffen', typ: 'Verb' },
-            { it: 'include', de: 'beinhalten', typ: 'Verb' }, { it: 'continue', de: 'fortfahren', typ: 'Verb' }, { it: 'set', de: 'setzen', typ: 'Verb' }, { it: 'learn', de: 'lernen', typ: 'Verb' }, { it: 'change', de: 'ändern', typ: 'Verb' },
-            { it: 'lead', de: 'führen', typ: 'Verb' }, { it: 'understand', de: 'verstehen', typ: 'Verb' }, { it: 'watch', de: 'beobachten', typ: 'Verb' }, { it: 'follow', de: 'folgen', typ: 'Verb' }, { it: 'stop', de: 'stoppen', typ: 'Verb' },
-            { it: 'create', de: 'erstellen', typ: 'Verb' }, { it: 'speak', de: 'sprechen', typ: 'Verb' }, { it: 'read', de: 'lesen', typ: 'Verb' }, { it: 'allow', de: 'erlauben', typ: 'Verb' }, { it: 'add', de: 'hinzufügen', typ: 'Verb' },
-            { it: 'spend', de: 'ausgeben', typ: 'Verb' }, { it: 'grow', de: 'wachsen', typ: 'Verb' }, { it: 'open', de: 'öffnen', typ: 'Verb' }, { it: 'walk', de: 'gehen', typ: 'Verb' }, { it: 'win', de: 'gewinnen', typ: 'Verb' },
-            { it: 'offer', de: 'anbieten', typ: 'Verb' }, { it: 'remember', de: 'erinnern', typ: 'Verb' }, { it: 'love', de: 'lieben', typ: 'Verb' }, { it: 'consider', de: 'betrachten', typ: 'Verb' }, { it: 'appear', de: 'erscheinen', typ: 'Verb' },
-            { it: 'buy', de: 'kaufen', typ: 'Verb' }, { it: 'wait', de: 'warten', typ: 'Verb' }, { it: 'serve', de: 'servieren', typ: 'Verb' }, { it: 'die', de: 'sterben', typ: 'Verb' }, { it: 'send', de: 'senden', typ: 'Verb' },
-            { it: 'expect', de: 'erwarten', typ: 'Verb' }, { it: 'build', de: 'bauen', typ: 'Verb' }, { it: 'stay', de: 'bleiben', typ: 'Verb' }, { it: 'fall', de: 'fallen', typ: 'Verb' }, { it: 'cut', de: 'schneiden', typ: 'Verb' },
-            { it: 'reach', de: 'erreichen', typ: 'Verb' }, { it: 'kill', de: 'töten', typ: 'Verb' }, { it: 'remain', de: 'bleiben', typ: 'Verb' }, { it: 'suggest', de: 'vorschlagen', typ: 'Verb' }, { it: 'raise', de: 'erhöhen', typ: 'Verb' },
-            { it: 'pass', de: 'bestehen', typ: 'Verb' }, { it: 'sell', de: 'verkaufen', typ: 'Verb' }, { it: 'decide', de: 'entscheiden', typ: 'Verb' }, { it: 'return', de: 'zurückkehren', typ: 'Verb' }, { it: 'explain', de: 'erklären', typ: 'Verb' },
-            { it: 'hope', de: 'hoffen', typ: 'Verb' }, { it: 'develop', de: 'entwickeln', typ: 'Verb' }, { it: 'carry', de: 'tragen', typ: 'Verb' }, { it: 'break', de: 'brechen', typ: 'Verb' }, { it: 'receive', de: 'erhalten', typ: 'Verb' },
-            { it: 'agree', de: 'zustimmen', typ: 'Verb' }, { it: 'support', de: 'unterstützen', typ: 'Verb' }, { it: 'hit', de: 'treffen', typ: 'Verb' }, { it: 'produce', de: 'produzieren', typ: 'Verb' }, { it: 'eat', de: 'essen', typ: 'Verb' },
-            { it: 'face', de: 'gegenüberstehen', typ: 'Verb' }, { it: 'cover', de: 'abdecken', typ: 'Verb' }, { it: 'catch', de: 'fangen', typ: 'Verb' }, { it: 'draw', de: 'zeichnen', typ: 'Verb' }, { it: 'choose', de: 'wählen', typ: 'Verb' },
-            { it: 'time', de: 'Zeit', typ: 'Substantiv' }, { it: 'year', de: 'Jahr', typ: 'Substantiv' }, { it: 'people', de: 'Leute', typ: 'Substantiv' }, { it: 'way', de: 'Weg', typ: 'Substantiv' }, { it: 'day', de: 'Tag', typ: 'Substantiv' },
-            { it: 'man', de: 'Mann', typ: 'Substantiv' }, { it: 'thing', de: 'Ding', typ: 'Substantiv' }, { it: 'woman', de: 'Frau', typ: 'Substantiv' }, { it: 'life', de: 'Leben', typ: 'Substantiv' }, { it: 'child', de: 'Kind', typ: 'Substantiv' },
-            { it: 'world', de: 'Welt', typ: 'Substantiv' }, { it: 'school', de: 'Schule', typ: 'Substantiv' }, { it: 'state', de: 'Staat', typ: 'Substantiv' }, { it: 'family', de: 'Familie', typ: 'Substantiv' }, { it: 'student', de: 'Student', typ: 'Substantiv' },
-            { it: 'group', de: 'Gruppe', typ: 'Substantiv' }, { it: 'country', de: 'Land', typ: 'Substantiv' }, { it: 'problem', de: 'Problem', typ: 'Substantiv' }, { it: 'hand', de: 'Hand', typ: 'Substantiv' }, { it: 'part', de: 'Teil', typ: 'Substantiv' },
-            { it: 'place', de: 'Platz', typ: 'Substantiv' }, { it: 'case', de: 'Fall', typ: 'Substantiv' }, { it: 'week', de: 'Woche', typ: 'Substantiv' }, { it: 'company', de: 'Firma', typ: 'Substantiv' }, { it: 'system', de: 'System', typ: 'Substantiv' },
-            { it: 'program', de: 'Programm', typ: 'Substantiv' }, { it: 'question', de: 'Frage', typ: 'Substantiv' }, { it: 'work', de: 'Arbeit', typ: 'Substantiv' }, { it: 'government', de: 'Regierung', typ: 'Substantiv' }, { it: 'number', de: 'Nummer', typ: 'Substantiv' },
-            { it: 'night', de: 'Nacht', typ: 'Substantiv' }, { it: 'mr', de: 'Herr', typ: 'Substantiv' }, { it: 'point', de: 'Punkt', typ: 'Substantiv' }, { it: 'home', de: 'Heim', typ: 'Substantiv' }, { it: 'water', de: 'Wasser', typ: 'Substantiv' },
-            { it: 'room', de: 'Raum', typ: 'Substantiv' }, { it: 'mother', de: 'Mutter', typ: 'Substantiv' }, { it: 'area', de: 'Bereich', typ: 'Substantiv' }, { it: 'money', de: 'Geld', typ: 'Substantiv' }, { it: 'story', de: 'Geschichte', typ: 'Substantiv' },
-            { it: 'fact', de: 'Fakt', typ: 'Substantiv' }, { it: 'month', de: 'Monat', typ: 'Substantiv' }, { it: 'lot', de: 'Menge', typ: 'Substantiv' }, { it: 'right', de: 'Recht', typ: 'Substantiv' }, { it: 'study', de: 'Studie', typ: 'Substantiv' },
-            { it: 'book', de: 'Buch', typ: 'Substantiv' }, { it: 'eye', de: 'Auge', typ: 'Substantiv' }, { it: 'job', de: 'Job', typ: 'Substantiv' }, { it: 'word', de: 'Wort', typ: 'Substantiv' }, { it: 'business', de: 'Geschäft', typ: 'Substantiv' },
-            { it: 'issue', de: 'Thema', typ: 'Substantiv' }, { it: 'side', de: 'Seite', typ: 'Substantiv' }, { it: 'kind', de: 'Art', typ: 'Substantiv' }, { it: 'head', de: 'Kopf', typ: 'Substantiv' }, { it: 'house', de: 'Haus', typ: 'Substantiv' },
-            { it: 'service', de: 'Service', typ: 'Substantiv' }, { it: 'friend', de: 'Freund', typ: 'Substantiv' }, { it: 'father', de: 'Vater', typ: 'Substantiv' }, { it: 'power', de: 'Macht', typ: 'Substantiv' }, { it: 'hour', de: 'Stunde', typ: 'Substantiv' },
-            { it: 'game', de: 'Spiel', typ: 'Substantiv' }, { it: 'line', de: 'Linie', typ: 'Substantiv' }, { it: 'end', de: 'Ende', typ: 'Substantiv' }, { it: 'member', de: 'Mitglied', typ: 'Substantiv' }, { it: 'law', de: 'Gesetz', typ: 'Substantiv' },
-            { it: 'car', de: 'Auto', typ: 'Substantiv' }, { it: 'city', de: 'Stadt', typ: 'Substantiv' }, { it: 'community', de: 'Gemeinschaft', typ: 'Substantiv' }, { it: 'name', de: 'Name', typ: 'Substantiv' }, { it: 'president', de: 'Präsident', typ: 'Substantiv' },
-            { it: 'team', de: 'Team', typ: 'Substantiv' }, { it: 'minute', de: 'Minute', typ: 'Substantiv' }, { it: 'idea', de: 'Idee', typ: 'Substantiv' }, { it: 'kid', de: 'Kind', typ: 'Substantiv' }, { it: 'body', de: 'Körper', typ: 'Substantiv' },
-            { it: 'information', de: 'Information', typ: 'Substantiv' }, { it: 'back', de: 'Rücken', typ: 'Substantiv' }, { it: 'parent', de: 'Elternteil', typ: 'Substantiv' }, { it: 'face', de: 'Gesicht', typ: 'Substantiv' }, { it: 'others', de: 'Andere', typ: 'Substantiv' },
-            { it: 'level', de: 'Level', typ: 'Substantiv' }, { it: 'office', de: 'Büro', typ: 'Substantiv' }, { it: 'door', de: 'Tür', typ: 'Substantiv' }, { it: 'health', de: 'Gesundheit', typ: 'Substantiv' }, { it: 'person', de: 'Person', typ: 'Substantiv' },
-            { it: 'art', de: 'Kunst', typ: 'Substantiv' }, { it: 'war', de: 'Krieg', typ: 'Substantiv' }, { it: 'history', de: 'Geschichte', typ: 'Substantiv' }, { it: 'party', de: 'Partei', typ: 'Substantiv' }, { it: 'result', de: 'Resultat', typ: 'Substantiv' },
-            { it: 'change', de: 'Veränderung', typ: 'Substantiv' }, { it: 'morning', de: 'Morgen', typ: 'Substantiv' }, { it: 'reason', de: 'Grund', typ: 'Substantiv' }, { it: 'low', de: 'Tief', typ: 'Substantiv' }, { it: 'girl', de: 'Mädchen', typ: 'Substantiv' },
-            { it: 'guy', de: 'Typ', typ: 'Substantiv' }, { it: 'moment', de: 'Moment', typ: 'Substantiv' }, { it: 'air', de: 'Luft', typ: 'Substantiv' }, { it: 'teacher', de: 'Lehrer', typ: 'Substantiv' }, { it: 'force', de: 'Kraft', typ: 'Substantiv' },
-            { it: 'education', de: 'Bildung', typ: 'Substantiv' }, { it: 'food', de: 'Essen', typ: 'Substantiv' }, { it: 'good', de: 'gut', typ: 'Adjektiv' }, { it: 'new', de: 'neu', typ: 'Adjektiv' }, { it: 'first', de: 'erstes', typ: 'Adjektiv' },
-            { it: 'last', de: 'letztes', typ: 'Adjektiv' }, { it: 'long', de: 'lang', typ: 'Adjektiv' }, { it: 'great', de: 'großartig', typ: 'Adjektiv' }, { it: 'little', de: 'klein', typ: 'Adjektiv' }, { it: 'own', de: 'eigenes', typ: 'Adjektiv' },
-            { it: 'other', de: 'anderes', typ: 'Adjektiv' }, { it: 'old', de: 'alt', typ: 'Adjektiv' }, { it: 'right', de: 'richtig', typ: 'Adjektiv' }, { it: 'big', de: 'groß', typ: 'Adjektiv' }, { it: 'high', de: 'hoch', typ: 'Adjektiv' },
-            { it: 'different', de: 'anders', typ: 'Adjektiv' }, { it: 'small', de: 'klein', typ: 'Adjektiv' }, { it: 'large', de: 'groß', typ: 'Adjektiv' }, { it: 'next', de: 'nächstes', typ: 'Adjektiv' }, { it: 'early', de: 'früh', typ: 'Adjektiv' },
-            { it: 'young', de: 'jung', typ: 'Adjektiv' }, { it: 'important', de: 'wichtig', typ: 'Adjektiv' }, { it: 'few', de: 'wenige', typ: 'Adjektiv' }, { it: 'public', de: 'öffentlich', typ: 'Adjektiv' }, { it: 'bad', de: 'schlecht', typ: 'Adjektiv' },
-            { it: 'same', de: 'gleiche', typ: 'Adjektiv' }, { it: 'able', de: 'fähig', typ: 'Adjektiv' }, { it: 'real', de: 'echt', typ: 'Adjektiv' }, { it: 'best', de: 'bestes', typ: 'Adjektiv' }, { it: 'social', de: 'sozial', typ: 'Adjektiv' },
-            { it: 'only', de: 'einzig', typ: 'Adjektiv' }, { it: 'likely', de: 'wahrscheinlich', typ: 'Adjektiv' }, { it: 'political', de: 'politisch', typ: 'Adjektiv' }, { it: 'local', de: 'lokal', typ: 'Adjektiv' }, { it: 'economic', de: 'ökonomisch', typ: 'Adjektiv' },
-            { it: 'above', de: 'über', typ: 'Präposition' }, { it: 'across', de: 'quer durch', typ: 'Präposition' }, { it: 'after', de: 'nach', typ: 'Präposition' }, { it: 'against', de: 'gegen', typ: 'Präposition' }, { it: 'along', de: 'entlang', typ: 'Präposition' },
-            { it: 'among', de: 'unter', typ: 'Präposition' }, { it: 'around', de: 'um', typ: 'Präposition' }, { it: 'at', de: 'an', typ: 'Präposition' }, { it: 'before', de: 'vor', typ: 'Präposition' }, { it: 'behind', de: 'hinter', typ: 'Präposition' },
-            { it: 'below', de: 'unter', typ: 'Präposition' }, { it: 'beside', de: 'neben', typ: 'Präposition' }, { it: 'between', de: 'zwischen', typ: 'Präposition' }, { it: 'beyond', de: 'jenseits', typ: 'Präposition' }, { it: 'by', de: 'bei', typ: 'Präposition' },
-            { it: 'during', de: 'während', typ: 'Präposition' }, { it: 'for', de: 'für', typ: 'Präposition' }, { it: 'from', de: 'von', typ: 'Präposition' }, { it: 'in', de: 'in', typ: 'Präposition' }, { it: 'inside', de: 'innerhalb', typ: 'Präposition' },
-            { it: 'into', de: 'hinein', typ: 'Präposition' }, { it: 'near', de: 'nahe', typ: 'Präposition' }, { it: 'of', de: 'von', typ: 'Präposition' }, { it: 'off', de: 'ab', typ: 'Präposition' }, { it: 'on', de: 'auf', typ: 'Präposition' },
-            { it: 'onto', de: 'auf ... hinauf', typ: 'Präposition' }, { it: 'outside', de: 'außerhalb', typ: 'Präposition' }, { it: 'over', de: 'über', typ: 'Präposition' }, { it: 'past', de: 'vorbei an', typ: 'Präposition' }, { it: 'through', de: 'durch', typ: 'Präposition' },
-            { it: 'to', de: 'zu', typ: 'Präposition' }, { it: 'toward', de: 'Richtung', typ: 'Präposition' }, { it: 'under', de: 'unter', typ: 'Präposition' }, { it: 'until', de: 'bis', typ: 'Präposition' }, { it: 'up', de: 'auf', typ: 'Präposition' },
-            { it: 'with', de: 'mit', typ: 'Präposition' }, { it: 'within', de: 'innerhalb', typ: 'Präposition' }, { it: 'without', de: 'ohne', typ: 'Präposition' }, { it: 'always', de: 'immer', typ: 'Adverb' }, { it: 'never', de: 'nie', typ: 'Adverb' },
-            { it: 'often', de: 'oft', typ: 'Adverb' }, { it: 'sometimes', de: 'manchmal', typ: 'Adverb' }, { it: 'usually', de: 'gewöhnlich', typ: 'Adverb' }, { it: 'very', de: 'sehr', typ: 'Adverb' }, { it: 'well', de: 'gut', typ: 'Adverb' },
-            { it: 'already', de: 'schon', typ: 'Adverb' }, { it: 'still', de: 'immer noch', typ: 'Adverb' }, { it: 'soon', de: 'bald', typ: 'Adverb' }, { it: 'today', de: 'heute', typ: 'Adverb' }, { it: 'yesterday', de: 'gestern', typ: 'Adverb' },
-            { it: 'tomorrow', de: 'morgen', typ: 'Adverb' }, { it: 'here', de: 'hier', typ: 'Adverb' }, { it: 'there', de: 'dort', typ: 'Adverb' }, { it: 'where', de: 'wo', typ: 'Adverb' }, { it: 'how', de: 'wie', typ: 'Adverb' },
-            { it: 'apple', de: 'Apfel', typ: 'Substantiv', emoji: '🍎' }, { it: 'banana', de: 'Banane', typ: 'Substantiv', emoji: '🍌' }, { it: 'bread', de: 'Brot', typ: 'Substantiv', emoji: '🍞' }, { it: 'water', de: 'Wasser', typ: 'Substantiv', emoji: '💧' }, { it: 'coffee', de: 'Kaffee', typ: 'Substantiv', emoji: '☕' },
-            { it: 'tea', de: 'Tee', typ: 'Substantiv', emoji: '🍵' }, { it: 'milk', de: 'Milch', typ: 'Substantiv', emoji: '🥛' }, { it: 'cheese', de: 'Käse', typ: 'Substantiv', emoji: '🧀' }, { it: 'meat', de: 'Fleisch', typ: 'Substantiv', emoji: '🥩' }, { it: 'egg', de: 'Ei', typ: 'Substantiv', emoji: '🥚' },
-            { it: 'house', de: 'Haus', typ: 'Substantiv', emoji: '🏠' }, { it: 'car', de: 'Auto', typ: 'Substantiv', emoji: '🚗' }, { it: 'bike', de: 'Fahrrad', typ: 'Substantiv', emoji: '🚲' }, { it: 'book', de: 'Buch', typ: 'Substantiv', emoji: '📖' }, { it: 'pen', de: 'Stift', typ: 'Substantiv', emoji: '🖊️' },
-            { it: 'computer', de: 'Computer', typ: 'Substantiv', emoji: '💻' }, { it: 'phone', de: 'Telefon', typ: 'Substantiv', emoji: '📱' }, { it: 'sun', de: 'Sonne', typ: 'Substantiv', emoji: '☀️' }, { it: 'moon', de: 'Mond', typ: 'Substantiv', emoji: '🌙' }, { it: 'star', de: 'Stern', typ: 'Substantiv', emoji: '⭐' },
-            { it: 'cat', de: 'Katze', typ: 'Substantiv', emoji: '🐱' }, { it: 'dog', de: 'Hund', typ: 'Substantiv', emoji: '🐶' }, { it: 'bird', de: 'Vogel', typ: 'Substantiv', emoji: '🐦' }, { it: 'fish', de: 'Fisch', typ: 'Substantiv', emoji: '🐟' }, { it: 'flower', de: 'Blume', typ: 'Substantiv', emoji: '🌸' },
-            { it: 'red', de: 'rot', typ: 'Adjektiv', emoji: '🔴' }, { it: 'blue', de: 'blau', typ: 'Adjektiv', emoji: '🔵' }, { it: 'green', de: 'grün', typ: 'Adjektiv', emoji: '🟢' }, { it: 'yellow', de: 'gelb', typ: 'Adjektiv', emoji: '🟡' }, { it: 'black', de: 'schwarz', typ: 'Adjektiv', emoji: '⚫' }
+            { en: 'be', de: 'sein', typ: 'Verb' }, { en: 'have', de: 'haben', typ: 'Verb' }, { en: 'do', de: 'tun', typ: 'Verb' }, { en: 'say', de: 'sagen', typ: 'Verb' }, { en: 'go', de: 'gehen', typ: 'Verb' },
+            { en: 'get', de: 'bekommen', typ: 'Verb' }, { en: 'make', de: 'machen', typ: 'Verb' }, { en: 'know', de: 'wissen', typ: 'Verb' }, { en: 'think', de: 'denken', typ: 'Verb' }, { en: 'take', de: 'nehmen', typ: 'Verb' },
+            { en: 'see', de: 'sehen', typ: 'Verb' }, { en: 'come', de: 'kommen', typ: 'Verb' }, { en: 'want', de: 'wollen', typ: 'Verb' }, { en: 'use', de: 'benutzen', typ: 'Verb' }, { en: 'find', de: 'finden', typ: 'Verb' },
+            { en: 'give', de: 'geben', typ: 'Verb' }, { en: 'tell', de: 'erzählen', typ: 'Verb' }, { en: 'work', de: 'arbeiten', typ: 'Verb' }, { en: 'call', de: 'anrufen', typ: 'Verb' }, { en: 'try', de: 'versuchen', typ: 'Verb' },
+            { en: 'ask', de: 'fragen', typ: 'Verb' }, { en: 'need', de: 'brauchen', typ: 'Verb' }, { en: 'feel', de: 'fühlen', typ: 'Verb' }, { en: 'become', de: 'werden', typ: 'Verb' }, { en: 'leave', de: 'verlassen', typ: 'Verb' },
+            { en: 'put', de: 'stellen/legen', typ: 'Verb' }, { en: 'mean', de: 'bedeuten', typ: 'Verb' }, { en: 'keep', de: 'behalten', typ: 'Verb' }, { en: 'let', de: 'lassen', typ: 'Verb' }, { en: 'begin', de: 'beginnen', typ: 'Verb' },
+            { en: 'seem', de: 'scheinen', typ: 'Verb' }, { en: 'help', de: 'helfen', typ: 'Verb' }, { en: 'talk', de: 'reden', typ: 'Verb' }, { en: 'turn', de: 'drehen', typ: 'Verb' }, { en: 'start', de: 'starten', typ: 'Verb' },
+            { en: 'show', de: 'zeigen', typ: 'Verb' }, { en: 'hear', de: 'hören', typ: 'Verb' }, { en: 'play', de: 'spielen', typ: 'Verb' }, { en: 'run', de: 'laufen', typ: 'Verb' }, { en: 'move', de: 'bewegen', typ: 'Verb' },
+            { en: 'live', de: 'leben', typ: 'Verb' }, { en: 'believe', de: 'glauben', typ: 'Verb' }, { en: 'bring', de: 'bringen', typ: 'Verb' }, { en: 'happen', de: 'passieren', typ: 'Verb' }, { en: 'write', de: 'schreiben', typ: 'Verb' },
+            { en: 'sit', de: 'sitzen', typ: 'Verb' }, { en: 'stand', de: 'stehen', typ: 'Verb' }, { en: 'lose', de: 'verlieren', typ: 'Verb' }, { en: 'pay', de: 'bezahlen', typ: 'Verb' }, { en: 'meet', de: 'treffen', typ: 'Verb' },
+            { en: 'include', de: 'beinhalten', typ: 'Verb' }, { en: 'continue', de: 'fortfahren', typ: 'Verb' }, { en: 'set', de: 'setzen', typ: 'Verb' }, { en: 'learn', de: 'lernen', typ: 'Verb' }, { en: 'change', de: 'ändern', typ: 'Verb' },
+            { en: 'lead', de: 'führen', typ: 'Verb' }, { en: 'understand', de: 'verstehen', typ: 'Verb' }, { en: 'watch', de: 'beobachten', typ: 'Verb' }, { en: 'follow', de: 'folgen', typ: 'Verb' }, { en: 'stop', de: 'stoppen', typ: 'Verb' },
+            { en: 'create', de: 'erstellen', typ: 'Verb' }, { en: 'speak', de: 'sprechen', typ: 'Verb' }, { en: 'read', de: 'lesen', typ: 'Verb' }, { en: 'allow', de: 'erlauben', typ: 'Verb' }, { en: 'add', de: 'hinzufügen', typ: 'Verb' },
+            { en: 'spend', de: 'ausgeben', typ: 'Verb' }, { en: 'grow', de: 'wachsen', typ: 'Verb' }, { en: 'open', de: 'öffnen', typ: 'Verb' }, { en: 'walk', de: 'gehen', typ: 'Verb' }, { en: 'win', de: 'gewinnen', typ: 'Verb' },
+            { en: 'offer', de: 'anbieten', typ: 'Verb' }, { en: 'remember', de: 'erinnern', typ: 'Verb' }, { en: 'love', de: 'lieben', typ: 'Verb' }, { en: 'consider', de: 'betrachten', typ: 'Verb' }, { en: 'appear', de: 'erscheinen', typ: 'Verb' },
+            { en: 'buy', de: 'kaufen', typ: 'Verb' }, { en: 'wait', de: 'warten', typ: 'Verb' }, { en: 'serve', de: 'servieren', typ: 'Verb' }, { en: 'die', de: 'sterben', typ: 'Verb' }, { en: 'send', de: 'senden', typ: 'Verb' },
+            { en: 'expect', de: 'erwarten', typ: 'Verb' }, { en: 'build', de: 'bauen', typ: 'Verb' }, { en: 'stay', de: 'bleiben', typ: 'Verb' }, { en: 'fall', de: 'fallen', typ: 'Verb' }, { en: 'cut', de: 'schneiden', typ: 'Verb' },
+            { en: 'reach', de: 'erreichen', typ: 'Verb' }, { en: 'kill', de: 'töten', typ: 'Verb' }, { en: 'remain', de: 'bleiben', typ: 'Verb' }, { en: 'suggest', de: 'vorschlagen', typ: 'Verb' }, { en: 'raise', de: 'erhöhen', typ: 'Verb' },
+            { en: 'pass', de: 'bestehen', typ: 'Verb' }, { en: 'sell', de: 'verkaufen', typ: 'Verb' }, { en: 'decide', de: 'entscheiden', typ: 'Verb' }, { en: 'return', de: 'zurückkehren', typ: 'Verb' }, { en: 'explain', de: 'erklären', typ: 'Verb' },
+            { en: 'hope', de: 'hoffen', typ: 'Verb' }, { en: 'develop', de: 'entwickeln', typ: 'Verb' }, { en: 'carry', de: 'tragen', typ: 'Verb' }, { en: 'break', de: 'brechen', typ: 'Verb' }, { en: 'receive', de: 'erhalten', typ: 'Verb' },
+            { en: 'agree', de: 'zustimmen', typ: 'Verb' }, { en: 'support', de: 'unterstützen', typ: 'Verb' }, { en: 'hit', de: 'treffen', typ: 'Verb' }, { en: 'produce', de: 'produzieren', typ: 'Verb' }, { en: 'eat', de: 'essen', typ: 'Verb' },
+            { en: 'face', de: 'gegenüberstehen', typ: 'Verb' }, { en: 'cover', de: 'abdecken', typ: 'Verb' }, { en: 'catch', de: 'fangen', typ: 'Verb' }, { en: 'draw', de: 'zeichnen', typ: 'Verb' }, { en: 'choose', de: 'wählen', typ: 'Verb' },
+            { en: 'time', de: 'Zeit', typ: 'Substantiv' }, { en: 'year', de: 'Jahr', typ: 'Substantiv' }, { en: 'people', de: 'Leute', typ: 'Substantiv' }, { en: 'way', de: 'Weg', typ: 'Substantiv' }, { en: 'day', de: 'Tag', typ: 'Substantiv' },
+            { en: 'man', de: 'Mann', typ: 'Substantiv' }, { en: 'thing', de: 'Ding', typ: 'Substantiv' }, { en: 'woman', de: 'Frau', typ: 'Substantiv' }, { en: 'life', de: 'Leben', typ: 'Substantiv' }, { en: 'child', de: 'Kind', typ: 'Substantiv' },
+            { en: 'world', de: 'Welt', typ: 'Substantiv' }, { en: 'school', de: 'Schule', typ: 'Substantiv' }, { en: 'state', de: 'Staat', typ: 'Substantiv' }, { en: 'family', de: 'Familie', typ: 'Substantiv' }, { en: 'student', de: 'Student', typ: 'Substantiv' },
+            { en: 'group', de: 'Gruppe', typ: 'Substantiv' }, { en: 'country', de: 'Land', typ: 'Substantiv' }, { en: 'problem', de: 'Problem', typ: 'Substantiv' }, { en: 'hand', de: 'Hand', typ: 'Substantiv' }, { en: 'part', de: 'Teil', typ: 'Substantiv' },
+            { en: 'place', de: 'Platz', typ: 'Substantiv' }, { en: 'case', de: 'Fall', typ: 'Substantiv' }, { en: 'week', de: 'Woche', typ: 'Substantiv' }, { en: 'company', de: 'Firma', typ: 'Substantiv' }, { en: 'system', de: 'System', typ: 'Substantiv' },
+            { en: 'program', de: 'Programm', typ: 'Substantiv' }, { en: 'question', de: 'Frage', typ: 'Substantiv' }, { en: 'work', de: 'Arbeit', typ: 'Substantiv' }, { en: 'government', de: 'Regierung', typ: 'Substantiv' }, { en: 'number', de: 'Nummer', typ: 'Substantiv' },
+            { en: 'night', de: 'Nacht', typ: 'Substantiv' }, { en: 'mr', de: 'Herr', typ: 'Substantiv' }, { en: 'point', de: 'Punkt', typ: 'Substantiv' }, { en: 'home', de: 'Heim', typ: 'Substantiv' }, { en: 'water', de: 'Wasser', typ: 'Substantiv' },
+            { en: 'room', de: 'Raum', typ: 'Substantiv' }, { en: 'mother', de: 'Mutter', typ: 'Substantiv' }, { en: 'area', de: 'Bereich', typ: 'Substantiv' }, { en: 'money', de: 'Geld', typ: 'Substantiv' }, { en: 'story', de: 'Geschichte', typ: 'Substantiv' },
+            { en: 'fact', de: 'Fakt', typ: 'Substantiv' }, { en: 'month', de: 'Monat', typ: 'Substantiv' }, { en: 'lot', de: 'Menge', typ: 'Substantiv' }, { en: 'right', de: 'Recht', typ: 'Substantiv' }, { en: 'study', de: 'Studie', typ: 'Substantiv' },
+            { en: 'book', de: 'Buch', typ: 'Substantiv' }, { en: 'eye', de: 'Auge', typ: 'Substantiv' }, { en: 'job', de: 'Job', typ: 'Substantiv' }, { en: 'word', de: 'Wort', typ: 'Substantiv' }, { en: 'business', de: 'Geschäft', typ: 'Substantiv' },
+            { en: 'issue', de: 'Thema', typ: 'Substantiv' }, { en: 'side', de: 'Seite', typ: 'Substantiv' }, { en: 'kind', de: 'Art', typ: 'Substantiv' }, { en: 'head', de: 'Kopf', typ: 'Substantiv' }, { en: 'house', de: 'Haus', typ: 'Substantiv' },
+            { en: 'service', de: 'Service', typ: 'Substantiv' }, { en: 'friend', de: 'Freund', typ: 'Substantiv' }, { en: 'father', de: 'Vater', typ: 'Substantiv' }, { en: 'power', de: 'Macht', typ: 'Substantiv' }, { en: 'hour', de: 'Stunde', typ: 'Substantiv' },
+            { en: 'game', de: 'Spiel', typ: 'Substantiv' }, { en: 'line', de: 'Linie', typ: 'Substantiv' }, { en: 'end', de: 'Ende', typ: 'Substantiv' }, { en: 'member', de: 'Mitglied', typ: 'Substantiv' }, { en: 'law', de: 'Gesetz', typ: 'Substantiv' },
+            { en: 'car', de: 'Auto', typ: 'Substantiv' }, { en: 'city', de: 'Stadt', typ: 'Substantiv' }, { en: 'community', de: 'Gemeinschaft', typ: 'Substantiv' }, { en: 'name', de: 'Name', typ: 'Substantiv' }, { en: 'president', de: 'Präsident', typ: 'Substantiv' },
+            { en: 'team', de: 'Team', typ: 'Substantiv' }, { en: 'minute', de: 'Minute', typ: 'Substantiv' }, { en: 'idea', de: 'Idee', typ: 'Substantiv' }, { en: 'kid', de: 'Kind', typ: 'Substantiv' }, { en: 'body', de: 'Körper', typ: 'Substantiv' },
+            { en: 'information', de: 'Information', typ: 'Substantiv' }, { en: 'back', de: 'Rücken', typ: 'Substantiv' }, { en: 'parent', de: 'Elternteil', typ: 'Substantiv' }, { en: 'face', de: 'Gesicht', typ: 'Substantiv' }, { en: 'others', de: 'Andere', typ: 'Substantiv' },
+            { en: 'level', de: 'Level', typ: 'Substantiv' }, { en: 'office', de: 'Büro', typ: 'Substantiv' }, { en: 'door', de: 'Tür', typ: 'Substantiv' }, { en: 'health', de: 'Gesundheit', typ: 'Substantiv' }, { en: 'person', de: 'Person', typ: 'Substantiv' },
+            { en: 'art', de: 'Kunst', typ: 'Substantiv' }, { en: 'war', de: 'Krieg', typ: 'Substantiv' }, { en: 'history', de: 'Geschichte', typ: 'Substantiv' }, { en: 'party', de: 'Partei', typ: 'Substantiv' }, { en: 'result', de: 'Resultat', typ: 'Substantiv' },
+            { en: 'change', de: 'Veränderung', typ: 'Substantiv' }, { en: 'morning', de: 'Morgen', typ: 'Substantiv' }, { en: 'reason', de: 'Grund', typ: 'Substantiv' }, { en: 'low', de: 'Tief', typ: 'Substantiv' }, { en: 'girl', de: 'Mädchen', typ: 'Substantiv' },
+            { en: 'guy', de: 'Typ', typ: 'Substantiv' }, { en: 'moment', de: 'Moment', typ: 'Substantiv' }, { en: 'air', de: 'Luft', typ: 'Substantiv' }, { en: 'teacher', de: 'Lehrer', typ: 'Substantiv' }, { en: 'force', de: 'Kraft', typ: 'Substantiv' },
+            { en: 'education', de: 'Bildung', typ: 'Substantiv' }, { en: 'food', de: 'Essen', typ: 'Substantiv' }, { en: 'good', de: 'gut', typ: 'Adjektiv' }, { en: 'new', de: 'neu', typ: 'Adjektiv' }, { en: 'first', de: 'erstes', typ: 'Adjektiv' },
+            { en: 'last', de: 'letztes', typ: 'Adjektiv' }, { en: 'long', de: 'lang', typ: 'Adjektiv' }, { en: 'great', de: 'großartig', typ: 'Adjektiv' }, { en: 'little', de: 'klein', typ: 'Adjektiv' }, { en: 'own', de: 'eigenes', typ: 'Adjektiv' },
+            { en: 'other', de: 'anderes', typ: 'Adjektiv' }, { en: 'old', de: 'alt', typ: 'Adjektiv' }, { en: 'right', de: 'richtig', typ: 'Adjektiv' }, { en: 'big', de: 'groß', typ: 'Adjektiv' }, { en: 'high', de: 'hoch', typ: 'Adjektiv' },
+            { en: 'different', de: 'anders', typ: 'Adjektiv' }, { en: 'small', de: 'klein', typ: 'Adjektiv' }, { en: 'large', de: 'groß', typ: 'Adjektiv' }, { en: 'next', de: 'nächstes', typ: 'Adjektiv' }, { en: 'early', de: 'früh', typ: 'Adjektiv' },
+            { en: 'young', de: 'jung', typ: 'Adjektiv' }, { en: 'important', de: 'wichtig', typ: 'Adjektiv' }, { en: 'few', de: 'wenige', typ: 'Adjektiv' }, { en: 'public', de: 'öffentlich', typ: 'Adjektiv' }, { en: 'bad', de: 'schlecht', typ: 'Adjektiv' },
+            { en: 'same', de: 'gleiche', typ: 'Adjektiv' }, { en: 'able', de: 'fähig', typ: 'Adjektiv' }, { en: 'real', de: 'echt', typ: 'Adjektiv' }, { en: 'best', de: 'bestes', typ: 'Adjektiv' }, { en: 'social', de: 'sozial', typ: 'Adjektiv' },
+            { en: 'only', de: 'einzig', typ: 'Adjektiv' }, { en: 'likely', de: 'wahrscheinlich', typ: 'Adjektiv' }, { en: 'political', de: 'politisch', typ: 'Adjektiv' }, { en: 'local', de: 'lokal', typ: 'Adjektiv' }, { en: 'economic', de: 'ökonomisch', typ: 'Adjektiv' },
+            { en: 'above', de: 'über', typ: 'Präposition' }, { en: 'across', de: 'quer durch', typ: 'Präposition' }, { en: 'after', de: 'nach', typ: 'Präposition' }, { en: 'against', de: 'gegen', typ: 'Präposition' }, { en: 'along', de: 'entlang', typ: 'Präposition' },
+            { en: 'among', de: 'unter', typ: 'Präposition' }, { en: 'around', de: 'um', typ: 'Präposition' }, { en: 'at', de: 'an', typ: 'Präposition' }, { en: 'before', de: 'vor', typ: 'Präposition' }, { en: 'behind', de: 'hinter', typ: 'Präposition' },
+            { en: 'below', de: 'unter', typ: 'Präposition' }, { en: 'beside', de: 'neben', typ: 'Präposition' }, { en: 'between', de: 'zwischen', typ: 'Präposition' }, { en: 'beyond', de: 'jenseits', typ: 'Präposition' }, { en: 'by', de: 'bei', typ: 'Präposition' },
+            { en: 'during', de: 'während', typ: 'Präposition' }, { en: 'for', de: 'für', typ: 'Präposition' }, { en: 'from', de: 'von', typ: 'Präposition' }, { en: 'in', de: 'in', typ: 'Präposition' }, { en: 'inside', de: 'innerhalb', typ: 'Präposition' },
+            { en: 'into', de: 'hinein', typ: 'Präposition' }, { en: 'near', de: 'nahe', typ: 'Präposition' }, { en: 'of', de: 'von', typ: 'Präposition' }, { en: 'off', de: 'ab', typ: 'Präposition' }, { en: 'on', de: 'auf', typ: 'Präposition' },
+            { en: 'onto', de: 'auf ... hinauf', typ: 'Präposition' }, { en: 'outside', de: 'außerhalb', typ: 'Präposition' }, { en: 'over', de: 'über', typ: 'Präposition' }, { en: 'past', de: 'vorbei an', typ: 'Präposition' }, { en: 'through', de: 'durch', typ: 'Präposition' },
+            { en: 'to', de: 'zu', typ: 'Präposition' }, { en: 'toward', de: 'Richtung', typ: 'Präposition' }, { en: 'under', de: 'unter', typ: 'Präposition' }, { en: 'until', de: 'bis', typ: 'Präposition' }, { en: 'up', de: 'auf', typ: 'Präposition' },
+            { en: 'with', de: 'mit', typ: 'Präposition' }, { en: 'within', de: 'innerhalb', typ: 'Präposition' }, { en: 'without', de: 'ohne', typ: 'Präposition' }, { en: 'always', de: 'immer', typ: 'Adverb' }, { en: 'never', de: 'nie', typ: 'Adverb' },
+            { en: 'often', de: 'oft', typ: 'Adverb' }, { en: 'sometimes', de: 'manchmal', typ: 'Adverb' }, { en: 'usually', de: 'gewöhnlich', typ: 'Adverb' }, { en: 'very', de: 'sehr', typ: 'Adverb' }, { en: 'well', de: 'gut', typ: 'Adverb' },
+            { en: 'already', de: 'schon', typ: 'Adverb' }, { en: 'still', de: 'immer noch', typ: 'Adverb' }, { en: 'soon', de: 'bald', typ: 'Adverb' }, { en: 'today', de: 'heute', typ: 'Adverb' }, { en: 'yesterday', de: 'gestern', typ: 'Adverb' },
+            { en: 'tomorrow', de: 'morgen', typ: 'Adverb' }, { en: 'here', de: 'hier', typ: 'Adverb' }, { en: 'there', de: 'dort', typ: 'Adverb' }, { en: 'where', de: 'wo', typ: 'Adverb' }, { en: 'how', de: 'wie', typ: 'Adverb' },
+            { en: 'apple', de: 'Apfel', typ: 'Substantiv', emoji: '🍎' }, { en: 'banana', de: 'Banane', typ: 'Substantiv', emoji: '🍌' }, { en: 'bread', de: 'Brot', typ: 'Substantiv', emoji: '🍞' }, { en: 'water', de: 'Wasser', typ: 'Substantiv', emoji: '💧' }, { en: 'coffee', de: 'Kaffee', typ: 'Substantiv', emoji: '☕' },
+            { en: 'tea', de: 'Tee', typ: 'Substantiv', emoji: '🍵' }, { en: 'milk', de: 'Milch', typ: 'Substantiv', emoji: '🥛' }, { en: 'cheese', de: 'Käse', typ: 'Substantiv', emoji: '🧀' }, { en: 'meat', de: 'Fleisch', typ: 'Substantiv', emoji: '🥩' }, { en: 'egg', de: 'Ei', typ: 'Substantiv', emoji: '🥚' },
+            { en: 'house', de: 'Haus', typ: 'Substantiv', emoji: '🏠' }, { en: 'car', de: 'Auto', typ: 'Substantiv', emoji: '🚗' }, { en: 'bike', de: 'Fahrrad', typ: 'Substantiv', emoji: '🚲' }, { en: 'book', de: 'Buch', typ: 'Substantiv', emoji: '📖' }, { en: 'pen', de: 'Stift', typ: 'Substantiv', emoji: '🖊️' },
+            { en: 'computer', de: 'Computer', typ: 'Substantiv', emoji: '💻' }, { en: 'phone', de: 'Telefon', typ: 'Substantiv', emoji: '📱' }, { en: 'sun', de: 'Sonne', typ: 'Substantiv', emoji: '☀️' }, { en: 'moon', de: 'Mond', typ: 'Substantiv', emoji: '🌙' }, { en: 'star', de: 'Stern', typ: 'Substantiv', emoji: '⭐' },
+            { en: 'cat', de: 'Katze', typ: 'Substantiv', emoji: '🐱' }, { en: 'dog', de: 'Hund', typ: 'Substantiv', emoji: '🐶' }, { en: 'bird', de: 'Vogel', typ: 'Substantiv', emoji: '🐦' }, { en: 'fish', de: 'Fisch', typ: 'Substantiv', emoji: '🐟' }, { en: 'flower', de: 'Blume', typ: 'Substantiv', emoji: '🌸' },
+            { en: 'red', de: 'rot', typ: 'Adjektiv', emoji: '🔴' }, { en: 'blue', de: 'blau', typ: 'Adjektiv', emoji: '🔵' }, { en: 'green', de: 'grün', typ: 'Adjektiv', emoji: '🟢' }, { en: 'yellow', de: 'gelb', typ: 'Adjektiv', emoji: '🟡' }, { en: 'black', de: 'schwarz', typ: 'Adjektiv', emoji: '⚫' }
         ];
+
+        window.enToDeMap = {};
+        window.deToEnMap = {};
+        window.offlineDictionaryEn.forEach(entry => {
+            if (entry.en) window.enToDeMap[entry.en.toLowerCase()] = entry;
+            if (entry.de && entry.en) {
+                const deKeys = entry.de.toLowerCase().split('/').map(w => w.trim());
+                deKeys.forEach(dk => { if (!window.deToEnMap[dk]) window.deToEnMap[dk] = entry; });
+            }
+        });
 
             // Re-bind info toggle listener for mobile
             const infoModeBtn = document.getElementById('infoModeToggle');
