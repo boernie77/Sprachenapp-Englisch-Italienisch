@@ -6109,6 +6109,13 @@
             selectedSourceCard = null;
             draggablesContainer.innerHTML = ''; dropzonesContainer.innerHTML = '';
 
+            let availableWords = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.isActive !== false);
+            if (availableWords.length < ROUND_SIZE) {
+                // If not enough active words, maybe fall back to 'Alle' or show message
+                // For consistency with other modes, we'll use getAvailableWords logic here too
+                availableWords = getAvailableWords(); // Already handles isActive filter
+            }
+
 
 
             // Ensure layout and info section visibility based on language
@@ -6148,10 +6155,6 @@
                 dropColHeader.innerHTML = isMobile ? `${deFlagSVG} Deutsch` : `${deFlagSVG} Deutsch (Ablegen)`;
             }
 
-            let availableWords = getAvailableWords();
-            if (availableWords.length < ROUND_SIZE) {
-                typeFilterEl.value = 'Alle'; availableWords = getAvailableWords();
-            }
             if (availableWords.length < ROUND_SIZE) {
                 draggablesContainer.innerHTML = `<div class="col-span-full text-center text-slate-400 italic py-8">Nicht genug Vokabeln gefunden (${ROUND_SIZE} benötigt).</div>`;
                 return;
