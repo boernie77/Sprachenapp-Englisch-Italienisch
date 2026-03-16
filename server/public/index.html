@@ -162,7 +162,7 @@
             color: #ffffff !important;
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .quiz-option-btn.correct-dim {
                 background-color: rgba(34, 197, 94, 0.2) !important;
                 border-color: rgba(34, 197, 94, 0.5) !important;
@@ -471,7 +471,7 @@
         }
 
         /* Mobile Dark Mode Optimization (Elegant Dark Mode) */
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             body {
                 background-color: #0f172a;
                 background-image:
@@ -4237,20 +4237,7 @@
                 if (gBtn) { gBtn.classList.remove('hidden'); gBtn.style.removeProperty('display'); }
             }
 
-            // Platform specific Info visibility (Both IT and EN)
-            if (isCapacitor) {
-                // App: Icon top-right, Tab hidden
-                if (iIcon) { iIcon.classList.remove('hidden'); iIcon.style.removeProperty('display'); }
-                if (iTab) { iTab.classList.add('hidden'); iTab.style.setProperty('display', 'none', 'important'); }
-            } else {
-                // Desktop/Web: Icon hidden, Tab visible
-                if (iIcon) { iIcon.classList.add('hidden'); iIcon.style.setProperty('display', 'none', 'important'); }
-                if (iTab) { 
-                    iTab.classList.remove('hidden'); 
-                    iTab.style.removeProperty('display');
-                    iTab.classList.add('sm:flex'); 
-                }
-            }
+            // Platform specific Info visibility (Removed manual overrides to let CSS media queries handle it)
 
             // Switch out of info if it shouldn't be visible (e.g. mobile grammar)
             // But actually we want it to work on mobile too if they click the 'i'
