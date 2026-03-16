@@ -4356,6 +4356,12 @@
             const sInputItLabel = document.getElementById('sentenceInputItLabel');
             if (sInputItLabel) sInputItLabel.innerHTML = `${currentFlag} ${langName}e Übersetzung`;
 
+            // Edit Vocab Modal
+            const eVocabDeLabel = document.getElementById('editVocabLangDeLabel');
+            if (eVocabDeLabel) eVocabDeLabel.innerHTML = `${deFlagSVG} Deutsch`;
+            const eVocabTargetLabel = document.getElementById('editVocabLangTargetLabel');
+            if (eVocabTargetLabel) eVocabTargetLabel.innerHTML = `${currentFlag} Zielsprache`;
+
             // Mode buttons
             const gBtn = document.getElementById('modeGrammarBtn');
             const iTab = document.getElementById('modeInfoBtn');
