@@ -7618,10 +7618,15 @@
 
         deleteBaseVocabArea.addEventListener('click', async () => {
             if (await showConfirm("Möchtest du die importierten Basis-Vokabeln von deinen Statistiken entfernen? Da wir dies nicht exakt abgrenzen können, leert dies einfach deine Liste an Vokabeln (nicht Sätze).", "Achtung")) {
-                await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Vocab`, { method: 'DELETE' });
-                showToast("Alle Vokabeln wurden gelöscht.", "success");
-                loadDataFromServer();
-                excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
+                try {
+                    await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Vocab`, { method: 'DELETE' });
+                    showToast("Alle Vokabeln wurden gelöscht.", "success");
+                    loadDataFromServer();
+                    excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
+                } catch (e) {
+                    console.error("Error during deletion:", e);
+                    showToast("Fehler beim Löschen der Vokabeln.", "error");
+                }
             }
         });
 
@@ -7669,10 +7674,15 @@
 
         deleteBaseSentencesArea.addEventListener('click', async () => {
             if (await showConfirm("Möchtest du die importierten Basis-Sätze aus deiner Liste entfernen? Dies löscht auch eigene Sätze.", "Achtung")) {
-                await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Satz`, { method: 'DELETE' });
-                showToast("Alle Sätze wurden gelöscht.", "success");
-                loadDataFromServer();
-                excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
+                try {
+                    await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Satz`, { method: 'DELETE' });
+                    showToast("Alle Sätze wurden gelöscht.", "success");
+                    loadDataFromServer();
+                    excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
+                } catch (e) {
+                    console.error("Error during deletion:", e);
+                    showToast("Fehler beim Löschen der Sätze.", "error");
+                }
             }
         });
 

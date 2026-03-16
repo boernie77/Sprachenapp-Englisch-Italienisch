@@ -1,5 +1,6 @@
 const express = require('express');
-const { User, Vocabulary, Stats, Sequelize } = require('../models');
+const { User, Vocabulary, Stats } = require('../models');
+const { Sequelize } = require('sequelize');
 const { authenticateToken, asyncHandler } = require('../middleware/auth');
 
 const router = express.Router();
