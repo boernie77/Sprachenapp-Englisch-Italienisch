@@ -1726,6 +1726,7 @@
                             <option value="Adjektiv">Adjektive</option>
                             <option value="Sonstiges">Sonstiges</option>
                             <option value="Favoriten">Favoriten</option>
+                            <option value="Satz">Sätze</option>
                         </select>
                         <div style="position:relative">
                             <button type="button" class="cs-btn" id="typeFilterBtn">
@@ -1744,6 +1745,7 @@
                                 <div class="cs-opt" data-value="Adjektiv">Adjektive</div>
                                 <div class="cs-opt" data-value="Sonstiges">Sonstiges</div>
                                 <div class="cs-opt" data-value="Favoriten" title="Nur markierte Favoriten üben">Favoriten</div>
+                                <div class="cs-opt" data-value="Satz">Sätze</div>
                             </div>
                         </div>
                     </div>
@@ -5768,18 +5770,23 @@
                 });
             } else if (filterValue === 'Adjektiv') {
                 availableWords = availableWords.filter(word => word.typ && /\badjektiv\b/i.test(word.typ));
+            } else if (filterValue === 'Satz') {
+                availableWords = availableWords.filter(word => word.typ === 'Satz');
             } else if (filterValue === 'Sonstiges') {
-                // Catch-all for things that are NOT Verbs, Nouns/Pronouns, or Adjectives
+                // Catch-all for things that are NOT Verbs, Nouns/Pronouns, Adjectives, or Sentences
                 availableWords = availableWords.filter(word => {
                     if (!word.typ) return true; // Empty type goes to Sonstiges
                     const typLower = word.typ.toLowerCase();
                     const isVerb = /\bverb\b/i.test(typLower);
                     const isNoun = typLower.includes('substantiv') || typLower.includes('nomen') || typLower.includes('pronomen');
                     const isAdj = /\badjektiv\b/i.test(typLower);
-                    return !isVerb && !isNoun && !isAdj;
+                    const isSatz = typLower === 'satz';
+                    return !isVerb && !isNoun && !isAdj && !isSatz;
                 });
+            } else if (filterValue === 'Alle') {
+                availableWords = availableWords.filter(word => word.typ !== 'Satz');
             }
-            // If filterValue is 'Alle', we do nothing and return all availableWords
+            // Retain backward compatibility if nothing matches
             return availableWords;
         }
 
