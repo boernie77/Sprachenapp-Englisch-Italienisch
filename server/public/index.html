@@ -4078,7 +4078,8 @@
                 addVocab: "Vokabel hinzufügen",
                 direction: "Italienisch",
                 welcomePrefix: "Ciao,",
-                statsTitle: "Lern-Statistik"
+                statsTitle: "Lern-Statistik",
+                grammarDescription: "Hier werden italienische Beispielsätze präsentiert..."
             },
             en: {
                 welcome: "Welcome!",
@@ -4089,7 +4090,8 @@
                 addVocab: "Add Vocabulary",
                 direction: "Englisch",
                 welcomePrefix: "Hello,",
-                statsTitle: "Learning Statistics"
+                statsTitle: "Learning Statistics",
+                grammarDescription: "Hier werden englische Beispielsätze präsentiert..."
             }
         };
 
@@ -4168,13 +4170,14 @@
             const excelCol1Desc = document.getElementById('excelCol1Desc');
             if (excelCol1Desc) excelCol1Desc.textContent = CURRENT_LANG === 'en' ? 'Englische Wörter' : 'Italienische Wörter';
 
-            const grammarInfolabel = document.querySelector('#grammarSection .bg-amber-50 b + span') || document.querySelector('#grammarContainer .bg-amber-50 b + span');
-            if (grammarInfolabel) {
-                if (CURRENT_LANG === 'en') {
-                    grammarInfolabel.textContent = grammarInfolabel.textContent.replace('italienische', 'englische');
-                } else {
-                    grammarInfolabel.textContent = grammarInfolabel.textContent.replace('englische', 'italienische');
-                }
+            const grammarExplText = document.getElementById('grammarExplanationText');
+            if (grammarExplText) {
+                grammarExplText.innerHTML = `<span id="grammarBulbIcon"></span> <b>Grammatik-Übung:</b> ${t.grammarDescription}`;
+                const gIcon = document.getElementById('grammarBulbIcon');
+                if (gIcon) gIcon.innerHTML = `
+                    <svg class="w-4 h-4 text-amber-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>`;
             }
 
             // Mode buttons
