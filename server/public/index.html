@@ -3304,8 +3304,8 @@
                         <option value="de">Deutsch Italienisch</option>
                         <option value="it">Italienisch Deutsch</option>
                     </select>
-                    <button type="button" class="cs-btn w-full" id="sentenceListSortDirBtn">
-                        <span id="sentenceListSortDirLabel">Deutsch ...</span>
+                    <button type="button" class="cs-btn w-full px-2" id="sentenceListSortDirBtn">
+                        <span id="sentenceListSortDirLabel" class="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap">Deutsch ...</span>
                         <svg class="cs-chevron" width="16" height="16" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -4522,14 +4522,18 @@
             const vTitle = document.getElementById('vocabListModalTitle');
             if (vTitle) vTitle.innerHTML = `${listSVG} ${t.vocabList}`;
 
-            const vSortLabel = document.getElementById('vocabListSortDirLabel');
-            if (vSortLabel) vSortLabel.innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${currentFlag} ${langName}`;
-
-            const vSortDeOpt = document.getElementById('vocabListSortDeOpt');
-            if (vSortDeOpt) vSortDeOpt.innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${currentFlag} ${langName}`;
-
             const vSortItOpt = document.getElementById('vocabListSortItOpt');
             if (vSortItOpt) vSortItOpt.innerHTML = `${currentFlag} ${langName} ${arrowSVG} ${deFlagSVG} Deutsch`;
+
+            // Sentence List Sorting Labels
+            const sSortLabel = document.getElementById('sentenceListSortDirLabel');
+            if (sSortLabel) sSortLabel.innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${currentFlag} ${langName}`;
+
+            const sSortDeOpt = document.getElementById('sentenceListSortDeOpt');
+            if (sSortDeOpt) sSortDeOpt.innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${currentFlag} ${langName}`;
+
+            const sSortItOpt = document.getElementById('sentenceListSortItOpt');
+            if (sSortItOpt) sSortItOpt.innerHTML = `${currentFlag} ${langName} ${arrowSVG} ${deFlagSVG} Deutsch`;
 
             const wTitle = document.getElementById('welcomeTitle');
             if (wTitle) wTitle.innerHTML = `${t.welcome} ${currentFlag}`;
@@ -7451,6 +7455,7 @@
             if (currentMode === 'dragdrop') startDragDropRound();
             else if (currentMode === 'quiz') startQuizRound();
             else if (currentMode === 'write') startWriteRound();
+            else if (currentMode === 'cards') startCardsRound();
         }
 
         typeFilterEl.addEventListener('change', handleFilterChange);
@@ -7587,6 +7592,15 @@
         }
 
         // --- Helper: Modal Setup ---
+        function closeAllModals() {
+            // Find all elements that look like modals (have id ending in Modal)
+            const modals = document.querySelectorAll('div[id$="Modal"]');
+            modals.forEach(m => {
+                m.classList.add('hidden');
+                m.classList.remove('flex');
+            });
+        }
+
         function setupModal(modal, openBtn, closeBtn, onOpen, onClose) {
             function closeModal() {
                 modal.classList.remove('flex');
@@ -7595,6 +7609,7 @@
             }
             if (openBtn) {
                 openBtn.addEventListener('click', () => {
+                    closeAllModals(); // Close any currently open modals
                     dropdownMenu.classList.add('hidden');
                     if (onOpen) onOpen();
                     modal.classList.remove('hidden');
@@ -8035,6 +8050,69 @@
                 saveEditVocabBtn.disabled = false;
             }
         });
+
+        // --- Edit Sentence Logic ---
+        const editSentenceModal = document.getElementById('editSentenceModal');
+        const closeEditSentenceModalBtn = document.getElementById('closeEditSentenceModalBtn');
+        const editSentenceDe = document.getElementById('editSentenceDe');
+        const editSentenceTarget = document.getElementById('editSentenceTarget');
+        const saveEditSentenceBtn = document.getElementById('saveEditSentenceBtn');
+        let currentEditSentenceId = null;
+
+        function openEditSentenceModal(word) {
+            currentEditSentenceId = word.id;
+            editSentenceDe.value = word.de || '';
+            editSentenceTarget.value = word.it || '';
+            editSentenceModal.classList.remove('hidden');
+            editSentenceModal.classList.add('flex');
+        }
+
+        if (closeEditSentenceModalBtn) {
+            closeEditSentenceModalBtn.addEventListener('click', () => {
+                editSentenceModal.classList.add('hidden');
+                editSentenceModal.classList.remove('flex');
+                currentEditSentenceId = null;
+            });
+        }
+
+        if (saveEditSentenceBtn) {
+            saveEditSentenceBtn.addEventListener('click', async () => {
+                if (!currentEditSentenceId) return;
+                const de = editSentenceDe.value.trim();
+                const it = editSentenceTarget.value.trim();
+
+                if (!de || !it) {
+                    showToast("Bitte beide Felder ausfüllen.", "warning");
+                    return;
+                }
+
+                try {
+                    saveEditSentenceBtn.disabled = true;
+                    const payload = { de, it, typ: 'Satz', grammatica: 'Eigene Sätze' };
+                    await apiFetch(`/vocab/${currentEditSentenceId}`, {
+                        method: 'PUT',
+                        body: JSON.stringify(payload)
+                    });
+
+                    // Update local dictionary
+                    const index = fullDictionary.findIndex(w => w.id === currentEditSentenceId);
+                    if (index > -1) {
+                        fullDictionary[index] = { ...fullDictionary[index], ...payload };
+                        saveAllDataLocally();
+                        renderSentenceList();
+                        updateAdminGrammarCount();
+                    }
+
+                    showToast("Satz erfolgreich gespeichert.", "success");
+                    editSentenceModal.classList.add('hidden');
+                    editSentenceModal.classList.remove('flex');
+                } catch (err) {
+                    showToast("Fehler beim Speichern.", "error");
+                } finally {
+                    saveEditSentenceBtn.disabled = false;
+                }
+            });
+        }
 
         // Vocab list sort/filter custom dropdowns
         setupCustomDropdown('vocabListSortDirBtn', 'vocabListSortDirList', 'vocabListSortDirLabel', 'vocabListSortDir', renderVocabList);
