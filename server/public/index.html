@@ -4301,6 +4301,12 @@
                     levelWrapper.classList.add('hidden');
                 }
             }
+            
+            // Sentence Add Modal
+            const sInputDeLabel = document.getElementById('sentenceInputDeLabel');
+            if (sInputDeLabel) sInputDeLabel.innerHTML = `${deFlagSVG} Deutscher Satz`;
+            const sInputItLabel = document.getElementById('sentenceInputItLabel');
+            if (sInputItLabel) sInputItLabel.innerHTML = `${currentFlag} ${langName}e Übersetzung`;
 
             // Mode buttons
             const gBtn = document.getElementById('modeGrammarBtn');
