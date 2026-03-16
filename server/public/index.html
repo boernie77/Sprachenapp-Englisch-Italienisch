@@ -7515,11 +7515,7 @@
                     // Let's call /vocab/clear/all?type=vocab (Assumes backend support or we iterate)
                     // Wait, /vocab/clear/all doesn't support type filtering. We need to do it by ID if not supported.
                     // For now, let's assume we modify the backend route `/vocab/clear/type?typ=Satz`.
-                    // Or we just fetch all and delete them one by one.
-                    const toDelete = fullDictionary.filter(w => w.typ !== 'Satz');
-                    for (const w of toDelete) {
-                        await apiFetch(`/vocab/${w.id}`, { method: 'DELETE' });
-                    }
+                    await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Vocab`, { method: 'DELETE' });
                     fullDictionary = fullDictionary.filter(w => w.typ === 'Satz');
                     renderVocabList();
                     excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
@@ -7535,10 +7531,7 @@
         clearSentencesArea.addEventListener('click', async () => {
             if (await showConfirm("Möchtest du wirklich alle eigenen Sätze unwiderruflich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.", "Sätze leeren?")) {
                 try {
-                    const toDelete = fullDictionary.filter(w => w.typ === 'Satz');
-                    for (const w of toDelete) {
-                        await apiFetch(`/vocab/${w.id}`, { method: 'DELETE' });
-                    }
+                    await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Satz`, { method: 'DELETE' });
                     fullDictionary = fullDictionary.filter(w => w.typ !== 'Satz');
                     renderVocabList();
                     excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
@@ -7604,7 +7597,7 @@
                 if (!choice) return; // Cancel
 
                 if (choice === 'replace') {
-                    await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}`, { method: 'DELETE' });
+                    await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Vocab`, { method: 'DELETE' });
                 }
 
                 const result = await apiFetch('/vocab/bulk', {
@@ -7624,8 +7617,11 @@
         });
 
         deleteBaseVocabArea.addEventListener('click', async () => {
-            if (await showConfirm("Möchtest du die importierten Basis-Vokabeln von deinen Statistiken entfernen? Da wir dies nicht exakt abgrenzen können, leert dies einfach deine Liste.", "Achtung")) {
-                showToast("Das direkte Löschen nur von Basis-Vokabeln ist noch nicht möglich.", "info");
+            if (await showConfirm("Möchtest du die importierten Basis-Vokabeln von deinen Statistiken entfernen? Da wir dies nicht exakt abgrenzen können, leert dies einfach deine Liste an Vokabeln (nicht Sätze).", "Achtung")) {
+                await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Vocab`, { method: 'DELETE' });
+                showToast("Alle Vokabeln wurden gelöscht.", "success");
+                loadDataFromServer();
+                excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
             }
         });
 
@@ -7652,8 +7648,7 @@
                 if (!choice) return;
 
                 if (choice === 'replace') {
-                    const toDelete = fullDictionary.filter(w => w.typ === 'Satz');
-                    for (const w of toDelete) await apiFetch(`/vocab/${w.id}`, { method: 'DELETE' });
+                    await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Satz`, { method: 'DELETE' });
                 }
 
                 const result = await apiFetch('/vocab/bulk', {
@@ -7674,8 +7669,7 @@
 
         deleteBaseSentencesArea.addEventListener('click', async () => {
             if (await showConfirm("Möchtest du die importierten Basis-Sätze aus deiner Liste entfernen? Dies löscht auch eigene Sätze.", "Achtung")) {
-                const toDelete = fullDictionary.filter(w => w.typ === 'Satz');
-                for (const w of toDelete) await apiFetch(`/vocab/${w.id}`, { method: 'DELETE' });
+                await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Satz`, { method: 'DELETE' });
                 showToast("Alle Sätze wurden gelöscht.", "success");
                 loadDataFromServer();
                 excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
@@ -7722,8 +7716,8 @@
                         if (!choice) { excelUploadEl.value = null; return; }
                         
                         if (choice === 'replace') {
-                            const toDelete = excelUploadType === 'sentences' ? fullDictionary.filter(w => w.typ === 'Satz') : fullDictionary.filter(w => w.typ !== 'Satz');
-                            for (const w of toDelete) await apiFetch(`/vocab/${w.id}`, { method: 'DELETE' });
+                            const delTyp = excelUploadType === 'sentences' ? 'Satz' : 'Vocab';
+                            await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=${delTyp}`, { method: 'DELETE' });
                         }
 
                         const result = await apiFetch('/vocab/bulk', {
