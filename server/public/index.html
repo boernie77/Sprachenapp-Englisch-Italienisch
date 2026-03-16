@@ -6410,6 +6410,11 @@
                     }
                 });
             }
+
+            // Always ensure 'Eigene Sätze' is an available category
+            if (!categories.includes('Eigene Sätze')) {
+                categories.push('Eigene Sätze');
+            }
             
             categories.sort();
 
