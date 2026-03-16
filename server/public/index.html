@@ -6477,9 +6477,17 @@
             let categories = [...new Set(grammarSentences.map(s => s.category).filter(Boolean))];
             
             // Add default English tenses if they are not already in the categories 
+            // Add default English tenses if they are not already in the categories 
             if (CURRENT_LANG === 'en') {
                 const enTenses = ['Simple Present', 'Present Continuous', 'Simple Past', 'Future', 'Present Perfect', 'Imperativ', 'Conditional'];
                 enTenses.forEach(tense => {
+                    if (!categories.includes(tense)) {
+                        categories.push(tense);
+                    }
+                });
+            } else if (CURRENT_LANG === 'it') {
+                const itTenses = ['Presente', 'Passato Prossimo', 'Imperfetto', 'Futuro Semplice', 'Condizionale', 'Imperativo', 'Congiuntivo'];
+                itTenses.forEach(tense => {
                     if (!categories.includes(tense)) {
                         categories.push(tense);
                     }
@@ -6880,6 +6888,23 @@
                         }
                     }
                 });
+            }
+
+            // Fallback: If no grammatical tokens were matched (e.g. for custom "Eigene Sätze"),
+            // pick the longest word as a custom gap.
+            if (eligibleTokens.length === 0) {
+                let longestIdx = -1;
+                let longestLen = 0;
+                tokens.forEach((token, idx) => {
+                    const cleanPunct = token.replace(/[.,:;?!()]/g, '').trim();
+                    if (cleanPunct.length > longestLen) {
+                        longestLen = cleanPunct.length;
+                        longestIdx = idx;
+                    }
+                });
+                if (longestIdx !== -1) {
+                    eligibleTokens.push({ idx: longestIdx, type: 'custom', weight: 1.0 });
+                }
             }
 
             // Randomly pick max 2 gaps (or 3 for English Conditionals), weighted towards articulated prepositions
