@@ -92,6 +92,7 @@ const GrammarSentence = sequelize.define('GrammarSentence', {
   it: { type: DataTypes.STRING, allowNull: false },
   de: { type: DataTypes.STRING, allowNull: false },
   category: { type: DataTypes.STRING, allowNull: true },
+  level: { type: DataTypes.STRING, allowNull: true },
   language: { type: DataTypes.STRING, defaultValue: 'it' }
 });
 
