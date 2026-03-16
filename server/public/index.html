@@ -6675,7 +6675,7 @@
         async function updateAdminGrammarCount() {
             try {
                 // Sentences are completely user-managed now. We only load what's actually in their dictionary.
-                const personalSentences = fullDictionary ? fullDictionary.filter(w => w.typ === 'Satz').map(v => ({
+                const personalSentences = fullDictionary ? fullDictionary.filter(w => w.typ === 'Satz' && w.isActive !== false).map(v => ({
                     id: v.id, de: v.de, it: v.it, category: v.grammatica || 'Eigene Sätze', level: 'Eigene'
                 })) : [];
                 grammarSentences = [...personalSentences];
@@ -7865,6 +7865,7 @@
                     word.isActive = e.target.checked;
                     saveAllDataLocally();
                     saveStatToServer(word.id);
+                    updateAdminGrammarCount(); // Ensure grammar pool is updated
                 });
                 li.querySelector('.edit-btn').addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -7954,6 +7955,7 @@
                     word.isActive = e.target.checked;
                     saveAllDataLocally();
                     saveStatToServer(word.id);
+                    updateAdminGrammarCount(); // Ensure grammar pool is updated
                 });
                 li.querySelector('.edit-btn').addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -9769,7 +9771,7 @@
 
         function startCardsRound() {
             const filterValue = typeFilterEl.value;
-            let words = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG);
+            let words = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.isActive !== false);
             if (filterValue === 'VerbInfinitiv') {
                 words = words.filter(word => word.typ && word.typ.toLowerCase().includes('verb'));
             } else if (filterValue === 'Favoriten' || filterValue === 'Markiert') {
