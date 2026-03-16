@@ -733,6 +733,105 @@
                 font-weight: 700;
             }
 
+            #vocabListModal .bg-white, #sentenceListModal .bg-white,
+            #vocabModal .bg-white {
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            }
+
+            #vocabListModal, #sentenceListModal,
+            #vocabModal {
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+            }
+
+            #vocabListModal .bg-white, #sentenceListModal .bg-white,
+            #vocabModal .bg-white {
+                animation: modalSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            #vocabListModal input, #sentenceListModal input,
+            #vocabListModal select, #sentenceListModal select,
+            #vocabModal input,
+            #vocabModal select {
+                font-family: 'DM Sans', sans-serif;
+            }
+
+            /* Extra typography refinements for modals */
+            #vocabListModal label, #sentenceListModal label,
+            #vocabListModal h2, #sentenceListModal h2,
+            #vocabListModal h3, #sentenceListModal h3,
+            #vocabListModal p, #sentenceListModal p,
+            #vocabListModal span, #sentenceListModal span,
+            #vocabModal label,
+            #vocabModal h2,
+            #vocabModal p,
+            #vocabModal span {
+                letter-spacing: -0.01em;
+            }
+
+            /* Better mobile lists */
+            #vocabListModal .bg-white, #sentenceListModal .bg-white {
+                padding: 1.25rem !important;
+            }
+
+            #vocabListModalSearch {
+                font-size: 16px !important;
+                /* Prevents iOS zoom */
+            }
+
+            /* Subtler list items */
+            #vocabListModal .bg-slate-50, #sentenceListModal .bg-slate-50 {
+                background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+            }
+
+            #vocabListModal .divide-slate-200, #sentenceListModal .divide-slate-200 {
+                border-color: rgba(226, 232, 240, 0.6);
+            }
+
+            #vocabListModal .text-slate-800, #sentenceListModal .text-slate-800 {
+                color: #1e293b;
+            }
+
+            #vocabListModal .text-slate-500, #sentenceListModal .text-slate-500,
+            #vocabListModal .text-slate-400, #sentenceListModal .text-slate-400 {
+                color: #64748b;
+            }
+
+            #vocabListModal .border-slate-200, #sentenceListModal .border-slate-200 {
+                border-color: #e2e8f0;
+            }
+
+            /* Custom Select Base */
+            #vocabListModal .cs-btn, #sentenceListModal .cs-btn,
+            #vocabListModal .cs-list, #sentenceListModal .cs-list {
+                width: 100%;
+                border-radius: 0.75rem;
+                border: 1px solid #e2e8f0;
+                font-size: 0.875rem;
+                transition: all 0.2s;
+            }
+
+            #vocabListModal .cs-opt, #sentenceListModal .cs-opt {
+                padding: 0.5rem 1rem;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+
+            #vocabListModal .cs-opt:hover, #sentenceListModal .cs-opt:hover {
+                background: #f1f5f9;
+                color: #2563eb;
+            }
+
+            #vocabListModal .cs-opt.selected, #sentenceListModal .cs-opt.selected {
+                background: #eff6ff;
+                color: #1d4ed8;
+                font-weight: 600;
+            }
+
+            #vocabListModal .cs-chevron, #sentenceListModal .cs-chevron   {
+                transition: transform 0.2s;
+            }
+
             /* Hamburger Menu Layering & Styling (Extreme Priority) */
             div.absolute.top-2.right-2.md\:top-4.md\:right-4 {
                 z-index: 9999 !important;
@@ -1626,6 +1725,9 @@
                 <button id="openVocabListModalBtn"
                     class="block w-full text-left px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100">Vollständige
                     Vokabelliste</button>
+                <button id="openSentenceListModalBtn"
+                    class="block w-full text-left px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100">Vollständige
+                    Satzliste</button>
                 <button id="openVocabModalBtn"
                     class="block w-full text-left px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100">Vokabel
                     hinzufügen</button>
@@ -3033,6 +3135,35 @@
         </div>
     </div>
 
+    <!-- Satz bearbeiten Modal -->
+    <div id="editSentenceModal"
+        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-[60] p-4">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-lg w-full shadow-2xl">
+            <div class="flex justify-between items-center mb-5">
+                <h2 class="text-xl font-bold text-slate-800 flex items-center">Satz bearbeiten</h2>
+                <button id="closeEditSentenceModalBtn"
+                    class="text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
+            </div>
+            
+            <div class="mb-3">
+                <label id="editSentenceLangDeLabel" class="block text-xs font-semibold text-slate-700 mb-1.5 flex justify-between items-center whitespace-nowrap overflow-hidden text-ellipsis">Deutsch</label>
+                <input id="editSentenceDe" type="text" autocomplete="off"
+                    class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400 transition-all">
+            </div>
+
+            <div class="mb-3">
+                <label id="editSentenceLangTargetLabel" class="block text-xs font-semibold text-slate-700 mb-1.5 flex justify-between items-center whitespace-nowrap overflow-hidden text-ellipsis">Zielsprache</label>
+                <input id="editSentenceTarget" type="text" autocomplete="off"
+                    class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400 transition-all">
+            </div>
+
+            <button id="saveEditSentenceBtn"
+                class="w-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+                Änderungen speichern <span class="vocab-btn-arrow"></span>
+            </button>
+        </div>
+    </div>
+
     <!-- Vollständige Vokabelliste Modal -->
     <div id="vocabListModal"
         class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
@@ -3124,6 +3255,93 @@
 
             <div class="mt-4 text-center">
                 <button id="saveVocabListBtn"
+                    class="w-full md:w-auto px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition-all active:transform active:scale-95">Speichern
+                    & Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vollständige Satzliste Modal -->
+    <div id="sentenceListModal"
+        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-200 pb-4">
+                <h2 id="sentenceListModalTitle" class="text-xl font-bold text-slate-800 flex items-center">Vollständige
+                    Satzliste</h2>
+                <button id="closeSentenceListModalBtn"
+                    class="text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
+            </div>
+
+            <p class="text-xs md:text-sm text-slate-500 mb-4 italic">
+                Hinweis: Nur die hier ausgewählten Sätze werden in den Übungen zum Lernen verwendet.
+            </p>
+
+            <div class="flex gap-2 mb-3">
+                <button id="selectAllSentencesBtn"
+                    class="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-600 font-semibold py-2 px-4 rounded-xl text-sm transition-colors border border-blue-200 shadow-sm active:transform active:scale-95">Alle
+                    wählen</button>
+                <button id="deselectAllSentencesBtn"
+                    class="flex-1 bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold py-2 px-4 rounded-xl text-sm transition-colors border border-slate-200 shadow-sm active:transform active:scale-95">Alle
+                    abwählen</button>
+            </div>
+
+            <div class="mb-3">
+                <div class="relative">
+                    <input type="text" id="sentenceListSearch" placeholder="Satz suchen..."
+                        class="w-full border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400 transition-all shadow-sm">
+                    <div class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-2 mb-3">
+                <div class="flex-1" style="position:relative">
+                    <select id="sentenceListSortDir" style="display:none">
+                        <option value="de">Deutsch Italienisch</option>
+                        <option value="it">Italienisch Deutsch</option>
+                    </select>
+                    <button type="button" class="cs-btn w-full" id="sentenceListSortDirBtn">
+                        <span id="sentenceListSortDirLabel">Deutsch ...</span>
+                        <svg class="cs-chevron" width="16" height="16" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div class="cs-list" id="sentenceListSortDirList">
+                        <div class="cs-opt selected" data-value="de" id="sentenceListSortDeOpt">Deutsch Italienisch</div>
+                        <div class="cs-opt" data-value="it" id="sentenceListSortItOpt">Italienisch Deutsch</div>
+                    </div>
+                </div>
+                <!-- Category filter custom dropdown -->
+                <div class="flex-1" style="position:relative">
+                    <select id="sentenceListCatFilter" style="display:none">
+                        <option value="Alle">Alle Kategorien</option>
+                        <option value="Eigene Sätze">Eigene Sätze</option>
+                    </select>
+                    <button type="button" class="cs-btn w-full" id="sentenceListCatFilterBtn">
+                        <span id="sentenceListCatFilterLabel">Alle Kategorien</span>
+                        <svg class="cs-chevron" width="16" height="16" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div class="cs-list" id="sentenceListCatFilterList">
+                        <div class="cs-opt selected" data-value="Alle">Alle Kategorien</div>
+                        <div class="cs-opt" data-value="Eigene Sätze">Eigene Sätze</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="overflow-y-auto flex-1 border border-slate-200 rounded-xl bg-slate-50 max-h-[55vh]">
+                <ul id="sentenceListContainer" class="divide-y divide-slate-200"></ul>
+            </div>
+
+            <div class="mt-4 text-center">
+                <button id="saveSentenceListBtn"
                     class="w-full md:w-auto px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition-all active:transform active:scale-95">Speichern
                     & Schließen</button>
             </div>
@@ -4237,7 +4455,12 @@
                 header: "Italienisch Lernen",
                 grammar: "Grammatica Italiana",
                 vocabList: "Vollständige Vokabelliste",
+                sentenceList: "Vollständige Satzliste",
                 addVocab: "Vokabel hinzufügen",
+                vocabBtn: "Vokabel hinzufügen",
+                sentenceBtn: "Sätze hinzufügen",
+                listBtn: "Excel-Liste verwalten",
+                contactBtn: "Kontakt",
                 direction: "Italienisch",
                 welcomePrefix: "Ciao,",
                 statsTitle: "Lern-Statistik",
@@ -4249,7 +4472,12 @@
                 header: "Englisch Lernen",
                 grammar: "English Grammar",
                 vocabList: "Vollständige Vokabelliste",
+                sentenceList: "Full Sentence List",
                 addVocab: "Add Vocabulary",
+                vocabBtn: "Add Vocabulary",
+                sentenceBtn: "Add Sentences",
+                listBtn: "Manage Excel List",
+                contactBtn: "Contact",
                 direction: "Englisch",
                 welcomePrefix: "Hello,",
                 statsTitle: "Learning Statistics",
@@ -7495,19 +7723,42 @@
         );
         document.getElementById('saveVocabListBtn').addEventListener('click', closeVocabListModal);
 
+        const sentenceListModal = document.getElementById('sentenceListModal');
+        const closeSentenceListModal = setupModal(
+            sentenceListModal,
+            document.getElementById('openSentenceListModalBtn'),
+            document.getElementById('closeSentenceListModalBtn'),
+            () => { renderSentenceList(); },
+            () => { restartCurrentMode(); }
+        );
+        document.getElementById('saveSentenceListBtn').addEventListener('click', closeSentenceListModal);
+
         document.getElementById('selectAllBtn').addEventListener('click', () => {
-            fullDictionary.forEach(w => w.isActive = true);
+            fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ !== 'Satz').forEach(w => w.isActive = true);
             saveAllDataLocally();
             renderVocabList();
         });
 
         document.getElementById('deselectAllBtn').addEventListener('click', () => {
-            fullDictionary.forEach(w => w.isActive = false);
+            fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ !== 'Satz').forEach(w => w.isActive = false);
             saveAllDataLocally();
             renderVocabList();
         });
 
+        document.getElementById('selectAllSentencesBtn').addEventListener('click', () => {
+            fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ === 'Satz').forEach(w => w.isActive = true);
+            saveAllDataLocally();
+            renderSentenceList();
+        });
+
+        document.getElementById('deselectAllSentencesBtn').addEventListener('click', () => {
+            fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ === 'Satz').forEach(w => w.isActive = false);
+            saveAllDataLocally();
+            renderSentenceList();
+        });
+
         document.getElementById('vocabListSearch').addEventListener('input', renderVocabList);
+        document.getElementById('sentenceListSearch').addEventListener('input', renderSentenceList);
 
         function stripArticles(text, lang) {
             if (!text) return '';
@@ -7625,6 +7876,94 @@
             });
         }
 
+        function renderSentenceList() {
+            const sortDir = document.getElementById('sentenceListSortDir').value;
+            const searchVal = document.getElementById('sentenceListSearch').value.toLowerCase().trim();
+
+            let words = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ === 'Satz');
+
+            // Search filter
+            if (searchVal) {
+                words = words.filter(w =>
+                    (w.de && w.de.toLowerCase().includes(searchVal)) ||
+                    (w.it && w.it.toLowerCase().includes(searchVal))
+                );
+            }
+
+            // Alphabetical sort by selected direction
+            words.sort((a, b) => {
+                const keyA = (sortDir === 'de' ? a.de : a.it) || '';
+                const keyB = (sortDir === 'de' ? b.de : b.it) || '';
+                return keyA.localeCompare(keyB, 'de', { sensitivity: 'base' });
+            });
+
+            const container = document.getElementById('sentenceListContainer');
+            container.innerHTML = '';
+            words.forEach((word) => {
+                const li = document.createElement('li');
+                li.className = 'flex items-center justify-between p-3 transition-colors';
+                const isChecked = word.isActive !== false;
+
+                const primary = sortDir === 'de' ? word.de : word.it;
+                const secondary = sortDir === 'de' ? word.it : word.de;
+
+                li.innerHTML = `
+                    <div class="flex items-center gap-2 overflow-hidden flex-1">
+                        <div class="truncate">
+                            <span class="font-bold text-slate-800 text-sm md:text-base text-left">${primary}</span>
+                            <span class="text-slate-400 mx-1 text-xs md:text-sm">|</span>
+                            <span class="font-bold text-blue-600 text-sm md:text-base">${secondary}</span>
+                            ${word.typ ? `<span class="ml-1 text-xs text-slate-400 italic">${word.typ}</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 ml-2 flex-shrink-0">
+                        <button class="edit-btn text-slate-400 hover:text-blue-500 transition-colors p-1" data-id="${word.id}" title="Bearbeiten">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                        </button>
+                        <button class="delete-btn text-slate-400 hover:text-red-500 transition-colors p-1" data-id="${word.id}" title="Löschen">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </button>
+                        <svg class="star-icon w-6 h-6 cursor-pointer ${word.isMarked ? 'marked' : ''}"
+                             data-mark-id="${word.id}"
+                             onclick="event.stopPropagation(); toggleMark('${word.id}', this)"
+                             fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer vocab-checkbox" data-id="${word.id}" ${isChecked ? 'checked' : ''}>
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 shadow-inner"></div>
+                        </label>
+                    </div>
+                `;
+                li.querySelector('.vocab-checkbox').addEventListener('change', (e) => {
+                    word.isActive = e.target.checked;
+                    saveAllDataLocally();
+                    saveStatToServer(word.id);
+                });
+                li.querySelector('.edit-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openEditSentenceModal(word);
+                });
+                li.querySelector('.delete-btn').addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    if (await showConfirm(`Möchtest du diesen Satz wirklich löschen?`, "Eintrag löschen")) {
+                        try {
+                            await apiFetch(`/vocab/${word.id}`, { method: 'DELETE' });
+                            fullDictionary = fullDictionary.filter(w => w.id !== word.id);
+                            delete wordStats[word.id];
+                            saveAllDataLocally();
+                            renderSentenceList();
+                            updateAdminGrammarCount(); // Update grammar dropdown
+                            showToast("Erfolgreich gelöscht.", "success");
+                        } catch (err) {
+                            showToast("Fehler beim Löschen.", "error");
+                        }
+                    }
+                });
+                container.appendChild(li);
+            });
+        }
+
         // --- Edit Vocab Logic ---
         const editVocabModal = document.getElementById('editVocabModal');
         const closeEditVocabModalBtn = document.getElementById('closeEditVocabModalBtn');
@@ -7700,6 +8039,9 @@
         // Vocab list sort/filter custom dropdowns
         setupCustomDropdown('vocabListSortDirBtn', 'vocabListSortDirList', 'vocabListSortDirLabel', 'vocabListSortDir', renderVocabList);
         setupCustomDropdown('vocabListCatFilterBtn', 'vocabListCatFilterList', 'vocabListCatFilterLabel', 'vocabListCatFilter', renderVocabList);
+        
+        setupCustomDropdown('sentenceListSortDirBtn', 'sentenceListSortDirList', 'sentenceListSortDirLabel', 'sentenceListSortDir', renderSentenceList);
+        setupCustomDropdown('sentenceListCatFilterBtn', 'sentenceListCatFilterList', 'sentenceListCatFilterLabel', 'sentenceListCatFilter', renderSentenceList);
 
         function restartCurrentMode() {
             if (currentMode === 'dragDrop') startDragDropRound();
