@@ -6367,11 +6367,11 @@
 
         async function updateAdminGrammarCount() {
             try {
-                const baseSentences = await apiFetch('/grammar-sentences');
+                // Sentences are completely user-managed now. We only load what's actually in their dictionary.
                 const personalSentences = fullDictionary ? fullDictionary.filter(w => w.typ === 'Satz').map(v => ({
                     id: v.id, de: v.de, it: v.it, category: v.grammatica || 'Eigene Sätze', level: 'Eigene'
                 })) : [];
-                grammarSentences = [...baseSentences, ...personalSentences];
+                grammarSentences = [...personalSentences];
                 saveAllDataLocally(); // Save to cache after fetch
                 updateGrammarFocusOptions();
 
