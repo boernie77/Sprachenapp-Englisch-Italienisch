@@ -4522,6 +4522,12 @@
             const vTitle = document.getElementById('vocabListModalTitle');
             if (vTitle) vTitle.innerHTML = `${listSVG} ${t.vocabList}`;
 
+            const vSortLabel = document.getElementById('vocabListSortDirLabel');
+            if (vSortLabel) vSortLabel.innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${currentFlag} ${langName}`;
+
+            const vSortDeOpt = document.getElementById('vocabListSortDeOpt');
+            if (vSortDeOpt) vSortDeOpt.innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${currentFlag} ${langName}`;
+
             const vSortItOpt = document.getElementById('vocabListSortItOpt');
             if (vSortItOpt) vSortItOpt.innerHTML = `${currentFlag} ${langName} ${arrowSVG} ${deFlagSVG} Deutsch`;
 
@@ -9805,7 +9811,17 @@
                 currentFlashcardTarget = null;
                 return;
             }
-            currentFlashcardTarget = words[Math.floor(Math.random() * words.length)];
+            
+            let nextTarget;
+            if (words.length > 1 && currentFlashcardTarget) {
+                do {
+                    nextTarget = words[Math.floor(Math.random() * words.length)];
+                } while (nextTarget.id === currentFlashcardTarget.id);
+            } else {
+                nextTarget = words[Math.floor(Math.random() * words.length)];
+            }
+            
+            currentFlashcardTarget = nextTarget;
             isFlashcardReversed = false;
             if (cardsWordToggle) cardsWordToggle.checked = currentFlashcardTarget.isActive !== false;
             const star = document.getElementById('cardsStarIcon');
@@ -9849,6 +9865,10 @@
                 currentFlashcardTarget.isActive = e.target.checked;
                 saveAllDataLocally();
                 saveStatToServer(currentFlashcardTarget.id);
+                if (!e.target.checked) {
+                    // Load next card immediately if unchecked
+                    startCardsRound();
+                }
             });
         }
         // Initialize DOM Elements and Triggers
