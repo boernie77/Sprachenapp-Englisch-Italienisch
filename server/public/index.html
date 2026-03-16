@@ -6064,7 +6064,7 @@
             const filterValue = typeFilterEl.value;
             let availableWords = fullDictionary.filter(word => {
                 const wLang = word.language || 'it';
-                return word.isActive !== false && wLang === CURRENT_LANG;
+                return word.isActive !== false && wLang === CURRENT_LANG && (filterValue === 'Satz' ? word.typ === 'Satz' : word.typ !== 'Satz');
             });
 
             if (filterValue === 'Markiert' || filterValue === 'Favoriten') {
@@ -6095,7 +6095,7 @@
                     return !isVerb && !isNoun && !isAdj && !isSatz;
                 });
             } else if (filterValue === 'Alle') {
-                availableWords = availableWords.filter(word => word.typ !== 'Satz');
+                // Already handled by base filter
             }
             // Retain backward compatibility if nothing matches
             return availableWords;
@@ -7813,7 +7813,7 @@
             const catFilter = document.getElementById('vocabListCatFilter').value;
             const searchVal = document.getElementById('vocabListSearch').value.toLowerCase().trim();
 
-            let words = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG);
+            let words = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && (catFilter === 'Satz' ? w.typ === 'Satz' : w.typ !== 'Satz'));
 
             // Category filter
             if (catFilter === 'Favoriten') {
@@ -9807,7 +9807,7 @@
 
         function startCardsRound() {
             const filterValue = typeFilterEl.value;
-            let words = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.isActive !== false);
+            let words = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.isActive !== false && (filterValue === 'Satz' ? w.typ === 'Satz' : w.typ !== 'Satz'));
             if (filterValue === 'VerbInfinitiv') {
                 words = words.filter(word => word.typ && word.typ.toLowerCase().includes('verb'));
             } else if (filterValue === 'Favoriten' || filterValue === 'Markiert') {
