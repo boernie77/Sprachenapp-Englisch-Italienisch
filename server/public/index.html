@@ -6122,11 +6122,15 @@
             selectedSourceCard = null;
             draggablesContainer.innerHTML = ''; dropzonesContainer.innerHTML = '';
 
-            let availableWords = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.isActive !== false);
+            let availableWords = getAvailableWords();
             if (availableWords.length < ROUND_SIZE) {
-                // If not enough active words, maybe fall back to 'Alle' or show message
-                // For consistency with other modes, we'll use getAvailableWords logic here too
-                availableWords = getAvailableWords(); // Already handles isActive filter
+                // Fallback to 'Alle' if not enough words for the specific filter
+                const currentFilter = typeFilterEl.value;
+                typeFilterEl.value = 'Alle';
+                availableWords = getAvailableWords();
+                if (availableWords.length < ROUND_SIZE) {
+                    typeFilterEl.value = currentFilter; // Reset back if it didn't help
+                }
             }
 
 
