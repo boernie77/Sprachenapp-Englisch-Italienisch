@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Vokabeln Multi</string>
-    <string name="title_activity_main">Vokabeln Multi</string>
+    <string name="app_name">Vokabeln</string>
+    <string name="title_activity_main">Vokabeln</string>
     <string name="package_name">com.bernauer24.vokabeln.multi</string>
     <string name="custom_url_scheme">com.bernauer24.vokabeln.multi</string>
 </resources>
