@@ -105,6 +105,7 @@
 
         .ios-smooth-scroll {
             -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
         }
 
         /* Quiz Button Styles */
@@ -1006,6 +1007,10 @@
                 #mainAppContent {
                     padding-top: calc(env(safe-area-inset-top, 20px) + 60px) !important;
                     gap: 10px !important; /* 10px gap for all components per user request */
+                    height: 100dvh !important;
+                    height: 100vh !important; /* Fallback */
+                    overflow: hidden !important;
+                    width: 100% !important;
                 }
 
                 /* Eliminate all margins around the tabs and header text */
