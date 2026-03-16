@@ -103,6 +103,10 @@
             -webkit-user-select: none;
         }
 
+        .ios-smooth-scroll {
+            -webkit-overflow-scrolling: touch;
+        }
+
         /* Quiz Button Styles */
         .quiz-option-btn:disabled {
             cursor: not-allowed;
@@ -1833,14 +1837,14 @@
                 <h2 id="dragColHeader"
                     class="text-base md:text-lg font-semibold text-slate-700 mb-1 md:mb-2 flex items-center gap-2 border-b-2 border-slate-200 pb-1 flex-shrink-0">
                     Deutsch (Ziehen)</h2>
-                <div id="draggables-container" class="flex flex-col gap-2 flex-1 min-h-0 overflow-y-auto px-1 pb-2 mt-[5px]">
+                <div id="draggables-container" class="flex flex-col gap-2 flex-1 min-h-0 overflow-y-auto px-1 pb-2 mt-[5px] ios-smooth-scroll">
                 </div>
             </section>
             <section class="flex flex-col min-h-0 order-1">
                 <h2 id="dropColHeader"
                     class="text-base md:text-lg font-semibold text-slate-700 mb-1 md:mb-2 flex items-center gap-2 border-b-2 border-slate-200 pb-1 flex-shrink-0">
                     Italienisch (Ablegen)</h2>
-                <div id="dropzones-container" class="flex flex-col gap-2 flex-1 min-h-0 overflow-y-auto px-1 pb-2 mt-[5px]">
+                <div id="dropzones-container" class="flex flex-col gap-2 flex-1 min-h-0 overflow-y-auto px-1 pb-2 mt-[5px] ios-smooth-scroll">
                 </div>
             </section>
             <section id="infoSection" class="flex flex-col transition-all min-h-0 order-3">
@@ -1848,7 +1852,7 @@
                     class="text-base md:text-lg font-semibold text-slate-700 mb-1 md:mb-2 flex items-center gap-2 border-b-2 border-slate-200 pb-1 flex-shrink-0">
                     <span id="infoBulbIcon"></span> Zusatzinfo
                 </h2>
-                <div id="info-container-main" class="flex flex-col gap-2 flex-1 min-h-0 overflow-y-auto px-1 pb-2">
+                <div id="info-container-main" class="flex flex-col gap-2 flex-1 min-h-0 overflow-y-auto px-1 pb-2 ios-smooth-scroll">
                     <div id="info-placeholder"
                         class="text-slate-400 italic text-sm text-center mt-2 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200">
                         Hier erscheinen Zusatzinformationen oder Bilder.</div>
@@ -1859,7 +1863,7 @@
 
         <!-- === KARTEIKARTEN BEREICH === -->
         <main id="cardsContainer"
-            class="w-full max-w-4xl flex-1 min-h-0 hidden flex-col items-center justify-start gap-3 md:gap-4 overflow-y-auto pb-4 mx-auto">
+            class="w-full max-w-4xl flex-1 min-h-0 hidden flex-col items-center justify-start gap-3 md:gap-4 overflow-y-auto pb-4 mx-auto ios-smooth-scroll">
             <div
                 class="bg-white p-6 md:p-12 rounded-3xl shadow-sm border border-slate-200 w-full text-center flex flex-col items-center justify-center flex-shrink-0 cursor-pointer hover:bg-slate-50 transition-colors relative"
                 id="cardsFlashcard">
@@ -1942,7 +1946,7 @@
 
         <!-- === GRAMMATIK BEREICH === -->
         <main id="grammarContainer"
-            class="w-full max-w-4xl flex-1 min-h-0 hidden flex-col items-center justify-start gap-4 overflow-y-auto pb-4 mx-auto">
+            class="w-full max-w-4xl flex-1 min-h-0 hidden flex-col items-center justify-start gap-4 overflow-y-auto pb-4 mx-auto ios-smooth-scroll">
             <div
                 class="bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-slate-200 w-full text-center flex flex-col items-center justify-center">
                 <div id="grammarQuestionDisplay"
@@ -1967,7 +1971,7 @@
 
         <!-- === INFO (GRAMMATIK-ÜBERSICHT) BEREICH === -->
         <main id="infoTabContainer"
-            class="w-full max-w-7xl hidden flex-col items-center justify-start gap-6 pb-24 mx-auto px-4 overflow-visible flex-shrink-0">
+            class="w-full max-w-7xl hidden flex-col items-center justify-start gap-6 pb-24 mx-auto px-4 overflow-y-auto flex-1 min-h-0 ios-smooth-scroll">
             <!-- Einleitung -->
             <div class="bg-white p-8 rounded-3xl w-full text-center border border-slate-200 shadow-xl mt-4">
                 <h2 class="text-3xl font-black mb-3 flex items-center justify-center gap-3">
