@@ -1,5 +1,5 @@
 const express = require('express');
-const { User, Vocabulary, Stats } = require('../models');
+const { User, Vocabulary, Stats, Sequelize } = require('../models');
 const { authenticateToken, asyncHandler } = require('../middleware/auth');
 
 const router = express.Router();
@@ -70,9 +70,16 @@ router.delete('/:id', authenticateToken, asyncHandler(async (req, res) => {
 }));
 
 router.delete('/clear/all', authenticateToken, asyncHandler(async (req, res) => {
-    const { language } = req.query;
+    const { language, typ } = req.query;
     const where = { UserId: req.user.id };
     if (language) where.language = language;
+    
+    if (typ === 'Satz') {
+        where.typ = 'Satz';
+    } else if (typ === 'Vocab') {
+        where.typ = { [Sequelize.Op.ne]: 'Satz' }; // Everything that is not a sentence
+    }
+
     await Vocabulary.destroy({ where });
     res.json({ message: `Vocabulary cleared${language ? ' for ' + language : ''}` });
 }));
