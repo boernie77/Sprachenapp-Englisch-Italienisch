@@ -8707,13 +8707,23 @@
                 // Update User Modal (Excel Modal) dynamically
                 const userCountEl = document.getElementById('baseVocabUserCountDesc');
                 if (userCountEl) {
-                    // Force a re-fetch of current lang count specifically to avoid stale UI state
                     const targetCount = CURRENT_LANG === 'en' ? countEn : countIt;
                     if (targetCount > 0) {
                         userCountEl.textContent = `Importiert eine kuratierte Liste von derzeit ${targetCount} Basis-Vokabeln (${CURRENT_LANG.toUpperCase()})`;
                     } else {
                         const fallbackCount = CURRENT_LANG === 'en' ? "~500" : "~700";
                         userCountEl.textContent = `Importiert eine kuratierte Liste von derzeit ${fallbackCount} Basis-Vokabeln (Offline-Fallback ${CURRENT_LANG.toUpperCase()})`;
+                    }
+                }
+
+                // Update the Sentences label in the Excel Modal
+                const sentenceCountEl = document.getElementById('baseSentencesUserCountDesc');
+                if (sentenceCountEl) {
+                    const targetCount = CURRENT_LANG === 'en' ? (grammarEnRes ? grammarEnRes.length : 0) : (grammarItRes ? grammarItRes.length : 0);
+                    if (targetCount > 0) {
+                        sentenceCountEl.textContent = `Importiert eine kuratierte Liste von derzeit ${targetCount} Basis-Sätzen (${CURRENT_LANG.toUpperCase()})`;
+                    } else {
+                        sentenceCountEl.textContent = `Importiert Basis-Sätze (Offline-Fallback ${CURRENT_LANG.toUpperCase()})`;
                     }
                 }
             } catch (err) {
