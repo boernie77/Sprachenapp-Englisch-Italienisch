@@ -5027,6 +5027,7 @@
                     grammatica: v.grammatica,
                     isActive: v.isActive !== false,
                     isMarked: v.isMarked === true,
+                    isOwn: v.isOwn === true,
                     language: v.language || (v.it ? 'it' : 'en'),
                     ... (v.typ === 'Verb' && v.it ? generateVerbForms(v.it) : {})
                 }));
