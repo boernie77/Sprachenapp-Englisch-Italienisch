@@ -64,12 +64,6 @@ router.put('/:id/stats', authenticateToken, asyncHandler(async (req, res) => {
     res.json({ message: 'Stats and status updated' });
 }));
 
-router.delete('/:id', authenticateToken, asyncHandler(async (req, res) => {
-    const deleted = await Vocabulary.destroy({ where: { id: req.params.id, UserId: req.user.id } });
-    if (deleted) res.json({ message: 'Deleted' });
-    else res.sendStatus(404);
-}));
-
 router.delete('/clear/all', authenticateToken, asyncHandler(async (req, res) => {
     const { language, typ } = req.query;
     const where = { UserId: req.user.id };
@@ -84,6 +78,14 @@ router.delete('/clear/all', authenticateToken, asyncHandler(async (req, res) => 
     await Vocabulary.destroy({ where });
     res.json({ message: `Vocabulary cleared${language ? ' for ' + language : ''}` });
 }));
+
+router.delete('/:id', authenticateToken, asyncHandler(async (req, res) => {
+    const deleted = await Vocabulary.destroy({ where: { id: req.params.id, UserId: req.user.id } });
+    if (deleted) res.json({ message: 'Deleted' });
+    else res.sendStatus(404);
+}));
+
+// Moving this block to avoid route shadow
 
 router.put('/stats/reset', authenticateToken, asyncHandler(async (req, res) => {
     const user = await User.findByPk(req.user.id);
