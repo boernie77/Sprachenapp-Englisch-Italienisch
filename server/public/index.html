@@ -6508,6 +6508,47 @@
 
             // Split into tokens including punctuation and spaces
             const tokens = sentenceObj.it.split(/(\s+|[,.!?;:()])/);
+            
+            // --- Merge "be going to" for English ---
+            if (CURRENT_LANG === 'en') {
+                for (let i = 0; i < tokens.length - 2; i++) {
+                    const t1 = tokens[i].trim().toLowerCase();
+                    // Match am/is/are/was/were or contractions 'm/'s/'re
+                    if (['am', 'is', 'are', 'was', 'were', 'be', "'m", "'s", "'re"].includes(t1)) {
+                        let nextGoeIdx = -1;
+                        let nextToIdx = -1;
+                        
+                        // Look for "going"
+                        for (let j = i + 1; j < tokens.length; j++) {
+                            if (!tokens[j].trim()) continue;
+                            if (tokens[j].trim().toLowerCase() === 'going') {
+                                nextGoeIdx = j;
+                                break;
+                            }
+                            break; 
+                        }
+                        
+                        if (nextGoeIdx !== -1) {
+                            // Look for "to"
+                            for (let k = nextGoeIdx + 1; k < tokens.length; k++) {
+                                if (!tokens[k].trim()) continue;
+                                if (tokens[k].trim().toLowerCase() === 'to') {
+                                    nextToIdx = k;
+                                    break;
+                                }
+                                break;
+                            }
+                        }
+                        
+                        if (nextToIdx !== -1) {
+                            const mergedValue = tokens.slice(i, nextToIdx + 1).join('');
+                            tokens.splice(i, nextToIdx - i + 1, mergedValue);
+                            // Stay at same index to re-check if needed, though unlikely for this pattern
+                        }
+                    }
+                }
+            }
+
             let eligibleTokens = [];
 
             tokens.forEach((token, idx) => {
@@ -6568,7 +6609,7 @@
                              ((item.en && item.en.toLowerCase() === cleanNoPunct) || (item.it && item.it.toLowerCase() === cleanNoPunct)) && item.typ === 'Verb'
                          );
                          const inf = deriveInfinitiveEn(cleanNoPunct);
-                         let isValidVerbGap = isKnownVerb || cleanNoPunct.endsWith('ing') || cleanNoPunct.endsWith('ed');
+                         let isValidVerbGap = isKnownVerb || cleanNoPunct.endsWith('ing') || cleanNoPunct.endsWith('ed') || /^(am|is|are|was|were|'m|'s|'re|be)\s+going\s+to$/i.test(cleanNoPunct);
                          
                          if (!isValidVerbGap && inf !== cleanNoPunct) {
                               const isJustStripped = cleanNoPunct.endsWith('s') && (inf === cleanNoPunct.slice(0, -1) || inf === cleanNoPunct.slice(0, -2) || inf === cleanNoPunct.slice(0, -3) + 'y');
@@ -6662,6 +6703,8 @@
                                 }
                             }
                             if (w === 'going' && nextWord === 'to') {
+                                inf = 'Future';
+                            } else if (/^(am|is|are|was|were|'m|'s|'re|be)\s+going\s+to$/i.test(w)) {
                                 inf = 'Future';
                             } else if (['am', 'is', 'are', 'was', 'were'].includes(w) && nextWord === 'going') {
                                 inf = 'Future';
