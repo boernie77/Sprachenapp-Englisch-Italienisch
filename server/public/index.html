@@ -1830,6 +1830,7 @@
                             <option value="Sonstiges">Sonstiges</option>
                             <option value="Favoriten">Favoriten</option>
                             <option value="Satz">Eigene Sätze</option>
+                            <option value="EigeneVokabeln">Eigene Vokabeln</option>
                         </select>
                         <div style="position:relative">
                             <button type="button" class="cs-btn" id="typeFilterBtn">
@@ -1849,6 +1850,7 @@
                                 <div class="cs-opt" data-value="Sonstiges">Sonstiges</div>
                                 <div class="cs-opt" data-value="Favoriten" title="Nur markierte Favoriten üben">Favoriten</div>
                                 <div class="cs-opt" data-value="Satz">Eigene Sätze</div>
+                                <div class="cs-opt" data-value="EigeneVokabeln">Eigene Vokabeln</div>
                             </div>
                         </div>
                     </div>
@@ -3229,6 +3231,7 @@
                         <option value="Sonstiges">Sonstiges</option>
                         <option value="Favoriten">Favoriten</option>
                         <option value="Satz">Eigene Sätze</option>
+                        <option value="EigeneVokabeln">Eigene Vokabeln</option>
                     </select>
                     <button type="button" class="cs-btn w-full" id="vocabListCatFilterBtn">
                         <span id="vocabListCatFilterLabel">Alle Kategorien</span>
@@ -3245,6 +3248,7 @@
                         <div class="cs-opt" data-value="Sonstiges">Sonstiges</div>
                         <div class="cs-opt" data-value="Favoriten">Favoriten</div>
                         <div class="cs-opt" data-value="Satz">Eigene Sätze</div>
+                        <div class="cs-opt" data-value="EigeneVokabeln">Eigene Vokabeln</div>
                     </div>
                 </div>
             </div>
@@ -6076,6 +6080,8 @@
                 availableWords = availableWords.filter(word => word.typ && /\badjektiv\b/i.test(word.typ));
             } else if (filterValue === 'Satz') {
                 availableWords = availableWords.filter(word => word.typ === 'Satz');
+            } else if (filterValue === 'EigeneVokabeln') {
+                availableWords = availableWords.filter(word => word.isOwn === true);
             } else if (filterValue === 'Sonstiges') {
                 // Catch-all for things that are NOT Verbs, Nouns/Pronouns, Adjectives, or Sentences
                 availableWords = availableWords.filter(word => {
@@ -7811,6 +7817,8 @@
             // Category filter
             if (catFilter === 'Favoriten') {
                 words = words.filter(w => w.isMarked === true);
+            } else if (catFilter === 'EigeneVokabeln') {
+                words = words.filter(w => w.isOwn === true);
             } else if (catFilter !== 'Alle') {
                 words = words.filter(w => w.typ && w.typ.toLowerCase().includes(catFilter.toLowerCase()));
             }
@@ -7849,6 +7857,7 @@
                             <span class="text-slate-400 mx-1 text-xs md:text-sm">|</span>
                             <span class="font-bold text-blue-600 text-sm md:text-base">${secondary}</span>
                             ${word.typ ? `<span class="ml-1 text-xs text-slate-400 italic">${word.typ}</span>` : ''}
+                            ${word.isOwn ? `<span class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[0.65rem] font-medium bg-blue-100 text-blue-800">Eigene Vokabel</span>` : ''}
                         </div>
                     </div>
                     <div class="flex items-center gap-3 ml-2 flex-shrink-0">
@@ -8951,7 +8960,7 @@
             }
 
             const forms = typ.toLowerCase().includes('verb') ? generateVerbForms(itWord) : {};
-            const payload = { de: deWord, it: itWord, typ, emoji, grammatica, language: CURRENT_LANG, ...forms };
+            const payload = { de: deWord, it: itWord, typ, emoji, grammatica, language: CURRENT_LANG, isOwn: true, ...forms };
 
             const clearFields = () => {
                 vocabInput.value = '';
@@ -9802,6 +9811,8 @@
                 words = words.filter(word => word.typ && word.typ.toLowerCase().includes('verb'));
             } else if (filterValue === 'Favoriten' || filterValue === 'Markiert') {
                 words = words.filter(word => word.isMarked === true);
+            } else if (filterValue === 'EigeneVokabeln') {
+                words = words.filter(word => word.isOwn === true);
             } else if (filterValue !== 'Alle') {
                 words = words.filter(word => word.typ && word.typ.toLowerCase().includes(filterValue.toLowerCase()));
             }
