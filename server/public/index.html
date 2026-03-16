@@ -6515,7 +6515,7 @@
                 if (CURRENT_LANG === 'it') {
                     // Check if this word is a known noun (Substantiv) in our dictionary
                     const isKnownNoun = fullDictionary.some(item =>
-                        item.it.toLowerCase() === cleanNoPunct && item.typ === 'Substantiv'
+                        item.it && item.it.toLowerCase() === cleanNoPunct && item.typ === 'Substantiv'
                     );
 
                     if (isKnownNoun) return; // Never make a gap for nouns
@@ -6562,7 +6562,7 @@
                          eligibleTokens.push({ idx, type: 'possessive', weight: 1.0 });
                     } else {
                          const isKnownVerb = fullDictionary.some(item =>
-                             (item.en && item.en.toLowerCase() === cleanNoPunct || item.it.toLowerCase() === cleanNoPunct) && item.typ === 'Verb'
+                             ((item.en && item.en.toLowerCase() === cleanNoPunct) || (item.it && item.it.toLowerCase() === cleanNoPunct)) && item.typ === 'Verb'
                          );
                          const inf = deriveInfinitiveEn(cleanNoPunct);
                          let isValidVerbGap = isKnownVerb || cleanNoPunct.endsWith('ing') || cleanNoPunct.endsWith('ed');
