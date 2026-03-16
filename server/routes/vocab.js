@@ -56,12 +56,20 @@ router.put('/:id/stats', authenticateToken, asyncHandler(async (req, res) => {
         vocab.isMarked = isMarked;
         await vocab.save();
     }
-
     await Stats.update(
         { presented, correct, incorrect, streak, lastReviewedDate, nextReviewDate },
         { where: { VocabularyId: vocab.id } }
     );
     res.json({ message: 'Stats and status updated' });
+}));
+
+router.put('/:id', authenticateToken, asyncHandler(async (req, res) => {
+    const { de, it, typ, emoji, grammatica } = req.body;
+    const vocab = await Vocabulary.findOne({ where: { id: req.params.id, UserId: req.user.id } });
+    if (!vocab) return res.sendStatus(404);
+    
+    await vocab.update({ de, it, typ, emoji, grammatica });
+    res.json(vocab);
 }));
 
 router.delete('/clear/all', authenticateToken, asyncHandler(async (req, res) => {
