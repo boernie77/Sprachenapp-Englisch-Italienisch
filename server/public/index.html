@@ -5539,7 +5539,11 @@
             writeSubmitBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
             
             let availableWords = getAvailableWords();
-            if (availableWords.length === 0) return;
+            if (availableWords.length === 0) {
+                writeQuestionDisplay.innerHTML = `<div class="pt-6 pb-2 px-2 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words text-slate-400">Keine Einträge gefunden</div></div>`;
+                writeSubtext.textContent = "";
+                return;
+            }
             const { due, future } = getDueWords(availableWords);
             currentWriteTarget = due.length > 0 ? due[0] : shuffleArray(future)[0];
             initWordStat(currentWriteTarget.id);
@@ -5855,6 +5859,10 @@
             if (availableWords.length < ROUND_SIZE) {
                 typeFilterEl.value = 'Alle'; availableWords = getAvailableWords();
             }
+            if (availableWords.length < ROUND_SIZE) {
+                draggablesContainer.innerHTML = `<div class="col-span-full text-center text-slate-400 italic py-8">Nicht genug Vokabeln gefunden (${ROUND_SIZE} benötigt).</div>`;
+                return;
+            }
 
             const { due, future } = getDueWords(availableWords);
             currentPairs = due.slice(0, ROUND_SIZE);
@@ -6166,6 +6174,11 @@
             quizFeedback.classList.add('hidden'); quizFeedback.classList.remove('flex'); quizOptionsContainer.innerHTML = '';
             let availableWords = getAvailableWords();
             if (availableWords.length < 4) { typeFilterEl.value = 'Alle'; availableWords = getAvailableWords(); }
+            if (availableWords.length < 4) {
+                quizQuestionDisplay.innerHTML = `<div class="pt-6 pb-2 px-2 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words text-slate-400">Nicht genug Vokabeln gefunden</div></div>`;
+                quizSubtext.textContent = "";
+                return;
+            }
             const { due, future } = getDueWords(availableWords);
             currentQuizTarget = due.length > 0 ? due[0] : shuffleArray(future)[0];
             let otherWords = availableWords.filter(w => w.id !== currentQuizTarget.id);
