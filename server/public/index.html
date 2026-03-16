@@ -1759,6 +1759,34 @@
                         </div>
                     </div>
                 </div>
+
+                <div id="grammarLevelFilterWrapper" class="mb-5 text-left hidden">
+                    <div>
+                        <label class="block text-xs md:text-sm font-semibold text-slate-700 mb-1.5">Sprachniveau</label>
+                    </div>
+                    <select id="grammarLevelFilter" style="display:none">
+                        <option value="Alle">Alle Niveaus</option>
+                        <option value="A1">A1 (Anfänger)</option>
+                        <option value="A2">A2 (Grundlagen)</option>
+                        <option value="B1">B1 (Fortgeschritten)</option>
+                    </select>
+                    <div style="position:relative">
+                        <button type="button" class="cs-btn w-full" id="grammarLevelFilterBtn">
+                            <span id="grammarLevelFilterLabel">Alle Niveaus</span>
+                            <svg class="cs-chevron" width="16" height="16" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div class="cs-list" id="grammarLevelFilterList">
+                            <div class="cs-opt selected" data-value="Alle">Alle Niveaus</div>
+                            <div class="cs-opt" data-value="A1">A1</div>
+                            <div class="cs-opt" data-value="A2">A2</div>
+                            <div class="cs-opt" data-value="B1">B1</div>
+                        </div>
+                    </div>
+                </div>
                 <p id="grammarExplanationText" class="flex items-start gap-2 text-sm leading-relaxed">
                     <span id="grammarBulbIcon"></span> <b>Grammatik-Übung:</b> Hier werden italienische Beispielsätze
                     präsentiert...
@@ -4180,6 +4208,15 @@
                     </svg>`;
             }
 
+            const levelWrapper = document.getElementById('grammarLevelFilterWrapper');
+            if (levelWrapper) {
+                if (CURRENT_LANG === 'en') {
+                    levelWrapper.classList.remove('hidden');
+                } else {
+                    levelWrapper.classList.add('hidden');
+                }
+            }
+
             // Mode buttons
             const gBtn = document.getElementById('modeGrammarBtn');
             const iTab = document.getElementById('modeInfoBtn');
@@ -6491,9 +6528,13 @@
 
             let filteredSentences = grammarSentences;
             const currentFocus = grammarFocusFilter ? grammarFocusFilter.value : "Alle";
+            const currentLevel = (grammarLevelFilter && CURRENT_LANG === 'en') ? grammarLevelFilter.value : "Alle";
 
             if (currentFocus !== "Alle") {
-                filteredSentences = grammarSentences.filter(s => s.category === currentFocus);
+                filteredSentences = filteredSentences.filter(s => s.category === currentFocus);
+            }
+            if (currentLevel !== "Alle") {
+                filteredSentences = filteredSentences.filter(s => s.level === currentLevel);
             }
 
             if (filteredSentences.length === 0) {
@@ -8587,6 +8628,7 @@
                             it: it ? String(it).trim() : null, // The db column is named 'it' globally, so we save English text here too
                             de: de ? String(de).trim() : null,
                             category: String(cat).trim(),
+                            level: row[3] ? String(row[3]).trim() : null,
                             language: lang
                         };
                     }).filter(s => s.it && s.de && isNaN(s.it)); // Filter out empty or numeric ID columns
