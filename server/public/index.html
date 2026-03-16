@@ -3459,9 +3459,12 @@
         let isInfoModeActive = false;
         let currentQuizTarget = null;
         let currentWriteTarget = null;
-        function showToast(message, type = 'info', duration = 6000) {
+        function showToast(message, type = 'info', duration = 4000) {
             const isMobile = window.innerWidth <= 640;
-            const finalDuration = isMobile ? 3500 : duration;
+            let finalDuration = isMobile ? 1500 : duration;
+            if (type === 'error') {
+                finalDuration = isMobile ? 3500 : 6000;
+            }
 
             const container = document.getElementById('toastContainer');
             if (!container) return; // Guard
@@ -4538,11 +4541,14 @@
             window._isSyncing = true;
 
             try {
+                if (isCapacitor) console.log("Fetching vocab...");
                 const vocab = await apiFetch('/vocab');
+                if (isCapacitor) console.log(`Vocab fetched: ${vocab.length} items`);
 
                 let serverActivity = {};
                 let serverLastReset = null;
                 try {
+                    if (isCapacitor) console.log("Fetching profile...");
                     const profile = await apiFetch('/auth/me');
                     serverActivity = profile.dailyActivity || {};
                     serverLastReset = profile.lastResetAt;
@@ -4551,7 +4557,9 @@
                         if (userNameEl) userNameEl.textContent = profile.name;
                         if (userNameMobileEl) userNameMobileEl.textContent = profile.name;
                     }
-                } catch (pe) { if (!isSilent) console.warn("Profile sync failed", pe); }
+                } catch (pe) { 
+                    if (!isSilent) console.warn("Profile sync failed", pe); 
+                }
 
                 // Check for remote reset
                     if (serverLastReset) {
