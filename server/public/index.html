@@ -7,7 +7,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             if (window.Capacitor && window.Capacitor.isNative) {
                 document.body.classList.add('is-native-app');
-                
                 // Keyboard stabilization
                 if (window.Capacitor.Plugins && window.Capacitor.Plugins.Keyboard) {
                     window.Capacitor.Plugins.Keyboard.setScroll({ isDisabled: true }).catch(err => {
@@ -1878,7 +1877,7 @@
                 </svg>
             </button>
             <button id="menuBtn"
-                class="p-2 bg-white rounded-xl shadow-sm border border-slate-200 hover:bg-slate-50 focus:outline-none transition-colors flex items-center justify-center w-[38px] h-[38px]">
+                class="relative z-[99999] p-2 bg-white rounded-xl shadow-sm border border-slate-200 hover:bg-slate-50 focus:outline-none transition-colors flex items-center justify-center w-[38px] h-[38px]">
                 <svg class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
                     </path>
@@ -5056,7 +5055,12 @@
                 applyTranslations();
             });
         });
-        let dailyActivity = JSON.parse(localStorage.getItem(`ita-daily-activity-${CURRENT_LANG}`) || '{}');
+        function safeJSONParse(item, fallback) {
+            if (!item || item === 'undefined' || item === 'null') return fallback;
+            try { return JSON.parse(item); } catch (e) { return fallback; }
+        }
+
+        let dailyActivity = safeJSONParse(localStorage.getItem(`ita-daily-activity-${CURRENT_LANG}`), {});
         let grammarActivityCount = parseInt(localStorage.getItem(`ita-grammar-stats-${CURRENT_LANG}`) || '0');
         let lastStreakPopupDate = localStorage.getItem(`ita-last-streak-popup-date-${CURRENT_LANG}`) || '';
         let currentPairs = [];
@@ -5367,7 +5371,7 @@
                 buildVerbReverseMap();
                 await updateAdminGrammarCount(); // Ensure grammar is loaded before sync finish / render
 
-                const localActivity = JSON.parse(localStorage.getItem(`ita-daily-activity-${CURRENT_LANG}`) || '{}');
+                const localActivity = safeJSONParse(localStorage.getItem(`ita-daily-activity-${CURRENT_LANG}`), {});
                 const reconstructed = reconstructActivityHistory();
 
                 // Robust merge: Take the maximum for each day across all sources
@@ -7906,8 +7910,11 @@
         dropdownMenu = document.getElementById('dropdownMenu');
         if (menuBtn && dropdownMenu) {
             menuBtn.addEventListener('click', (e) => {
+                console.log("HAMBURGER MENU CLICKED!", e);
+                e.preventDefault();
                 e.stopPropagation();
                 dropdownMenu.classList.toggle('hidden');
+                console.log("Dropdown is now hidden?", dropdownMenu.classList.contains('hidden'));
             });
             document.addEventListener('click', (e) => { 
                 if (!menuBtn.contains(e.target) && !dropdownMenu.contains(e.target)) 
