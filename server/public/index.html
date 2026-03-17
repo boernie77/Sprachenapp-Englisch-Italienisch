@@ -5269,9 +5269,10 @@
         }
 
         async function loadDataFromServer(isSilent = false) {
+            let cachedVocab = null;
             // Load from Cache FIRST (skip if silent background pull)
             if (!isSilent) {
-                const cachedVocab = localStorage.getItem(`ita-full-dictionary-${CURRENT_LANG}`);
+                cachedVocab = localStorage.getItem(`ita-full-dictionary-${CURRENT_LANG}`);
                 if (cachedVocab) {
                     try {
                         fullDictionary = safeJSONParse(cachedVocab, []);
@@ -7856,7 +7857,7 @@
         modeCardsBtn.addEventListener('click', () => switchMode('cards'));
         modeWriteBtn.addEventListener('click', () => switchMode('write'));
         modeGrammarBtn.addEventListener('click', () => switchMode('grammar'));
-        modeInfoBtn.addEventListener('click', () => switchMode('info'));
+        if (modeInfoBtn) modeInfoBtn.addEventListener('click', () => switchMode('info'));
         nextBtn.addEventListener('click', startDragDropRound);
         writeSubmitBtn.addEventListener('click', handleWriteSubmit);
         document.getElementById('closeStreakModalBtn').addEventListener('click', () => {
