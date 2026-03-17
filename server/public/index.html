@@ -2053,7 +2053,7 @@
                     </select>
                     <div style="position:relative">
                         <button type="button" class="cs-btn w-full" id="grammarFocusFilterBtn">
-                            <span id="grammarFocusFilterLabel">Focus Alle Sätze</span>
+                            <span id="grammarFocusFilterLabel" data-i18n="grammar_focus_all">Focus Alle Sätze</span>
                             <svg class="cs-chevron" width="16" height="16" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -2061,14 +2061,14 @@
                             </svg>
                         </button>
                         <div class="cs-list" id="grammarFocusFilterList">
-                            <div class="cs-opt selected" data-value="Alle">Focus Alle Sätze</div>
+                            <div class="cs-opt selected" data-value="Alle" data-i18n="grammar_focus_all">Focus Alle Sätze</div>
                         </div>
                     </div>
                 </div>
 
                 <div id="grammarLevelFilterWrapper" class="mb-5 text-left hidden">
                     <div>
-                        <label class="block text-xs md:text-sm font-semibold text-slate-700 mb-1.5">Sprachniveau</label>
+                        <label class="block text-xs md:text-sm font-semibold text-slate-700 mb-1.5" data-i18n="grammar_level_label">Sprachniveau</label>
                     </div>
                     <select id="grammarLevelFilter" style="display:none">
                         <option value="Alle">Alle Niveaus</option>
@@ -2078,7 +2078,7 @@
                     </select>
                     <div style="position:relative">
                         <button type="button" class="cs-btn w-full" id="grammarLevelFilterBtn">
-                            <span id="grammarLevelFilterLabel">Alle Niveaus</span>
+                            <span id="grammarLevelFilterLabel" data-i18n="grammar_level_all">Alle Niveaus</span>
                             <svg class="cs-chevron" width="16" height="16" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -2086,7 +2086,7 @@
                             </svg>
                         </button>
                         <div class="cs-list" id="grammarLevelFilterList">
-                            <div class="cs-opt selected" data-value="Alle">Alle Niveaus</div>
+                            <div class="cs-opt selected" data-value="Alle" data-i18n="grammar_level_all">Alle Niveaus</div>
                             <div class="cs-opt" data-value="A1">A1</div>
                             <div class="cs-opt" data-value="A2">A2</div>
                             <div class="cs-opt" data-value="B1">B1</div>
@@ -4953,6 +4953,12 @@
                 type_own_vocab: "Eigene Vokabeln",
                 grammar_focus_label: "Übungs-Focus",
                 grammar_focus_all: "Focus Alle Sätze",
+                grammar_level_label: "Sprachniveau",
+                grammar_expl_prefix: "Grammatik-Übung:",
+                grammar_level_all: "Alle Niveaus",
+                grammar_no_sentences: "Keine Grammatik-Sätze geladen.",
+                grammar_upload_hint: "Lade eine Liste im Admin-Bereich hoch.",
+                btn_check: "Prüfen",
                 score_label: "Punkte:",
                 info_btn: "Infos",
                 success_correct: "Bravissimo!",
@@ -5270,6 +5276,12 @@
 
                 grammar_focus_label: "Practice Focus",
                 grammar_focus_all: "Focus All Sentences",
+                grammar_level_label: "Level",
+                grammar_expl_prefix: "Grammar Exercise:",
+                grammar_level_all: "All Levels",
+                grammar_no_sentences: "No Grammar Sentences loaded.",
+                grammar_upload_hint: "Upload a list in the Admin area.",
+                btn_check: "Check",
                 score_label: "Score:",
                 info_btn: "Info",
                 success_correct: "Well done!",
@@ -5540,7 +5552,7 @@
 
             const grammarExplText = document.getElementById('grammarExplanationText');
             if (grammarExplText) {
-                grammarExplText.innerHTML = `<span id="grammarBulbIcon"></span> <b>Grammatik-Übung:</b> ${t.grammarDescription}`;
+                grammarExplText.innerHTML = `<span id="grammarBulbIcon"></span> <b>${getI18n('grammar_expl_prefix')}</b> ${t.grammarDescription}`;
                 const gIcon = document.getElementById('grammarBulbIcon');
                 if (gIcon) gIcon.innerHTML = `
                     <svg class="w-4 h-4 text-amber-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -6831,7 +6843,7 @@
             writeInput.value = ''; writeInput.disabled = false;
             writeSubmitBtn.disabled = false;
             writeSubmitBtn.setAttribute('data-state', 'check');
-            writeSubmitBtn.querySelector('.btn-text').textContent = 'Prüfen';
+            writeSubmitBtn.querySelector('.btn-text').textContent = getI18n('btn_check');
             writeSubmitBtn.querySelector('.btn-icon-check').classList.remove('hidden');
             writeSubmitBtn.querySelector('.btn-icon-next').classList.add('hidden');
             writeSubmitBtn.classList.remove('btn-next', 'bg-slate-700', 'hover:bg-slate-800');
@@ -6935,7 +6947,7 @@
 
             // Toggle button to "Next"
             writeSubmitBtn.setAttribute('data-state', 'next');
-            writeSubmitBtn.querySelector('.btn-text').textContent = 'Weiter';
+            writeSubmitBtn.querySelector('.btn-text').textContent = getI18n('btn_next');
             writeSubmitBtn.querySelector('.btn-icon-check').classList.add('hidden');
             writeSubmitBtn.querySelector('.btn-icon-next').classList.remove('hidden');
             writeSubmitBtn.disabled = false;
@@ -7755,7 +7767,7 @@
                 // If we are currently in grammar mode, refresh the round to show data if it was missing
                 if (currentMode === 'grammar' && grammarSentences.length > 0) {
                     const displayContent = grammarQuestionDisplay ? grammarQuestionDisplay.textContent : "";
-                    if (displayContent.includes("Keine Grammatik-Sätze geladen")) {
+                    if (displayContent.includes("Keine Grammatik-Sätze geladen") || displayContent.includes(getI18n('grammar_no_sentences'))) {
                         startGrammarRound();
                     }
                 }
@@ -7802,9 +7814,9 @@
             const currentVal = sel.value;
 
             // Update Select
-            sel.innerHTML = '<option value="Alle">Alle Sätze</option>';
+            sel.innerHTML = `<option value="Alle">${getI18n('grammar_focus_all')}</option>`;
             // Update Custom List
-            list.innerHTML = '<div class="cs-opt selected" data-value="Alle">Focus Alle Sätze</div>';
+            list.innerHTML = `<div class="cs-opt selected" data-value="Alle">${getI18n('grammar_focus_all')}</div>`;
 
             categories.forEach(cat => {
                 const text = "Focus " + cat;
@@ -7827,7 +7839,7 @@
                 label.textContent = "Focus " + currentVal;
             } else {
                 sel.value = "Alle";
-                label.textContent = "Focus Alle Sätze";
+                label.textContent = getI18n('grammar_focus_all');
             }
 
             // Re-bind listeners for the new .cs-opt elements
@@ -8012,8 +8024,8 @@
 
         function startGrammarRound() {
             if (grammarSentences.length === 0) {
-                grammarQuestionDisplay.textContent = "Keine Grammatik-Sätze geladen.";
-                grammarTranslationDisplay.textContent = "Lade eine Liste im Admin-Bereich hoch.";
+                grammarQuestionDisplay.textContent = getI18n('grammar_no_sentences');
+                grammarTranslationDisplay.textContent = getI18n('grammar_upload_hint');
                 return;
             }
 
