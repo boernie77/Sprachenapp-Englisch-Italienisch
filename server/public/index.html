@@ -562,8 +562,6 @@
             #vocabModal,
             #vocabListModal,
             #sentenceListModal,
-            #editVocabModal,
-            #editSentenceModal,
             #excelModal,
             #adminModal,
             #impressumModal,
@@ -574,7 +572,9 @@
 
             #choiceModal,
             #confirmModal,
-            #promptModal {
+            #promptModal,
+            #editVocabModal,
+            #editSentenceModal {
                 z-index: 15000 !important;
             }
 
@@ -1005,7 +1005,10 @@
             #authOverlay .bg-white,
             #forgotPasswordModal .bg-white,
             #resetPasswordModal .bg-white,
-            #vocabListModal .bg-white {
+            #vocabListModal .bg-white,
+            #sentenceListModal .bg-white,
+            #editVocabModal .bg-white,
+            #editSentenceModal .bg-white {
                 background-color: #0f172a !important;
                 color: #f1f5f9 !important;
                 border: 1px solid rgba(255, 255, 255, 0.2) !important;
@@ -1063,33 +1066,72 @@
             /* Custom Dropdowns in Modals (Add Vocab & Vocab List) */
             #vocabListModal .cs-btn,
             #vocabListModal .cs-list,
+            #sentenceListModal .cs-btn,
+            #sentenceListModal .cs-list,
             #vocabModal .cs-btn,
-            #vocabModal .cs-list {
+            #vocabModal .cs-list,
+            #editVocabModal .cs-btn,
+            #editVocabModal .cs-list,
+            #editSentenceModal .cs-btn,
+            #editSentenceModal .cs-list {
                 background-color: #1e293b !important;
                 color: #ffffff !important;
                 border: 1px solid rgba(255, 255, 255, 0.2) !important;
             }
 
             #vocabListModal .cs-opt,
-            #vocabModal .cs-opt {
+            #sentenceListModal .cs-opt,
+            #vocabModal .cs-opt,
+            #editVocabModal .cs-opt,
+            #editSentenceModal .cs-opt {
                 color: #cbd5e1 !important;
                 background-color: transparent !important;
             }
 
             #vocabListModal .cs-opt:hover,
-            #vocabModal .cs-opt:hover {
+            #sentenceListModal .cs-opt:hover,
+            #vocabModal .cs-opt:hover,
+            #editVocabModal .cs-opt:hover,
+            #editSentenceModal .cs-opt:hover {
                 background-color: rgba(255, 255, 255, 0.1) !important;
             }
 
             #vocabListModal .cs-opt.selected,
-            #vocabModal .cs-opt.selected {
+            #sentenceListModal .cs-opt.selected,
+            #vocabModal .cs-opt.selected,
+            #editVocabModal .cs-opt.selected,
+            #editSentenceModal .cs-opt.selected {
                 color: #60a5fa !important;
                 background-color: rgba(59, 130, 246, 0.2) !important;
             }
 
             #vocabListModal .cs-chevron,
-            #vocabModal .cs-chevron {
+            #sentenceListModal .cs-chevron,
+            #vocabModal .cs-chevron,
+            #editVocabModal .cs-chevron,
+            #editSentenceModal .cs-chevron {
                 color: #94a3b8 !important;
+            }
+
+            /* Inputs in Modals */
+            #vocabListModal input,
+            #sentenceListModal input,
+            #vocabModal input,
+            #editVocabModal input,
+            #editSentenceModal input,
+            #editVocabModal select,
+            #editSentenceModal select {
+                background-color: #1e293b !important;
+                color: #ffffff !important;
+                border-color: rgba(255, 255, 255, 0.2) !important;
+            }
+            
+            #vocabListModal input::placeholder,
+            #sentenceListModal input::placeholder,
+            #vocabModal input::placeholder,
+            #editVocabModal input::placeholder,
+            #editSentenceModal input::placeholder {
+                color: #64748b !important;
             }
 
             /* Excel Modal Contrast */
