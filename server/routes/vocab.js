@@ -75,6 +75,12 @@ router.put('/:id', authenticateToken, asyncHandler(async (req, res) => {
 
 router.delete('/clear/all', authenticateToken, asyncHandler(async (req, res) => {
     const { language, typ, isOwn } = req.query;
+
+    // FAIL-SAFE: Verhindert "Lösche Alles", wenn ein alter Browser-Cache das 'isOwn' Feld nicht sendet.
+    if (isOwn === undefined || isOwn === null) {
+        return res.status(400).json({ error: "Sicherheits-Abbruch: Parameter 'isOwn' (true/false) fehlt zwingend!" });
+    }
+
     const where = { UserId: req.user.id };
     if (language) where.language = language;
     
@@ -84,11 +90,14 @@ router.delete('/clear/all', authenticateToken, asyncHandler(async (req, res) => 
         where.typ = { [Sequelize.Op.ne]: 'Satz' };
     }
 
-    // Explicit filter for own vs base vocabulary if provided
-    if (isOwn === 'true') {
+    // Explicit filter for own vs base vocabulary
+    if (isOwn === 'true' || isOwn === true) {
         where.isOwn = true;
-    } else if (isOwn === 'false') {
-        where.isOwn = false;
+    } else if (isOwn === 'false' || isOwn === false) {
+        // Wenn false, lösche auch ältere Einträge, die isOwn=NULL haben könnten.
+        where.isOwn = { [Sequelize.Op.or]: [false, null] };
+    } else {
+        return res.status(400).json({ error: "Sicherheits-Abbruch: Parameter 'isOwn' muss 'true' oder 'false' sein." });
     }
 
     await Vocabulary.destroy({ where });
