@@ -8523,7 +8523,7 @@
                     loadDataFromServer();
                 } catch (err) {
                     console.error(err);
-                    showToast("Fehler beim Löschen der Liste.", "error");
+                    showToast("Fehler beim Löschen der Liste: " + err.message, "error");
                 }
             }
         });
@@ -8539,7 +8539,7 @@
                     loadDataFromServer();
                 } catch (err) {
                     console.error(err);
-                    showToast("Fehler beim Löschen der Sätze.", "error");
+                    showToast("Fehler beim Löschen der Sätze: " + err.message, "error");
                 }
             }
         });
@@ -8626,7 +8626,7 @@
                     excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
                 } catch (e) {
                     console.error("Error during deletion:", e);
-                    showToast("Fehler beim Löschen der Vokabeln.", "error");
+                    showToast("Fehler beim Löschen der Vokabeln: " + e.message, "error");
                 }
             }
         });
@@ -8683,7 +8683,7 @@
                     excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
                 } catch (e) {
                     console.error("Error during deletion:", e);
-                    showToast("Fehler beim Löschen der Sätze.", "error");
+                    showToast("Fehler beim Löschen der Sätze: " + e.message, "error");
                 }
             }
         });
