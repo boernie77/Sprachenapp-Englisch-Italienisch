@@ -2251,7 +2251,7 @@
                         <!-- Suggestions will appear here -->
                     </div>
                 </div>
-                <div id="verbFoundDetails" class="hidden mt-6 bg-white/95 backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-white/20 animate-in fade-in slide-in-from-top-4 duration-300">
+                <div id="verbFoundDetails" class="hidden mt-6 bg-white/95 backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-white/20 animate-in fade-in slide-in-from-top-4 duration-300 text-slate-800">
                     <!-- Verb details will be rendered here -->
                 </div>
             </div>
@@ -7669,7 +7669,7 @@
 
                             verbSearchResults.querySelectorAll('.verb-suggestion-item').forEach(item => {
                                 item.addEventListener('click', () => {
-                                    const pair = matches.find(m => m.id === item.dataset.id);
+                                    const pair = matches.find(m => m.id == item.dataset.id);
                                     if (pair) {
                                         verbFoundDetails.innerHTML = renderVerbInfo(pair);
                                         verbFoundDetails.classList.remove('hidden');
