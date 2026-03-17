@@ -6325,7 +6325,7 @@
             const isMobile = window.innerWidth <= MOBILE_THRESHOLD;
 
             // Restore styling: background, border, shadow, and layout
-            el.className = 'bg-white p-2 md:p-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between cursor-move transition-all no-select max-w-full';
+            el.className = 'bg-white p-2 md:p-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between cursor-move cursor-pointer transition-all no-select max-w-full';
             el.draggable = !isMobile;
             el.dataset.id = pair.id;
 
@@ -6389,10 +6389,25 @@
             }
             el.appendChild(controlsWrapper);
 
+            let lastTap = 0;
+            const handleDoubleTap = (e) => {
+                if (window.innerWidth <= MOBILE_THRESHOLD) {
+                    const currentTime = new Date().getTime();
+                    const tapLength = currentTime - lastTap;
+                    if (tapLength < 300 && tapLength > 0) {
+                        showInfoModal(pair, false);
+                        lastTap = 0;
+                    } else {
+                        lastTap = currentTime;
+                    }
+                }
+            };
+            
+            // iOS double-tap fix: Use touchstart
+            el.addEventListener('touchstart', handleDoubleTap, { passive: true });
+
             el.addEventListener('click', (e) => {
-                if (isMobile) {
-                    e.preventDefault();
-                    e.stopPropagation();
+                if (window.innerWidth <= MOBILE_THRESHOLD) {
                     if (isInfoModeActive) {
                         showInfoModal(pair, false);
                     } else {
@@ -6405,22 +6420,13 @@
                             selectedSourceCard = el;
                         }
                     }
-
-                    // --- Custom Double-Tap Detection for Mobile ---
-                    const currentTime = new Date().getTime();
-                    const tapLength = currentTime - lastTap;
-                    if (tapLength < 300 && tapLength > 0) {
-                        showInfoModal(pair, false);
-                        lastTap = 0; // Reset to prevent triple-tap issues
-                    } else {
-                        lastTap = currentTime;
-                    }
                 } else {
                     document.querySelectorAll('#draggables-container div').forEach(d => d.classList.remove('ring-2', 'ring-blue-500'));
                     el.classList.add('ring-2', 'ring-blue-500');
                     displayExtraInfo(pair);
                 }
             });
+
             el.addEventListener('dragstart', (e) => {
                 handleDragStart(e);
                 document.querySelectorAll('#draggables-container div').forEach(d => d.classList.remove('ring-2', 'ring-blue-500'));
@@ -6428,7 +6434,6 @@
                 displayExtraInfo(pair);
             });
             el.addEventListener('dragend', handleDragEnd);
-            let lastTap = 0; // Initialize lastTap for this element
             el.addEventListener('dblclick', (e) => {
                 if (window.innerWidth <= MOBILE_THRESHOLD) {
                     showInfoModal(pair, false);
@@ -6441,7 +6446,7 @@
             const isDeToIt = directionFilterEl.value === 'de-it';
             const textContent = isDeToIt ? getFullIt(pair) : pair.de;
             const el = document.createElement('div');
-            el.className = 'relative bg-slate-100 p-2 md:p-3 rounded-xl border-2 border-dashed border-slate-300 min-h-[45px] md:min-h-[50px] flex flex-col justify-center transition-colors no-select flex-shrink-0';
+            el.className = 'relative bg-slate-100 p-2 md:p-3 rounded-xl border-2 border-dashed border-slate-300 min-h-[45px] md:min-h-[50px] flex flex-col justify-center transition-colors no-select flex-shrink-0 cursor-pointer';
             el.dataset.id = pair.id;
             const rowWrapper = document.createElement('div');
             rowWrapper.className = 'w-full flex items-center justify-between';
@@ -6474,8 +6479,10 @@
                     if (selectedSourceCard) selectedSourceCard.classList.remove('mobile-selected');
                     selectedSourceCard = null;
                 }
+            });
 
-                // --- Custom Double-Tap Detection for Mobile (only if matched) ---
+            // iOS double-tap fix: Use touchstart for info
+            el.addEventListener('touchstart', () => {
                 if (window.innerWidth <= MOBILE_THRESHOLD && el.classList.contains('matched')) {
                     const currentTime = new Date().getTime();
                     const tapLength = currentTime - (el.lastTap || 0);
@@ -6486,7 +6493,8 @@
                         el.lastTap = currentTime;
                     }
                 }
-            });
+            }, { passive: true });
+
             el.addEventListener('dblclick', () => {
                 if (window.innerWidth <= MOBILE_THRESHOLD && el.classList.contains('matched')) {
                     showInfoModal(pair, true);
