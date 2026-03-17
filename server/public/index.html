@@ -480,8 +480,10 @@
             }
         }
 
-        /* Global Dark Mode Optimization (Elegant Dark Mode) */
-        /* Removed @media (max-width: 768px) to make dark mode global */
+        /* Selective UI Fixes: Dark Mode for narrow windows/apps only */
+        @media (max-width: 1024px) {
+            /* Global Dark Mode Optimization (Elegant Dark Mode) */
+            /* Removed @media (max-width: 768px) to make dark mode broader for narrow windows */
             body {
                 background-color: #0f172a;
                 background-image:
@@ -1158,8 +1160,9 @@
             #excelWordCount {
                 color: white !important;
             }
+        }
 
-            /* --- DEFINITIVE MOBILE LAYOUT FIXES (High Priority) --- */
+        /* --- DEFINITIVE MOBILE LAYOUT FIXES (High Priority) --- */
             @media (max-width: 768px) {
 
                 /* Flags alignment with top navigation */
@@ -1379,24 +1382,35 @@
             margin-top: 0.5rem !important;
         }
 
-        /* --- FINAL OVERRIDE BLOCK: FORCED TOP POSITIONING & SCROLLABLE DROPDOWNS --- */
-        /* This block is placed at the very end to ensure it overrides EVERYTHING else */
-        
-        div[id$="Modal"], 
-        #authOverlay,
-        #vocabModal,
-        #statsModal,
-        #excelModal {
-            align-items: flex-start !important;
-            padding-top: 2rem !important; /* Fixed pixel value for better consistency */
+        /* FINAL OVERRIDE BLOCK: FORCED TOP POSITIONING & SCROLLABLE DROPDOWNS --- */
+        /* Limited to narrow screens to preserve light desktop view */
+        @media (max-width: 1024px) {
+            div[id$="Modal"], 
+            #authOverlay,
+            #vocabModal,
+            #statsModal,
+            #excelModal {
+                align-items: flex-start !important;
+                padding-top: 2rem !important;
+            }
+
+            div[id$="Modal"] > div, 
+            #authOverlay > div {
+                margin-top: 0 !important;
+            }
+
+            /* Dark Mode Labels Fix */
+            #mobileFilterContent label {
+                color: #cbd5e1 !important;
+            }
+
+            #mobileFilterContent .cs-btn {
+                background-color: #1e293b !important;
+                color: #ffffff !important;
+            }
         }
 
-        /* Ensure any inner bg-white doesn't force centering if there's a parent conflict */
-        div[id$="Modal"] > div, 
-        #authOverlay > div {
-            margin-top: 0 !important;
-        }
-
+        /* GLOBALLY Scrollable Dropdowns (Safe for all sizes) */
         .cs-list {
             max-height: 250px !important;
             overflow-y: auto !important;
@@ -1407,16 +1421,6 @@
 
         .cs-list.open {
             display: block !important;
-        }
-
-        /* Re-fix labels for mobile filter in case of override */
-        #mobileFilterContent label {
-            color: #cbd5e1 !important;
-        }
-
-        #mobileFilterContent .cs-btn {
-            background-color: #1e293b !important;
-            color: #ffffff !important;
         }
     </style>
 </head>
