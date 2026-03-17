@@ -3297,11 +3297,11 @@
                 <p class="text-[11px] text-amber-800 font-bold mb-2 flex items-center">
                     <span id="excelBulbFormat"></span> <span data-i18n="excel_format_title">Erforderliches Excel-Format:</span>
                 </p>
-                <ul class="text-[10px] text-amber-700 space-y-1">
-                    <li>• <strong id="excelCol1Header">Spalte 1:</strong> <span id="excelCol1Desc">Italienische Wörter</span></li>
-                    <li>• <strong id="excelCol2Header">Spalte 2:</strong> <span id="excelCol2Desc">Deutsche Übersetzung</span></li>
-                    <li>• <strong id="excelCol3Header">Spalte 3:</strong> <span id="excelCol3Desc">Wortart (z.B. Substantiv, Verb)</span></li>
-                    <li>• <strong id="excelCol4Header">Spalte 4:</strong> <span id="excelCol4Desc">Emoji (optional)</span></li>
+                <ul class="text-[10px] text-amber-700 space-y-1 list-disc pl-4">
+                    <li id="liExcelCol1">Spalte 1: Italienische Wörter</li>
+                    <li data-i18n="excel_format_col2">Spalte 2: Deutsche Übersetzung</li>
+                    <li data-i18n="excel_format_col3">Spalte 3: Wortart (z.B. Substantiv, Verb)</li>
+                    <li data-i18n="excel_format_col4">Spalte 4: Emoji (optional)</li>
                 </ul>
             </div>
 
@@ -5406,6 +5406,10 @@
                 const text = getI18n(key);
                 el.innerHTML = text; // Verwende innerHTML um Formatierungen (wie <strong>) beizubehalten
             });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                el.placeholder = getI18n(key);
+            });
             updateLangButtonStyles();
             
             // Re-sync Custom Dropdown Labels after translation
@@ -5531,8 +5535,8 @@
             if (wPrefix) wPrefix.innerText = t.welcomePrefix;
 
             // Excel & Admin Hints
-            const excelCol1Desc = document.getElementById('excelCol1Desc');
-            if (excelCol1Desc) excelCol1Desc.textContent = CURRENT_LANG === 'en' ? 'Englische Wörter' : 'Italienische Wörter';
+            const liExcelCol1 = document.getElementById('liExcelCol1');
+            if (liExcelCol1) liExcelCol1.textContent = CURRENT_LANG === 'en' ? getI18n('excel_format_col1_en') : getI18n('excel_format_col1_it');
 
             const grammarExplText = document.getElementById('grammarExplanationText');
             if (grammarExplText) {
@@ -5627,7 +5631,7 @@
             setIc('excelExportIcon', exportSVG);
             setIc('excelTrashIcon', trashSVG);
             setIc('excelBooksIcon', booksSVG);
-            setIc('excelCol1Desc', CURRENT_LANG === 'it' ? getI18n('excel_format_col1_it') : getI18n('excel_format_col1_en'));
+            setIc('liExcelCol1', CURRENT_LANG === 'it' ? getI18n('excel_format_col1_it') : getI18n('excel_format_col1_en'));
             setIc('excelBulbFormat', bulbSVG);
             setIc('vocabLangDeBtn', `${deFlagSVG} Deutsch`);
             setIc('vocabLangItBtn', `${currentFlag} ${langName}`);
