@@ -3841,13 +3841,14 @@
     <script>
         // --- 1. Global State & App Detection ---
         const isCapacitor = window.location.protocol === 'capacitor:' || (typeof window.Capacitor !== 'undefined' && window.Capacitor.platform !== 'web');
+        const MOBILE_THRESHOLD = 768;
 
         // --- Toast Notification System ---
         let isInfoModeActive = false;
         let currentQuizTarget = null;
         let currentWriteTarget = null;
         function showToast(message, type = 'info', duration = 4000) {
-            const isMobile = window.innerWidth <= 640;
+            const isMobile = window.innerWidth <= MOBILE_THRESHOLD;
             let finalDuration = isMobile ? 1500 : duration;
             if (type === 'error') {
                 finalDuration = isMobile ? 3500 : 6000;
@@ -5864,7 +5865,7 @@
             const { due, future } = getDueWords(availableWords);
             currentWriteTarget = due.length > 0 ? due[0] : shuffleArray(future)[0];
             initWordStat(currentWriteTarget.id);
-            const isMobile = window.innerWidth <= 640;
+            const isMobile = window.innerWidth <= MOBILE_THRESHOLD;
             const markHtml = `
                 <svg class="star-icon w-6 h-6 md:w-8 md:h-8 ${currentWriteTarget.isMarked ? 'marked' : ''}" 
                      data-mark-id="${currentWriteTarget.id}" 
@@ -6172,13 +6173,13 @@
             }
 
             if (directionFilterEl.value === 'de-it') {
-                const isMobile = window.innerWidth <= 640;
+                const isMobile = window.innerWidth <= MOBILE_THRESHOLD;
                 const targetFlag = CURRENT_LANG === 'it' ? itFlagSVG : gbFlagSVG;
                 const targetName = CURRENT_LANG === 'it' ? 'Italienisch' : 'Englisch';
                 dragColHeader.innerHTML = isMobile ? `${deFlagSVG} Deutsch` : `${deFlagSVG} Deutsch (Ziehen)`;
                 dropColHeader.innerHTML = isMobile ? `${targetFlag} ${targetName}` : `${targetFlag} ${targetName} (Ablegen)`;
             } else {
-                const isMobile = window.innerWidth <= 640;
+                const isMobile = window.innerWidth <= MOBILE_THRESHOLD;
                 const targetFlag = CURRENT_LANG === 'it' ? itFlagSVG : gbFlagSVG;
                 const targetName = CURRENT_LANG === 'it' ? 'Italienisch' : 'Englisch';
                 dragColHeader.innerHTML = isMobile ? `${targetFlag} ${targetName}` : `${targetFlag} ${targetName} (Ziehen)`;
@@ -6208,7 +6209,7 @@
             const isDeToIt = directionFilterEl.value === 'de-it';
             const textContent = isDeToIt ? pair.de : getFullIt(pair);
             const el = document.createElement('div');
-            const isMobile = window.innerWidth <= 640;
+            const isMobile = window.innerWidth <= MOBILE_THRESHOLD;
 
             // Restore styling: background, border, shadow, and layout
             el.className = 'bg-white p-2 md:p-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between cursor-move transition-all no-select max-w-full';
@@ -6305,7 +6306,7 @@
             });
             el.addEventListener('dragend', handleDragEnd);
             el.addEventListener('dblclick', (e) => {
-                if (window.innerWidth <= 768) {
+                if (window.innerWidth <= MOBILE_THRESHOLD) {
                     showInfoModal(pair, false);
                 }
             });
@@ -6330,7 +6331,7 @@
             el.addEventListener('dragleave', handleDragLeave);
             el.addEventListener('drop', handleDrop);
             el.addEventListener('click', (e) => {
-                if (window.innerWidth <= 768 && selectedSourceCard) {
+                if (window.innerWidth <= MOBILE_THRESHOLD && selectedSourceCard) {
                     e.stopPropagation(); // Prevent bubbling issues
                     const draggedId = selectedSourceCard.dataset.id;
                     const dropzoneId = el.dataset.id;
@@ -6351,7 +6352,7 @@
                 }
             });
             el.addEventListener('dblclick', () => {
-                if (window.innerWidth <= 768 && el.classList.contains('matched')) {
+                if (window.innerWidth <= MOBILE_THRESHOLD && el.classList.contains('matched')) {
                     showInfoModal(pair, true);
                 }
             });
@@ -6456,7 +6457,7 @@
         }
 
         function showInfoModal(pair, isMatched = false) {
-            if (window.innerWidth > 640) return;
+            if (window.innerWidth > MOBILE_THRESHOLD) return;
             const modal = document.getElementById('infoModal');
             const content = document.getElementById('infoModalContent');
             const isVerb = pair.typ && pair.typ.toLowerCase().includes('verb');
@@ -6517,7 +6518,7 @@
             const isNoun = currentQuizTarget.typ && currentQuizTarget.typ.toLowerCase().includes('substantiv');
             const isVerbInfinitivMode = typeFilterEl.value === 'VerbInfinitiv';
 
-            const isMobile = window.innerWidth <= 640;
+            const isMobile = window.innerWidth <= MOBILE_THRESHOLD;
             const markHtml = `
                 <svg class="star-icon w-6 h-6 md:w-8 md:h-8 ${currentQuizTarget.isMarked ? 'marked' : ''}"
                      data-mark-id="${currentQuizTarget.id}"
@@ -9793,7 +9794,7 @@
 
             function handleInfoToggle(e, btn) {
                 if (e) e.stopPropagation();
-                if (window.innerWidth <= 640) {
+                if (window.innerWidth <= MOBILE_THRESHOLD) {
                     switchMode('info');
                     return;
                 }
