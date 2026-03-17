@@ -2066,7 +2066,21 @@
                         display: none !important;
                     }
                 }
-            </style>
+                /* Search Suggestion Styles */
+            .verb-suggestion-item:hover {
+                background-color: #f1f5f9;
+                color: #2563eb;
+            }
+            .verb-suggestion-item {
+                cursor: pointer;
+                padding: 12px 20px;
+                border-bottom: 1px solid #f1f5f9;
+                transition: all 0.2s;
+            }
+            .verb-suggestion-item:last-child {
+                border-bottom: none;
+            }
+        </style>
         </header>
 
         <!-- === DRAG & DROP BEREICH === -->
@@ -2221,6 +2235,25 @@
                     <span id="grammarHeaderIcon"></span> <span id="infoTitleText">Grammatica Italiana</span>
                 </h2>
                 <p id="infoDescText" class="text-slate-600 text-lg font-medium">Index der wichtigsten Regeln und Konjugationstabellen.</p>
+            </div>
+
+            <!-- Verb Search Section -->
+            <div id="verbSearchSection" class="bg-blue-600 p-6 md:p-8 rounded-3xl w-full border border-blue-500 shadow-xl hidden">
+                <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    Verb-Suche
+                </h3>
+                <div class="relative group">
+                    <input type="text" id="verbSearchInput" 
+                        class="w-full bg-white/10 border border-white/20 rounded-2xl px-6 py-4 text-white placeholder-white/50 focus:outline-none focus:bg-white/20 focus:border-white/40 transition-all text-lg shadow-inner"
+                        placeholder="Verb suchen (z.B. parlare, andare...)">
+                    <div id="verbSearchResults" class="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden z-[100] max-h-60 overflow-y-auto">
+                        <!-- Suggestions will appear here -->
+                    </div>
+                </div>
+                <div id="verbFoundDetails" class="hidden mt-6 bg-white/95 backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-white/20 animate-in fade-in slide-in-from-top-4 duration-300">
+                    <!-- Verb details will be rendered here -->
+                </div>
             </div>
 
             <!-- Language Specific Content Containers -->
@@ -6601,6 +6634,19 @@
             if (score === ROUND_SIZE) { setTimeout(() => { successText.classList.remove('hidden'); nextBtn.classList.remove('hidden'); }, 500); }
         }
 
+        function renderVerbInfo(pair) {
+            return `
+                <div class="font-bold border-b pb-2 mb-4 text-center text-lg">${getFullIt(pair)} <br><span class="font-normal opacity-60 text-sm">(${pair.de})</span></div>
+                <div class="grid grid-cols-1 gap-3 text-sm">
+                    <div class="bg-slate-50 p-2 rounded-lg dark:bg-white/5"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">Präsens</span>${pair.praesens || '-'}</div>
+                    <div class="bg-slate-50 p-2 rounded-lg dark:bg-white/5"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">Passato Prossimo</span>${pair.passato || '-'}</div>
+                    <div class="bg-slate-50 p-2 rounded-lg dark:bg-white/5"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">Imperfetto</span>${pair.imperfetto || '-'}</div>
+                    <div class="bg-slate-50 p-2 rounded-lg dark:bg-white/5"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">Gerundio</span>${pair.gerundio || '-'}</div>
+                    <div class="bg-blue-50 p-2 rounded-lg border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800/50"><span class="block text-[10px] uppercase font-bold mb-1">Imperativ</span><span class="text-blue-600 dark:text-blue-400 italic font-bold">${pair.imperativo || '-'}</span></div>
+                </div>
+            `;
+        }
+
         function showInfoModal(pair, isMatched = false) {
             if (window.innerWidth > MOBILE_THRESHOLD) return;
             const modal = document.getElementById('infoModal');
@@ -6613,16 +6659,7 @@
                 const label = isVerb ? 'das Verb' : 'das Wort';
                 content.innerHTML = `<div class="text-slate-500 italic text-center p-4">Löse ${label} richtig, um die Zusatzinfos zu sehen.</div>`;
             } else if (isVerb) {
-                content.innerHTML = `
-                    <div class="font-bold border-b pb-2 mb-4 text-center text-lg">${getFullIt(pair)} <br><span class="font-normal opacity-60 text-sm">(${pair.de})</span></div>
-                    <div class="grid grid-cols-1 gap-3 text-sm">
-                        <div class="bg-slate-50 p-2 rounded-lg"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">Präsens</span>${pair.praesens || '-'}</div>
-                        <div class="bg-slate-50 p-2 rounded-lg"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">Passato Prossimo</span>${pair.passato || '-'}</div>
-                        <div class="bg-slate-50 p-2 rounded-lg"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">Imperfetto</span>${pair.imperfetto || '-'}</div>
-                        <div class="bg-slate-50 p-2 rounded-lg"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">Gerundio</span>${pair.gerundio || '-'}</div>
-                        <div class="bg-blue-50 p-2 rounded-lg border border-blue-100"><span class="block text-[10px] uppercase font-bold mb-1">Imperativ</span><span class="text-blue-600 italic font-bold">${pair.imperativo || '-'}</span></div>
-                    </div>
-                `;
+                content.innerHTML = renderVerbInfo(pair);
             } else if (isNoun) {
                 content.innerHTML = `
                     <div class="flex flex-col items-center gap-4">
@@ -7590,6 +7627,72 @@
             } else if (mode === 'info') {
                 infoTabContainer.classList.add('flex'); infoTabContainer.classList.remove('hidden');
                 renderAllLabels(); // Ensure content is correctly shown for language
+                
+                // Verb Search Visibility & Logic (Italian only)
+                const verbSearchSection = document.getElementById('verbSearchSection');
+                const verbSearchInput = document.getElementById('verbSearchInput');
+                const verbSearchResults = document.getElementById('verbSearchResults');
+                const verbFoundDetails = document.getElementById('verbFoundDetails');
+                
+                if (CURRENT_LANG === 'it') {
+                    verbSearchSection.classList.remove('hidden');
+                    verbSearchInput.value = '';
+                    verbSearchResults.classList.add('hidden');
+                    verbFoundDetails.classList.add('hidden');
+
+                    // Remove old listeners if any (by replacing the input)
+                    const newInput = verbSearchInput.cloneNode(true);
+                    verbSearchInput.parentNode.replaceChild(newInput, verbSearchInput);
+                    
+                    newInput.addEventListener('input', () => {
+                        const query = newInput.value.toLowerCase().trim();
+                        if (query.length < 2) {
+                            verbSearchResults.classList.add('hidden');
+                            return;
+                        }
+
+                        const matches = fullDictionary.filter(p => {
+                            const isVerb = p.typ && p.typ.toLowerCase().includes('verb');
+                            const isIt = (p.language || 'it') === 'it';
+                            if (!isVerb || !isIt) return false;
+                            return p.it.toLowerCase().includes(query) || p.de.toLowerCase().includes(query);
+                        }).slice(0, 10);
+
+                        if (matches.length > 0) {
+                            verbSearchResults.innerHTML = matches.map(m => `
+                                <div class="verb-suggestion-item text-slate-800 font-medium" data-id="${m.id}">
+                                    <span class="text-blue-600 font-bold">${m.it}</span>
+                                    <span class="text-slate-400 text-sm ml-2">(${m.de})</span>
+                                </div>
+                            `).join('');
+                            verbSearchResults.classList.remove('hidden');
+
+                            verbSearchResults.querySelectorAll('.verb-suggestion-item').forEach(item => {
+                                item.addEventListener('click', () => {
+                                    const pair = matches.find(m => m.id === item.dataset.id);
+                                    if (pair) {
+                                        verbFoundDetails.innerHTML = renderVerbInfo(pair);
+                                        verbFoundDetails.classList.remove('hidden');
+                                        verbSearchResults.classList.add('hidden');
+                                        newInput.value = pair.it;
+                                    }
+                                });
+                            });
+                        } else {
+                            verbSearchResults.classList.add('hidden');
+                        }
+                    });
+
+                    // Close results on click outside
+                    const handleOutsideClick = (e) => {
+                        if (!newInput.contains(e.target) && !verbSearchResults.contains(e.target)) {
+                            verbSearchResults.classList.add('hidden');
+                        }
+                    };
+                    document.addEventListener('click', handleOutsideClick, { once: true });
+                } else {
+                    verbSearchSection.classList.add('hidden');
+                }
             }
         }
 
