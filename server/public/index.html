@@ -66,6 +66,15 @@
             animation: shake 0.4s ease-in-out;
         }
 
+        .flash-red {
+            animation: flashRed 0.5s ease-in-out;
+        }
+
+        @keyframes flashRed {
+            0%, 100% { background-color: transparent; }
+            50% { background-color: rgba(239, 68, 68, 0.4); }
+        }
+
         @keyframes popIn {
             0% {
                 transform: scale(0.8);
@@ -2000,10 +2009,14 @@
             </div>
             <div id="cardsFeedback"
                 class="flex flex-col items-center gap-4 w-full mt-2 p-3 bg-white rounded-xl shadow-sm border border-slate-100 flex-shrink-0">
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2 md:gap-4">
+                    <button id="cardsPrevBtn"
+                        class="bg-slate-500 hover:bg-slate-600 text-white font-bold py-2 px-4 md:px-6 rounded-lg transition-all shadow-md active:transform active:scale-95 text-xs md:text-base flex items-center gap-2 opacity-50 cursor-not-allowed" disabled>
+                        <span>←</span> Letzte Karte
+                    </button>
                     <button id="cardsNextBtn"
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors shadow-md active:transform active:scale-95 text-sm md:text-base flex items-center gap-2 mx-auto">
-                        Nächste Karte <span class="vocab-btn-arrow"></span>
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 md:px-6 rounded-lg transition-all shadow-md active:transform active:scale-95 text-xs md:text-base flex items-center gap-2">
+                        Nächste Karte <span>→</span>
                     </button>
                 </div>
             </div>
@@ -6327,8 +6340,8 @@
                         if (isInfoModeActive) showInfoModal(pair, true);
                     } else {
                         currentRoundMistakes.add(draggedId);
-                        el.classList.add('wrong-animation', 'bg-red-100/50', 'border-red-500');
-                        setTimeout(() => el.classList.remove('wrong-animation', 'bg-red-100/50', 'border-red-500'), 400);
+                        el.classList.add('wrong-animation', 'flash-red', 'bg-red-100/50', 'border-red-500');
+                        setTimeout(() => el.classList.remove('wrong-animation', 'flash-red', 'bg-red-100/50', 'border-red-500'), 500);
 
                         // New local feedback for mobile
                         showDragDropWrongFeedback();
@@ -6359,8 +6372,8 @@
             if (draggedId === dropzone.dataset.id) matchSuccess(draggedId, dropzone);
             else {
                 currentRoundMistakes.add(draggedId);
-                dropzone.classList.add('wrong-animation', 'bg-red-50', 'border-red-400');
-                setTimeout(() => dropzone.classList.remove('wrong-animation', 'bg-red-50', 'border-red-400'), 400);
+                dropzone.classList.add('wrong-animation', 'flash-red', 'bg-red-50', 'border-red-400');
+                setTimeout(() => dropzone.classList.remove('wrong-animation', 'flash-red', 'bg-red-50', 'border-red-400'), 500);
                 // No central feedback on desktop per user request
             }
         }
@@ -7416,6 +7429,8 @@
                 quizContainer.classList.remove('hidden'); quizContainer.classList.add('flex');
                 startQuizRound();
             } else if (mode === 'cards') {
+                cardsHistory = [];
+                currentFlashcardTarget = null;
                 cardsContainer.classList.remove('hidden'); cardsContainer.classList.add('flex');
                 startCardsRound();
             } else if (mode === 'write') {
@@ -7475,7 +7490,11 @@
             if (currentMode === 'dragdrop') startDragDropRound();
             else if (currentMode === 'quiz') startQuizRound();
             else if (currentMode === 'write') startWriteRound();
-            else if (currentMode === 'cards') startCardsRound();
+            else if (currentMode === 'cards') {
+                cardsHistory = [];
+                currentFlashcardTarget = null;
+                startCardsRound();
+            }
         }
 
         typeFilterEl.addEventListener('change', handleFilterChange);
@@ -9809,7 +9828,9 @@
         const cardsWordToggle = document.getElementById('cardsWordToggle');
         const cardsNextBtn = document.getElementById('cardsNextBtn');
 
-        function startCardsRound() {
+        let cardsHistory = [];
+
+        function startCardsRound(isBack = false) {
             const filterValue = typeFilterEl.value;
             let words = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.isActive !== false && (filterValue === 'Satz' ? w.typ === 'Satz' : w.typ !== 'Satz'));
             if (filterValue === 'VerbInfinitiv') {
@@ -9828,6 +9849,12 @@
                 return;
             }
             
+            if (!isBack && currentFlashcardTarget) {
+                cardsHistory.push(currentFlashcardTarget.id);
+                if (cardsHistory.length > 50) cardsHistory.shift();
+            }
+            updateCardsPrevBtnState();
+
             let nextTarget;
             if (words.length > 1 && currentFlashcardTarget) {
                 do {
@@ -9839,6 +9866,7 @@
             
             currentFlashcardTarget = nextTarget;
             isFlashcardReversed = false;
+            
             if (cardsWordToggle) cardsWordToggle.checked = currentFlashcardTarget.isActive !== false;
             const star = document.getElementById('cardsStarIcon');
             if (star) {
@@ -9849,6 +9877,30 @@
             recordDailyActivity();
             saveAllDataLocally();
             renderFlashcard();
+        }
+
+        function showPreviousCard() {
+            if (cardsHistory.length === 0) return;
+            const prevId = cardsHistory.pop();
+            const prevWord = fullDictionary.find(w => w.id == prevId);
+            if (prevWord) {
+                currentFlashcardTarget = prevWord;
+                isFlashcardReversed = false;
+                renderFlashcard();
+                updateCardsPrevBtnState();
+            }
+        }
+
+        function updateCardsPrevBtnState() {
+            const btn = document.getElementById('cardsPrevBtn');
+            if (!btn) return;
+            if (cardsHistory.length > 0) {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
         }
 
         function renderFlashcard() {
@@ -9873,7 +9925,9 @@
             });
         }
 
-        if (cardsNextBtn) cardsNextBtn.addEventListener('click', startCardsRound);
+        if (cardsNextBtn) cardsNextBtn.addEventListener('click', () => startCardsRound(false));
+        const cardsPrevBtn = document.getElementById('cardsPrevBtn');
+        if (cardsPrevBtn) cardsPrevBtn.addEventListener('click', showPreviousCard);
 
         if (cardsWordToggle) {
             cardsWordToggle.addEventListener('change', (e) => {
