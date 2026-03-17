@@ -6305,7 +6305,7 @@
             });
             el.addEventListener('dragend', handleDragEnd);
             el.addEventListener('dblclick', (e) => {
-                if (window.innerWidth <= 640) {
+                if (window.innerWidth <= 768) {
                     showInfoModal(pair, false);
                 }
             });
@@ -6330,7 +6330,7 @@
             el.addEventListener('dragleave', handleDragLeave);
             el.addEventListener('drop', handleDrop);
             el.addEventListener('click', (e) => {
-                if (window.innerWidth <= 640 && selectedSourceCard) {
+                if (window.innerWidth <= 768 && selectedSourceCard) {
                     e.stopPropagation(); // Prevent bubbling issues
                     const draggedId = selectedSourceCard.dataset.id;
                     const dropzoneId = el.dataset.id;
@@ -6351,7 +6351,7 @@
                 }
             });
             el.addEventListener('dblclick', () => {
-                if (window.innerWidth <= 640 && el.classList.contains('matched')) {
+                if (window.innerWidth <= 768 && el.classList.contains('matched')) {
                     showInfoModal(pair, true);
                 }
             });
@@ -6374,7 +6374,9 @@
                 currentRoundMistakes.add(draggedId);
                 dropzone.classList.add('wrong-animation', 'flash-red', 'bg-red-50', 'border-red-400');
                 setTimeout(() => dropzone.classList.remove('wrong-animation', 'flash-red', 'bg-red-50', 'border-red-400'), 500);
-                // No central feedback on desktop per user request
+                
+                // Show central feedback overlay on desktop/browser view as well
+                showDragDropWrongFeedback();
             }
         }
 
