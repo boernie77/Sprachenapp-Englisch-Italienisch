@@ -5274,14 +5274,14 @@
                 const cachedVocab = localStorage.getItem(`ita-full-dictionary-${CURRENT_LANG}`);
                 if (cachedVocab) {
                     try {
-                        fullDictionary = JSON.parse(cachedVocab);
+                        fullDictionary = safeJSONParse(cachedVocab, []);
                         const cachedStats = localStorage.getItem(`ita-word-stats-${CURRENT_LANG}`);
-                        if (cachedStats) wordStats = JSON.parse(cachedStats);
+                        if (cachedStats) wordStats = safeJSONParse(cachedStats, {});
                         
                         // Load Grammar Sentences from cache
                         const cachedGrammar = localStorage.getItem(`ita-grammar-sentences-${CURRENT_LANG}`);
                         if (cachedGrammar) {
-                            grammarSentences = JSON.parse(cachedGrammar);
+                            grammarSentences = safeJSONParse(cachedGrammar, []);
                             updateGrammarFocusOptions();
                         }
 
@@ -5499,7 +5499,7 @@
         }
 
         // --- Offline Sync Outbox ---
-        let syncOutbox = JSON.parse(localStorage.getItem('ita-sync-outbox') || '[]');
+        let syncOutbox = safeJSONParse(localStorage.getItem('ita-sync-outbox'), []);
 
         function addToSyncOutbox(type, payload) {
             if (type === 'daily-activity') {
