@@ -1477,44 +1477,44 @@
     <div id="authOverlay"
         class="fixed inset-0 bg-slate-900 bg-opacity-90 backdrop-blur-md z-[100] flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
-            <h2 id="authTitle" class="text-3xl font-bold text-slate-800 mb-6 text-center">Willkommen!</h2>
+            <h2 id="authTitle" data-i18n="auth_title_login" class="text-3xl font-bold text-slate-800 mb-6 text-center">Willkommen!</h2>
             <div id="authError"
                 class="hidden mb-4 p-3 bg-red-50 text-red-600 rounded-xl text-sm border border-red-100 italic"></div>
 
             <div class="space-y-4">
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">Email</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1" data-i18n="auth_email_label">Email</label>
                     <input type="email" id="authEmail"
                         class="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-blue-400 transition-all"
                         placeholder="name@example.com">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">Passwort</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1" data-i18n="auth_password_label">Passwort</label>
                     <input type="password" id="authPassword"
                         class="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-blue-400 transition-all"
                         placeholder="••••••••">
                 </div>
                 <div id="authInviteCodeContainer" class="hidden">
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">Einladungscode</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1" data-i18n="auth_invite_label">Einladungscode</label>
                     <input type="text" id="authInviteCode"
                         class="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-blue-400 transition-all"
                         placeholder="ITA-XXXX-XXXX">
                 </div>
 
-                <button id="authSubmitBtn"
+                <button id="authSubmitBtn" data-i18n="auth_submit_login"
                     class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-md active:scale-95">Anmelden</button>
 
-                <p class="text-right mt-2"><button id="openForgotPasswordBtn"
+                <p class="text-right mt-2"><button id="openForgotPasswordBtn" data-i18n="auth_forgot"
                         class="text-xs text-slate-500 hover:text-blue-600 hover:underline">Passwort vergessen?</button>
                 </p>
 
                 <p class="text-center text-sm text-slate-500 mt-4">
-                    <span id="authToggleText">Noch kein Konto?</span>
-                    <button id="authToggleBtn" class="text-blue-600 font-bold hover:underline">Registrieren</button>
+                    <span id="authToggleText" data-i18n="auth_toggle_text_login">Noch kein Konto?</span>
+                    <button id="authToggleBtn" data-i18n="auth_toggle_btn_login" class="text-blue-600 font-bold hover:underline">Registrieren</button>
                 </p>
 
                 <p class="text-center mt-6">
-                    <button id="openImpressumAuthBtn"
+                    <button id="openImpressumAuthBtn" data-i18n="menu_impressum"
                         class="text-[10px] text-slate-400 hover:text-slate-600 transition-colors uppercase tracking-widest font-bold">Impressum
                         & Lizenzen</button>
                 </p>
@@ -1574,19 +1574,19 @@
         <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative">
             <button id="closeForgotPasswordBtn"
                 class="absolute top-4 right-4 text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
-            <h2 class="text-2xl font-bold text-slate-800 mb-4 text-center">Passwort zurücksetzen</h2>
-            <p class="text-sm text-slate-600 mb-6 text-center">Gib deine E-Mail-Adresse ein. Wir senden dir einen Link,
+            <h2 class="text-2xl font-bold text-slate-800 mb-4 text-center" data-i18n="forgot_title">Passwort zurücksetzen</h2>
+            <p class="text-sm text-slate-600 mb-6 text-center" data-i18n="forgot_desc">Gib deine E-Mail-Adresse ein. Wir senden dir einen Link,
                 um dein Passwort neu zu vergeben.</p>
             <div id="forgotPasswordError" class="hidden mb-4 p-3 rounded-xl text-sm border italic"></div>
 
             <div class="space-y-4">
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">Email</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1" data-i18n="auth_email_label">Email</label>
                     <input type="email" id="forgotPasswordEmail"
                         class="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-blue-400 transition-all"
                         placeholder="name@example.com">
                 </div>
-                <button id="forgotPasswordSubmitBtn"
+                <button id="forgotPasswordSubmitBtn" data-i18n="forgot_submit"
                     class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-md active:scale-95">Link
                     senden</button>
             </div>
@@ -1597,17 +1597,17 @@
     <div id="resetPasswordModal"
         class="hidden fixed inset-0 bg-slate-900 bg-opacity-90 backdrop-blur-md z-[120] items-center justify-center p-4">
         <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
-            <h2 class="text-2xl font-bold text-slate-800 mb-4 text-center">Neues Passwort vergeben</h2>
+            <h2 class="text-2xl font-bold text-slate-800 mb-4 text-center" data-i18n="reset_title">Neues Passwort vergeben</h2>
             <div id="resetPasswordError" class="hidden mb-4 p-3 rounded-xl text-sm border italic"></div>
 
             <div class="space-y-4">
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">Neues Passwort</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1" data-i18n="reset_label">Neues Passwort</label>
                     <input type="password" id="resetPasswordInput"
                         class="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-blue-400 transition-all"
                         placeholder="Min. 6 Zeichen">
                 </div>
-                <button id="resetPasswordSubmitBtn"
+                <button id="resetPasswordSubmitBtn" data-i18n="reset_submit"
                     class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl transition-all shadow-md active:scale-95">Passwort
                     speichern</button>
             </div>
@@ -1644,14 +1644,14 @@
     <div id="onboardingModal"
         class="hidden fixed inset-0 bg-slate-900 bg-opacity-90 backdrop-blur-md z-[150] items-center justify-center p-4">
         <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
-            <h2 id="welcomeTitle" class="text-2xl font-bold text-slate-800 mb-4 text-center">Benvenuto!</h2>
-            <p class="text-sm text-slate-600 mb-6 text-center">
+            <h2 id="welcomeTitle" data-i18n="onboarding_title" class="text-2xl font-bold text-slate-800 mb-4 text-center">Benvenuto!</h2>
+            <p class="text-sm text-slate-600 mb-6 text-center" data-i18n="onboarding_desc">
                 Schön, dass du da bist! Um zu starten, verrate uns bitte deinen Namen.
             </p>
 
             <div class="space-y-4">
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">Dein Name</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1" data-i18n="onboarding_name_label">Dein Name</label>
                     <input type="text" id="onboardingNameInput"
                         class="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-blue-400 transition-all"
                         placeholder="z.B. Mario">
@@ -1659,7 +1659,7 @@
 
 
 
-                <button id="onboardingSubmitBtn"
+                <button id="onboardingSubmitBtn" data-i18n="onboarding_submit"
                     class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-md active:scale-95">Starten</button>
             </div>
         </div>
@@ -1669,17 +1669,17 @@
     <div id="onboardingVocabModal"
         class="hidden fixed inset-0 bg-slate-900 bg-opacity-90 backdrop-blur-md z-[151] items-center justify-center p-4">
         <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
-            <h2 id="onboardingVocabTitle"
+            <h2 id="onboardingVocabTitle" data-i18n="onboarding_vocab_title"
                 class="text-2xl font-bold text-slate-800 mb-4 text-center flex items-center justify-center">Vokabeln
                 eintragen!</h2>
-            <p class="text-sm text-slate-600 mb-6 text-center leading-relaxed">
+            <p class="text-sm text-slate-600 mb-6 text-center leading-relaxed" data-i18n="onboarding_vocab_desc">
                 Damit die App funktioniert, müssen zuerst Vokabeln eingetragen werden. <br><br>
                 Füge diese entweder manuell über die Funktion <strong>"Vokabel hinzufügen"</strong> hinzu oder nutze das
                 <strong>Einlesen einer Excelliste</strong> im Burgermenü.<br><br>
                 Es werden <strong>mindestens 10 Vokabeln</strong> benötigt, damit das Programm einwandfrei funktioniert.
             </p>
 
-            <button id="onboardingVocabSubmitBtn"
+            <button id="onboardingVocabSubmitBtn" data-i18n="onboarding_vocab_submit"
                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-md active:scale-95">Alles
                 klar, OK!</button>
         </div>
@@ -1700,9 +1700,9 @@
             <p id="confirmMessage" class="text-sm text-slate-600 mb-6 text-center leading-relaxed">Diese Aktion kann
                 nicht rückgängig gemacht werden.</p>
             <div class="flex gap-3">
-                <button id="confirmCancelBtn"
+                <button id="confirmCancelBtn" data-i18n="btn_cancel"
                     class="flex-1 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition-all">Abbrechen</button>
-                <button id="confirmConfirmBtn"
+                <button id="confirmConfirmBtn" data-i18n="btn_confirm"
                     class="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl transition-all shadow-md active:scale-95">Bestätigen</button>
             </div>
         </div>
@@ -1717,13 +1717,13 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                 </svg>
             </div>
-            <h3 id="promptTitle" class="text-xl font-bold text-slate-800 mb-2 text-center">E-Mail Adresse</h3>
-            <p id="promptMessage" class="text-sm text-slate-600 mb-4 text-center leading-relaxed">Wohin soll der Code gesendet werden?</p>
+            <h3 id="promptTitle" class="text-xl font-bold text-slate-800 mb-2 text-center" data-i18n="prompt_email_title">E-Mail Adresse</h3>
+            <p id="promptMessage" class="text-sm text-slate-600 mb-4 text-center leading-relaxed" data-i18n="prompt_email_desc">Wohin soll der Code gesendet werden?</p>
             <input type="text" id="promptInput" class="w-full border border-slate-200 rounded-xl px-4 py-3 mb-6 outline-none focus:border-blue-400 transition-all text-sm" placeholder="name@beispiel.de">
             <div class="flex gap-3">
-                <button id="promptCancelBtn"
+                <button id="promptCancelBtn" data-i18n="btn_cancel"
                     class="flex-1 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition-all">Abbrechen</button>
-                <button id="promptConfirmBtn"
+                <button id="promptConfirmBtn" data-i18n="btn_send"
                     class="flex-1 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all shadow-md active:scale-95">Senden</button>
             </div>
         </div>
@@ -1748,7 +1748,7 @@
                         d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                 </svg>
             </div>
-            <h3 class="text-xl font-bold text-slate-800 mb-2 italic">Import-Modus wählen</h3>
+            <h3 class="text-xl font-bold text-slate-800 mb-2 italic" data-i18n="choice_mode_title">Import-Modus wählen</h3>
             <p id="choiceMessage" class="text-slate-600 mb-8 text-sm leading-relaxed">Wie sollen die neuen Vokabeln
                 verarbeitet werden?</p>
 
@@ -1759,15 +1759,15 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
-                    <span id="choiceReplaceText">Liste ersetzen (Löschen)</span>
+                    <span id="choiceReplaceText" data-i18n="choice_replace_text">Liste ersetzen (Löschen)</span>
                 </button>
                 <button id="choiceAddBtn"
                     class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2">
-                    <span id="choiceAddText">Liste ergänzen (Hinzufügen)</span>
+                    <span id="choiceAddText" data-i18n="choice_add_text">Liste ergänzen (Hinzufügen)</span>
                 </button>
                 <button id="choiceCancelBtn"
                     class="w-full py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-xl transition-all">
-                    <span id="choiceCancelText">Abbrechen</span>
+                    <span id="choiceCancelText" data-i18n="btn_cancel">Abbrechen</span>
                 </button>
             </div>
         </div>
@@ -3181,9 +3181,9 @@
         <div class="bg-white rounded-3xl p-4 md:p-6 max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl">
             <div class="flex justify-between items-start sm:items-center mb-4">
                 <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-                    <h2 id="statsModalTitle" class="text-xl font-bold text-slate-800 flex items-center">Lern-Statistik
+                    <h2 id="statsModalTitle" data-i18n="stats_title" class="text-xl font-bold text-slate-800 flex items-center">Lern-Statistik
                     </h2>
-                    <button id="resetStatsBtn"
+                    <button id="resetStatsBtn" data-i18n="stats_reset_btn"
                         class="bg-red-50 hover:bg-red-100 text-red-600 font-medium py-1 px-2.5 rounded-lg text-xs md:text-sm transition-colors border border-red-200 shadow-sm active:transform active:scale-95">Statistik
                         zurücksetzen</button>
                 </div>
@@ -3191,20 +3191,20 @@
                     class="text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
             </div>
             <div class="flex gap-4 mb-3 border-b border-slate-200 text-sm">
-                <button id="tabWordsBtn"
+                <button id="tabWordsBtn" data-i18n="stats_tab_words"
                     class="font-semibold text-blue-600 border-b-2 border-blue-600 px-2 pb-1">Wörter</button>
-                <button id="tabDaysBtn"
+                <button id="tabDaysBtn" data-i18n="stats_tab_days"
                     class="font-medium text-slate-500 hover:text-slate-700 px-2 pb-1 transition-colors">Tages-Aktivität</button>
             </div>
             <div id="statsWordsContainer" class="overflow-y-auto flex-1 border border-slate-200 rounded-xl">
                 <table class="w-full text-left border-collapse min-w-[500px] text-sm">
                     <thead class="bg-slate-50 sticky top-0 border-b border-slate-200 shadow-sm z-10">
                         <tr>
-                            <th class="p-3 font-semibold text-slate-700">Wort (DE - IT)</th>
-                            <th class="p-3 font-semibold text-slate-700 text-center">Präsentiert</th>
-                            <th class="p-3 font-semibold text-green-600 text-center">Richtig</th>
-                            <th class="p-3 font-semibold text-red-500 text-center">Falsch</th>
-                            <th class="p-3 font-semibold text-slate-700 text-center">Zuletzt gelernt</th>
+                            <th class="p-3 font-semibold text-slate-700" data-i18n="stats_th_word">Wort (DE - IT)</th>
+                            <th class="p-3 font-semibold text-slate-700 text-center" data-i18n="stats_th_presented">Präsentiert</th>
+                            <th class="p-3 font-semibold text-green-600 text-center" data-i18n="stats_th_correct">Richtig</th>
+                            <th class="p-3 font-semibold text-red-500 text-center" data-i18n="stats_th_wrong">Falsch</th>
+                            <th class="p-3 font-semibold text-slate-700 text-center" data-i18n="stats_th_last_learned">Zuletzt gelernt</th>
                         </tr>
                     </thead>
                     <tbody id="statsTableBody" class="divide-y divide-slate-100"></tbody>
@@ -3229,7 +3229,7 @@
         class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
         <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl">
             <div class="flex justify-between items-center mb-6">
-                <h2 id="excelModalTitle" class="text-xl font-bold text-slate-800 flex items-center">Excel-Liste
+                <h2 id="excelModalTitle" data-i18n="excel_title" class="text-xl font-bold text-slate-800 flex items-center">Excel-Liste
                     verwalten</h2>
                 <button id="closeExcelModalBtn"
                     class="text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
@@ -3239,12 +3239,12 @@
                 <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50">
                     <div class="flex items-center gap-3 mb-3">
                         <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-lg flex-shrink-0" id="excelVocabIcon">📚</div>
-                        <div class="font-semibold text-slate-800 text-sm">Eigene Vokabeln</div>
+                        <div class="font-semibold text-slate-800 text-sm" data-i18n="excel_custom_vocab">Eigene Vokabeln</div>
                     </div>
                     <div class="flex gap-2">
-                        <button id="importArea" class="flex-1 bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">📥 Import</button>
-                        <button id="exportArea" class="flex-1 bg-white hover:bg-green-50 text-green-600 border border-green-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">📤 Export</button>
-                        <button id="clearVocabArea" class="flex-1 bg-white hover:bg-red-50 text-red-600 border border-red-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">🗑️ Löschen</button>
+                        <button id="importArea" data-i18n="excel_btn_import" class="flex-1 bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">📥 Import</button>
+                        <button id="exportArea" data-i18n="excel_btn_export" class="flex-1 bg-white hover:bg-green-50 text-green-600 border border-green-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">📤 Export</button>
+                        <button id="clearVocabArea" data-i18n="excel_btn_delete" class="flex-1 bg-white hover:bg-red-50 text-red-600 border border-red-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">🗑️ Löschen</button>
                     </div>
                 </div>
 
@@ -3252,12 +3252,12 @@
                 <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50">
                     <div class="flex items-center gap-3 mb-3">
                         <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-lg flex-shrink-0" id="excelSentenceIcon">📝</div>
-                        <div class="font-semibold text-slate-800 text-sm">Eigene Sätze</div>
+                        <div class="font-semibold text-slate-800 text-sm" data-i18n="excel_custom_sentences">Eigene Sätze</div>
                     </div>
                     <div class="flex gap-2">
-                        <button id="importSentencesArea" class="flex-1 bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">📥 Import</button>
-                        <button id="exportSentencesArea" class="flex-1 bg-white hover:bg-green-50 text-green-600 border border-green-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">📤 Export</button>
-                        <button id="clearSentencesArea" class="flex-1 bg-white hover:bg-red-50 text-red-600 border border-red-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">🗑️ Löschen</button>
+                        <button id="importSentencesArea" data-i18n="excel_btn_import" class="flex-1 bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">📥 Import</button>
+                        <button id="exportSentencesArea" data-i18n="excel_btn_export" class="flex-1 bg-white hover:bg-green-50 text-green-600 border border-green-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">📤 Export</button>
+                        <button id="clearSentencesArea" data-i18n="excel_btn_delete" class="flex-1 bg-white hover:bg-red-50 text-red-600 border border-red-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">🗑️ Löschen</button>
                     </div>
                 </div>
 
@@ -3265,21 +3265,21 @@
                 <div class="grid grid-cols-2 gap-3">
                     <!-- Base Vokabeln -->
                     <div class="p-3 rounded-xl border border-indigo-200 bg-indigo-50 flex flex-col justify-between">
-                        <div class="font-semibold text-indigo-900 text-xs mb-2">Basis-Vokabeln</div>
+                        <div class="font-semibold text-indigo-900 text-xs mb-2" data-i18n="excel_base_vocab">Basis-Vokabeln</div>
                         <div class="text-[10px] text-slate-500 mb-2 leading-tight" id="baseVocabUserCountDesc">Lade Informationen...</div>
                         <div class="flex flex-col gap-2 relative mt-auto">
-                            <button id="loadBaseVocabArea" class="w-full bg-white hover:bg-indigo-100 text-indigo-700 border border-indigo-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">📖 Einlesen</button>
-                            <button id="deleteBaseVocabArea" class="w-full bg-white hover:bg-red-50 text-red-600 border border-red-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">🗑️ Löschen</button>
+                            <button id="loadBaseVocabArea" data-i18n="excel_btn_read" class="w-full bg-white hover:bg-indigo-100 text-indigo-700 border border-indigo-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">📖 Einlesen</button>
+                            <button id="deleteBaseVocabArea" data-i18n="excel_btn_delete" class="w-full bg-white hover:bg-red-50 text-red-600 border border-red-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">🗑️ Löschen</button>
                         </div>
                     </div>
                     
                     <!-- Base Sätze -->
                     <div class="p-3 rounded-xl border border-indigo-200 bg-indigo-50 flex flex-col justify-between">
-                        <div class="font-semibold text-indigo-900 text-xs mb-2">Basis-Sätze</div>
+                        <div class="font-semibold text-indigo-900 text-xs mb-2" data-i18n="excel_base_sentences">Basis-Sätze</div>
                         <div class="text-[10px] text-slate-500 mb-2 leading-tight" id="baseSentencesUserCountDesc">Lade Informationen...</div>
                         <div class="flex flex-col gap-2 relative mt-auto">
-                            <button id="loadBaseSentencesArea" class="w-full bg-white hover:bg-indigo-100 text-indigo-700 border border-indigo-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">📖 Einlesen</button>
-                            <button id="deleteBaseSentencesArea" class="w-full bg-white hover:bg-red-50 text-red-600 border border-red-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">🗑️ Löschen</button>
+                            <button id="loadBaseSentencesArea" data-i18n="excel_btn_read" class="w-full bg-white hover:bg-indigo-100 text-indigo-700 border border-indigo-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">📖 Einlesen</button>
+                            <button id="deleteBaseSentencesArea" data-i18n="excel_btn_delete" class="w-full bg-white hover:bg-red-50 text-red-600 border border-red-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">🗑️ Löschen</button>
                         </div>
                     </div>
                 </div>
@@ -3720,14 +3720,14 @@
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-amber-500 mr-2">
                         <path d="M22.5 18a1.5 1.5 0 0 1-1.5 1.5H3A1.5 1.5 0 0 1 1.5 18v-1.5h21V18Zm-3.863-4.5H5.362l-1.636-7.362a.75.75 0 0 1 1.171-.77l3.963 2.642 2.618-5.236a.75.75 0 0 1 1.344 0l2.618 5.236 3.963-2.642a.75.75 0 0 1 1.171.77L18.637 13.5Z" />
                     </svg>
-                    Admin Dashboard
+                    <span data-i18n="admin_dashboard_title">Admin Dashboard</span>
                 </h2>
                 <div class="flex gap-2">
                     <button onclick="exportAdminCSV()"
                         class="text-xs px-3 py-1.5 bg-green-100 text-green-700 hover:bg-green-200 rounded-lg transition-colors font-semibold flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 mr-1">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
-                        </svg> CSV-Export
+                        </svg> <span data-i18n="admin_btn_csv">CSV-Export</span>
                     </button>
                     <button id="closeAdminModalBtn"
                         class="text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
@@ -3736,12 +3736,9 @@
 
             <div class="flex justify-between items-center mb-4 shrink-0 px-1 border-b border-slate-100">
                 <div class="flex gap-4">
-                    <button onclick="switchAdminTab('users')" id="adminTabUsers" class="admin-tab-btn active">👥
-                        Benutzer</button>
-                    <button onclick="switchAdminTab('lists')" id="adminTabLists" class="admin-tab-btn">📚
-                        Listen</button>
-                    <button onclick="switchAdminTab('invites')" id="adminTabInvites" class="admin-tab-btn">🎟️
-                        Einladungen</button>
+                    <button onclick="switchAdminTab('users')" id="adminTabUsers" class="admin-tab-btn active" data-i18n="admin_tab_users">👥 Benutzer</button>
+                    <button onclick="switchAdminTab('lists')" id="adminTabLists" class="admin-tab-btn" data-i18n="admin_tab_lists">📚 Listen</button>
+                    <button onclick="switchAdminTab('invites')" id="adminTabInvites" class="admin-tab-btn" data-i18n="admin_tab_invites">🎟️ Einladungen</button>
                 </div>
             </div>
 
@@ -3749,22 +3746,22 @@
             <div id="adminUserTabContent" class="flex flex-col flex-1 min-h-0">
                 <div class="grid grid-cols-2 gap-2 mb-4 shrink-0">
                     <div class="bg-blue-50 rounded-xl p-3 text-center border border-blue-100">
-                        <p class="text-[10px] text-blue-500 font-bold uppercase tracking-wide">Nutzer</p>
+                        <p class="text-[10px] text-blue-500 font-bold uppercase tracking-wide" data-i18n="admin_kpi_users">Nutzer</p>
                         <p id="kpiTotalUsers" class="text-lg font-black text-blue-800">-</p>
                     </div>
                     <div class="bg-purple-50 rounded-xl p-3 text-center border border-purple-100">
-                        <p class="text-[10px] text-purple-500 font-bold uppercase tracking-wide">Offene Codes</p>
+                        <p class="text-[10px] text-purple-500 font-bold uppercase tracking-wide" data-i18n="admin_kpi_codes">Offene Codes</p>
                         <p id="kpiOpenInviteCodes" class="text-lg font-black text-purple-800">-</p>
                     </div>
                 </div>
                 
                 <div class="grid grid-cols-2 gap-2 mb-4 shrink-0">
                     <div class="bg-emerald-50 rounded-xl p-3 text-center border border-emerald-100">
-                        <p class="text-[10px] text-emerald-600 font-bold uppercase tracking-wide">Gelernt (IT)</p>
+                        <p class="text-[10px] text-emerald-600 font-bold uppercase tracking-wide" data-i18n="admin_kpi_it">Gelernt (IT)</p>
                         <p id="kpiLearnedVocabIt" class="text-lg font-black text-emerald-800">-</p>
                     </div>
                     <div class="bg-amber-50 rounded-xl p-3 text-center border border-amber-100">
-                        <p class="text-[10px] text-amber-600 font-bold uppercase tracking-wide">Gelernt (EN)</p>
+                        <p class="text-[10px] text-amber-600 font-bold uppercase tracking-wide" data-i18n="admin_kpi_en">Gelernt (EN)</p>
                         <p id="kpiLearnedVocabEn" class="text-lg font-black text-amber-800">-</p>
                     </div>
                 </div>
@@ -3779,19 +3776,19 @@
                 <!-- Global Base Vocabulary Management -->
                 <div class="mb-6 p-4 bg-slate-50 rounded-2xl border border-slate-100">
                     <h3 class="text-sm font-bold text-slate-700 mb-3 flex items-center justify-between">
-                        <span>📚 Basis-Vokabeln verwalten</span>
+                        <span data-i18n="admin_base_vocab_title">📚 Basis-Vokabeln verwalten</span>
                     </h3>
                     
                     <div class="space-y-4">
                         <!-- Italienisch -->
                         <div class="p-3 bg-white rounded-xl border border-slate-200">
                             <div class="flex justify-between items-center mb-2">
-                                <span class="text-xs font-bold text-slate-600">Italienisch</span>
+                                <span class="text-xs font-bold text-slate-600" data-i18n="admin_lang_it">Italienisch</span>
                                 <span id="adminBaseVocabCountIt" class="text-[10px] text-slate-400">- Vokabeln</span>
                             </div>
                             <div class="flex gap-2">
                                 <input type="file" id="adminBaseVocabUploadIt" class="hidden" accept=".xlsx" onchange="uploadBaseVocab('it')">
-                                <button onclick="document.getElementById('adminBaseVocabUploadIt').click()"
+                                <button onclick="document.getElementById('adminBaseVocabUploadIt').click()" data-i18n="admin_btn_load_it"
                                     class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded-lg text-xs transition-all shadow-sm">
                                     📥 Italienisch laden
                                 </button>
@@ -3811,12 +3808,12 @@
                         <!-- Englisch -->
                         <div class="p-3 bg-white rounded-xl border border-slate-200">
                             <div class="flex justify-between items-center mb-2">
-                                <span class="text-xs font-bold text-slate-600">Englisch</span>
+                                <span class="text-xs font-bold text-slate-600" data-i18n="admin_lang_en">Englisch</span>
                                 <span id="adminBaseVocabCountEn" class="text-[10px] text-slate-400">- Vokabeln</span>
                             </div>
                             <div class="flex gap-2">
                                 <input type="file" id="adminBaseVocabUploadEn" class="hidden" accept=".xlsx" onchange="uploadBaseVocab('en')">
-                                <button onclick="document.getElementById('adminBaseVocabUploadEn').click()"
+                                <button onclick="document.getElementById('adminBaseVocabUploadEn').click()" data-i18n="admin_btn_load_en"
                                     class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg text-xs transition-all shadow-sm">
                                     📥 Englisch laden
                                 </button>
@@ -3838,18 +3835,18 @@
                 <!-- Grammar Sentence Management -->
                 <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
                     <h3 class="text-sm font-bold text-slate-700 mb-3 flex items-center justify-between">
-                        <span>📝 Grammatik-Sätze verwalten</span>
+                        <span data-i18n="admin_grammar_title">📝 Grammatik-Sätze verwalten</span>
                     </h3>
                     <div class="space-y-4">
                         <!-- Italienisch (Grammar) -->
                         <div class="p-3 bg-white rounded-xl border border-slate-200">
                             <div class="flex justify-between items-center mb-2">
-                                <span class="text-xs font-bold text-slate-600">Italienisch</span>
+                                <span class="text-xs font-bold text-slate-600" data-i18n="admin_lang_it">Italienisch</span>
                                 <span id="adminGrammarCountIt" class="text-[10px] text-slate-400">- Sätze</span>
                             </div>
                             <div class="flex gap-2">
                                 <input type="file" id="adminGrammarUploadIt" class="hidden" accept=".xlsx" onchange="uploadGrammar('it')">
-                                <button onclick="document.getElementById('adminGrammarUploadIt').click()"
+                                <button onclick="document.getElementById('adminGrammarUploadIt').click()" data-i18n="admin_btn_load_it_gram"
                                     class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-lg text-xs transition-all shadow-sm">
                                     📥 Laden (IT)
                                 </button>
@@ -3869,12 +3866,12 @@
                         <!-- Englisch (Grammar) -->
                         <div class="p-3 bg-white rounded-xl border border-slate-200">
                             <div class="flex justify-between items-center mb-2">
-                                <span class="text-xs font-bold text-slate-600">Englisch</span>
+                                <span class="text-xs font-bold text-slate-600" data-i18n="admin_lang_en">Englisch</span>
                                 <span id="adminGrammarCountEn" class="text-[10px] text-slate-400">- Sätze</span>
                             </div>
                             <div class="flex gap-2">
                                 <input type="file" id="adminGrammarUploadEn" class="hidden" accept=".xlsx" onchange="uploadGrammar('en')">
-                                <button onclick="document.getElementById('adminGrammarUploadEn').click()"
+                                <button onclick="document.getElementById('adminGrammarUploadEn').click()" data-i18n="admin_btn_load_en_gram"
                                     class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-lg text-xs transition-all shadow-sm">
                                     📥 Laden (EN)
                                 </button>
@@ -3897,7 +3894,7 @@
             <!-- Tab Content: Invites -->
             <div id="adminInviteTabContent" class="hidden flex flex-col flex-1 min-h-0 overflow-y-auto pr-2">
                 <div class="mb-4 flex gap-2">
-                    <button onclick="generateInviteCode()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-md active:scale-95">
+                    <button onclick="generateInviteCode()" data-i18n="admin_btn_gen_invite" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-md active:scale-95">
                         🎟️ Einladungscode generieren
                     </button>
                 </div>
@@ -3915,34 +3912,34 @@
         class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-[150] p-4">
         <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl">
             <div class="flex justify-between items-center mb-5">
-                <h2 class="text-xl font-bold text-slate-800">✉️ Kontakt</h2>
+                <h2 class="text-xl font-bold text-slate-800" data-i18n="contact_title">✉️ Kontakt</h2>
                 <button id="closeContactModalBtn"
                     class="text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
             </div>
 
-            <p class="text-sm text-slate-600 mb-4">Schicke uns eine Nachricht. Wir melden uns so schnell wie möglich bei
+            <p class="text-sm text-slate-600 mb-4" data-i18n="contact_desc">Schicke uns eine Nachricht. Wir melden uns so schnell wie möglich bei
                 dir!</p>
 
             <div class="space-y-4">
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">Ihre Nachricht</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1" data-i18n="contact_msg_label">Ihre Nachricht</label>
                     <textarea id="contactMessageInput" rows="5"
                         class="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-blue-400 transition-all resize-none"
-                        placeholder="Was möchtest du uns sagen?"></textarea>
+                        placeholder="..."></textarea>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">Anhang (Optional)</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1" data-i18n="contact_attach_label">Anhang (Optional)</label>
                     <div class="relative">
                         <input type="file" id="contactFileInput" class="hidden">
                         <button type="button" onclick="document.getElementById('contactFileInput').click()"
                             class="w-full border-2 border-dashed border-slate-200 hover:border-blue-400 rounded-xl px-4 py-3 text-sm text-slate-500 transition-all flex items-center justify-center gap-2">
-                            <span id="contactFileName">📎 Datei auswählen</span>
+                            <span id="contactFileName" data-i18n="contact_file_btn">📎 Datei auswählen</span>
                         </button>
                     </div>
                 </div>
 
-                <button id="contactSubmitBtn"
+                <button id="contactSubmitBtn" data-i18n="contact_submit"
                     class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-md active:scale-95">Absenden</button>
             </div>
         </div>
@@ -4732,7 +4729,200 @@
                 menu_guide: "Kurzanleitung",
                 menu_impressum: "Impressum & Lizenzen",
                 menu_app_language_title: "App Sprache",
-                menu_logout: "Abmelden"
+                menu_logout: "Abmelden",
+
+                // Toasts & Messages
+                toast_save_success: "Erfolgreich gespeichert.",
+                toast_save_error: "Fehler beim Speichern.",
+                toast_delete_success: "Erfolgreich gelöscht.",
+                toast_delete_error: "Fehler beim Löschen.",
+                toast_fill_all_fields: "Bitte beide Felder ausfüllen.",
+                toast_sync_started: "Synchronisierung gestartet...",
+                toast_offline_mode: "Server nicht erreichbar. Offline-Modus aktiv.",
+                toast_register_success: "Registrierung erfolgreich. Bitte anmelden.",
+                toast_enter_name: "Bitte gib deinen Namen ein.",
+                toast_enter_message: "Bitte gib eine Nachricht ein.",
+                toast_message_sent: "Deine Nachricht wurde gesendet! Ciao!",
+                toast_stats_reset_success: "Statistiken wurden auf dem Server und lokal zurückgesetzt.",
+                toast_stats_reset_error: "Fehler beim Zurücksetzen der Statistik auf dem Server.",
+                toast_custom_vocab_deleted: "Alle eigenen Vokabeln wurden gelöscht.",
+                toast_custom_sentences_deleted: "Alle eigenen Sätze wurden gelöscht.",
+                toast_base_vocab_deleted: "Basis-Vokabeln wurden gelöscht.",
+                toast_base_sentences_deleted: "Basis-Sätze wurden gelöscht.",
+                toast_no_offline_list: "Keine Offline-Liste verfügbar.",
+                toast_no_base_sentences: "Aktuell gibt es keine Basis-Sätze für diese Sprache.",
+                toast_upload_error: "Fehler beim Upload!",
+                toast_code_generated: "Einladungscode generiert",
+                toast_code_gen_error: "Fehler beim Generieren",
+                toast_email_sending: "E-Mail wird gesendet...",
+                toast_email_sent: "Code erfolgreich versendet",
+                
+                // Dynamic Toasts & Modals
+                confirm_reset_stats: "Möchtest du wirklich alle Statistiken zurücksetzen? Diese Aktion ist endgültig.",
+                title_reset_stats: "Statistik zurücksetzen?",
+                confirm_delete_entry: "Möchtest du dieses Element wirklich löschen?",
+                title_delete_entry: "Eintrag löschen",
+                confirm_delete_sentence: "Möchtest du diesen Satz wirklich löschen?",
+                toast_sentence_save_success: "Satz erfolgreich gespeichert.",
+                excel_sheet_sentences: "Sätze",
+                excel_sheet_vocab: "Vokabeln",
+                excel_filename_sentences: "Saetze.xlsx",
+                excel_filename_vocab: "Vokabelliste.xlsx",
+                confirm_clear_custom_vocab: "Möchtest du wirklich alle eigenen Vokabeln unwiderruflich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.",
+                title_clear_vocab: "Vokabeln leeren?",
+                confirm_clear_custom_sentences: "Möchtest du wirklich alle eigenen Sätze unwiderruflich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.",
+                title_clear_sentences: "Sätze leeren?",
+                title_load_base_list: "Basis-Liste laden",
+                label_server_base_list: "Server-Basisliste",
+                msg_no_server_base_vocab: "Keine Basis-Liste auf dem Server hinterlegt.",
+                msg_server_base_vocab_fetch_error: "Fehler beim Abrufen der Basis-Liste vom Server.",
+                confirm_load_offline_list: "Möchtest du stattdessen die Standard-Offline-Liste laden?",
+                title_load_standard_list: "Standard-Liste laden?",
+                label_standard_list: "Standard-Liste",
+                choice_process_vocab: "Wie sollen diese verarbeitet werden?",
+                action_replaced: "ersetzt",
+                action_added: "hinzugefügt",
+                toast_vocab_loaded_success: "Vokabeln erfolgreich geladen!",
+                toast_import_error: "Fehler beim Import",
+                confirm_delete_base_vocab: "Möchtest du die importierten Basis-Vokabeln von deinen Statistiken entfernen? Deine eigenen Vokabeln bleiben erhalten.",
+                title_delete_base_vocab: "Basis-Vokabeln löschen?",
+                title_load_base_sentences: "Basis-Sätze laden",
+                choice_process_sentences: "Sollen sie deine aktuellen Sätze ersetzen oder ergänzen?",
+                toast_base_sentences_loaded_success: "Basis-Sätze erfolgreich geladen!",
+                toast_import_base_sentences_error: "Fehler beim Import der Basis-Sätze.",
+                confirm_delete_base_sentences: "Möchtest du die importierten Basis-Sätze aus deiner Liste entfernen? Deine eigenen Sätze bleiben erhalten.",
+                title_delete_base_sentences: "Basis-Sätze löschen?",
+                choice_admin_global_sentences: "Möchtest du die globale Sätzeliste ersetzen, ergänzen oder nur lokal speichern?",
+                title_global_base_sentences: "Globale Basis-Sätze",
+                action_replace: "Ersetzen",
+                action_add: "Ergänzen",
+                action_local: "Lokal",
+                toast_admin_global_sentences_success: "Globale Sätze via Admin erfolgreich verarbeitet.",
+                choice_import_data: "Möchtest du ersetzen oder ergänzen?",
+                label_sentences: "Sätze",
+                label_vocab: "Vokabeln",
+                toast_data_loaded_synced: "Daten erfolgreich geladen und synchronisiert.",
+                label_german_word: "Deutsches Wort",
+                label_english: "Englische",
+                label_italian: "Italienische",
+                label_translation: "Übersetzung",
+                placeholder_german_word: "z.B. trinken",
+                placeholder_auto_manual_input: "Automatisch oder manuell eingeben",
+                label_word: "Wort",
+                label_german_translation: "Deutsche Übersetzung",
+                placeholder_italian_word: "z.B. bere",
+                tag_offline: "✨ Offline",
+                tag_searching_online: "⏳ Suche online…",
+                tag_online: "🌐 Online",
+                title_select_emoji: " wählen",
+                title_no_emoji: "Kein Emoji",
+                title_remove_emoji: "Emoji entfernen",
+                toast_vocab_added: "Wurde zur Vokabelliste hinzugefügt!",
+                toast_vocab_sync_offline: "Wird synchronisiert, sobald du online bist.",
+                toast_sentence_added: "Satz wurde zur Vokabelliste hinzugefügt!",
+                toast_save_error_generic: "Fehler beim Speichern.",
+                loading_invites: "Lade Einladungen...",
+                error_loading_generic: "Fehler beim Laden",
+                no_invites_generated: "Noch keine Einladungen generiert.",
+                status_used: "Genutzt",
+                status_open: "Offen",
+                sent_to: "Gesendet an",
+                btn_send: "Senden",
+                error: "Fehler",
+                btn_cancel: "Abbrechen",
+                btn_ok: "Verstanden / OK",
+                btn_confirm: "Bestätigen",
+                btn_replace: "Ersetzen",
+                btn_append: "Ergänzen",
+                prompt_email_title: "E-Mail Adresse",
+                prompt_email_desc: "Wohin soll der Code gesendet werden?",
+                choice_mode_title: "Import-Modus wählen",
+                choice_replace_text: "Liste ersetzen (Löschen)",
+                choice_add_text: "Liste ergänzen (Hinzufügen)",
+                
+                // Stats Modal
+                stats_title: "Lern-Statistik",
+                stats_reset_btn: "Statistik zurücksetzen",
+                stats_tab_words: "Wörter",
+                stats_tab_days: "Tages-Aktivität",
+                stats_th_word: "Wort (DE - Zielsprache)",
+                stats_th_presented: "Präsentiert",
+                stats_th_correct: "Richtig",
+                stats_th_wrong: "Falsch",
+                stats_th_last_learned: "Zuletzt gelernt",
+                
+                // Excel Modal
+                excel_title: "Excel-Liste verwalten",
+                excel_custom_vocab: "Eigene Vokabeln",
+                excel_btn_import: "📥 Import",
+                excel_btn_export: "📤 Export",
+                excel_btn_delete: "🗑️ Löschen",
+                excel_custom_sentences: "Eigene Sätze",
+                excel_base_vocab: "Basis-Vokabeln",
+                excel_base_sentences: "Basis-Sätze",
+                excel_btn_read: "📖 Einlesen",
+                
+                // Admin Modal
+                admin_dashboard_title: "Admin Dashboard",
+                admin_btn_csv: "CSV-Export",
+                admin_tab_users: "👥 Benutzer",
+                admin_tab_lists: "📚 Listen",
+                admin_tab_invites: "🎟️ Einladungen",
+                admin_kpi_users: "Nutzer",
+                admin_kpi_codes: "Offene Codes",
+                admin_kpi_it: "Gelernt (IT)",
+                admin_kpi_en: "Gelernt (EN)",
+                admin_base_vocab_title: "📚 Basis-Vokabeln verwalten",
+                admin_lang_it: "Italienisch",
+                admin_lang_en: "Englisch",
+                admin_btn_load_it: "📥 Italienisch laden",
+                admin_btn_load_en: "📥 Englisch laden",
+                admin_grammar_title: "📝 Grammatik-Sätze verwalten",
+                admin_btn_load_it_gram: "📥 Laden (IT)",
+                admin_btn_load_en_gram: "📥 Laden (EN)",
+                admin_btn_gen_invite: "🎟️ Einladungscode generieren",
+                
+                // Contact Modal
+                contact_title: "✉️ Kontakt",
+                contact_desc: "Schicke uns eine Nachricht. Wir melden uns so schnell wie möglich bei dir!",
+                contact_msg_label: "Ihre Nachricht",
+                contact_attach_label: "Anhang (Optional)",
+                contact_file_btn: "📎 Datei auswählen",
+                contact_submit: "Absenden",
+                
+                // Onboarding
+                onboarding_title: "Benvenuto!",
+                onboarding_desc: "Schön, dass du da bist! Um zu starten, verrate uns bitte deinen Namen.",
+                onboarding_name_label: "Dein Name",
+                onboarding_submit: "Starten",
+                onboarding_vocab_title: "Vokabeln eintragen!",
+                onboarding_vocab_desc: "Damit die App funktioniert, müssen zuerst Vokabeln eingetragen werden. <br><br>Füge diese entweder manuell über die Funktion <strong>\"Vokabel hinzufügen\"</strong> hinzu oder nutze das <strong>Einlesen einer Excelliste</strong> im Burgermenü.<br><br>Es werden <strong>mindestens 10 Vokabeln</strong> benötigt, damit das Programm einwandfrei funktioniert.",
+                onboarding_vocab_submit: "Alles klar, OK!",
+                
+                // Auth & Onboarding Overlays
+                auth_title_login: "Willkommen!",
+                auth_title_register: "Registrierung",
+                auth_title_invite: "Einladungscode erforderlich",
+                auth_email_label: "Email",
+                auth_password_label: "Passwort",
+                auth_invite_label: "Einladungscode",
+                auth_submit_login: "Anmelden",
+                auth_submit_register: "Registrieren",
+                auth_submit_invite: "Prüfen & Weiter",
+                auth_forgot: "Passwort vergessen?",
+                auth_toggle_text_login: "Noch kein Konto?",
+                auth_toggle_text_register: "Bereits ein Konto?",
+                auth_toggle_btn_login: "Registrieren",
+                auth_toggle_btn_register: "Anmelden",
+                forgot_title: "Passwort zurücksetzen",
+                forgot_desc: "Gib deine E-Mail-Adresse ein. Wir senden dir einen Link, um dein Passwort neu zu vergeben.",
+                forgot_submit: "Link senden",
+                reset_title: "Neues Passwort vergeben",
+                reset_label: "Neues Passwort",
+                reset_submit: "Passwort speichern",
+                
+                // Dialogs
+                confirm_delete_code: "Soll der Code wirklich gelöscht werden?"
             },
             en: {
                 // Header
@@ -4755,7 +4945,202 @@
                 menu_guide: "Quick Guide",
                 menu_impressum: "Imprint & Licenses",
                 menu_app_language_title: "App Language",
-                menu_logout: "Log out"
+                menu_logout: "Log out",
+
+                // Toasts & Messages
+                toast_save_success: "Successfully saved.",
+                toast_save_error: "Error saving.",
+                toast_delete_success: "Successfully deleted.",
+                toast_delete_error: "Error deleting.",
+                toast_fill_all_fields: "Please fill in all fields.",
+                toast_sync_started: "Sync started...",
+                toast_offline_mode: "Server unreachable. Offline mode active.",
+                toast_register_success: "Registration successful. Please log in.",
+                toast_enter_name: "Please enter your name.",
+                toast_enter_message: "Please enter a message.",
+                toast_message_sent: "Your message was sent! Ciao!",
+                toast_stats_reset_success: "Statistics have been reset on the server and locally.",
+                toast_stats_reset_error: "Error resetting statistics on the server.",
+                toast_custom_vocab_deleted: "All custom vocabulary deleted.",
+                toast_custom_sentences_deleted: "All custom sentences deleted.",
+                toast_base_vocab_deleted: "Base vocabulary deleted.",
+                toast_base_sentences_deleted: "Base sentences deleted.",
+                toast_no_offline_list: "No offline list available.",
+                toast_no_base_sentences: "Currently no base sentences for this language.",
+                toast_upload_error: "Error uploading!",
+                toast_code_generated: "Invite code generated",
+                toast_code_gen_error: "Error generating",
+                toast_email_sending: "Sending email...",
+                toast_email_sent: "Code successfully sent",
+                
+                // Dynamic Toasts & Modals
+                confirm_reset_stats: "Are you sure you want to reset all statistics? This action is permanent.",
+                title_reset_stats: "Reset statistics?",
+                confirm_delete_entry: "Do you really want to delete this entry?",
+                title_delete_entry: "Delete entry",
+                confirm_delete_sentence: "Do you really want to delete this sentence?",
+                toast_sentence_save_success: "Sentence successfully saved.",
+                excel_sheet_sentences: "Sentences",
+                excel_sheet_vocab: "Vocabulary",
+                excel_filename_sentences: "Sentences.xlsx",
+                excel_filename_vocab: "Vocabulary.xlsx",
+                confirm_clear_custom_vocab: "Are you sure you want to permanently delete all custom vocabulary? This action cannot be undone.",
+                title_clear_vocab: "Clear vocabulary?",
+                confirm_clear_custom_sentences: "Are you sure you want to permanently delete all custom sentences? This action cannot be undone.",
+                title_clear_sentences: "Clear sentences?",
+                title_load_base_list: "Load base list",
+                label_server_base_list: "Server base list",
+                msg_no_server_base_vocab: "No base list found on the server.",
+                msg_server_base_vocab_fetch_error: "Error fetching base list from server.",
+                confirm_load_offline_list: "Do you want to load the standard offline list instead?",
+                title_load_standard_list: "Load standard list?",
+                label_standard_list: "Standard list",
+                choice_process_vocab: "How should they be processed?",
+                action_replaced: "replaced",
+                action_added: "added",
+                toast_vocab_loaded_success: "Vocabulary loaded successfully!",
+                toast_import_error: "Error during import",
+                confirm_delete_base_vocab: "Do you want to remove the imported base vocabulary from your statistics? Your custom vocabulary will be kept.",
+                title_delete_base_vocab: "Delete base vocabulary?",
+                title_load_base_sentences: "Load base sentences",
+                choice_process_sentences: "Should they replace or append to your existing sentences?",
+                toast_base_sentences_loaded_success: "Base sentences successfully loaded!",
+                toast_import_base_sentences_error: "Error importing base sentences.",
+                confirm_delete_base_sentences: "Do you want to remove the imported base sentences from your list? Your custom sentences will be kept.",
+                title_delete_base_sentences: "Delete base sentences?",
+                choice_admin_global_sentences: "Do you want to replace, append to the global sentence list, or save locally?",
+                title_global_base_sentences: "Global Base Sentences",
+                action_replace: "Replace",
+                action_add: "Append",
+                action_local: "Local",
+                toast_admin_global_sentences_success: "Global sentences successfully processed via admin.",
+                choice_import_data: "Do you want to replace or append?",
+                label_sentences: "Sentences",
+                label_vocab: "Vocabulary",
+                toast_data_loaded_synced: "Data successfully loaded and synchronized.",
+                label_german_word: "German Word",
+                label_english: "English",
+                label_italian: "Italian",
+                label_translation: "Translation",
+                placeholder_german_word: "e.g. trinken",
+                placeholder_auto_manual_input: "Automatic or manual input",
+                label_word: "Word",
+                label_german_translation: "German Translation",
+                placeholder_italian_word: "e.g. bere",
+                tag_offline: "✨ Offline",
+                tag_searching_online: "⏳ Searching online…",
+                tag_online: "🌐 Online",
+                title_select_emoji: " select",
+                title_no_emoji: "No Emoji",
+                title_remove_emoji: "Remove Emoji",
+                toast_vocab_added: "Added to vocabulary list!",
+                toast_vocab_sync_offline: "Will sync when you are online.",
+                toast_sentence_added: "Sentence added to vocabulary list!",
+                toast_save_error_generic: "Error saving.",
+                loading_invites: "Loading invites...",
+                error_loading_generic: "Error loading",
+                no_invites_generated: "No invites generated yet.",
+                status_used: "Used",
+                status_open: "Open",
+                sent_to: "Sent to",
+                not_yet_sent: "Not yet sent",
+                by: "By",
+                btn_send: "Send",
+                error: "Error",
+                btn_cancel: "Cancel",
+                btn_ok: "Got it / OK",
+                btn_confirm: "Confirm",
+                btn_replace: "Replace",
+                btn_append: "Append",
+                prompt_email_title: "Email Address",
+                prompt_email_desc: "Where should the code be sent?",
+                choice_mode_title: "Select Import Mode",
+                choice_replace_text: "Replace List (Delete)",
+                choice_add_text: "Append to List (Add)",
+
+                // Stats Modal
+                stats_title: "Learning Statistics",
+                stats_reset_btn: "Reset Statistics",
+                stats_tab_words: "Words",
+                stats_tab_days: "Daily Activity",
+                stats_th_word: "Word (DE - Target)",
+                stats_th_presented: "Presented",
+                stats_th_correct: "Correct",
+                stats_th_wrong: "Wrong",
+                stats_th_last_learned: "Last Learned",
+
+                // Excel Modal
+                excel_title: "Manage Excel List",
+                excel_custom_vocab: "Custom Vocabulary",
+                excel_btn_import: "📥 Import",
+                excel_btn_export: "📤 Export",
+                excel_btn_delete: "🗑️ Delete",
+                excel_custom_sentences: "Custom Sentences",
+                excel_base_vocab: "Base Vocabulary",
+                excel_base_sentences: "Base Sentences",
+                excel_btn_read: "📖 Read",
+
+                // Admin Modal
+                admin_dashboard_title: "Admin Dashboard",
+                admin_btn_csv: "CSV Export",
+                admin_tab_users: "👥 Users",
+                admin_tab_lists: "📚 Lists",
+                admin_tab_invites: "🎟️ Invites",
+                admin_kpi_users: "Users",
+                admin_kpi_codes: "Open Codes",
+                admin_kpi_it: "Learned (IT)",
+                admin_kpi_en: "Learned (EN)",
+                admin_base_vocab_title: "📚 Manage Base Vocabulary",
+                admin_lang_it: "Italian",
+                admin_lang_en: "English",
+                admin_btn_load_it: "📥 Load Italian",
+                admin_btn_load_en: "📥 Load English",
+                admin_grammar_title: "📝 Manage Grammar Sentences",
+                admin_btn_load_it_gram: "📥 Load (IT)",
+                admin_btn_load_en_gram: "📥 Load (EN)",
+                admin_btn_gen_invite: "🎟️ Generate Invite Code",
+
+                // Contact Modal
+                contact_title: "✉️ Contact",
+                contact_desc: "Send us a message. We will get back to you as soon as possible!",
+                contact_msg_label: "Your Message",
+                contact_attach_label: "Attachment (Optional)",
+                contact_file_btn: "📎 Select File",
+                contact_submit: "Submit",
+
+                // Onboarding
+                onboarding_title: "Welcome!",
+                onboarding_desc: "Great to have you here! To get started, please tell us your name.",
+                onboarding_name_label: "Your Name",
+                onboarding_submit: "Start",
+                onboarding_vocab_title: "Add Vocabulary!",
+                onboarding_vocab_desc: "For the app to work, you need to add vocabulary first. <br><br>Add them either manually via the <strong>\"Add Vocabulary\"</strong> function or use the <strong>Read Excel list</strong> option in the burger menu.<br><br>A minimum of <strong>10 words</strong> is required for the program to work properly.",
+                onboarding_vocab_submit: "Got it, OK!",
+
+                // Auth & Onboarding Overlays
+                auth_title_login: "Welcome!",
+                auth_title_register: "Registration",
+                auth_title_invite: "Invite Code Required",
+                auth_email_label: "Email",
+                auth_password_label: "Password",
+                auth_invite_label: "Invite Code",
+                auth_submit_login: "Log in",
+                auth_submit_register: "Register",
+                auth_submit_invite: "Check & Continue",
+                auth_forgot: "Forgot your password?",
+                auth_toggle_text_login: "No account yet?",
+                auth_toggle_text_register: "Already have an account?",
+                auth_toggle_btn_login: "Register",
+                auth_toggle_btn_register: "Log in",
+                forgot_title: "Reset Password",
+                forgot_desc: "Enter your email address to receive a link to reset your password.",
+                forgot_submit: "Send Link",
+                reset_title: "Set New Password",
+                reset_label: "New Password",
+                reset_submit: "Save Password",
+
+                // Dialogs
+                confirm_delete_code: "Do you really want to delete this code?"
             }
         };
 
@@ -4767,7 +5152,7 @@
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 const text = getI18n(key);
-                el.textContent = text; // Safely set text content for the span
+                el.innerHTML = text; // Verwende innerHTML um Formatierungen (wie <strong>) beizubehalten
             });
             updateLangButtonStyles();
         }
@@ -8091,17 +8476,17 @@
         );
 
         document.getElementById('resetStatsBtn').addEventListener('click', async () => {
-            if (await showConfirm('Möchtest du wirklich alle Statistiken zurücksetzen? Diese Aktion ist endgültig.', 'Statistik zurücksetzen?')) {
+            if (await showConfirm(getI18n('confirm_reset_stats'), getI18n('title_reset_stats'))) {
                 try {
                     await apiFetch('/vocab/stats/reset', { method: 'PUT' });
                     wordStats = {}; dailyActivity = {}; grammarActivityCount = 0;
                     localStorage.setItem('ita-local-last-reset', Date.now().toString());
                     saveAllDataLocally();
                     renderStats(); renderDailyStats();
-                    showToast("Statistiken wurden auf dem Server und lokal zurückgesetzt.", "success");
+                    showToast(getI18n('toast_stats_reset_success'), "success");
                 } catch (err) {
                     console.error("Reset failed", err);
-                    showToast("Fehler beim Zurücksetzen der Statistik auf dem Server.", "error");
+                    showToast(getI18n('toast_stats_reset_error'), "error");
                 }
             }
         });
@@ -8329,7 +8714,7 @@
                 });
                 li.querySelector('.delete-btn').addEventListener('click', async (e) => {
                     e.stopPropagation();
-                    if (await showConfirm(`Möchtest du dieses Element wirklich löschen?`, "Eintrag löschen")) {
+                    if (await showConfirm(getI18n('confirm_delete_entry'), getI18n('title_delete_entry'))) {
                         try {
                             await apiFetch(`/vocab/${word.id}`, { method: 'DELETE' });
                             fullDictionary = fullDictionary.filter(w => w.id !== word.id);
@@ -8338,9 +8723,9 @@
                             renderVocabList();
                             updateAdminBaseVocabCount(); // In case sentence/vocab count changes in excel modal
                             updateAdminGrammarCount(); // Update grammar dropdown if it was a sentence
-                            showToast("Erfolgreich gelöscht.", "success");
+                            showToast(getI18n('toast_delete_success'), "success");
                         } catch (err) {
-                            showToast("Fehler beim Löschen.", "error");
+                            showToast(getI18n('toast_delete_error'), "error");
                         }
                     }
                 });
@@ -8425,7 +8810,7 @@
                 });
                 li.querySelector('.delete-btn').addEventListener('click', async (e) => {
                     e.stopPropagation();
-                    if (await showConfirm(`Möchtest du diesen Satz wirklich löschen?`, "Eintrag löschen")) {
+                    if (await showConfirm(getI18n('confirm_delete_sentence'), getI18n('title_delete_entry'))) {
                         try {
                             await apiFetch(`/vocab/${word.id}`, { method: 'DELETE' });
                             fullDictionary = fullDictionary.filter(w => w.id !== word.id);
@@ -8433,9 +8818,9 @@
                             saveAllDataLocally();
                             renderSentenceList();
                             updateAdminGrammarCount(); // Update grammar dropdown
-                            showToast("Erfolgreich gelöscht.", "success");
+                            showToast(getI18n('toast_delete_success'), "success");
                         } catch (err) {
-                            showToast("Fehler beim Löschen.", "error");
+                            showToast(getI18n('toast_delete_error'), "error");
                         }
                     }
                 });
@@ -8478,7 +8863,7 @@
             const emoji = editVocabEmoji.value.trim();
             
             if (!de || !it) {
-                showToast("Bitte Deutsch und Zielsprache ausfüllen.", "warning");
+                showToast(getI18n('toast_fill_all_fields'), "warning");
                 return;
             }
 
@@ -8503,13 +8888,13 @@
                     updateAdminGrammarCount();
                 }
                 
-                showToast("Erfolgreich gespeichert.", "success");
+                showToast(getI18n('toast_save_success'), "success");
                 editVocabModal.classList.add('hidden');
                 editVocabModal.classList.remove('flex');
                 
             } catch (e) {
                 console.error(e);
-                showToast("Fehler beim Speichern.", "error");
+                showToast(getI18n('toast_save_error'), "error");
             } finally {
                 saveEditVocabBtn.disabled = false;
             }
@@ -8546,7 +8931,7 @@
                 const it = editSentenceTarget.value.trim();
 
                 if (!de || !it) {
-                    showToast("Bitte beide Felder ausfüllen.", "warning");
+                    showToast(getI18n('toast_fill_all_fields'), "warning");
                     return;
                 }
 
@@ -8567,11 +8952,11 @@
                         updateAdminGrammarCount();
                     }
 
-                    showToast("Satz erfolgreich gespeichert.", "success");
+                    showToast(getI18n('toast_sentence_save_success'), "success");
                     editSentenceModal.classList.add('hidden');
                     editSentenceModal.classList.remove('flex');
                 } catch (err) {
-                    showToast("Fehler beim Speichern.", "error");
+                    showToast(getI18n('toast_save_error'), "error");
                 } finally {
                     saveEditSentenceBtn.disabled = false;
                 }
@@ -8620,41 +9005,41 @@
             }));
             const ws = XLSX.utils.json_to_sheet(rows);
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, isSentences ? 'Sätze' : 'Vokabeln');
-            XLSX.writeFile(wb, isSentences ? 'Saetze.xlsx' : 'Vokabelliste.xlsx');
+            XLSX.utils.book_append_sheet(wb, ws, isSentences ? getI18n('excel_sheet_sentences') : getI18n('excel_sheet_vocab'));
+            XLSX.writeFile(wb, isSentences ? getI18n('excel_filename_sentences') : getI18n('excel_filename_vocab'));
             excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
         }
         exportArea.addEventListener('click', () => exportToExcelLogic(false));
         exportSentencesArea.addEventListener('click', () => exportToExcelLogic(true));
 
         clearVocabArea.addEventListener('click', async () => {
-            if (await showConfirm("Möchtest du wirklich alle eigenen Vokabeln unwiderruflich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.", "Vokabeln leeren?")) {
+            if (await showConfirm(getI18n('confirm_clear_custom_vocab'), getI18n('title_clear_vocab'))) {
                 try {
                     await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Vocab&isOwn=true`, { method: 'DELETE' });
                     fullDictionary = fullDictionary.filter(w => !(w.language === CURRENT_LANG && w.typ !== 'Satz' && w.isOwn === true));
                     renderVocabList();
                     excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
-                    showToast("Alle eigenen Vokabeln wurden gelöscht.", "success");
+                    showToast(getI18n('toast_custom_vocab_deleted'), "success");
                     loadDataFromServer();
                 } catch (err) {
                     console.error(err);
-                    showToast("Fehler beim Löschen der Liste: " + err.message, "error");
+                    showToast(getI18n('toast_delete_error') + ": " + err.message, "error");
                 }
             }
         });
 
         clearSentencesArea.addEventListener('click', async () => {
-            if (await showConfirm("Möchtest du wirklich alle eigenen Sätze unwiderruflich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.", "Sätze leeren?")) {
+            if (await showConfirm(getI18n('confirm_clear_custom_sentences'), getI18n('title_clear_sentences'))) {
                 try {
                     await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Satz&isOwn=true`, { method: 'DELETE' });
                     fullDictionary = fullDictionary.filter(w => !(w.language === CURRENT_LANG && w.typ === 'Satz' && w.isOwn === true));
                     renderVocabList();
                     excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
-                    showToast("Alle eigenen Sätze wurden gelöscht.", "success");
+                    showToast(getI18n('toast_custom_sentences_deleted'), "success");
                     loadDataFromServer();
                 } catch (err) {
                     console.error(err);
-                    showToast("Fehler beim Löschen der Sätze: " + err.message, "error");
+                    showToast(getI18n('toast_delete_error') + ": " + err.message, "error");
                 }
             }
         });
@@ -8676,24 +9061,24 @@
                 let sourceLabel = "";
 
                 if (serverBase.length > 0) {
-                    const loadConfirmed = await showConfirm(`Basis-Liste (${CURRENT_LANG.toUpperCase()}) auf dem Server gefunden (${serverBase.length} Vokabeln). Möchtest du diese laden?`, "Basis-Liste laden");
+                    const loadConfirmed = await showConfirm(getI18n('confirm_load_server_base_vocab', serverBase.length, CURRENT_LANG.toUpperCase()), getI18n('title_load_base_list'));
                     if (!loadConfirmed) return;
                     wordsToUpload = serverBase.map(v => ({
                         de: v.de, it: v.it, typ: v.typ, emoji: v.emoji, grammatica: v.grammatica, language: CURRENT_LANG, isOwn: false
                     }));
-                    sourceLabel = `${CURRENT_LANG.toUpperCase()}-Server-Basisliste`;
+                    sourceLabel = getI18n('label_server_base_list', CURRENT_LANG.toUpperCase());
                 } else {
                     // Inform user WHY fallback is offered
-                    let msg = `Keine Basis-Liste (${CURRENT_LANG.toUpperCase()}) auf dem Server hinterlegt.`;
-                    if (fetchError) msg = `Fehler beim Abrufen der Basis-Liste vom Server: ${fetchError}.`;
+                    let msg = getI18n('msg_no_server_base_vocab', CURRENT_LANG.toUpperCase());
+                    if (fetchError) msg = getI18n('msg_server_base_vocab_fetch_error', fetchError);
 
-                    const fallbackConfirmed = await showConfirm(`${msg}\n\nMöchtest du stattdessen die Standard-Offline-Liste laden?`, "Standard-Liste laden?");
+                    const fallbackConfirmed = await showConfirm(`${msg}\n\n${getI18n('confirm_load_offline_list')}`, getI18n('title_load_standard_list'));
                     if (!fallbackConfirmed) return;
 
                     const dictToUse = CURRENT_LANG === 'en' ? (window.offlineDictionaryEn || []) : offlineDictionary;
                     
                     if (dictToUse.length === 0) {
-                        return showToast(`Keine Offline-Liste für ${CURRENT_LANG.toUpperCase()} verfügbar.`, "warning");
+                        return showToast(getI18n('toast_no_offline_list', CURRENT_LANG.toUpperCase()), "warning");
                     }
 
                     wordsToUpload = dictToUse.map(item => {
@@ -8704,11 +9089,11 @@
                         }
                         return { ...item, language: CURRENT_LANG, grammatica: grammatica || null, isOwn: false };
                     });
-                    sourceLabel = `${CURRENT_LANG.toUpperCase()}-Standard-Liste`;
+                    sourceLabel = getI18n('label_standard_list', CURRENT_LANG.toUpperCase());
                 }
 
                 // 2. Choice Modal for Add vs Replace
-                const choice = await showChoice(`Du lädst ${wordsToUpload.length} Vokabeln (${sourceLabel}). Wie sollen diese verarbeitet werden?`);
+                const choice = await showChoice(getI18n('choice_process_vocab', wordsToUpload.length, sourceLabel));
                 if (!choice) return; // Cancel
 
                 if (choice === 'replace') {
@@ -8722,26 +9107,26 @@
 
                 if (result) {
                     loadDataFromServer();
-                    showToast(`${result.length} Vokabeln erfolgreich ${choice === 'replace' ? 'ersetzt' : 'hinzugefügt'}!`, "success");
+                    showToast(getI18n('toast_vocab_loaded_success', result.length, choice === 'replace' ? getI18n('action_replaced') : getI18n('action_added')), "success");
                     excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
                 }
             } catch (err) {
                 console.error(err);
-                showToast("Fehler beim Import: " + err.message, "error");
+                showToast(getI18n('toast_import_error') + ": " + err.message, "error");
             }
         });
 
         deleteBaseVocabArea.addEventListener('click', async () => {
-            if (await showConfirm("Möchtest du die importierten Basis-Vokabeln von deinen Statistiken entfernen? Deine eigenen Vokabeln bleiben erhalten.", "Basis-Vokabeln löschen?")) {
+            if (await showConfirm(getI18n('confirm_delete_base_vocab'), getI18n('title_delete_base_vocab'))) {
                 try {
                     await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Vocab&isOwn=false`, { method: 'DELETE' });
                     fullDictionary = fullDictionary.filter(w => !(w.language === CURRENT_LANG && w.typ !== 'Satz' && w.isOwn !== true));
-                    showToast("Basis-Vokabeln wurden gelöscht.", "success");
+                    showToast(getI18n('toast_base_vocab_deleted'), "success");
                     loadDataFromServer();
                     excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
                 } catch (e) {
                     console.error("Error during deletion:", e);
-                    showToast("Fehler beim Löschen der Vokabeln: " + e.message, "error");
+                    showToast(getI18n('toast_delete_error') + ": " + e.message, "error");
                 }
             }
         });
@@ -8756,16 +9141,16 @@
                     console.warn("Server base sentences fetch failed", e);
                 }
 
-                if (serverBase.length === 0) return showToast("Aktuell gibt es keine Basis-Sätze für diese Sprache.", "warning");
+                if (serverBase.length === 0) return showToast(getI18n('toast_no_base_sentences'), "warning");
 
-                const loadConfirmed = await showConfirm(`Basis-Sätze (${CURRENT_LANG.toUpperCase()}) auf dem Server gefunden (${serverBase.length} Sätze). Möchtest du diese für deine Karteikarten importieren?`, "Basis-Sätze laden");
+                const loadConfirmed = await showConfirm(getI18n('confirm_load_server_base_sentences', serverBase.length, CURRENT_LANG.toUpperCase()), getI18n('title_load_base_sentences'));
                 if (!loadConfirmed) return;
 
                 const wordsToUpload = serverBase.map(v => ({
                     de: v.de, it: v.it, typ: 'Satz', emoji: '', grammatica: v.category || v.level || '', language: CURRENT_LANG, isOwn: false
                 }));
 
-                const choice = await showChoice(`Du lädst ${wordsToUpload.length} Sätze. Sollen sie deine aktuellen Sätze ersetzen oder ergänzen?`);
+                const choice = await showChoice(getI18n('choice_process_sentences', wordsToUpload.length));
                 if (!choice) return;
 
                 if (choice === 'replace') {
@@ -8779,26 +9164,26 @@
 
                 if (result) {
                     loadDataFromServer();
-                    showToast(`${result.length} Basis-Sätze erfolgreich ${choice === 'replace' ? 'ersetzt' : 'hinzugefügt'}!`, "success");
+                    showToast(getI18n('toast_base_sentences_loaded_success', result.length, choice === 'replace' ? getI18n('action_replaced') : getI18n('action_added')), "success");
                     excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
                 }
             } catch (err) {
                 console.error(err);
-                showToast("Fehler beim Import der Basis-Sätze.", "error");
+                showToast(getI18n('toast_import_base_sentences_error'), "error");
             }
         });
 
         deleteBaseSentencesArea.addEventListener('click', async () => {
-            if (await showConfirm("Möchtest du die importierten Basis-Sätze aus deiner Liste entfernen? Deine eigenen Sätze bleiben erhalten.", "Basis-Sätze löschen?")) {
+            if (await showConfirm(getI18n('confirm_delete_base_sentences'), getI18n('title_delete_base_sentences'))) {
                 try {
                     await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Satz&isOwn=false`, { method: 'DELETE' });
                     fullDictionary = fullDictionary.filter(w => !(w.language === CURRENT_LANG && w.typ === 'Satz' && w.isOwn !== true));
-                    showToast("Basis-Sätze wurden gelöscht.", "success");
+                    showToast(getI18n('toast_base_sentences_deleted'), "success");
                     loadDataFromServer();
                     excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
                 } catch (e) {
                     console.error("Error during deletion:", e);
-                    showToast("Fehler beim Löschen der Sätze: " + e.message, "error");
+                    showToast(getI18n('toast_delete_error') + ": " + e.message, "error");
                 }
             }
         });
@@ -8828,18 +9213,18 @@
                     if (wordsToUpload.length > 0) {
                         
                         if (excelUploadType === 'sentences' && currentUserIsAdmin) {
-                            const globalChoice = await showChoice("Möchtest du die globale Sätzeliste ersetzen, ergänzen oder nur lokal speichern?", "Globale Basis-Sätze", { confirmText: "Ersetzen", toggleText: "Ergänzen", cancelText: "Lokal" });
+                            const globalChoice = await showChoice(getI18n('choice_admin_global_sentences'), getI18n('title_global_base_sentences'), { confirmText: getI18n('action_replace'), toggleText: getI18n('action_add'), cancelText: getI18n('action_local') });
                             if (globalChoice === 'replace' || globalChoice === 'append') {
                                 const baseSentences = wordsToUpload.map(w => ({ de: w.de, it: w.it, category: w.grammatica, language: CURRENT_LANG }));
                                 await apiFetch('/admin/grammar-sentences/bulk', {
                                     method: 'POST',
                                     body: JSON.stringify({ sentences: baseSentences, language: CURRENT_LANG, mode: globalChoice })
                                 });
-                                showToast(`Globale Sätze via Admin erfolgreich ${globalChoice === 'replace' ? 'ersetzt' : 'ergänzt'}.`, "success");
+                                showToast(getI18n('toast_admin_global_sentences_success', globalChoice === 'replace' ? getI18n('action_replaced') : getI18n('action_added')), "success");
                             }
                         }
 
-                        const choice = await showChoice(`Du importierst ${wordsToUpload.length} ${excelUploadType === 'sentences' ? 'Sätze' : 'Vokabeln'}. Möchtest du ersetzen oder ergänzen?`);
+                        const choice = await showChoice(getI18n('choice_import_data', wordsToUpload.length, excelUploadType === 'sentences' ? getI18n('label_sentences') : getI18n('label_vocab')));
                         if (!choice) { excelUploadEl.value = null; return; }
                         
                         if (choice === 'replace') {
@@ -8853,7 +9238,7 @@
                         });
                         if (result && result.length > 0) {
                             loadDataFromServer();
-                            showToast(`${result.length} Daten erfolgreich geladen und synchronisiert.`, "success");
+                            showToast(getI18n('toast_data_loaded_synced', result.length), "success");
                             typeFilterEl.value = 'Alle';
                             excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
                             startDragDropRound();
@@ -8861,7 +9246,7 @@
                     }
                 } catch (err) {
                     console.error(err);
-                    showToast("Fehler beim Upload!", "error");
+                    showToast(getI18n('toast_upload_error'), "error");
                 }
             };
             reader.readAsArrayBuffer(file);
@@ -9014,17 +9399,17 @@
             if (lang === 'de') {
                 vocabLangDeBtn.classList.add('bg-white', 'shadow-sm', 'font-semibold', 'text-slate-800'); vocabLangDeBtn.classList.remove('text-slate-500', 'font-medium');
                 vocabLangItBtn.classList.remove('bg-white', 'shadow-sm', 'font-semibold', 'text-slate-800'); vocabLangItBtn.classList.add('text-slate-500', 'font-medium');
-                vocabInputLabel.textContent = 'Deutsches Wort';
-                vocabTranslationLabel.textContent = `${CURRENT_LANG === 'en' ? 'Englische' : 'Italienische'} Übersetzung`;
-                vocabInput.placeholder = 'z.B. trinken';
-                vocabTranslation.placeholder = 'Automatisch oder manuell eingeben';
+                vocabInputLabel.textContent = getI18n('label_german_word');
+                vocabTranslationLabel.textContent = `${CURRENT_LANG === 'en' ? getI18n('label_english') : getI18n('label_italian')} ${getI18n('label_translation')}`;
+                vocabInput.placeholder = getI18n('placeholder_german_word');
+                vocabTranslation.placeholder = getI18n('placeholder_auto_manual_input');
             } else {
                 vocabLangItBtn.classList.add('bg-white', 'shadow-sm', 'font-semibold', 'text-slate-800'); vocabLangItBtn.classList.remove('text-slate-500', 'font-medium');
                 vocabLangDeBtn.classList.remove('bg-white', 'shadow-sm', 'font-semibold', 'text-slate-800'); vocabLangDeBtn.classList.add('text-slate-500', 'font-medium');
-                vocabInputLabel.textContent = `${CURRENT_LANG === 'en' ? 'Englisches' : 'Italienisches'} Wort`;
-                vocabTranslationLabel.textContent = 'Deutsche Übersetzung';
-                vocabInput.placeholder = 'z.B. bere';
-                vocabTranslation.placeholder = 'Automatisch oder manuell eingeben';
+                vocabInputLabel.textContent = `${CURRENT_LANG === 'en' ? getI18n('label_english') : getI18n('label_italian')} ${getI18n('label_word')}`;
+                vocabTranslationLabel.textContent = getI18n('label_german_translation');
+                vocabInput.placeholder = getI18n('placeholder_italian_word');
+                vocabTranslation.placeholder = getI18n('placeholder_auto_manual_input');
             }
             vocabInput.value = ''; vocabTranslation.value = ''; vocabAutoTag.classList.add('hidden');
         }
@@ -9117,7 +9502,7 @@
                 }
                 if (offlineResult.emoji) vocabEmoji.value = offlineResult.emoji;
                 Object.assign(vocabAutoTag.style, { color: '#3b82f6', background: '#eff6ff', borderColor: '#bfdbfe' });
-                vocabAutoTag.textContent = '✨ Offline';
+                vocabAutoTag.textContent = getI18n('tag_offline');
                 vocabAutoTag.classList.remove('hidden');
                 checkDuplicate(); // FIX: Ensure duplicate is checked in offline branch
                 return;
@@ -9125,7 +9510,7 @@
 
             // 2) Online-Suche via MyMemory (kostenlos, kein API-Key)
             Object.assign(vocabAutoTag.style, { color: '#f59e0b', background: '#fffbeb', borderColor: '#fde68a' });
-            vocabAutoTag.textContent = '⏳ Suche online…';
+            vocabAutoTag.textContent = getI18n('tag_searching_online');
             vocabAutoTag.classList.remove('hidden');
             try {
                 const langpair = (CURRENT_LANG === 'en' || CURRENT_LANG === 'gb')
@@ -9156,7 +9541,7 @@
                         }
                     }
                     Object.assign(vocabAutoTag.style, { color: '#16a34a', background: '#f0fdf4', borderColor: '#bbf7d0' });
-                    vocabAutoTag.textContent = '🌐 Online';
+                    vocabAutoTag.textContent = getI18n('tag_online');
                 } else {
                     vocabAutoTag.classList.add('hidden');
                 }
@@ -9317,7 +9702,7 @@
                 [...suggestions, ''].forEach(emoji => {
                     const btn = document.createElement('button');
                     btn.type = 'button';
-                    btn.title = emoji ? emoji + ' wählen' : 'Kein Emoji';
+                    btn.title = emoji ? emoji + getI18n('title_select_emoji') : getI18n('title_no_emoji');
                     Object.assign(btn.style, {
                         border: '2px solid transparent', background: '#f8fafc',
                         cursor: 'pointer', padding: '0.4rem',
@@ -9336,7 +9721,7 @@
                         Object.assign(btn.style, { color: '#ef4444', fontSize: '1.3rem', fontWeight: '500' });
                         const xSvg = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 inline-block text-red-500"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>';
                         btn.innerHTML = xSvg;
-                        btn.title = 'Emoji entfernen';
+                        btn.title = getI18n('title_remove_emoji');
                     }
                     btn.addEventListener('mouseenter', () => { btn.style.background = '#e2e8f0'; btn.style.borderColor = emoji ? '#94a3b8' : '#ef4444'; });
                     btn.addEventListener('mouseleave', () => { btn.style.background = '#f8fafc'; btn.style.borderColor = 'transparent'; });
@@ -9390,7 +9775,7 @@
             const typ = vocabTyp.value;
             const emoji = vocabEmoji.value.trim() || null;
             const grammatica = vocabGrammatica.value || null;
-            if (!deWord || !itWord) { showToast('Bitte beide Felder ausfüllen.', 'warning'); return; }
+            if (!deWord || !itWord) { showToast(getI18n('toast_fill_all_fields'), "warning"); return; }
 
             // Auto-Add German Article if missing for nouns
             if (typ === 'Substantiv') {
@@ -9424,7 +9809,7 @@
                     wordStats[result.id] = result.Stat || result.Statistic || result.Stats || { presented: 0, correct: 0, incorrect: 0, streak: 0 };
                     renderVocabList();
                     clearFields();
-                    showToast(`„${deWord}“ wurde zur Vokabelliste hinzugefügt! ${sparkleSVG}`, "success");
+                    showToast(getI18n('toast_vocab_added', deWord, sparkleSVG), "success");
                 }
             } catch (err) {
                 console.warn("Saving to server failed, queuing for sync", err);
@@ -9436,7 +9821,7 @@
                 addToSyncOutbox('addVocab', payload);
                 renderVocabList();
                 clearFields();
-                showToast(`„${deWord}“ wird synchronisiert, sobald du online bist.`, "info");
+                showToast(getI18n('toast_vocab_sync_offline', deWord), "info");
             } finally {
                 const isDup = !vocabDuplicateHint.classList.contains('hidden');
                 saveVocabBtn.disabled = isDup;
@@ -9459,7 +9844,7 @@
         saveSentenceBtn.addEventListener('click', async () => {
             const deSatz = sentenceInputDe.value.trim();
             const itSatz = sentenceInputIt.value.trim();
-            if (!deSatz || !itSatz) { showToast('Bitte beide Felder ausfüllen.', 'warning'); return; }
+            if (!deSatz || !itSatz) { showToast(getI18n('toast_fill_all_fields'), "warning"); return; }
 
             const payload = { de: deSatz, it: itSatz, typ: 'Satz', emoji: '', grammatica: 'Eigene Sätze', language: CURRENT_LANG, isOwn: true };
 
@@ -9481,11 +9866,11 @@
                     renderVocabList();
                     updateAdminGrammarCount(); // Ensure the Grammar UI dropdown registers the new "Eigene Sätze" count
                     clearFields();
-                    showToast(`Satz wurde zur Vokabelliste hinzugefügt!`, "success");
+                    showToast(getI18n('toast_sentence_added'), "success");
                 }
             } catch (err) {
                 console.warn("Saving to server failed.", err);
-                showToast(`Fehler beim Speichern.`, "error");
+                showToast(getI18n('toast_save_error_generic'), "error");
             } finally {
                 saveSentenceBtn.disabled = false;
                 saveAllDataLocally();
@@ -9556,16 +9941,16 @@
 
         async function loadAdminInviteCodes() {
             const list = document.getElementById('adminInviteList');
-            list.innerHTML = '<p class="text-slate-500 text-sm center p-4">Lade Einladungen...</p>';
+            list.innerHTML = `<p class="text-slate-500 text-sm center p-4">${getI18n('loading_invites')}</p>`;
             try {
                 const res = await fetch(`${API_BASE_URL}/api/admin/invite-codes`, {
                     headers: { 'Authorization': `Bearer ${API_TOKEN}` }
                 });
                 const codes = await res.json();
-                if (!res.ok) throw new Error(codes.error || 'Fehler beim Laden');
+                if (!res.ok) throw new Error(codes.error || getI18n('error_loading_generic'));
 
                 if (codes.length === 0) {
-                    list.innerHTML = '<p class="text-slate-500 text-sm text-center p-4">Noch keine Einladungen generiert.</p>';
+                    list.innerHTML = `<p class="text-slate-500 text-sm text-center p-4">${getI18n('no_invites_generated')}</p>`;
                     return;
                 }
 
@@ -9574,23 +9959,23 @@
                         <div>
                             <div class="flex items-center gap-2">
                                 <span class="font-mono font-bold text-slate-800">${c.code}</span>
-                                ${c.isUsed ? '<span class="px-2 py-0.5 bg-green-100 text-green-700 text-[10px] rounded-full uppercase font-bold">Genutzt</span>' : '<span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] rounded-full uppercase font-bold">Offen</span>'}
+                                ${c.isUsed ? `<span class="px-2 py-0.5 bg-green-100 text-green-700 text-[10px] rounded-full uppercase font-bold">${getI18n('status_used')}</span>` : `<span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] rounded-full uppercase font-bold">${getI18n('status_open')}</span>`}
                             </div>
-                            <div class="text-[10px] text-slate-500 mt-1">
-                                ${c.email ? `Gesendet an: ${c.email}` : 'Noch nicht versendet'}
-                                ${c.usedByUser ? ` • Von: ${c.usedByUser.email}` : ''}
+                            <div class="text-[11px] text-slate-500 mt-1">
+                                ${c.email ? `${getI18n('sent_to')}: ${c.email}` : getI18n('not_yet_sent')}
+                                ${c.usedByUser ? ` • ${getI18n('by')}: ${c.usedByUser.email}` : ''}
                             </div>
                         </div>
                         <div class="flex gap-2 w-full md:w-auto">
                             ${!c.isUsed ? `
-                                <button onclick="sendInviteCodePrompt('${c.code}')" class="flex-1 md:flex-none px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg text-xs font-bold transition-all">📧 Senden</button>
+                                <button onclick="sendInviteCodePrompt('${c.code}')" class="flex-1 md:flex-none px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg text-xs font-bold transition-all">📧 ${getI18n('btn_send')}</button>
                                 <button onclick="deleteInviteCode('${c.code}')" class="flex-1 md:flex-none px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg text-xs font-bold transition-all">🗑️</button>
                             ` : ''}
                         </div>
                     </div>
                 `).join('');
             } catch (err) {
-                list.innerHTML = `<p class="text-red-500 text-sm p-4">Fehler: ${err.message}</p>`;
+                list.innerHTML = `<p class="text-red-500 text-sm p-4">${getI18n('error')}: ${err.message}</p>`;
             }
         }
 
@@ -9640,7 +10025,7 @@
         }
 
         async function deleteInviteCode(code) {
-            if (!confirm(`Soll der Code ${code} wirklich gelöscht werden?`)) return;
+            if (!confirm(getI18n('confirm_delete_code'))) return;
             try {
                 const res = await fetch(`${API_BASE_URL}/api/admin/invite-codes/${code}`, {
                     method: 'DELETE',
