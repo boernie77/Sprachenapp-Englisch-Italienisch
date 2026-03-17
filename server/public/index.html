@@ -7143,13 +7143,8 @@
             dragDropContainer.classList.add('lg:grid-cols-3', 'max-w-7xl');
             dragDropContainer.classList.remove('lg:grid-cols-2', 'max-w-5xl');
             
-            if (CURRENT_LANG === 'en' || isCapacitor) {
-                infoSection.classList.add('hidden');
-                infoSection.classList.remove('flex');
-            } else {
-                infoSection.classList.remove('hidden');
-                infoSection.classList.add('flex');
-            }
+            infoSection.classList.remove('hidden');
+            infoSection.classList.add('flex');
 
             if (typeFilterEl.value === 'Verb' || typeFilterEl.value === 'VerbInfinitiv') {
                 infoColHeader.innerHTML = 'ℹ️ Verbformen';
