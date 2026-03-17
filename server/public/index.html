@@ -7905,7 +7905,10 @@
         menuBtn = document.getElementById('menuBtn');
         dropdownMenu = document.getElementById('dropdownMenu');
         if (menuBtn && dropdownMenu) {
-            menuBtn.addEventListener('click', () => dropdownMenu.classList.toggle('hidden'));
+            menuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                dropdownMenu.classList.toggle('hidden');
+            });
             document.addEventListener('click', (e) => { 
                 if (!menuBtn.contains(e.target) && !dropdownMenu.contains(e.target)) 
                     dropdownMenu.classList.add('hidden'); 
