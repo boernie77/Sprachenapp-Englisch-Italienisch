@@ -6405,6 +6405,16 @@
                             selectedSourceCard = el;
                         }
                     }
+
+                    // --- Custom Double-Tap Detection for Mobile ---
+                    const currentTime = new Date().getTime();
+                    const tapLength = currentTime - lastTap;
+                    if (tapLength < 300 && tapLength > 0) {
+                        showInfoModal(pair, false);
+                        lastTap = 0; // Reset to prevent triple-tap issues
+                    } else {
+                        lastTap = currentTime;
+                    }
                 } else {
                     document.querySelectorAll('#draggables-container div').forEach(d => d.classList.remove('ring-2', 'ring-blue-500'));
                     el.classList.add('ring-2', 'ring-blue-500');
@@ -6418,6 +6428,7 @@
                 displayExtraInfo(pair);
             });
             el.addEventListener('dragend', handleDragEnd);
+            let lastTap = 0; // Initialize lastTap for this element
             el.addEventListener('dblclick', (e) => {
                 if (window.innerWidth <= MOBILE_THRESHOLD) {
                     showInfoModal(pair, false);
@@ -6462,6 +6473,18 @@
                     }
                     if (selectedSourceCard) selectedSourceCard.classList.remove('mobile-selected');
                     selectedSourceCard = null;
+                }
+
+                // --- Custom Double-Tap Detection for Mobile (only if matched) ---
+                if (window.innerWidth <= MOBILE_THRESHOLD && el.classList.contains('matched')) {
+                    const currentTime = new Date().getTime();
+                    const tapLength = currentTime - (el.lastTap || 0);
+                    if (tapLength < 300 && tapLength > 0) {
+                        showInfoModal(pair, true);
+                        el.lastTap = 0;
+                    } else {
+                        el.lastTap = currentTime;
+                    }
                 }
             });
             el.addEventListener('dblclick', () => {
