@@ -8564,7 +8564,7 @@
                     const loadConfirmed = await showConfirm(`Basis-Liste (${CURRENT_LANG.toUpperCase()}) auf dem Server gefunden (${serverBase.length} Vokabeln). Möchtest du diese laden?`, "Basis-Liste laden");
                     if (!loadConfirmed) return;
                     wordsToUpload = serverBase.map(v => ({
-                        de: v.de, it: v.it, typ: v.typ, emoji: v.emoji, grammatica: v.grammatica, language: CURRENT_LANG
+                        de: v.de, it: v.it, typ: v.typ, emoji: v.emoji, grammatica: v.grammatica, language: CURRENT_LANG, isOwn: false
                     }));
                     sourceLabel = `${CURRENT_LANG.toUpperCase()}-Server-Basisliste`;
                 } else {
