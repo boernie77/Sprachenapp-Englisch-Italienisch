@@ -1308,6 +1308,50 @@
                     color: #cbd5e1 !important;
                 }
 
+                /* Dark Mode overrides for Verb Search (Mobile) */
+                #verbSearchSection {
+                    background-color: rgba(30, 41, 59, 0.7) !important;
+                    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+                }
+                #verbSearchResults {
+                    background-color: #1e293b !important;
+                    border-color: rgba(255, 255, 255, 0.2) !important;
+                    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+                }
+                .verb-suggestion-item {
+                    color: white !important;
+                    border-bottom-color: rgba(255, 255, 255, 0.05) !important;
+                }
+                .verb-suggestion-item span.text-blue-600 {
+                    color: #60a5fa !important;
+                }
+                .verb-suggestion-item:hover {
+                    background-color: rgba(59, 130, 246, 0.2) !important;
+                }
+                #verbFoundDetails {
+                    background-color: rgba(15, 23, 42, 0.8) !important;
+                    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+                    color: white !important;
+                }
+                #verbFoundDetails .bg-slate-50 {
+                    background-color: rgba(255, 255, 255, 0.05) !important;
+                    border-color: rgba(255, 255, 255, 0.1) !important;
+                }
+                #verbFoundDetails .text-blue-600 {
+                    color: #60a5fa !important;
+                }
+                #verbFoundDetails .bg-blue-50 {
+                    background-color: rgba(37, 99, 235, 0.15) !important;
+                    border-color: rgba(37, 99, 235, 0.3) !important;
+                }
+                #verbFoundDetails .border-b {
+                    border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+                }
+                #verbFoundDetails span[class*="opacity-50"] {
+                    color: #94a3b8 !important;
+                    opacity: 1 !important;
+                }
+
                 /* Drag & Drop Feedback Area - Mobile Only Center Overlay */
                 #dragDropFeedback {
                     position: fixed;
@@ -6638,11 +6682,11 @@
             return `
                 <div class="font-bold border-b pb-2 mb-4 text-center text-lg">${getFullIt(pair)} <br><span class="font-normal opacity-60 text-sm">(${pair.de})</span></div>
                 <div class="grid grid-cols-1 gap-3 text-sm">
-                    <div class="bg-slate-50 p-2 rounded-lg dark:bg-white/5"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">Präsens</span>${pair.praesens || '-'}</div>
-                    <div class="bg-slate-50 p-2 rounded-lg dark:bg-white/5"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">Passato Prossimo</span>${pair.passato || '-'}</div>
-                    <div class="bg-slate-50 p-2 rounded-lg dark:bg-white/5"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">Imperfetto</span>${pair.imperfetto || '-'}</div>
-                    <div class="bg-slate-50 p-2 rounded-lg dark:bg-white/5"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">Gerundio</span>${pair.gerundio || '-'}</div>
-                    <div class="bg-blue-50 p-2 rounded-lg border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800/50"><span class="block text-[10px] uppercase font-bold mb-1">Imperativ</span><span class="text-blue-600 dark:text-blue-400 italic font-bold">${pair.imperativo || '-'}</span></div>
+                    <div class="bg-slate-50 p-2 rounded-lg"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">Präsens</span>${pair.praesens || '-'}</div>
+                    <div class="bg-slate-50 p-2 rounded-lg"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">Passato Prossimo</span>${pair.passato || '-'}</div>
+                    <div class="bg-slate-50 p-2 rounded-lg"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">Imperfetto</span>${pair.imperfetto || '-'}</div>
+                    <div class="bg-slate-50 p-2 rounded-lg"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">Gerundio</span>${pair.gerundio || '-'}</div>
+                    <div class="bg-blue-50 p-2 rounded-lg border border-blue-100"><span class="block text-[10px] uppercase font-bold mb-1">Imperativ</span><span class="text-blue-600 italic font-bold">${pair.imperativo || '-'}</span></div>
                 </div>
             `;
         }
