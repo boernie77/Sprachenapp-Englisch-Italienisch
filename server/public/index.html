@@ -1933,7 +1933,7 @@
                 <div id="syncStatus"
                     class="px-4 py-2 text-[10px] text-slate-400 bg-slate-50 flex items-center justify-between cursor-pointer hover:bg-slate-100 transition-colors"
                     title="Klicken zum manuellen Synchronisieren">
-                    <span>Letzter Sync:</span>
+                    <span data-i18n="last_sync">Letzter Sync:</span>
                     <span id="lastSyncTime" class="font-mono">Nie</span>
                 </div>
                 <div class="px-4 py-1.5 text-[10px] text-slate-400 bg-slate-50/50 flex items-center justify-between border-t border-slate-100/50">
@@ -2166,12 +2166,12 @@
             <section id="infoSection" class="flex flex-col transition-all min-h-0 order-3">
                 <h2 id="infoColHeader"
                     class="text-base md:text-lg font-semibold text-slate-700 mb-1 md:mb-2 flex items-center gap-2 border-b-2 border-slate-200 pb-1 flex-shrink-0">
-                    <span id="infoBulbIcon"></span> Zusatzinfo
+                    <span id="infoBulbIcon"></span> <span data-i18n="info_extra_title">Zusatzinfo</span>
                 </h2>
                 <div id="info-container-main" class="flex flex-col gap-2 flex-1 min-h-0 overflow-y-auto px-1 pb-2 ios-smooth-scroll">
                     <div id="info-placeholder"
                         class="text-slate-400 italic text-sm text-center mt-2 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200">
-                        Hier erscheinen Zusatzinformationen oder Bilder.</div>
+                        <span data-i18n="info_extra_placeholder">Hier erscheinen Zusatzinformationen oder Bilder.</span></div>
                 </div>
             </section>
         </main>
@@ -3295,7 +3295,7 @@
 
             <div class="p-4 bg-amber-50 rounded-2xl border border-amber-100">
                 <p class="text-[11px] text-amber-800 font-bold mb-2 flex items-center">
-                    <span id="excelBulbFormat"></span> Erforderliches Excel-Format:
+                    <span id="excelBulbFormat"></span> <span data-i18n="excel_format_title">Erforderliches Excel-Format:</span>
                 </p>
                 <ul class="text-[10px] text-amber-700 space-y-1">
                     <li>• <strong id="excelCol1Header">Spalte 1:</strong> <span id="excelCol1Desc">Italienische Wörter</span></li>
@@ -3305,9 +3305,9 @@
                 </ul>
             </div>
 
-            <p class="text-center text-xs text-slate-400 mt-4">Aktuelle Liste: <span id="excelWordCount"
-                    class="font-semibold text-slate-600">0</span> Vokabeln, <span id="excelSentenceCount"
-                    class="font-semibold text-slate-600">0</span> Sätze</p>
+            <p class="text-center text-xs text-slate-400 mt-4"><span data-i18n="excel_current_list">Aktuelle Liste:</span> <span id="excelWordCount"
+                    class="font-semibold text-slate-600">0</span> <span data-i18n="excel_sheet_vocab">Vokabeln</span>, <span id="excelSentenceCount"
+                    class="font-semibold text-slate-600">0</span> <span data-i18n="excel_sheet_sentences">Sätze</span></p>
         </div>
     </div>
 
@@ -3404,17 +3404,17 @@
             </p>
 
             <div class="flex gap-2 mb-3">
-                <button id="selectAllBtn"
+                <button id="selectAllBtn" data-i18n="btn_select_all"
                     class="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-600 font-semibold py-2 px-4 rounded-xl text-sm transition-colors border border-blue-200 shadow-sm active:transform active:scale-95">Alle
                     wählen</button>
-                <button id="deselectAllBtn"
+                <button id="deselectAllBtn" data-i18n="btn_deselect_all"
                     class="flex-1 bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold py-2 px-4 rounded-xl text-sm transition-colors border border-slate-200 shadow-sm active:transform active:scale-95">Alle
                     abwählen</button>
             </div>
 
             <div class="mb-3">
                 <div class="relative">
-                    <input type="text" id="vocabListSearch" placeholder="Vokabel suchen..."
+                    <input type="text" id="vocabListSearch" placeholder="Vokabel suchen..." data-i18n-placeholder="vocab_search"
                         class="w-full border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400 transition-all shadow-sm">
                     <div class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -4010,26 +4010,26 @@
                         Lernbereiche</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 ml-2">
                         <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                            <h4 class="font-bold text-blue-700 text-sm mb-1">Drag & Drop</h4>
+                            <h4 class="font-bold text-blue-700 text-sm mb-1" data-i18n="mode_dragdrop">Drag & Drop</h4>
                             <p class="text-xs text-slate-600" data-i18n="guide_area_drag">Ordne die Begriffe zu. <strong>Mobil:</strong> "Tab and
                                 Match". Zusatzinfos erscheinen nach der Lösung.</p>
                         </div>
                         <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                            <h4 class="font-bold text-amber-500 text-sm mb-1">Karteikarten</h4>
+                            <h4 class="font-bold text-amber-500 text-sm mb-1" data-i18n="mode_cards">Karteikarten</h4>
                             <p class="text-xs text-slate-600" data-i18n="guide_area_cards">Der Klassiker. Lerne Vokabeln wie mit echten Karten. Klicke zum Umdrehen und markiere Favoriten.</p>
                         </div>
                         <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                            <h4 class="font-bold text-orange-700 text-sm mb-1">Quiz Modus</h4>
+                            <h4 class="font-bold text-orange-700 text-sm mb-1" data-i18n="mode_quiz">Quiz Modus</h4>
                             <p class="text-xs text-slate-600" data-i18n="guide_area_quiz">Wähle die richtige Übersetzung aus vier Möglichkeiten aus.
                                 Schnell und effektiv für zwischendurch.</p>
                         </div>
                         <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                            <h4 class="font-bold text-emerald-700 text-sm mb-1">Schreiben</h4>
+                            <h4 class="font-bold text-emerald-700 text-sm mb-1" data-i18n="mode_write">Schreiben</h4>
                             <p class="text-xs text-slate-600" data-i18n="guide_area_write">Die Königsdisziplin. Tippe die Übersetzung korrekt ein.
                                 Bei Tippfehlern helfen wir dir mit Hinweisen.</p>
                         </div>
                         <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                            <h4 class="font-bold text-purple-700 text-sm mb-1">Grammatik</h4>
+                            <h4 class="font-bold text-purple-700 text-sm mb-1" data-i18n="mode_grammar">Grammatik</h4>
                             <p class="text-xs text-slate-600" data-i18n="guide_area_grammar">Lerne ganze Sätze im Kontext. Nutze den Filter <strong>"Eigene Sätze"</strong>, um gezielt deine selbst erstellten Sätze zu trainieren.</p>
                         </div>
                     </div>
@@ -4797,6 +4797,18 @@
                 choice_process_sentences: "Sollen sie deine aktuellen Sätze ersetzen oder ergänzen?",
                 toast_base_sentences_loaded_success: "Basis-Sätze erfolgreich geladen!",
                 toast_import_base_sentences_error: "Fehler beim Import der Basis-Sätze.",
+                info_extra_title: "Zusatzinfo",
+                info_extra_placeholder: "Hier erscheinen Zusatzinformationen oder Bilder.",
+                last_sync: "Letzter Sync:",
+                no_vocab_filter: "Keine passenden Vokabeln für diesen Filter gefunden.",
+                info_placeholder_verb: "Hier erscheinen die Zusatzinformationen der richtig zugeordneten Verben.",
+                info_placeholder_noun: "Klicke oder ziehe ein Wort in der linken Spalte, um das Bild zu sehen.",
+                info_placeholder_all: "Klicke auf ein Wort, um Bilder oder Verbformen zu sehen.",
+                no_vocab_short: "Keine passenden Vokabeln gefunden.",
+                stats_done_grammar: "Erledigte Grammatik-Übungen",
+                vocab_search: "Vokabel suchen...",
+                btn_select_all: "Alle auswählen",
+                btn_deselect_all: "Alle abwählen",
                 confirm_delete_base_sentences: "Möchtest du die importierten Basis-Sätze aus deiner Liste entfernen? Deine eigenen Sätze bleiben erhalten.",
                 title_delete_base_sentences: "Basis-Sätze löschen?",
                 choice_admin_global_sentences: "Möchtest du die globale Sätzeliste ersetzen, ergänzen oder nur lokal speichern?",
@@ -5197,6 +5209,18 @@
                 vocab_type_noun: "Noun",
                 vocab_type_verb: "Verb",
                 vocab_type_adj: "Adjective",
+                info_extra_title: "Additional Info",
+                info_extra_placeholder: "Additional information or pictures will appear here.",
+                last_sync: "Last Sync:",
+                no_vocab_filter: "No matching vocabulary found for this filter.",
+                info_placeholder_verb: "Extra information for correctly matched verbs will appear here.",
+                info_placeholder_noun: "Click or drag a word in the left column to see the picture.",
+                info_placeholder_all: "Click on a word to see pictures or verb forms.",
+                no_vocab_short: "No matching vocabulary found.",
+                stats_done_grammar: "Completed Grammar Exercises",
+                vocab_search: "Search vocabulary...",
+                btn_select_all: "Select all",
+                btn_deselect_all: "Deselect all",
                 vocab_type_other: "Other",
                 vocab_grammar: "Grammar (optional)",
                 vocab_grammar_none: "None / Other",
@@ -7093,7 +7117,7 @@
                 // If we have words but less than ROUND_SIZE, just use what we have
                 // No fallback to 'Alle' anymore to respect user filter choice
             } else if (availableWords.length === 0) {
-                draggablesContainer.innerHTML = `<div class="col-span-full text-center text-slate-400 italic py-8">Keine passenden Vokabeln für diesen Filter gefunden.</div>`;
+                draggablesContainer.innerHTML = `<div class="col-span-full text-center text-slate-400 italic py-8">${getI18n('no_vocab_filter')}</div>`;
                 return;
             }
 
@@ -7113,13 +7137,13 @@
 
             if (typeFilterEl.value === 'Verb' || typeFilterEl.value === 'VerbInfinitiv') {
                 infoColHeader.innerHTML = 'ℹ️ Verbformen';
-                infoMain.innerHTML = '<div id="info-placeholder" class="text-slate-400 italic text-sm text-center mt-2 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200">Hier erscheinen die Zusatzinformationen der richtig zugeordneten Verben.</div>';
+                infoMain.innerHTML = `<div id="info-placeholder" class="text-slate-400 italic text-sm text-center mt-2 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200">${getI18n('info_placeholder_verb')}</div>`;
             } else if (typeFilterEl.value === 'Substantiv') {
                 infoColHeader.innerHTML = '🖼️ Bild';
-                infoMain.innerHTML = '<div id="info-placeholder" class="text-slate-400 italic text-sm text-center mt-2 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200">Klicke oder ziehe ein Wort in der linken Spalte, um das Bild zu sehen.</div>';
+                infoMain.innerHTML = `<div id="info-placeholder" class="text-slate-400 italic text-sm text-center mt-2 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200">${getI18n('info_placeholder_noun')}</div>`;
             } else {
-                infoColHeader.innerHTML = 'ℹ️ Zusatzinfo';
-                infoMain.innerHTML = '<div id="info-placeholder" class="text-slate-400 italic text-sm text-center mt-2 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200">Klicke auf ein Wort, um Bilder oder Verbformen zu sehen.</div>';
+                infoColHeader.innerHTML = `ℹ️ ${getI18n('info_extra_title')}`;
+                infoMain.innerHTML = `<div id="info-placeholder" class="text-slate-400 italic text-sm text-center mt-2 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200">${getI18n('info_placeholder_all')}</div>`;
             }
 
             if (directionFilterEl.value === 'de-it') {
@@ -7504,7 +7528,7 @@
                 // But for quiz, we need 4 to have enough decoys. 
                 // However, user wants to see THEIR words.
                 if (availableWords.length === 0) {
-                    quizQuestionDisplay.innerHTML = `<div class="pt-6 pb-2 px-2 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words text-slate-400">Keine passenden Vokabeln für diesen Filter gefunden.</div></div>`;
+                    quizQuestionDisplay.innerHTML = `<div class="pt-6 pb-2 px-2 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words text-slate-400">${getI18n('no_vocab_filter')}</div></div>`;
                     quizSubtext.textContent = "";
                     return;
                 }
@@ -8799,7 +8823,7 @@
                         ${booksSVG}
                     </div>
                     <div>
-                        <div class="text-xs text-blue-600 font-bold uppercase tracking-wider">Erledigte Grammatik-Übungen</div>
+                        <div class="text-xs text-blue-600 font-bold uppercase tracking-wider">${getI18n('stats_done_grammar')}</div>
                         <div class="text-xl font-black text-blue-900">${grammarActivityCount}</div>
                     </div>
                 </div>
@@ -10923,7 +10947,7 @@
             let words = getAvailableWords();
 
             if (words.length === 0) {
-                if (cardsQuestionDisplay) cardsQuestionDisplay.innerHTML = "Keine passenden Vokabeln gefunden.";
+                if (cardsQuestionDisplay) cardsQuestionDisplay.innerHTML = getI18n('no_vocab_short');
                 currentFlashcardTarget = null;
                 return;
             }
