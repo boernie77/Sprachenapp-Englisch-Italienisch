@@ -519,6 +519,9 @@
 
             #vocabModal .bg-white,
             #vocabListModal .bg-white,
+            #sentenceListModal .bg-white,
+            #editVocabModal .bg-white,
+            #editSentenceModal .bg-white,
             #excelModal .bg-white {
                 background-color: rgba(15, 23, 42, 0.95) !important;
             }
@@ -558,30 +561,38 @@
             #statsModal,
             #vocabModal,
             #vocabListModal,
+            #sentenceListModal,
+            #editVocabModal,
+            #editSentenceModal,
             #excelModal,
             #adminModal,
             #impressumModal,
             #guideModal,
             #infoModal {
-                z-index: 10000 !important;
+                z-index: 11000 !important;
             }
 
             #choiceModal,
-            #confirmModal {
-                z-index: 12000 !important;
+            #confirmModal,
+            #promptModal {
+                z-index: 13000 !important;
             }
 
             #impressumModal {
-                z-index: 11000 !important;
+                z-index: 12000 !important;
             }
 
             #statsModal .bg-white,
             #vocabModal .bg-white,
             #vocabListModal .bg-white,
+            #sentenceListModal .bg-white,
+            #editVocabModal .bg-white,
+            #editSentenceModal .bg-white,
             #excelModal .bg-white,
             #impressumModal .bg-white,
             #choiceModal .bg-white,
             #confirmModal .bg-white,
+            #promptModal .bg-white,
             #onboardingModal .bg-white,
             #onboardingVocabModal .bg-white,
             #guideModal .bg-white,
@@ -790,7 +801,15 @@
 
             /* Subtler list items */
             #vocabListModal .bg-slate-50, #sentenceListModal .bg-slate-50 {
-                background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+                background: rgba(255, 255, 255, 0.05) !important;
+            }
+
+            /* Fix divide lines and other list details */
+            .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
+                border-color: rgba(255, 255, 255, 0.1) !important;
+            }
+            .border-slate-200 {
+                border-color: rgba(255, 255, 255, 0.1) !important;
             }
 
             #vocabListModal .divide-slate-200, #sentenceListModal .divide-slate-200 {
@@ -3224,22 +3243,22 @@
                 </div>
             </div>
 
-            <div class="flex gap-2 mb-3">
+            <div class="flex flex-col md:flex-row gap-2 mb-3">
                 <div class="flex-1" style="position:relative">
                     <select id="vocabListSortDir" style="display:none">
                         <option value="de">Deutsch Italienisch</option>
                         <option value="it">Italienisch Deutsch</option>
                     </select>
-                    <button type="button" class="cs-btn w-full" id="vocabListSortDirBtn">
-                        <span id="vocabListSortDirLabel">Deutsch ...</span>
+                    <button type="button" class="cs-btn w-full px-2" id="vocabListSortDirBtn">
+                        <span id="vocabListSortDirLabel" class="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap">Deutsch ...</span>
                         <svg class="cs-chevron" width="16" height="16" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     <div class="cs-list" id="vocabListSortDirList">
-                        <div class="cs-opt selected" data-value="de" id="vocabListSortDeOpt">Deutsch Italienisch</div>
-                        <div class="cs-opt" data-value="it" id="vocabListSortItOpt">Italienisch Deutsch</div>
+                        <div class="cs-opt selected" data-value="de">Deutsch Italienisch</div>
+                        <div class="cs-opt" data-value="it">Italienisch Deutsch</div>
                     </div>
                 </div>
                 <!-- Category filter custom dropdown -->
@@ -3323,7 +3342,7 @@
                 </div>
             </div>
 
-            <div class="flex gap-2 mb-3">
+            <div class="flex flex-col md:flex-row gap-2 mb-3">
                 <div class="flex-1" style="position:relative">
                     <select id="sentenceListSortDir" style="display:none">
                         <option value="de">Deutsch Italienisch</option>
@@ -7896,14 +7915,14 @@
                             ${word.isOwn ? `<span class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[0.65rem] font-medium bg-blue-100 text-blue-800">Eigene Vokabel</span>` : ''}
                         </div>
                     </div>
-                    <div class="flex items-center gap-3 ml-2 flex-shrink-0">
+                    <div class="flex items-center gap-1.5 ml-2 flex-shrink-0">
                         <button class="edit-btn text-slate-400 hover:text-blue-500 transition-colors p-1" data-id="${word.id}" title="Bearbeiten">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                         </button>
                         <button class="delete-btn text-slate-400 hover:text-red-500 transition-colors p-1" data-id="${word.id}" title="Löschen">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                         </button>
-                        <svg class="star-icon w-6 h-6 cursor-pointer ${word.isMarked ? 'marked' : ''}"
+                        <svg class="star-icon w-6 h-6 md:w-7 md:h-7 cursor-pointer ${word.isMarked ? 'marked' : ''}"
                              data-mark-id="${word.id}"
                              onclick="event.stopPropagation(); toggleMark('${word.id}', this)"
                              fill="currentColor" viewBox="0 0 24 24">
@@ -7911,7 +7930,7 @@
                         </svg>
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" class="sr-only peer vocab-checkbox" data-id="${word.id}" ${isChecked ? 'checked' : ''}>
-                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 shadow-inner"></div>
+                            <div class="w-10 h-5 md:w-12 md:h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 md:after:h-5 md:after:w-5 after:transition-all peer-checked:bg-blue-600 shadow-inner"></div>
                         </label>
                     </div>
                 `;
@@ -7986,14 +8005,14 @@
                             ${word.typ ? `<span class="ml-1 text-xs text-slate-400 italic">${word.typ}</span>` : ''}
                         </div>
                     </div>
-                    <div class="flex items-center gap-3 ml-2 flex-shrink-0">
+                    <div class="flex items-center gap-1.5 ml-2 flex-shrink-0">
                         <button class="edit-btn text-slate-400 hover:text-blue-500 transition-colors p-1" data-id="${word.id}" title="Bearbeiten">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                         </button>
                         <button class="delete-btn text-slate-400 hover:text-red-500 transition-colors p-1" data-id="${word.id}" title="Löschen">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                         </button>
-                        <svg class="star-icon w-6 h-6 cursor-pointer ${word.isMarked ? 'marked' : ''}"
+                        <svg class="star-icon w-6 h-6 md:w-7 md:h-7 cursor-pointer ${word.isMarked ? 'marked' : ''}"
                              data-mark-id="${word.id}"
                              onclick="event.stopPropagation(); toggleMark('${word.id}', this)"
                              fill="currentColor" viewBox="0 0 24 24">
@@ -8001,7 +8020,7 @@
                         </svg>
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" class="sr-only peer vocab-checkbox" data-id="${word.id}" ${isChecked ? 'checked' : ''}>
-                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 shadow-inner"></div>
+                            <div class="w-10 h-5 md:w-12 md:h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 md:after:h-5 md:after:w-5 after:transition-all peer-checked:bg-blue-600 shadow-inner"></div>
                         </label>
                     </div>
                 `;
