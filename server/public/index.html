@@ -1476,8 +1476,16 @@
     <!-- Login/Register Overlay -->
     <div id="authOverlay"
         class="fixed inset-0 bg-slate-900 bg-opacity-90 backdrop-blur-md z-[100] flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
-            <h2 id="authTitle" data-i18n="auth_title_login" class="text-3xl font-bold text-slate-800 mb-6 text-center">Willkommen!</h2>
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="authTitle" data-i18n="auth_title_login" class="text-3xl font-bold text-slate-800">Willkommen!</h2>
+                
+                <!-- Auth Language Switcher -->
+                <div class="flex gap-1 bg-slate-100 p-1 rounded-lg">
+                    <button id="btnAuthLang_de" class="px-2 py-1 text-xs bg-white rounded shadow-sm font-bold focus:ring-2 focus:ring-blue-500 transition-colors">DE</button>
+                    <button id="btnAuthLang_en" class="px-2 py-1 text-xs text-slate-500 hover:text-slate-800 rounded font-bold focus:ring-2 focus:ring-blue-500 transition-colors">EN</button>
+                </div>
+            </div>
             <div id="authError"
                 class="hidden mb-4 p-3 bg-red-50 text-red-600 rounded-xl text-sm border border-red-100 italic"></div>
 
@@ -1974,7 +1982,7 @@
                 <div id="standardFiltersWrapper" class="contents">
                     <div id="directionFilterContainer" class="w-full">
                         <label
-                            class="block text-xs md:text-sm font-semibold text-slate-700 mb-1.5 mobile-white">Lernrichtung</label>
+                            class="block text-xs md:text-sm font-semibold text-slate-700 mb-1.5 mobile-white" data-i18n="filter_direction">Lernrichtung</label>
                         <select id="directionFilter" style="display:none">
                             <option value="de-it">de-it</option>
                             <option value="it-de">it-de</option>
@@ -1996,7 +2004,7 @@
                     </div>
 
                     <div class="w-full">
-                        <label class="block text-xs md:text-sm font-semibold text-slate-700 mb-1.5">Was möchtest du
+                        <label class="block text-xs md:text-sm font-semibold text-slate-700 mb-1.5" data-i18n="filter_type">Was möchtest du
                             lernen?</label>
                         <select id="typeFilter" style="display:none">
                             <option value="Alle">Alle mischen</option>
@@ -2019,15 +2027,15 @@
                                 </svg>
                             </button>
                             <div class="cs-list" id="typeFilterList">
-                                <div class="cs-opt selected" data-value="Alle">Alle mischen</div>
-                                <div class="cs-opt" data-value="Substantiv">Substantive</div>
-                                <div class="cs-opt" data-value="VerbInfinitiv">Verben</div>
-                                <div class="cs-opt" data-value="Verb">Verbformen</div>
-                                <div class="cs-opt" data-value="Adjektiv">Adjektive</div>
-                                <div class="cs-opt" data-value="Sonstiges">Sonstiges</div>
-                                <div class="cs-opt" data-value="Favoriten" title="Nur markierte Favoriten üben">Favoriten</div>
-                                <div class="cs-opt" data-value="Satz">Eigene Sätze</div>
-                                <div class="cs-opt" data-value="EigeneVokabeln">Eigene Vokabeln</div>
+                                <div class="cs-opt selected" data-value="Alle" data-i18n="type_all">Alle mischen</div>
+                                <div class="cs-opt" data-value="Substantiv" data-i18n="type_noun">Substantive</div>
+                                <div class="cs-opt" data-value="VerbInfinitiv" data-i18n="type_verb_inf">Verben</div>
+                                <div class="cs-opt" data-value="Verb" data-i18n="type_verb">Verbformen</div>
+                                <div class="cs-opt" data-value="Adjektiv" data-i18n="type_adj">Adjektive</div>
+                                <div class="cs-opt" data-value="Sonstiges" data-i18n="type_other">Sonstiges</div>
+                                <div class="cs-opt" data-value="Favoriten" title="Nur markierte Favoriten üben" data-i18n="type_fav">Favoriten</div>
+                                <div class="cs-opt" data-value="Satz" data-i18n="type_sentence">Eigene Sätze</div>
+                                <div class="cs-opt" data-value="EigeneVokabeln" data-i18n="type_own_vocab">Eigene Vokabeln</div>
                             </div>
                         </div>
                     </div>
@@ -2038,7 +2046,7 @@
                 class="hidden mt-2 md:mt-3 bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-200 text-slate-700 text-sm md:text-base leading-relaxed">
                 <div id="grammarFocusFilterWrapper" class="mb-5 text-left">
                     <div id="grammarFocusFilterLabelParent">
-                        <label class="block text-xs md:text-sm font-semibold text-slate-700 mb-1.5">Übungs-Focus</label>
+                        <label class="block text-xs md:text-sm font-semibold text-slate-700 mb-1.5" data-i18n="grammar_focus_label">Übungs-Focus</label>
                     </div>
                     <select id="grammarFocusFilter" style="display:none">
                         <option value="Alle">Focus Alle Sätze</option>
@@ -2094,7 +2102,7 @@
             <div id="scoreBar"
                 class="mt-2 flex justify-between items-center bg-white p-2 md:p-3 rounded-2xl shadow-sm border border-slate-100">
                 <div class="text-slate-700 font-semibold text-sm md:text-base">
-                    Punkte: <span id="score" class="text-blue-600 text-lg md:text-xl">0</span> / <span
+                    <span data-i18n="score_label">Punkte:</span> <span id="score" class="text-blue-600 text-lg md:text-xl">0</span> / <span
                         id="total">5</span>
                 </div>
                 <div class="flex items-center gap-2 md:gap-4">
@@ -2107,7 +2115,7 @@
                     </button>
                     <span id="successText"
                         class="hidden text-green-600 font-bold text-xs md:text-sm animate-pulse flex items-center gap-1.5">
-                        <span id="successSparkleIcon"></span> Bravissimo!
+                        <span id="successSparkleIcon"></span> <span data-i18n="success_correct">Bravissimo!</span>
                     </span>
                     <button id="nextBtn"
                         class="hidden bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-3 md:px-4 rounded-lg transition-colors shadow-md active:transform active:scale-95 text-xs md:text-sm flex items-center gap-1.5">
@@ -4710,7 +4718,8 @@
         const UI_TRANSLATIONS = {
             de: {
                 // Header
-                header_learn: "Lernen",
+                header_learn_it: "Italienisch Lernen",
+                header_learn_en: "Englisch Lernen",
                 mode_dragdrop: "Drag & Drop",
                 mode_quiz: "Quiz Modus",
                 mode_cards: "Karteikarten",
@@ -4862,6 +4871,33 @@
                 excel_base_sentences: "Basis-Sätze",
                 excel_btn_read: "📖 Einlesen",
                 
+                // Filters & Main UI
+                filter_direction: "Lernrichtung",
+                filter_type: "Was möchtest du lernen?",
+                type_all: "Alle mischen",
+                type_noun: "Substantive",
+                type_verb_inf: "Verben",
+                type_verb: "Verbformen",
+                type_adj: "Adjektive",
+                type_other: "Sonstiges",
+                type_fav: "Favoriten",
+                type_sentence: "Eigene Sätze",
+                type_own_vocab: "Eigene Vokabeln",
+                grammar_focus_label: "Übungs-Focus",
+                grammar_focus_all: "Focus Alle Sätze",
+                score_label: "Punkte:",
+                info_btn: "Infos",
+                success_correct: "Bravissimo!",
+                
+                // Drag & Drop specific
+                drag_de_pull: "Deutsch (Ziehen)",
+                drag_it_drop: "Italienisch (Ablegen)",
+                drag_en_drop: "Englisch (Ablegen)",
+                drag_it_pull: "Italienisch (Ziehen)",
+                drag_en_pull: "Englisch (Ziehen)",
+                drag_de_drop: "Deutsch (Ablegen)",
+                drag_not_enough: "Nicht genug Vokabeln gefunden ({count} benötigt).",
+                
                 // Admin Modal
                 admin_dashboard_title: "Admin Dashboard",
                 admin_btn_csv: "CSV-Export",
@@ -4926,7 +4962,8 @@
             },
             en: {
                 // Header
-                header_learn: "Learning",
+                header_learn_it: "Learning Italian",
+                header_learn_en: "Learning English",
                 mode_dragdrop: "Drag & Drop",
                 mode_quiz: "Quiz Mode",
                 mode_cards: "Flashcards",
@@ -5080,6 +5117,33 @@
                 excel_base_sentences: "Base Sentences",
                 excel_btn_read: "📖 Read",
 
+                // Filters & Main UI
+                filter_direction: "Learning Direction",
+                filter_type: "What do you want to learn?",
+                type_all: "Mix all",
+                type_noun: "Nouns",
+                type_verb_inf: "Verbs",
+                type_verb: "Verb forms",
+                type_adj: "Adjectives",
+                type_other: "Other",
+                type_fav: "Favorites",
+                type_sentence: "Own Sentences",
+                type_own_vocab: "Own Vocabulary",
+                grammar_focus_label: "Practice Focus",
+                grammar_focus_all: "Focus All Sentences",
+                score_label: "Score:",
+                info_btn: "Info",
+                success_correct: "Well done!",
+
+                // Drag & Drop specific
+                drag_de_pull: "German (Drag)",
+                drag_it_drop: "Italian (Drop)",
+                drag_en_drop: "English (Drop)",
+                drag_it_pull: "Italian (Drag)",
+                drag_en_pull: "English (Drag)",
+                drag_de_drop: "German (Drop)",
+                drag_not_enough: "Not enough vocabulary found ({count} required).",
+
                 // Admin Modal
                 admin_dashboard_title: "Admin Dashboard",
                 admin_btn_csv: "CSV Export",
@@ -5155,19 +5219,51 @@
                 el.innerHTML = text; // Verwende innerHTML um Formatierungen (wie <strong>) beizubehalten
             });
             updateLangButtonStyles();
+            
+            // Re-sync Custom Dropdown Labels after translation
+            document.querySelectorAll('.cs-list').forEach(list => {
+                const selectedOpt = list.querySelector('.cs-opt.selected');
+                const labelId = list.id.replace('List', 'Label');
+                const label = document.getElementById(labelId);
+                if (selectedOpt && label) {
+                    label.innerHTML = selectedOpt.innerHTML;
+                }
+            });
+
+            // Re-sync dynamic labels (header, drag & drop, etc.)
+            if (typeof renderAllLabels === 'function') {
+                renderAllLabels();
+            }
         }
 
         function updateLangButtonStyles() {
             const btnDe = document.getElementById('btnLangUI_de');
             const btnEn = document.getElementById('btnLangUI_en');
-            if (!btnDe || !btnEn) return;
-
+            const authBtnDe = document.getElementById('btnAuthLang_de');
+            const authBtnEn = document.getElementById('btnAuthLang_en');
+            
             if (APP_UI_LANG === 'de') {
-                btnDe.classList.add('ring-2', 'ring-blue-500', 'bg-blue-50');
-                btnEn.classList.remove('ring-2', 'ring-blue-500', 'bg-blue-50');
+                if(btnDe && btnEn) {
+                    btnDe.classList.add('ring-2', 'ring-blue-500', 'bg-blue-50');
+                    btnEn.classList.remove('ring-2', 'ring-blue-500', 'bg-blue-50');
+                }
+                if(authBtnDe && authBtnEn) {
+                    authBtnDe.classList.add('bg-white', 'shadow-sm', 'text-slate-800');
+                    authBtnDe.classList.remove('text-slate-500', 'hover:text-slate-800');
+                    authBtnEn.classList.remove('bg-white', 'shadow-sm', 'text-slate-800');
+                    authBtnEn.classList.add('text-slate-500', 'hover:text-slate-800');
+                }
             } else {
-                btnEn.classList.add('ring-2', 'ring-blue-500', 'bg-blue-50');
-                btnDe.classList.remove('ring-2', 'ring-blue-500', 'bg-blue-50');
+                if(btnDe && btnEn) {
+                    btnEn.classList.add('ring-2', 'ring-blue-500', 'bg-blue-50');
+                    btnDe.classList.remove('ring-2', 'ring-blue-500', 'bg-blue-50');
+                }
+                if(authBtnDe && authBtnEn) {
+                    authBtnEn.classList.add('bg-white', 'shadow-sm', 'text-slate-800');
+                    authBtnEn.classList.remove('text-slate-500', 'hover:text-slate-800');
+                    authBtnDe.classList.remove('bg-white', 'shadow-sm', 'text-slate-800');
+                    authBtnDe.classList.add('text-slate-500', 'hover:text-slate-800');
+                }
             }
         }
 
@@ -5229,17 +5325,17 @@
 
             const drHeader = document.getElementById('dragColHeader');
             const dpHeader = document.getElementById('dropColHeader');
-            if (drHeader) drHeader.innerHTML = `${deFlagSVG} Deutsch (Ziehen)`;
+            if (drHeader) drHeader.innerHTML = `${deFlagSVG} ${getI18n('drag_de_pull')}`;
             if (dpHeader) {
                 if (CURRENT_LANG === 'en') {
-                    dpHeader.innerHTML = `${gbFlagSVG} Englisch (Ablegen)`;
+                    dpHeader.innerHTML = `${gbFlagSVG} ${getI18n('drag_en_drop')}`;
                 } else {
-                    dpHeader.innerHTML = `${itFlagSVG} Italienisch (Ablegen)`;
+                    dpHeader.innerHTML = `${itFlagSVG} ${getI18n('drag_it_drop')}`;
                 }
             }
 
             const appHeaderTitle = document.getElementById('appHeaderTitle');
-            if (appHeaderTitle) appHeaderTitle.textContent = t.header;
+            if (appHeaderTitle) appHeaderTitle.textContent = getI18n('header_learn_' + CURRENT_LANG);
             const appHeaderIcon = document.getElementById('appHeaderIcon');
             if (appHeaderIcon) appHeaderIcon.innerHTML = currentFlag;
 
@@ -5428,13 +5524,25 @@
             document.getElementById('langItBtn')?.addEventListener('click', () => switchLanguage('it'));
             document.getElementById('langEnBtn')?.addEventListener('click', () => switchLanguage('en'));
 
-            // UI Language Switcher Listeners
+            // UI Language Switcher Listeners (Sidebar)
             document.getElementById('btnLangUI_de')?.addEventListener('click', () => {
                 APP_UI_LANG = 'de';
                 localStorage.setItem('ita-ui-lang', 'de');
                 applyTranslations();
             });
             document.getElementById('btnLangUI_en')?.addEventListener('click', () => {
+                APP_UI_LANG = 'en';
+                localStorage.setItem('ita-ui-lang', 'en');
+                applyTranslations();
+            });
+            
+            // UI Language Switcher Listeners (Auth Modal)
+            document.getElementById('btnAuthLang_de')?.addEventListener('click', () => {
+                APP_UI_LANG = 'de';
+                localStorage.setItem('ita-ui-lang', 'de');
+                applyTranslations();
+            });
+            document.getElementById('btnAuthLang_en')?.addEventListener('click', () => {
                 APP_UI_LANG = 'en';
                 localStorage.setItem('ita-ui-lang', 'en');
                 applyTranslations();
@@ -6856,19 +6964,29 @@
             if (directionFilterEl.value === 'de-it') {
                 const isMobile = window.innerWidth <= MOBILE_THRESHOLD;
                 const targetFlag = CURRENT_LANG === 'it' ? itFlagSVG : gbFlagSVG;
-                const targetName = CURRENT_LANG === 'it' ? 'Italienisch' : 'Englisch';
-                dragColHeader.innerHTML = isMobile ? `${deFlagSVG} Deutsch` : `${deFlagSVG} Deutsch (Ziehen)`;
-                dropColHeader.innerHTML = isMobile ? `${targetFlag} ${targetName}` : `${targetFlag} ${targetName} (Ablegen)`;
+                const targetName = CURRENT_LANG === 'it' ? getI18n('admin_lang_it') : getI18n('admin_lang_en');
+                dragColHeader.innerHTML = isMobile ? `${deFlagSVG} Deutsch` : `${deFlagSVG} ${getI18n('drag_de_pull')}`;
+                if (CURRENT_LANG === 'it') {
+                    dropColHeader.innerHTML = isMobile ? `${targetFlag} ${targetName}` : `${targetFlag} ${getI18n('drag_it_drop')}`;
+                } else {
+                    dropColHeader.innerHTML = isMobile ? `${targetFlag} ${targetName}` : `${targetFlag} ${getI18n('drag_en_drop')}`;
+                }
             } else {
                 const isMobile = window.innerWidth <= MOBILE_THRESHOLD;
                 const targetFlag = CURRENT_LANG === 'it' ? itFlagSVG : gbFlagSVG;
-                const targetName = CURRENT_LANG === 'it' ? 'Italienisch' : 'Englisch';
-                dragColHeader.innerHTML = isMobile ? `${targetFlag} ${targetName}` : `${targetFlag} ${targetName} (Ziehen)`;
-                dropColHeader.innerHTML = isMobile ? `${deFlagSVG} Deutsch` : `${deFlagSVG} Deutsch (Ablegen)`;
+                const targetName = CURRENT_LANG === 'it' ? getI18n('admin_lang_it') : getI18n('admin_lang_en');
+                
+                if (CURRENT_LANG === 'it') {
+                    dragColHeader.innerHTML = isMobile ? `${targetFlag} ${targetName}` : `${targetFlag} ${getI18n('drag_it_pull')}`;
+                } else {
+                    dragColHeader.innerHTML = isMobile ? `${targetFlag} ${targetName}` : `${targetFlag} ${getI18n('drag_en_pull')}`;
+                }
+                
+                dropColHeader.innerHTML = isMobile ? `${deFlagSVG} Deutsch` : `${deFlagSVG} ${getI18n('drag_de_drop')}`;
             }
 
             if (availableWords.length < ROUND_SIZE) {
-                draggablesContainer.innerHTML = `<div class="col-span-full text-center text-slate-400 italic py-8">Nicht genug Vokabeln gefunden (${ROUND_SIZE} benötigt).</div>`;
+                draggablesContainer.innerHTML = `<div class="col-span-full text-center text-slate-400 italic py-8">${getI18n('drag_not_enough').replace('{count}', ROUND_SIZE)}</div>`;
                 return;
             }
 
