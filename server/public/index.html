@@ -3492,28 +3492,26 @@
         class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
         <div class="bg-white rounded-3xl p-6 md:p-8 max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl">
             <div class="flex justify-between items-center mb-4 border-b border-slate-200 pb-4">
-                <h2 id="sentenceListModalTitle" class="text-xl font-bold text-slate-800 flex items-center">Vollständige
+                <h2 id="sentenceListModalTitle" class="text-xl font-bold text-slate-800 flex items-center" data-i18n="menu_sentence_list">Vollständige
                     Satzliste</h2>
                 <button id="closeSentenceListModalBtn"
                     class="text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
             </div>
 
-            <p class="text-xs md:text-sm text-slate-500 mb-4 italic">
+            <p class="text-xs md:text-sm text-slate-500 mb-4 italic" data-i18n="sentence_list_hint">
                 Hinweis: Nur die hier ausgewählten Sätze werden in den Übungen zum Lernen verwendet.
             </p>
 
             <div class="flex gap-2 mb-3">
                 <button id="selectAllSentencesBtn"
-                    class="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-600 font-semibold py-2 px-4 rounded-xl text-sm transition-colors border border-blue-200 shadow-sm active:transform active:scale-95">Alle
-                    wählen</button>
+                    class="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-600 font-semibold py-2 px-4 rounded-xl text-sm transition-colors border border-blue-200 shadow-sm active:transform active:scale-95" data-i18n="sentence_select_all">Alle wählen</button>
                 <button id="deselectAllSentencesBtn"
-                    class="flex-1 bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold py-2 px-4 rounded-xl text-sm transition-colors border border-slate-200 shadow-sm active:transform active:scale-95">Alle
-                    abwählen</button>
+                    class="flex-1 bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold py-2 px-4 rounded-xl text-sm transition-colors border border-slate-200 shadow-sm active:transform active:scale-95" data-i18n="sentence_deselect_all">Alle abwählen</button>
             </div>
 
             <div class="mb-3">
                 <div class="relative">
-                    <input type="text" id="sentenceListSearch" placeholder="Satz suchen..."
+                    <input type="text" id="sentenceListSearch" placeholder="Satz suchen..." data-i18n-placeholder="sentence_search"
                         class="w-full border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400 transition-all shadow-sm">
                     <div class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3549,15 +3547,15 @@
                         <option value="Eigene Sätze">Eigene Sätze</option>
                     </select>
                     <button type="button" class="cs-btn w-full" id="sentenceListCatFilterBtn">
-                        <span id="sentenceListCatFilterLabel">Alle Kategorien</span>
+                        <span id="sentenceListCatFilterLabel" data-i18n="sentence_cat_all">Alle Kategorien</span>
                         <svg class="cs-chevron" width="16" height="16" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     <div class="cs-list" id="sentenceListCatFilterList">
-                        <div class="cs-opt selected" data-value="Alle">Alle Kategorien</div>
-                        <div class="cs-opt" data-value="Eigene Sätze">Eigene Sätze</div>
+                        <div class="cs-opt selected" data-value="Alle" data-i18n="sentence_cat_all">Alle Kategorien</div>
+                        <div class="cs-opt" data-value="Eigene Sätze" data-i18n="sentence_cat_own">Eigene Sätze</div>
                     </div>
                 </div>
             </div>
@@ -3568,7 +3566,7 @@
 
             <div class="mt-4 text-center">
                 <button id="saveSentenceListBtn"
-                    class="w-full md:w-auto px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition-all active:transform active:scale-95">Speichern
+                    class="w-full md:w-auto px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition-all active:transform active:scale-95" data-i18n="modal_save_close">Speichern
                     & Schließen</button>
             </div>
         </div>
@@ -3579,14 +3577,14 @@
         class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
         <div class="bg-white rounded-3xl p-6 md:p-8 max-w-lg w-full shadow-2xl">
             <div class="flex justify-between items-center mb-5">
-                <h2 id="vocabModalTitle" class="text-xl font-bold text-slate-800 flex items-center">Vokabel hinzufügen
+                <h2 id="vocabModalTitle" class="text-xl font-bold text-slate-800 flex items-center" data-i18n="menu_add_vocab">Vokabel hinzufügen
                 </h2>
                 <button id="closeVocabModalBtn"
                     class="text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
             </div>
 
             <div class="mb-4">
-                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Ich kenne das Wort auf…
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2" data-i18n="vocab_direction">Ich kenne das Wort auf…
                 </p>
                 <div class="inline-flex bg-slate-100 rounded-xl p-1 gap-1">
                     <button id="vocabLangDeBtn"
@@ -3599,7 +3597,7 @@
             <div class="mb-3">
                 <label id="vocabInputLabel" class="block text-xs font-semibold text-slate-700 mb-1.5">Deutsches
                     Wort</label>
-                <input id="vocabInput" type="text" placeholder="z.B. trinken" autocomplete="off"
+                <input id="vocabInput" type="text" placeholder="z.B. trinken" data-i18n-placeholder="vocab_example_de" autocomplete="off"
                     class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400 transition-all">
             </div>
 
@@ -3615,14 +3613,14 @@
                         <span id="vocabWarningIcon"></span> Vokabel bereits vorhanden
                     </span>
                 </label>
-                <input id="vocabTranslation" type="text" placeholder="Automatisch oder manuell eingeben"
+                <input id="vocabTranslation" type="text" placeholder="Automatisch oder manuell eingeben" data-i18n-placeholder="vocab_auto_manual"
                     autocomplete="off"
                     class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400 transition-all">
             </div>
 
             <div class="flex gap-3 mb-5">
                 <div class="flex-1">
-                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">Wortart</label>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5" data-i18n="vocab_type">Wortart</label>
                     <select id="vocabTyp" class="hidden">
                         <option value="Substantiv" selected>Substantiv</option>
                         <option value="Verb">Verb</option>
@@ -3632,7 +3630,7 @@
                     <div style="position:relative">
                         <button type="button" class="cs-btn" id="vocabTypBtn"
                             style="font-size:0.875rem;padding:10px 14px;width:100%">
-                            <span id="vocabTypLabel">Substantiv</span>
+                            <span id="vocabTypLabel" data-i18n="vocab_type_noun">Substantiv</span>
                             <svg class="cs-chevron" width="16" height="16" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -3640,15 +3638,15 @@
                             </svg>
                         </button>
                         <div class="cs-list" id="vocabTypList">
-                            <div class="cs-opt selected" data-value="Substantiv">Substantiv</div>
-                            <div class="cs-opt" data-value="Verb">Verb</div>
-                            <div class="cs-opt" data-value="Adjektiv">Adjektiv</div>
-                            <div class="cs-opt" data-value="Sonstiges">Sonstiges</div>
+                            <div class="cs-opt selected" data-value="Substantiv" data-i18n="vocab_type_noun">Substantiv</div>
+                            <div class="cs-opt" data-value="Verb" data-i18n="vocab_type_verb">Verb</div>
+                            <div class="cs-opt" data-value="Adjektiv" data-i18n="vocab_type_adj">Adjektiv</div>
+                            <div class="cs-opt" data-value="Sonstiges" data-i18n="vocab_type_other">Sonstiges</div>
                         </div>
                     </div>
                 </div>
                 <div class="flex-1">
-                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">Grammatik (optional)</label>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5" data-i18n="vocab_grammar">Grammatik (optional)</label>
                     <select id="vocabGrammatica" class="hidden">
                         <option value="">Keine/Andere</option>
                         <option value="m-sg">maskulin (sg)</option>
@@ -3659,7 +3657,7 @@
                     <div style="position:relative">
                         <button type="button" class="cs-btn" id="vocabGrammaticaBtn"
                             style="font-size:0.875rem;padding:10px 14px;width:100%">
-                            <span id="vocabGrammaticaLabel">Keine/Andere</span>
+                            <span id="vocabGrammaticaLabel" data-i18n="vocab_grammar_none">Keine/Andere</span>
                             <svg class="cs-chevron" width="16" height="16" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -3667,16 +3665,16 @@
                             </svg>
                         </button>
                         <div class="cs-list" id="vocabGrammaticaList">
-                            <div class="cs-opt selected" data-value="">Keine/Andere</div>
-                            <div class="cs-opt" data-value="m-sg">maskulin (sg)</div>
-                            <div class="cs-opt" data-value="f-sg">feminin (sg)</div>
-                            <div class="cs-opt" data-value="m-pl">maskulin (pl)</div>
-                            <div class="cs-opt" data-value="f-pl">feminin (pl)</div>
+                            <div class="cs-opt selected" data-value="" data-i18n="vocab_grammar_none">Keine/Andere</div>
+                            <div class="cs-opt" data-value="m-sg" data-i18n="vocab_grammar_msg">maskulin (sg)</div>
+                            <div class="cs-opt" data-value="f-sg" data-i18n="vocab_grammar_fsg">feminin (sg)</div>
+                            <div class="cs-opt" data-value="m-pl" data-i18n="vocab_grammar_mpl">maskulin (pl)</div>
+                            <div class="cs-opt" data-value="f-pl" data-i18n="vocab_grammar_fpl">feminin (pl)</div>
                         </div>
                     </div>
                 </div>
                 <div class="w-20">
-                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">Emoji</label>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5" data-i18n="vocab_emoji">Emoji</label>
                     <input id="vocabEmoji" type="text" placeholder="" maxlength="4"
                         class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-center text-slate-800 outline-none focus:border-blue-400 transition-all">
                 </div>
@@ -3684,7 +3682,7 @@
 
             <button id="saveVocabBtn"
                 class="w-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
-                Vokabel hinzufügen <span class="vocab-btn-arrow"></span>
+                <span data-i18n="vocab_submit_btn">Vokabel hinzufügen</span> <span class="vocab-btn-arrow"></span>
             </button>
         </div>
     </div>
@@ -3694,27 +3692,27 @@
         class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
         <div class="bg-white rounded-3xl p-6 md:p-8 max-w-lg w-full shadow-2xl">
             <div class="flex justify-between items-center mb-5">
-                <h2 id="sentenceModalTitle" class="text-xl font-bold text-slate-800 flex items-center">Satz hinzufügen
+                <h2 id="sentenceModalTitle" class="text-xl font-bold text-slate-800 flex items-center" data-i18n="menu_add_sentence">Satz hinzufügen
                 </h2>
                 <button id="closeSentenceModalBtn"
                     class="text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
             </div>
 
             <div class="mb-3">
-                <label id="sentenceInputDeLabel" class="block text-xs font-semibold text-slate-700 mb-1.5">Deutscher Satz</label>
-                <input id="sentenceInputDe" type="text" placeholder="z.B. Ich trinke gerne Kaffee." autocomplete="off"
+                <label id="sentenceInputDeLabel" class="block text-xs font-semibold text-slate-700 mb-1.5" data-i18n="sentence_input_de">Deutscher Satz</label>
+                <input id="sentenceInputDe" type="text" placeholder="z.B. Ich trinke gerne Kaffee." data-i18n-placeholder="sentence_example_de" autocomplete="off"
                     class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400 transition-all">
             </div>
 
             <div class="mb-5">
-                <label id="sentenceInputItLabel" class="block text-xs font-semibold text-slate-700 mb-1.5">Italienische Übersetzung</label>
-                <input id="sentenceInputIt" type="text" placeholder="z.B. Bevo volentieri il caffè." autocomplete="off"
+                <label id="sentenceInputItLabel" class="block text-xs font-semibold text-slate-700 mb-1.5" data-i18n="sentence_translation">Italienische Übersetzung</label>
+                <input id="sentenceInputIt" type="text" placeholder="z.B. Bevo volentieri il caffè."
                     class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400 transition-all">
             </div>
 
             <button id="saveSentenceBtn"
                 class="w-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
-                Satz hinzufügen <span class="vocab-btn-arrow"></span>
+                <span data-i18n="sentence_submit_btn">Satz hinzufügen</span> <span class="vocab-btn-arrow"></span>
             </button>
         </div>
     </div>
@@ -3744,9 +3742,9 @@
 
             <div class="flex justify-between items-center mb-4 shrink-0 px-1 border-b border-slate-100">
                 <div class="flex gap-4">
-                    <button onclick="switchAdminTab('users')" id="adminTabUsers" class="admin-tab-btn active" data-i18n="admin_tab_users">👥 Benutzer</button>
-                    <button onclick="switchAdminTab('lists')" id="adminTabLists" class="admin-tab-btn" data-i18n="admin_tab_lists">📚 Listen</button>
-                    <button onclick="switchAdminTab('invites')" id="adminTabInvites" class="admin-tab-btn" data-i18n="admin_tab_invites">🎟️ Einladungen</button>
+                    <button onclick="switchAdminTab('users')" id="adminTabUsers" class="admin-tab-btn active" data-i18n="admin_users_tab">👥 Benutzer</button>
+                    <button onclick="switchAdminTab('lists')" id="adminTabLists" class="admin-tab-btn" data-i18n="admin_lists_tab">📚 Listen</button>
+                    <button onclick="switchAdminTab('invites')" id="adminTabInvites" class="admin-tab-btn" data-i18n="admin_invites_tab">🎟️ Einladungen</button>
                 </div>
             </div>
 
@@ -3754,22 +3752,22 @@
             <div id="adminUserTabContent" class="flex flex-col flex-1 min-h-0">
                 <div class="grid grid-cols-2 gap-2 mb-4 shrink-0">
                     <div class="bg-blue-50 rounded-xl p-3 text-center border border-blue-100">
-                        <p class="text-[10px] text-blue-500 font-bold uppercase tracking-wide" data-i18n="admin_kpi_users">Nutzer</p>
+                        <p class="text-[10px] text-blue-500 font-bold uppercase tracking-wide" data-i18n="admin_users_count">Nutzer</p>
                         <p id="kpiTotalUsers" class="text-lg font-black text-blue-800">-</p>
                     </div>
                     <div class="bg-purple-50 rounded-xl p-3 text-center border border-purple-100">
-                        <p class="text-[10px] text-purple-500 font-bold uppercase tracking-wide" data-i18n="admin_kpi_codes">Offene Codes</p>
+                        <p class="text-[10px] text-purple-500 font-bold uppercase tracking-wide" data-i18n="admin_open_codes">Offene Codes</p>
                         <p id="kpiOpenInviteCodes" class="text-lg font-black text-purple-800">-</p>
                     </div>
                 </div>
                 
                 <div class="grid grid-cols-2 gap-2 mb-4 shrink-0">
                     <div class="bg-emerald-50 rounded-xl p-3 text-center border border-emerald-100">
-                        <p class="text-[10px] text-emerald-600 font-bold uppercase tracking-wide" data-i18n="admin_kpi_it">Gelernt (IT)</p>
+                        <p class="text-[10px] text-emerald-600 font-bold uppercase tracking-wide" data-i18n="admin_learned_it">Gelernt (IT)</p>
                         <p id="kpiLearnedVocabIt" class="text-lg font-black text-emerald-800">-</p>
                     </div>
                     <div class="bg-amber-50 rounded-xl p-3 text-center border border-amber-100">
-                        <p class="text-[10px] text-amber-600 font-bold uppercase tracking-wide" data-i18n="admin_kpi_en">Gelernt (EN)</p>
+                        <p class="text-[10px] text-amber-600 font-bold uppercase tracking-wide" data-i18n="admin_learned_en">Gelernt (EN)</p>
                         <p id="kpiLearnedVocabEn" class="text-lg font-black text-amber-800">-</p>
                     </div>
                 </div>
@@ -4878,6 +4876,64 @@
                 type_noun: "Substantive",
                 type_verb_inf: "Verben",
                 type_verb: "Verbformen",
+                
+                // Vocab & Sentence Modals
+                vocab_direction: "Ich kenne das Wort auf…",
+                vocab_input_de: "Deutsches Wort",
+                vocab_input_it: "Italienische Übersetzung",
+                vocab_input_en: "Englische Übersetzung",
+                vocab_example_de: "z.B. trinken",
+                vocab_auto_manual: "Automatisch oder manuell eingeben",
+                vocab_type: "Wortart",
+                vocab_type_noun: "Substantiv",
+                vocab_type_verb: "Verb",
+                vocab_type_adj: "Adjektiv",
+                vocab_type_other: "Sonstiges",
+                vocab_grammar: "Grammatik (optional)",
+                vocab_grammar_none: "Keine/Andere",
+                vocab_grammar_msg: "maskulin (sg)",
+                vocab_grammar_fsg: "feminin (sg)",
+                vocab_grammar_mpl: "maskulin (pl)",
+                vocab_grammar_fpl: "feminin (pl)",
+                vocab_emoji: "Emoji",
+                vocab_submit_btn: "Vokabel hinzufügen",
+                sentence_input_de: "Deutscher Satz",
+                sentence_example_de: "z.B. Ich trinke gerne Kaffee.",
+                sentence_translation: "Übersetzung",
+                sentence_submit_btn: "Satz hinzufügen",
+                sentence_list_hint: "Hinweis: Nur die hier ausgewählten Sätze werden in den Übungen zum Lernen verwendet.",
+                sentence_select_all: "Alle wählen",
+                sentence_deselect_all: "Alle abwählen",
+                sentence_search: "Satz suchen...",
+                sentence_cat_all: "Alle Kategorien",
+                sentence_cat_own: "Eigene Sätze",
+                modal_save_close: "Speichern & Schließen",
+                
+                // Excel & Admin
+                excel_manage_base_vocab_desc: "Importiert eine kuratierte Liste von derzeit xyz Basis-Vokabeln",
+                excel_manage_base_sentences_desc: "Importiert eine kuratierte Liste von derzeit xyz Basis-Sätzen",
+                excel_format_title: "Erforderliches Excel-Format:",
+                excel_format_col1_en: "Spalte 1: Englische Wörter",
+                excel_format_col1_it: "Spalte 1: Italienische Wörter",
+                excel_format_col2: "Spalte 2: Deutsche Übersetzung",
+                excel_format_col3: "Spalte 3: Wortart (z.B. Substantiv, Verb)",
+                excel_format_col4: "Spalte 4: Emoji (optional)",
+                excel_current_list: "Aktuelle Liste:",
+                admin_users_tab: "Benutzer",
+                admin_lists_tab: "Listen",
+                admin_invites_tab: "Einladungen",
+                admin_users_count: "BENUTZER",
+                admin_open_codes: "OFFENE CODES",
+                admin_learned_it: "GELERNT (IT)",
+                admin_learned_en: "GELERNT (EN)",
+                admin_user_name: "Name:",
+                admin_user_reg: "Registriert:",
+                admin_user_last_login: "Letzter Login:",
+                admin_user_last_exercise: "Letzte Übung:",
+                admin_user_vocab_it: "Vokabeln (IT):",
+                admin_user_vocab_en: "Vokabeln (EN):",
+                admin_user_learned: "gelernt",
+                admin_password_btn: "Passwort",
                 type_adj: "Adjektive",
                 type_other: "Sonstiges",
                 type_fav: "Favoriten",
@@ -5129,6 +5185,65 @@
                 type_fav: "Favorites",
                 type_sentence: "Own Sentences",
                 type_own_vocab: "Own Vocabulary",
+                
+                // Vocab & Sentence Modals
+                vocab_direction: "I know the word in…",
+                vocab_input_de: "German Word",
+                vocab_input_it: "Italian Translation",
+                vocab_input_en: "English Translation",
+                vocab_example_de: "e.g. trinken",
+                vocab_auto_manual: "Enter automatically or manually",
+                vocab_type: "Part of speech",
+                vocab_type_noun: "Noun",
+                vocab_type_verb: "Verb",
+                vocab_type_adj: "Adjective",
+                vocab_type_other: "Other",
+                vocab_grammar: "Grammar (optional)",
+                vocab_grammar_none: "None / Other",
+                vocab_grammar_msg: "masculine (sg)",
+                vocab_grammar_fsg: "feminine (sg)",
+                vocab_grammar_mpl: "masculine (pl)",
+                vocab_grammar_fpl: "feminine (pl)",
+                vocab_emoji: "Emoji",
+                vocab_submit_btn: "Add Vocabulary",
+                sentence_input_de: "German Sentence",
+                sentence_example_de: "e.g. Ich trinke gerne Kaffee.",
+                sentence_translation: "Translation",
+                sentence_submit_btn: "Add Sentence",
+                sentence_list_hint: "Note: Only selected sentences will be used in learning exercises.",
+                sentence_select_all: "Select all",
+                sentence_deselect_all: "Deselect all",
+                sentence_search: "Search sentence...",
+                sentence_cat_all: "All Categories",
+                sentence_cat_own: "Custom Sentences",
+                modal_save_close: "Save & Close",
+                
+                // Excel & Admin
+                excel_manage_base_vocab_desc: "Imports a curated list of currently xyz base vocabulary.",
+                excel_manage_base_sentences_desc: "Imports a curated list of currently xyz base sentences.",
+                excel_format_title: "Required Excel Format:",
+                excel_format_col1_en: "Column 1: English Words",
+                excel_format_col1_it: "Column 1: Italian Words",
+                excel_format_col2: "Column 2: German Translation",
+                excel_format_col3: "Column 3: Part of speech",
+                excel_format_col4: "Column 4: Emoji (optional)",
+                excel_current_list: "Current List:",
+                admin_users_tab: "Users",
+                admin_lists_tab: "Lists",
+                admin_invites_tab: "Invites",
+                admin_users_count: "USERS",
+                admin_open_codes: "OPEN CODES",
+                admin_learned_it: "LEARNED (IT)",
+                admin_learned_en: "LEARNED (EN)",
+                admin_user_name: "Name:",
+                admin_user_reg: "Registered:",
+                admin_user_last_login: "Last Login:",
+                admin_user_last_exercise: "Last Exercise:",
+                admin_user_vocab_it: "Vocabulary (IT):",
+                admin_user_vocab_en: "Vocabulary (EN):",
+                admin_user_learned: "learned",
+                admin_password_btn: "Password",
+
                 grammar_focus_label: "Practice Focus",
                 grammar_focus_all: "Focus All Sentences",
                 score_label: "Score:",
@@ -10217,27 +10332,34 @@
                 const isPowerUser = u.loginCount && u.loginCount >= 5;
                 const fireSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 inline-block text-orange-500 mr-1"><path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248Z" clip-rule="evenodd" /></svg>';
                 const powerIcon = isPowerUser ? fireSvg : '';
-                const lastLoginStr = u.lastLogin ? new Date(u.lastLogin).toLocaleString('de-DE') : 'Nie';
-                const lastActivityStr = u.lastActivity ? new Date(u.lastActivity).toLocaleString('de-DE') : 'Nie';
+                const localeStr = CURRENT_LANG === 'en' ? 'en-US' : 'de-DE';
+                const neverStr = CURRENT_LANG === 'en' ? 'Never' : 'Nie';
+                const lockedStr = CURRENT_LANG === 'en' ? '(Locked)' : '(Gesperrt)';
+                const blockStr = CURRENT_LANG === 'en' ? 'Block' : 'Sperren';
+                const unblockStr = CURRENT_LANG === 'en' ? 'Unblock' : 'Entsperren';
+                const deleteStr = CURRENT_LANG === 'en' ? 'Delete' : 'Löschen';
+                
+                const lastLoginStr = u.lastLogin ? new Date(u.lastLogin).toLocaleString(localeStr) : neverStr;
+                const lastActivityStr = u.lastActivity ? new Date(u.lastActivity).toLocaleString(localeStr) : neverStr;
                 const adminSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 inline-block text-amber-500 ml-1"><path d="M22.5 18a1.5 1.5 0 0 1-1.5 1.5H3A1.5 1.5 0 0 1 1.5 18v-1.5h21V18Zm-3.863-4.5H5.362l-1.636-7.362a.75.75 0 0 1 1.171-.77l3.963 2.642 2.618-5.236a.75.75 0 0 1 1.344 0l2.618 5.236 3.963-2.642a.75.75 0 0 1 1.171.77L18.637 13.5Z" /></svg>';
 
                 return `
                 <div class="bg-slate-50 border ${isActive ? 'border-slate-200' : 'border-red-300 opacity-75'} rounded-xl p-4 mb-3 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
                     <div class="w-full md:w-1/2">
-                        <p class="font-bold text-slate-800 break-all">${powerIcon} ${u.email} ${u.isAdmin ? adminSvg : ''} ${!isActive ? '<span class="text-red-500 text-xs ml-2">(Gesperrt)</span>' : ''}</p>
-                        ${u.name ? `<p class="text-xs text-blue-600 font-semibold mt-0.5">Name: ${u.name}</p>` : ''}
+                        <p class="font-bold text-slate-800 break-all">${powerIcon} ${u.email} ${u.isAdmin ? adminSvg : ''} ${!isActive ? `<span class="text-red-500 text-xs ml-2">${lockedStr}</span>` : ''}</p>
+                        ${u.name ? `<p class="text-xs text-blue-600 font-semibold mt-0.5">${getI18n('admin_user_name')} ${u.name}</p>` : ''}
                         <p class="text-[11px] text-slate-500 mt-1">
-                            ID: ${u.id} | Reg: ${new Date(u.createdAt).toLocaleDateString('de-DE')}<br/>
-                            Logins: ${u.loginCount || 0} | Zuletzt: ${lastLoginStr}<br/>
-                            Letzte Übung: <span class="text-blue-600 font-medium">${lastActivityStr}</span><br/>
-                            Vokabeln (IT): ${u.stats?.it?.total || 0} (${u.stats?.it?.learned || 0} gelernt)<br/>
-                            Vokabeln (EN): ${u.stats?.en?.total || 0} (${u.stats?.en?.learned || 0} gelernt)
+                            ID: ${u.id} | ${getI18n('admin_user_reg')} ${new Date(u.createdAt).toLocaleDateString(localeStr)}<br/>
+                            Logins: ${u.loginCount || 0} | ${getI18n('admin_user_last_login')} ${lastLoginStr}<br/>
+                            ${getI18n('admin_user_last_exercise')} <span class="text-blue-600 font-medium">${lastActivityStr}</span><br/>
+                            ${getI18n('admin_user_vocab_it')} ${u.stats?.it?.total || 0} (${u.stats?.it?.learned || 0} ${getI18n('admin_user_learned')})<br/>
+                            ${getI18n('admin_user_vocab_en')} ${u.stats?.en?.total || 0} (${u.stats?.en?.learned || 0} ${getI18n('admin_user_learned')})
                         </p>
                     </div>
                     <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
-                        ${!u.isAdmin ? `<button onclick="toggleUserActive(${u.id}, ${isActive})" class="px-3 py-1.5 ${isActive ? 'bg-orange-100 text-orange-700 hover:bg-orange-200' : 'bg-green-100 text-green-700 hover:bg-green-200'} rounded-lg text-xs font-semibold transition-colors">${isActive ? 'Sperren' : 'Entsperren'}</button>` : ''}
-                        <button onclick="resetUserPassword(${u.id})" class="px-3 py-1.5 bg-yellow-100 text-yellow-700 hover:bg-yellow-200 rounded-lg text-xs font-semibold transition-colors">Passwort</button>
-                        ${!u.isAdmin ? `<button onclick="deleteUser(${u.id})" class="px-3 py-1.5 bg-red-100 text-red-700 hover:bg-red-200 rounded-lg text-xs font-semibold transition-colors">Löschen</button>` : ''}
+                        ${!u.isAdmin ? `<button onclick="toggleUserActive(${u.id}, ${isActive})" class="px-3 py-1.5 ${isActive ? 'bg-orange-100 text-orange-700 hover:bg-orange-200' : 'bg-green-100 text-green-700 hover:bg-green-200'} rounded-lg text-xs font-semibold transition-colors">${isActive ? blockStr : unblockStr}</button>` : ''}
+                        <button onclick="resetUserPassword(${u.id})" class="px-3 py-1.5 bg-yellow-100 text-yellow-700 hover:bg-yellow-200 rounded-lg text-xs font-semibold transition-colors">${getI18n('admin_password_btn')}</button>
+                        ${!u.isAdmin ? `<button onclick="deleteUser(${u.id})" class="px-3 py-1.5 bg-red-100 text-red-700 hover:bg-red-200 rounded-lg text-xs font-semibold transition-colors">${deleteStr}</button>` : ''}
                     </div>
                 </div>
             `}).join('');
