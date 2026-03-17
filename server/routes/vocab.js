@@ -34,7 +34,7 @@ router.post('/bulk', authenticateToken, asyncHandler(async (req, res) => {
         de, it, typ, emoji, grammatica, 
         isActive: isActive !== false, 
         isMarked: isMarked === true, 
-        isOwn: isOwn === true,
+        isOwn: isOwn === undefined ? true : isOwn === true,
         language: language || word.language || req.query.language || 'it',
         UserId: req.user.id 
       });
@@ -74,14 +74,21 @@ router.put('/:id', authenticateToken, asyncHandler(async (req, res) => {
 }));
 
 router.delete('/clear/all', authenticateToken, asyncHandler(async (req, res) => {
-    const { language, typ } = req.query;
+    const { language, typ, isOwn } = req.query;
     const where = { UserId: req.user.id };
     if (language) where.language = language;
     
     if (typ === 'Satz') {
         where.typ = 'Satz';
     } else if (typ === 'Vocab') {
-        where.typ = { [Sequelize.Op.ne]: 'Satz' }; // Everything that is not a sentence
+        where.typ = { [Sequelize.Op.ne]: 'Satz' };
+    }
+
+    // Explicit filter for own vs base vocabulary if provided
+    if (isOwn === 'true') {
+        where.isOwn = true;
+    } else if (isOwn === 'false') {
+        where.isOwn = false;
     }
 
     await Vocabulary.destroy({ where });
