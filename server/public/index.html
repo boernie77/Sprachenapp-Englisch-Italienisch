@@ -575,7 +575,7 @@
             #choiceModal,
             #confirmModal,
             #promptModal {
-                z-index: 13000 !important;
+                z-index: 15000 !important;
             }
 
             #impressumModal {
@@ -1042,16 +1042,16 @@
                 border-color: rgba(255, 255, 255, 0.1) !important;
             }
 
-            #vocabListModal .text-slate-800 {
+            #vocabListModal .text-slate-800, #sentenceListModal .text-slate-800 {
                 color: #ffffff !important;
             }
 
-            #vocabListModal .text-slate-500,
-            #vocabListModal .text-slate-400 {
+            #vocabListModal .text-slate-500, #sentenceListModal .text-slate-500,
+            #vocabListModal .text-slate-400, #sentenceListModal .text-slate-400 {
                 color: #94a3b8 !important;
             }
 
-            #vocabListModal .border-slate-200 {
+            #vocabListModal .border-slate-200, #sentenceListModal .border-slate-200 {
                 border-color: rgba(255, 255, 255, 0.1) !important;
             }
 
@@ -7844,6 +7844,8 @@
 
         document.getElementById('vocabListSearch').addEventListener('input', renderVocabList);
         document.getElementById('sentenceListSearch').addEventListener('input', renderSentenceList);
+        document.getElementById('sentenceListSortDir').addEventListener('change', renderSentenceList);
+        document.getElementById('sentenceListCatFilter').addEventListener('change', renderSentenceList);
 
         function stripArticles(text, lang) {
             if (!text) return '';
@@ -7967,9 +7969,15 @@
 
         function renderSentenceList() {
             const sortDir = document.getElementById('sentenceListSortDir').value;
+            const catFilter = document.getElementById('sentenceListCatFilter').value;
             const searchVal = document.getElementById('sentenceListSearch').value.toLowerCase().trim();
 
             let words = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ === 'Satz');
+
+            // Category filter
+            if (catFilter === 'Eigene Sätze') {
+                words = words.filter(w => w.isOwn === true);
+            }
 
             // Search filter
             if (searchVal) {
