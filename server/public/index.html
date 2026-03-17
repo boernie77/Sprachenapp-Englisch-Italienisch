@@ -6383,6 +6383,7 @@
 
         let feedbackTimer = null;
         function showDragDropWrongFeedback() {
+            if (window.innerWidth > MOBILE_THRESHOLD) return;
             if (!dragDropFeedback) return;
             dragDropFeedback.innerHTML = '<div class="feedback-box"><span class="feedback-wrong">Falsch</span></div>';
             dragDropFeedback.style.opacity = '1';
