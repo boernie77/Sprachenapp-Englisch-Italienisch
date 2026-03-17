@@ -4382,7 +4382,7 @@
         const listSVG = `<svg class="w-5 h-5 text-blue-500 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>`;
 
         // --- 2. Backend API Integration ---
-        const isProdDomain = !window.location.hostname.includes('localhost') && !window.location.hostname.match(/^\d+\.\d+\.\d+\.\d+$/);
+        const isProdDomain = window.location.protocol.startsWith('http') && !window.location.hostname.includes('localhost') && !window.location.hostname.match(/^\d+\.\d+\.\d+\.\d+$/);
         
         const API_BASE_URL = (isCapacitor || isProdDomain)
             ? 'https://vokabeln.bernauer24.com'
@@ -6048,7 +6048,7 @@
             
             let availableWords = getAvailableWords();
             if (availableWords.length === 0) {
-                writeQuestionDisplay.innerHTML = `<div class="pt-6 pb-2 px-2 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words text-slate-400">Keine Einträge gefunden</div></div>`;
+                writeQuestionDisplay.innerHTML = `<div class="pt-6 pb-2 px-2 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words text-slate-400">Keine passenden Einträge für diesen Filter gefunden.</div></div>`;
                 writeSubtext.textContent = "";
                 return;
             }
@@ -6268,12 +6268,19 @@
             const filterValue = typeFilterEl.value;
             let availableWords = fullDictionary.filter(word => {
                 const wLang = word.language || 'it';
-                return word.isActive !== false && wLang === CURRENT_LANG && (filterValue === 'Satz' ? word.typ === 'Satz' : word.typ !== 'Satz');
+                // Base language and active check
+                if (word.isActive === false || wLang !== CURRENT_LANG) return false;
+                
+                // Specific type logic
+                if (filterValue === 'Satz') return word.typ === 'Satz';
+                if (filterValue === 'Favoriten' || filterValue === 'Markiert') return word.isMarked === true;
+                if (filterValue === 'EigeneVokabeln') return word.isOwn === true && word.typ !== 'Satz';
+                
+                // Default: Filter out sentences for other vocabulary types
+                return word.typ !== 'Satz';
             });
 
-            if (filterValue === 'Markiert' || filterValue === 'Favoriten') {
-                availableWords = availableWords.filter(word => word.isMarked === true);
-            } else if (filterValue === 'Verb' || filterValue === 'VerbInfinitiv') {
+            if (filterValue === 'Verb' || filterValue === 'VerbInfinitiv') {
                 availableWords = availableWords.filter(word => word.typ && /\bverb\b/i.test(word.typ));
             } else if (filterValue === 'Substantiv') {
                 availableWords = availableWords.filter(word => {
@@ -6283,14 +6290,9 @@
                 });
             } else if (filterValue === 'Adjektiv') {
                 availableWords = availableWords.filter(word => word.typ && /\badjektiv\b/i.test(word.typ));
-            } else if (filterValue === 'Satz') {
-                availableWords = availableWords.filter(word => word.typ === 'Satz');
-            } else if (filterValue === 'EigeneVokabeln') {
-                availableWords = availableWords.filter(word => word.isOwn === true);
             } else if (filterValue === 'Sonstiges') {
-                // Catch-all for things that are NOT Verbs, Nouns/Pronouns, Adjectives, or Sentences
                 availableWords = availableWords.filter(word => {
-                    if (!word.typ) return true; // Empty type goes to Sonstiges
+                    if (!word.typ) return true;
                     const typLower = word.typ.toLowerCase();
                     const isVerb = /\bverb\b/i.test(typLower);
                     const isNoun = typLower.includes('substantiv') || typLower.includes('nomen') || typLower.includes('pronomen');
@@ -6298,10 +6300,7 @@
                     const isSatz = typLower === 'satz';
                     return !isVerb && !isNoun && !isAdj && !isSatz;
                 });
-            } else if (filterValue === 'Alle') {
-                // Already handled by base filter
             }
-            // Retain backward compatibility if nothing matches
             return availableWords;
         }
 
@@ -6327,14 +6326,12 @@
             draggablesContainer.innerHTML = ''; dropzonesContainer.innerHTML = '';
 
             let availableWords = getAvailableWords();
-            if (availableWords.length < ROUND_SIZE) {
-                // Fallback to 'Alle' if not enough words for the specific filter
-                const currentFilter = typeFilterEl.value;
-                typeFilterEl.value = 'Alle';
-                availableWords = getAvailableWords();
-                if (availableWords.length < ROUND_SIZE) {
-                    typeFilterEl.value = currentFilter; // Reset back if it didn't help
-                }
+            if (availableWords.length < ROUND_SIZE && availableWords.length > 0) {
+                // If we have words but less than ROUND_SIZE, just use what we have
+                // No fallback to 'Alle' anymore to respect user filter choice
+            } else if (availableWords.length === 0) {
+                draggablesContainer.innerHTML = `<div class="col-span-full text-center text-slate-400 italic py-8">Keine passenden Vokabeln für diesen Filter gefunden.</div>`;
+                return;
             }
 
 
@@ -6728,11 +6725,17 @@
         function startQuizRound() {
             quizFeedback.classList.add('hidden'); quizFeedback.classList.remove('flex'); quizOptionsContainer.innerHTML = '';
             let availableWords = getAvailableWords();
-            if (availableWords.length < 4) { typeFilterEl.value = 'Alle'; availableWords = getAvailableWords(); }
             if (availableWords.length < 4) {
-                quizQuestionDisplay.innerHTML = `<div class="pt-6 pb-2 px-2 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words text-slate-400">Nicht genug Vokabeln gefunden</div></div>`;
-                quizSubtext.textContent = "";
-                return;
+                // If we have some words but less than 4 (min required for quiz), 
+                // we can either show an error or just show those and fewer options.
+                // But for quiz, we need 4 to have enough decoys. 
+                // However, user wants to see THEIR words.
+                if (availableWords.length === 0) {
+                    quizQuestionDisplay.innerHTML = `<div class="pt-6 pb-2 px-2 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words text-slate-400">Keine passenden Vokabeln für diesen Filter gefunden.</div></div>`;
+                    quizSubtext.textContent = "";
+                    return;
+                }
+                // If we have 1-3 words, we still need decoys. Let's use other words as decoys but keep the target from the filtered list.
             }
             const { due, future } = getDueWords(availableWords);
             currentQuizTarget = due.length > 0 ? due[0] : shuffleArray(future)[0];
@@ -8512,12 +8515,8 @@
         clearVocabArea.addEventListener('click', async () => {
             if (await showConfirm("Möchtest du wirklich alle eigenen Vokabeln unwiderruflich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.", "Vokabeln leeren?")) {
                 try {
-                    // We need to delete only where typ != Satz. The API /vocab/clear/all deletes all. 
-                    // Let's call /vocab/clear/all?type=vocab (Assumes backend support or we iterate)
-                    // Wait, /vocab/clear/all doesn't support type filtering. We need to do it by ID if not supported.
-                    // For now, let's assume we modify the backend route `/vocab/clear/type?typ=Satz`.
-                    await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Vocab`, { method: 'DELETE' });
-                    fullDictionary = fullDictionary.filter(w => w.typ === 'Satz');
+                    await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Vocab&isOwn=true`, { method: 'DELETE' });
+                    fullDictionary = fullDictionary.filter(w => !(w.language === CURRENT_LANG && w.typ !== 'Satz' && w.isOwn === true));
                     renderVocabList();
                     excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
                     showToast("Alle eigenen Vokabeln wurden gelöscht.", "success");
@@ -8532,8 +8531,8 @@
         clearSentencesArea.addEventListener('click', async () => {
             if (await showConfirm("Möchtest du wirklich alle eigenen Sätze unwiderruflich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.", "Sätze leeren?")) {
                 try {
-                    await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Satz`, { method: 'DELETE' });
-                    fullDictionary = fullDictionary.filter(w => w.typ !== 'Satz');
+                    await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Satz&isOwn=true`, { method: 'DELETE' });
+                    fullDictionary = fullDictionary.filter(w => !(w.language === CURRENT_LANG && w.typ === 'Satz' && w.isOwn === true));
                     renderVocabList();
                     excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
                     showToast("Alle eigenen Sätze wurden gelöscht.", "success");
@@ -8588,7 +8587,7 @@
                         if (!grammatica && isNoun && CURRENT_LANG === 'it') {
                             grammatica = autoDetectGrammatica(item.it);
                         }
-                        return { ...item, language: CURRENT_LANG, grammatica: grammatica || null };
+                        return { ...item, language: CURRENT_LANG, grammatica: grammatica || null, isOwn: false };
                     });
                     sourceLabel = `${CURRENT_LANG.toUpperCase()}-Standard-Liste`;
                 }
@@ -8598,7 +8597,7 @@
                 if (!choice) return; // Cancel
 
                 if (choice === 'replace') {
-                    await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Vocab`, { method: 'DELETE' });
+                    await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Vocab&isOwn=false`, { method: 'DELETE' });
                 }
 
                 const result = await apiFetch('/vocab/bulk', {
@@ -8618,10 +8617,11 @@
         });
 
         deleteBaseVocabArea.addEventListener('click', async () => {
-            if (await showConfirm("Möchtest du die importierten Basis-Vokabeln von deinen Statistiken entfernen? Da wir dies nicht exakt abgrenzen können, leert dies einfach deine Liste an Vokabeln (nicht Sätze).", "Achtung")) {
+            if (await showConfirm("Möchtest du die importierten Basis-Vokabeln von deinen Statistiken entfernen? Deine eigenen Vokabeln bleiben erhalten.", "Basis-Vokabeln löschen?")) {
                 try {
-                    await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Vocab`, { method: 'DELETE' });
-                    showToast("Alle Vokabeln wurden gelöscht.", "success");
+                    await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Vocab&isOwn=false`, { method: 'DELETE' });
+                    fullDictionary = fullDictionary.filter(w => !(w.language === CURRENT_LANG && w.typ !== 'Satz' && w.isOwn !== true));
+                    showToast("Basis-Vokabeln wurden gelöscht.", "success");
                     loadDataFromServer();
                     excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
                 } catch (e) {
@@ -8647,14 +8647,14 @@
                 if (!loadConfirmed) return;
 
                 const wordsToUpload = serverBase.map(v => ({
-                    de: v.de, it: v.it, typ: 'Satz', emoji: '', grammatica: v.category || v.level || '', language: CURRENT_LANG
+                    de: v.de, it: v.it, typ: 'Satz', emoji: '', grammatica: v.category || v.level || '', language: CURRENT_LANG, isOwn: false
                 }));
 
                 const choice = await showChoice(`Du lädst ${wordsToUpload.length} Sätze. Sollen sie deine aktuellen Sätze ersetzen oder ergänzen?`);
                 if (!choice) return;
 
                 if (choice === 'replace') {
-                    await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Satz`, { method: 'DELETE' });
+                    await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Satz&isOwn=false`, { method: 'DELETE' });
                 }
 
                 const result = await apiFetch('/vocab/bulk', {
@@ -8674,10 +8674,11 @@
         });
 
         deleteBaseSentencesArea.addEventListener('click', async () => {
-            if (await showConfirm("Möchtest du die importierten Basis-Sätze aus deiner Liste entfernen? Dies löscht auch eigene Sätze.", "Achtung")) {
+            if (await showConfirm("Möchtest du die importierten Basis-Sätze aus deiner Liste entfernen? Deine eigenen Sätze bleiben erhalten.", "Basis-Sätze löschen?")) {
                 try {
-                    await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Satz`, { method: 'DELETE' });
-                    showToast("Alle Sätze wurden gelöscht.", "success");
+                    await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Satz&isOwn=false`, { method: 'DELETE' });
+                    fullDictionary = fullDictionary.filter(w => !(w.language === CURRENT_LANG && w.typ === 'Satz' && w.isOwn !== true));
+                    showToast("Basis-Sätze wurden gelöscht.", "success");
                     loadDataFromServer();
                     excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
                 } catch (e) {
@@ -8706,7 +8707,7 @@
                             grammatica = autoDetectGrammatica(italWord);
                         }
 
-                        return { de: deWord, it: italWord, typ: typ, emoji: row.Emoji || row.emoji || null, grammatica: grammatica || null, language: CURRENT_LANG };
+                        return { de: deWord, it: italWord, typ: typ, emoji: row.Emoji || row.emoji || null, grammatica: grammatica || null, language: CURRENT_LANG, isOwn: true };
                     }).filter(item => item.de && item.it);
 
                     if (wordsToUpload.length > 0) {
@@ -9345,7 +9346,7 @@
             const itSatz = sentenceInputIt.value.trim();
             if (!deSatz || !itSatz) { showToast('Bitte beide Felder ausfüllen.', 'warning'); return; }
 
-            const payload = { de: deSatz, it: itSatz, typ: 'Satz', emoji: '', grammatica: 'Eigene Sätze', language: CURRENT_LANG };
+            const payload = { de: deSatz, it: itSatz, typ: 'Satz', emoji: '', grammatica: 'Eigene Sätze', language: CURRENT_LANG, isOwn: true };
 
             const clearFields = () => {
                 sentenceInputDe.value = '';
@@ -10133,17 +10134,7 @@
         let cardsHistory = [];
 
         function startCardsRound(isBack = false) {
-            const filterValue = typeFilterEl.value;
-            let words = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.isActive !== false && (filterValue === 'Satz' ? w.typ === 'Satz' : w.typ !== 'Satz'));
-            if (filterValue === 'VerbInfinitiv') {
-                words = words.filter(word => word.typ && word.typ.toLowerCase().includes('verb'));
-            } else if (filterValue === 'Favoriten' || filterValue === 'Markiert') {
-                words = words.filter(word => word.isMarked === true);
-            } else if (filterValue === 'EigeneVokabeln') {
-                words = words.filter(word => word.isOwn === true);
-            } else if (filterValue !== 'Alle') {
-                words = words.filter(word => word.typ && word.typ.toLowerCase().includes(filterValue.toLowerCase()));
-            }
+            let words = getAvailableWords();
 
             if (words.length === 0) {
                 if (cardsQuestionDisplay) cardsQuestionDisplay.innerHTML = "Keine passenden Vokabeln gefunden.";
