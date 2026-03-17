@@ -261,7 +261,8 @@
             border-radius: 12px;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
             z-index: 500;
-            overflow: hidden;
+            max-height: 250px !important;
+            overflow-y: auto !important;
         }
 
         .cs-list.open {
@@ -479,8 +480,8 @@
             }
         }
 
-        /* Mobile Dark Mode Optimization (Elegant Dark Mode) */
-        @media (max-width: 768px) {
+        /* Global Dark Mode Optimization (Elegant Dark Mode) */
+        /* Removed @media (max-width: 768px) to make dark mode global */
             body {
                 background-color: #0f172a;
                 background-image:
@@ -1362,7 +1363,6 @@
                     border-radius: 1.5rem !important;
                 }
             }
-            }
 
             @media (min-width: 768px) {
                 #openAdminDashboardBtn:not(.hidden) {
@@ -1377,6 +1377,46 @@
             top: 100% !important;
             bottom: auto !important;
             margin-top: 0.5rem !important;
+        }
+
+        /* --- FINAL OVERRIDE BLOCK: FORCED TOP POSITIONING & SCROLLABLE DROPDOWNS --- */
+        /* This block is placed at the very end to ensure it overrides EVERYTHING else */
+        
+        div[id$="Modal"], 
+        #authOverlay,
+        #vocabModal,
+        #statsModal,
+        #excelModal {
+            align-items: flex-start !important;
+            padding-top: 2rem !important; /* Fixed pixel value for better consistency */
+        }
+
+        /* Ensure any inner bg-white doesn't force centering if there's a parent conflict */
+        div[id$="Modal"] > div, 
+        #authOverlay > div {
+            margin-top: 0 !important;
+        }
+
+        .cs-list {
+            max-height: 250px !important;
+            overflow-y: auto !important;
+            display: none !important;
+            position: absolute !important;
+            z-index: 30000 !important;
+        }
+
+        .cs-list.open {
+            display: block !important;
+        }
+
+        /* Re-fix labels for mobile filter in case of override */
+        #mobileFilterContent label {
+            color: #cbd5e1 !important;
+        }
+
+        #mobileFilterContent .cs-btn {
+            background-color: #1e293b !important;
+            color: #ffffff !important;
         }
     </style>
 </head>
@@ -7590,8 +7630,7 @@
 
             // Close mobile filter modal on backdrop click
             if (e.target === mobileFilterModal) {
-                mobileFilterModal.classList.add('hidden');
-                mobileFilterModal.classList.remove('flex');
+                toggleFilterModal(false);
             }
         });
 
