@@ -1886,34 +1886,49 @@
             </button>
             <div id="dropdownMenu"
                 class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-100 py-1 overflow-hidden">
-                <button id="showStatsBtn"
+                <button id="showStatsBtn" data-i18n="menu_stats"
                     class="block w-full text-left px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100">Statistik</button>
-                <button id="openVocabListModalBtn"
+                <button id="openVocabListModalBtn" data-i18n="menu_vocab_list"
                     class="block w-full text-left px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100">Vollständige
                     Vokabelliste</button>
-                <button id="openSentenceListModalBtn"
+                <button id="openSentenceListModalBtn" data-i18n="menu_sentence_list"
                     class="block w-full text-left px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100">Vollständige
                     Satzliste</button>
-                <button id="openVocabModalBtn"
+                <button id="openVocabModalBtn" data-i18n="menu_add_vocab"
                     class="block w-full text-left px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100">Vokabel
                     hinzufügen</button>
-                <button id="openSentenceModalBtn"
+                <button id="openSentenceModalBtn" data-i18n="menu_add_sentence"
                     class="block w-full text-left px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100">Sätze
                     hinzufügen</button>
-                <button id="openExcelModalBtn"
+                <button id="openExcelModalBtn" data-i18n="menu_manage_excel"
                     class="block w-full text-left px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100">Excel-Liste
                     verwalten</button>
-                <button id="openAdminDashboardBtn"
+                <button id="openAdminDashboardBtn" data-i18n="menu_admin_dashboard"
                     class="hidden w-full text-left px-4 py-3 text-sm font-medium text-purple-600 hover:bg-purple-50 border-b border-slate-100">Admin
                     Dashboard</button>
-                <button id="openContactModalBtn"
+                <button id="openContactModalBtn" data-i18n="menu_contact"
                     class="block w-full text-left px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100 italic">Kontakt</button>
-                <button id="openGuideModalBtn"
+                <button id="openGuideModalBtn" data-i18n="menu_guide"
                     class="block w-full text-left px-4 py-3 text-sm font-medium text-blue-600 hover:bg-blue-50 border-b border-slate-100">Kurzanleitung</button>
-                <button id="openImpressumMenuBtn"
+                <button id="openImpressumMenuBtn" data-i18n="menu_impressum"
                     class="block w-full text-left px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100">Impressum & Lizenzen</button>
-                <button id="logoutBtn"
+
+                <!-- NEW: App Language Switcher -->
+                <div class="px-4 py-2 border-b border-slate-100 bg-slate-50/50">
+                    <span class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wide" data-i18n="menu_app_language_title">App Sprache</span>
+                    <div class="flex gap-2">
+                        <button id="btnLangUI_de" class="flex-1 py-1.5 px-2 text-sm bg-white border border-slate-200 rounded-lg shadow-sm font-medium focus:ring-2 focus:ring-blue-500 hover:bg-slate-50 transition-colors">
+                            🇩🇪 DE
+                        </button>
+                        <button id="btnLangUI_en" class="flex-1 py-1.5 px-2 text-sm bg-white border border-slate-200 rounded-lg shadow-sm font-medium focus:ring-2 focus:ring-blue-500 hover:bg-slate-50 transition-colors">
+                            🇬🇧 EN
+                        </button>
+                    </div>
+                </div>
+
+                <button id="logoutBtn" data-i18n="menu_logout"
                     class="block w-full text-left px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 cursor-pointer border-b border-slate-100">Abmelden</button>
+
                 <div id="syncStatus"
                     class="px-4 py-2 text-[10px] text-slate-400 bg-slate-50 flex items-center justify-between cursor-pointer hover:bg-slate-100 transition-colors"
                     title="Klicken zum manuellen Synchronisieren">
@@ -1933,29 +1948,32 @@
             <h1
                 class="text-2xl md:text-4xl font-bold text-slate-800 mb-0 flex items-center justify-center gap-2">
                 <span id="appHeaderIcon"></span> 
-                <span id="appHeaderTitle">Lernen</span> 
+                <span id="appHeaderTitle" data-i18n="header_learn">Lernen</span> 
                 <span class="text-[10px] font-normal text-slate-400 align-top mt-1 ml-1" id="appVersionMain">2.0.4 Stable</span>
             </h1>
 
             <div class="flex justify-center items-center gap-1 mt-1 mb-1">
                 <div
                     class="bg-slate-200 p-1 md:p-1.5 rounded-xl inline-flex gap-1 shadow-inner text-xs md:text-sm w-full sm:w-auto">
-                    <button id="modeDragDropBtn"
+                    <button id="modeDragDropBtn" data-i18n="mode_dragdrop"
                         class="flex-1 md:flex-none px-3 md:px-5 py-1.5 rounded-lg bg-white shadow-sm text-slate-800 font-semibold transition-all">Drag
                         & Drop</button>
-                    <button id="modeQuizBtn"
+                    <button id="modeQuizBtn" data-i18n="mode_quiz"
                         class="flex-1 md:flex-none px-3 md:px-5 py-1.5 rounded-lg text-slate-500 font-medium hover:text-slate-800 transition-all">Quiz
                         Modus</button>
-                    <button id="modeCardsBtn"
+                    <button id="modeCardsBtn" data-i18n="mode_cards"
                         class="flex-1 md:flex-none px-3 md:px-5 py-1.5 rounded-lg text-slate-500 font-medium hover:text-slate-800 transition-all">Karteikarten</button>
-                    <button id="modeWriteBtn"
+                    <button id="modeWriteBtn" data-i18n="mode_write"
                         class="flex-1 md:flex-none px-3 md:px-5 py-1.5 rounded-lg text-slate-500 font-medium hover:text-slate-800 transition-all">Schreiben</button>
-                    <button id="modeGrammarBtn"
-                        class="flex-1 md:flex-none px-3 md:px-5 py-1.5 rounded-lg text-slate-500 font-medium hover:text-slate-800 transition-all">Grammatik</button>
-                    <button id="modeInfoBtn"
-                        class="hidden md:flex flex-1 md:flex-none px-3 md:px-5 py-1.5 rounded-lg text-slate-500 font-medium hover:text-slate-800 transition-all">Info</button>
+                    <button id="modeGrammarBtn" data-i18n="mode_grammar"
+                        class="hidden md:flex flex-1 md:flex-none px-3 md:px-5 py-1.5 rounded-lg text-slate-500 font-medium hover:text-slate-800 transition-all gap-2 items-center">
+                        Grammatik Sätze
+                        <span id="grammarCountBadge"
+                            class="bg-blue-100 text-blue-700 text-[10px] px-1.5 py-0.5 rounded-full font-bold">0</span>
+                    </button>
                 </div>
             </div>
+        </header>
 
             <div id="filterContainer"
                 class="mt-2 md:mt-3 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 items-start bg-white p-3 md:p-4 rounded-2xl shadow-sm border border-slate-200 text-left">
@@ -4948,9 +4966,22 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             renderAllLabels();
+            applyTranslations(); // Init UI language
             
             document.getElementById('langItBtn')?.addEventListener('click', () => switchLanguage('it'));
             document.getElementById('langEnBtn')?.addEventListener('click', () => switchLanguage('en'));
+
+            // UI Language Switcher Listeners
+            document.getElementById('btnLangUI_de')?.addEventListener('click', () => {
+                APP_UI_LANG = 'de';
+                localStorage.setItem('ita-ui-lang', 'de');
+                applyTranslations();
+            });
+            document.getElementById('btnLangUI_en')?.addEventListener('click', () => {
+                APP_UI_LANG = 'en';
+                localStorage.setItem('ita-ui-lang', 'en');
+                applyTranslations();
+            });
         });
         let dailyActivity = JSON.parse(localStorage.getItem(`ita-daily-activity-${CURRENT_LANG}`) || '{}');
         let grammarActivityCount = parseInt(localStorage.getItem(`ita-grammar-stats-${CURRENT_LANG}`) || '0');
