@@ -36,5 +36,5 @@ Dieses Dokument dient dazu, wichtige Projektdaten und spezifische Benutzeranford
 ## Deployment
 - Nach Änderungen in `server/public/index.html` immer `npx cap sync` ausführen, um Android und iOS zu aktualisieren.
 - **Design-Regel**: Der Dunkelmodus muss in den Apps und der schmalen Browseransicht (max-width: 1024px) immer konsequent eingehalten werden.
-- **Icon-Regel**: Nur Icons verwenden (z. B. Emojis oder etablierte SVGs), die auf Mobilgeräten plattformübergreifend zuverlässig funktionieren.
+- **Icon-Regel**: Nur Icons verwenden (z. B. Standard-Emojis), die auf Mobilgeräten (iOS/Android) plattformübergreifend zuverlässig funktionieren.
 - Neue Builds als `.aab` im Hauptverzeichnis ablegen (z.B. `app-release-v2.0.5-v15-FINAL.aab`).
