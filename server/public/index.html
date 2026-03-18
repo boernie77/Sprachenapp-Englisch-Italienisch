@@ -4947,6 +4947,10 @@
                 label_german_translation: "Deutsche Übersetzung",
                 placeholder_italian_word: "z.B. bere",
                 tag_offline: "✨ Offline",
+                toast_loading_started: "Ladevorgang gestartet...",
+                toast_clearing_started: "Löschvorgang gestartet...",
+                confirm_load_server_base_vocab: "Möchten Sie {0} Basis-Vokabeln ({1}) vom Server laden?",
+                confirm_load_server_base_sentences: "Möchten Sie {0} Basis-Sätze ({1}) vom Server laden?",
                 tag_searching_online: "⏳ Suche online…",
                 tag_online: "🌐 Online",
                 title_select_emoji: " wählen",
@@ -9448,7 +9452,7 @@
             if (words.length > 200 && !window.sentenceListShowAll) {
                 const hint = document.createElement('div');
                 hint.className = 'p-4 text-center text-amber-600 bg-amber-50 font-medium text-sm border-b border-amber-100';
-                hint.innerHTML = `<svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg> Nur die ersten 200 von ${words.length} Treffern angezeigt (Performance-Limit). <button onclick="window.sentenceListShowAll=true; renderSentenceList()" class="underline font-bold text-amber-700 hover:text-amber-900 ml-1">Alle ${words.length} anzeigen</button>`;
+                hint.innerHTML = `<svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg> Nur die ersten 200 von ${words.length} Treffern angezeigt (Performance-Limit). Bitte Suche verfeinern. <button onclick="window.sentenceListShowAll=true; renderSentenceList()" class="underline font-bold text-amber-700 hover:text-amber-900 ml-1">Alle ${words.length} anzeigen</button>`;
                 container.appendChild(hint);
             } else if (window.sentenceListShowAll && words.length > 200) {
                  const hint = document.createElement('div');
@@ -9728,6 +9732,7 @@
         clearSentencesArea.addEventListener('click', async () => {
             if (await showConfirm(getI18n('confirm_clear_custom_sentences'), getI18n('title_clear_sentences'))) {
                 try {
+                    showToast(getI18n('toast_clearing_started'), "info");
                     await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Satz&isOwn=true`, { method: 'DELETE' });
                     fullDictionary = fullDictionary.filter(w => !(w.language === CURRENT_LANG && w.typ === 'Satz' && w.isOwn === true));
                     renderVocabList();
@@ -9760,6 +9765,9 @@
                 if (serverBase.length > 0) {
                     const loadConfirmed = await showConfirm(getI18n('confirm_load_server_base_vocab', serverBase.length, CURRENT_LANG.toUpperCase()), getI18n('title_load_base_list'));
                     if (!loadConfirmed) return;
+
+                    showToast(getI18n('toast_loading_started'), "info");
+
                     wordsToUpload = serverBase.map(v => ({
                         de: v.de, it: v.it, typ: v.typ, emoji: v.emoji, grammatica: v.grammatica, language: CURRENT_LANG, isOwn: false
                     }));
@@ -9842,6 +9850,8 @@
 
                 const loadConfirmed = await showConfirm(getI18n('confirm_load_server_base_sentences', serverBase.length, CURRENT_LANG.toUpperCase()), getI18n('title_load_base_sentences'));
                 if (!loadConfirmed) return;
+
+                showToast(getI18n('toast_loading_started'), "info");
 
                 const wordsToUpload = serverBase.map(v => ({
                     de: v.de, it: v.it, typ: 'Satz', emoji: '', grammatica: v.category || v.level || '', language: CURRENT_LANG, isOwn: false
