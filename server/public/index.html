@@ -4823,11 +4823,18 @@
                 toast_import_base_sentences_error: "Fehler beim Import der Basis-Sätze.",
                 info_extra_title: "Zusatzinfo",
                 info_extra_placeholder: "Hier erscheinen Zusatzinformationen oder Bilder.",
+                info_type_verb: "Verbformen",
+                info_type_noun: "Bild",
                 last_sync: "Letzter Sync:",
                 no_vocab_filter: "Keine passenden Vokabeln für diesen Filter gefunden.",
                 info_placeholder_verb: "Hier erscheinen die Zusatzinformationen der richtig zugeordneten Verben.",
                 info_placeholder_noun: "Klicke oder ziehe ein Wort in der linken Spalte, um das Bild zu sehen.",
                 info_placeholder_all: "Klicke auf ein Wort, um Bilder oder Verbformen zu sehen.",
+                verb_praesens: "Präsens",
+                verb_passato: "Passato Prossimo",
+                verb_imperfetto: "Imperfetto",
+                verb_gerundio: "Gerundio",
+                verb_imperativo: "Imperativ",
                 no_vocab_short: "Keine passenden Vokabeln gefunden.",
                 stats_done_grammar: "Erledigte Grammatik-Übungen",
                 vocab_search: "Vokabel suchen...",
@@ -5093,7 +5100,12 @@
                 guide_area_quiz: "Wähle die richtige Übersetzung aus großen Buttons. Schnell und effektiv.",
                 guide_area_write: "Die Königsdisziplin. Tippe die Übersetzung korrekt ein. Bei Tippfehlern helfen wir dir mit kleinen Hinweisen.",
                 guide_area_grammar: "Lerne ganze Sätze im Kontext. Nutze den Filter <strong>\"Eigene Sätze\"</strong>, um gezielt Sätze zu trainieren, die du selbst angelegt hast.",
-                guide_btn: "Verstanden!"
+                guide_btn: "Verstanden!",
+                
+                // Extra Info
+                info_solve_verb: "Löse das Verb richtig, um die Zusatzinfos zu sehen.",
+                info_solve_noun: "Löse das Wort richtig, um das Bild zu sehen.",
+                info_no_extra: "Keine Zusatzinfos für dieses Wort vorhanden."
             },
             en: {
                 // Header
@@ -5279,11 +5291,18 @@
                 vocab_type_adj: "Adjective",
                 info_extra_title: "Additional Info",
                 info_extra_placeholder: "Additional information or pictures will appear here.",
+                info_type_verb: "Verb Forms",
+                info_type_noun: "Picture",
                 last_sync: "Last Sync:",
                 no_vocab_filter: "No matching vocabulary found for this filter.",
                 info_placeholder_verb: "Extra information for correctly matched verbs will appear here.",
                 info_placeholder_noun: "Click or drag a word in the left column to see the picture.",
                 info_placeholder_all: "Click on a word to see pictures or verb forms.",
+                verb_praesens: "Present",
+                verb_passato: "Past Tense",
+                verb_imperfetto: "Imperfect",
+                verb_gerundio: "Gerund",
+                verb_imperativo: "Imperative",
                 no_vocab_short: "No matching vocabulary found.",
                 stats_done_grammar: "Completed Grammar Exercises",
                 vocab_search: "Search vocabulary...",
@@ -7210,14 +7229,14 @@
             infoSection.classList.add('flex');
 
             if (typeFilterEl.value === 'Verb' || typeFilterEl.value === 'VerbInfinitiv') {
-                infoColHeader.innerHTML = 'ℹ️ Verbformen';
-                infoMain.innerHTML = `<div id="info-placeholder" class="text-slate-400 italic text-sm text-center mt-2 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200">${getI18n('info_placeholder_verb')}</div>`;
+                infoColHeader.innerHTML = `<span id="infoBulbIcon">ℹ️</span> <span data-i18n="info_type_verb">${getI18n('info_type_verb')}</span>`;
+                infoMain.innerHTML = `<div id="info-placeholder" class="text-slate-400 italic text-sm text-center mt-2 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200"><span data-i18n="info_placeholder_verb">${getI18n('info_placeholder_verb')}</span></div>`;
             } else if (typeFilterEl.value === 'Substantiv') {
-                infoColHeader.innerHTML = '🖼️ Bild';
-                infoMain.innerHTML = `<div id="info-placeholder" class="text-slate-400 italic text-sm text-center mt-2 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200">${getI18n('info_placeholder_noun')}</div>`;
+                infoColHeader.innerHTML = `<span id="infoBulbIcon">🖼️</span> <span data-i18n="info_type_noun">${getI18n('info_type_noun')}</span>`;
+                infoMain.innerHTML = `<div id="info-placeholder" class="text-slate-400 italic text-sm text-center mt-2 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200"><span data-i18n="info_placeholder_noun">${getI18n('info_placeholder_noun')}</span></div>`;
             } else {
-                infoColHeader.innerHTML = `ℹ️ ${getI18n('info_extra_title')}`;
-                infoMain.innerHTML = `<div id="info-placeholder" class="text-slate-400 italic text-sm text-center mt-2 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200">${getI18n('info_placeholder_all')}</div>`;
+                infoColHeader.innerHTML = `<span id="infoBulbIcon">ℹ️</span> <span data-i18n="info_extra_title">${getI18n('info_extra_title')}</span>`;
+                infoMain.innerHTML = `<div id="info-placeholder" class="text-slate-400 italic text-sm text-center mt-2 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200"><span data-i18n="info_placeholder_all">${getI18n('info_placeholder_all')}</span></div>`;
             }
 
             if (directionFilterEl.value === 'de-it') {
@@ -7492,8 +7511,8 @@
             const isNoun = pair.typ && pair.typ.toLowerCase().includes('substantiv');
 
             if ((isVerb || isNoun) && !isMatched) {
-                const text = isVerb ? getI18n('info_solve_verb') : getI18n('info_solve_noun');
-                infoMain.innerHTML = `<div class="text-slate-400 italic text-sm text-center mt-2 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200">🔒 ${text}</div>`;
+                const i18nKey = isVerb ? 'info_solve_verb' : 'info_solve_noun';
+                infoMain.innerHTML = `<div class="text-slate-400 italic text-sm text-center mt-2 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200">🔒 <span data-i18n="${i18nKey}">${getI18n(i18nKey)}</span></div>`;
                 return;
             }
 
@@ -7503,11 +7522,11 @@
                 infoCard.innerHTML = `
                     <div class="font-bold text-slate-800 border-b border-slate-100 pb-2 mb-2">${getFullIt(pair)} <span class="font-normal text-slate-500 text-sm">(${pair.de})</span></div>
                     <div class="flex flex-col gap-2 text-slate-700 text-xs md:text-sm">
-                        <div><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">Präsens</span>${pair.praesens || '-'}</div>
-                        <div><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">Passato Prossimo</span>${pair.passato || '-'}</div>
-                        <div><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">Imperfetto</span>${pair.imperfetto || '-'}</div>
-                        <div class="pt-1 border-t border-slate-50"><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">Gerundio</span>${pair.gerundio || '-'}</div>
-                        <div><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">Imperativ</span><span class="text-blue-600 italic font-medium">${pair.imperativo || '-'}</span></div>
+                        <div><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">${getI18n('verb_praesens')}</span>${pair.praesens || '-'}</div>
+                        <div><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">${getI18n('verb_passato')}</span>${pair.passato || '-'}</div>
+                        <div><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">${getI18n('verb_imperfetto')}</span>${pair.imperfetto || '-'}</div>
+                        <div class="pt-1 border-t border-slate-50"><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">${getI18n('verb_gerundio')}</span>${pair.gerundio || '-'}</div>
+                        <div><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">${getI18n('verb_imperativo')}</span><span class="text-blue-600 italic font-medium">${pair.imperativo || '-'}</span></div>
                     </div>
                 `;
                 infoMain.appendChild(infoCard);
@@ -7523,7 +7542,7 @@
                     </div>
                 `;
                 infoMain.appendChild(infoCard);
-            } else infoMain.innerHTML = `<div class="text-slate-400 italic text-sm text-center mt-2 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200">${getI18n('info_no_extra')}</div>`;
+            } else infoMain.innerHTML = `<div class="text-slate-400 italic text-sm text-center mt-2 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200"><span data-i18n="info_no_extra">${getI18n('info_no_extra')}</span></div>`;
         }
 
         function matchSuccess(id, dropzone) {
