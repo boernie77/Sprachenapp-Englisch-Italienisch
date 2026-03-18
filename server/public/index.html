@@ -6124,8 +6124,14 @@
             if (!infinitive) return;
 
             // Collect search terms for verbs
+            let isVerb = (wordObj.typ && wordObj.typ.toLowerCase().includes('verb'));
             let searchTerms = [infinitive];
-            if (wordObj.typ === 'Verb' && CURRENT_LANG === 'it') {
+            if (isVerb && CURRENT_LANG === 'it') {
+                // Fallback: Generate forms on the fly if missing (e.g. following a cache load)
+                if (!wordObj.praesens) {
+                    const forms = generateVerbForms(infinitive);
+                    Object.assign(wordObj, forms);
+                }
                 const formsToExtract = ['praesens', 'imperfetto', 'passato', 'gerundio', 'imperativo'];
                 formsToExtract.forEach(field => {
                     const val = wordObj[field];
@@ -6156,7 +6162,7 @@
             let match = null;
             // 1. Try exact infinitive match first
             const escapedInf = infinitive.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            const regexInf = new RegExp(`(^|[^a-zA-ZàèéìòùÀÈÉÌÒÙ'])${escapedInf}([^a-zA-ZàèéìòùÀÈÉÌÒÙ']|$)`, 'i');
+            const regexInf = new RegExp(`(^|[^a-zA-ZàèéìòùÀÈÉÌÒÙ])${escapedInf}([^a-zA-ZàèéìòùÀÈÉÌÒÙ]|$)`, 'i');
             match = allBaseSentences.find(s => regexInf.test((s.it || "").toLowerCase()));
 
             // 2. If no infinitive found, try conjugated forms (sorted by length for better precision)
@@ -6164,7 +6170,7 @@
                 const sortedTerms = searchTerms.slice(1).sort((a,b) => b.length - a.length);
                 for (const term of sortedTerms) {
                     const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                    const regex = new RegExp(`(^|[^a-zA-ZàèéìòùÀÈÉÌÒÙ'])${escapedTerm}([^a-zA-ZàèéìòùÀÈÉÌÒÙ']|$)`, 'i');
+                    const regex = new RegExp(`(^|[^a-zA-ZàèéìòùÀÈÉÌÒÙ])${escapedTerm}([^a-zA-ZàèéìòùÀÈÉÌÒÙ]|$)`, 'i');
                     match = allBaseSentences.find(s => regex.test((s.it || "").toLowerCase()));
                     if (match) break;
                 }
@@ -6268,7 +6274,7 @@
                     isMarked: v.isMarked === true,
                     isOwn: v.isOwn === true,
                     language: v.language || (v.it ? 'it' : 'en'),
-                    ... (v.typ === 'Verb' && v.it ? generateVerbForms(v.it) : {})
+                    ... (v.typ && v.typ.toLowerCase().includes('verb') && v.it ? generateVerbForms(v.it) : {})
                 }));
 
                 // Merge wordStats instead of replacing
