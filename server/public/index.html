@@ -24,7 +24,7 @@
     <meta name="theme-color" content="#0f172a">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/197/197626.png">
     <link rel="manifest" href="/manifest.json">
-    <title>Italienisch Lernen - Drag & Drop & Quiz</title>
+    <title>Lernapp v2.0.6 - Italienisch & Englisch</title>
 
     <!-- Tailwind CSS für modernes, responsives Design -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -1176,16 +1176,23 @@
                 to { opacity: 1; transform: scale(1); }
             }
 
+            /* Mode hiding utility */
+            .mode-hidden { 
+                display: none !important; 
+            }
+
             /* Example Sentence Buttons */
-            #toggleExampleSentencesBtn.active,
-            #toggleExampleSentencesBtnMobile.active {
+            button#toggleExampleSentencesBtn.active,
+            button#toggleExampleSentencesBtnMobile.active {
                 background-color: #2563eb !important; /* blue-600 */
                 color: #ffffff !important;
                 border-color: #2563eb !important;
+                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important;
             }
-            #toggleExampleSentencesBtn.active span,
-            #toggleExampleSentencesBtnMobile.active span {
+            button#toggleExampleSentencesBtn.active span,
+            button#toggleExampleSentencesBtnMobile.active span {
                 color: #ffffff !important;
+                font-weight: 700 !important;
             }
             #toggleExampleSentencesBtnMobile {
                 font-size: 1.25rem;
@@ -8765,13 +8772,11 @@
             const desktopToggle = document.getElementById('exampleToggleDesktopWrapper');
             const mobileToggle = document.getElementById('toggleExampleSentencesBtnMobile');
             if (mode === 'cards') {
-                desktopToggle?.classList.add('hidden');
-                desktopToggle?.classList.remove('md:flex');
-                mobileToggle?.classList.add('hidden');
+                desktopToggle?.classList.add('mode-hidden');
+                mobileToggle?.classList.add('mode-hidden');
             } else {
-                desktopToggle?.classList.remove('hidden');
-                desktopToggle?.classList.add('md:flex');
-                mobileToggle?.classList.remove('hidden');
+                desktopToggle?.classList.remove('mode-hidden');
+                mobileToggle?.classList.remove('mode-hidden');
             }
 
             if (mode === 'info') {
