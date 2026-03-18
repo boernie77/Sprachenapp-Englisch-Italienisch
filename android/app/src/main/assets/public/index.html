@@ -1684,12 +1684,12 @@
             <button id="langItBtn" 
                 class="p-0 bg-white rounded-xl shadow-sm border border-slate-200 hover:bg-slate-50 focus:outline-none transition-all flex items-center justify-center w-[38px] h-[38px] overflow-hidden active:scale-95" 
                 title="Italienisch">
-                <svg class="w-7 h-7 rounded shadow-sm" viewBox="0 0 3 2"><rect width="3" height="2" fill="#ed2939"/><rect width="2" height="2" fill="#fff"/><rect width="1" height="2" fill="#009246"/></svg>
+                <svg class="w-7 h-5 rounded shadow-sm" viewBox="0 0 3 2"><rect width="3" height="2" fill="#ed2939"/><rect width="2" height="2" fill="#fff"/><rect width="1" height="2" fill="#009246"/></svg>
             </button>
             <button id="langEnBtn" 
                 class="p-0 bg-white rounded-xl shadow-sm border border-slate-200 hover:bg-slate-50 focus:outline-none transition-all flex items-center justify-center w-[38px] h-[38px] overflow-hidden active:scale-95" 
                 title="English">
-                <svg class="w-7 h-7 rounded shadow-sm" viewBox="0 0 60 30"><clipPath id="s_sw_sm"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="t_sw_sm"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#s_sw_sm)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4" clip-path="url(#t_sw_sm)"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg>
+                <svg class="w-7 h-5 rounded shadow-sm" viewBox="0 0 60 30"><clipPath id="s_sw_hd"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="t_sw_hd"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#s_sw_hd)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4" clip-path="url(#t_sw_hd)"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg>
             </button>
         </div>
 
@@ -1901,7 +1901,9 @@
     <div id="exampleSentenceModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[30000] items-center justify-center p-4">
         <div class="modal-content bg-white rounded-[2rem] shadow-2xl max-w-sm w-full p-6 md:p-8 text-center border border-slate-100">
             <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <span class="text-3xl">💡</span>
+                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.674a1 1 0 01.707.293l1.414 1.414a1 1 0 01.293.707V20a1 1 0 01-1 1H8.324a1 1 0 01-1-1v-1a1 1 0 01.293-.707l1.414-1.414a1 1 0 01.707-.293V17zM12 3c-3.313 0-6 2.687-6 6 0 2.126 1.104 3.992 2.76 5.068A1 1 0 019 15h6a1 1 0 01.24-.668c1.656-1.076 2.76-2.942 2.76-5.068 0-3.313-2.687-6-6-6z"/>
+                </svg>
             </div>
             <h3 class="text-xl font-bold text-slate-800 mb-2" data-i18n="example_sentence_title">Beispielsatz</h3>
             <div id="exampleSentenceBox" class="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-6 text-left">
@@ -1943,7 +1945,9 @@
         <div class="top-nav-container absolute top-[calc(env(safe-area-inset-top,0px)+8px)] right-2 md:top-4 md:right-4 z-[1000] flex items-center gap-[2px]">
             <!-- Beispielsätze Mobile Button -->
             <button id="toggleExampleSentencesBtnMobile" class="md:hidden p-2 bg-white text-slate-700 rounded-xl shadow-sm active:scale-95 flex items-center justify-center w-[38px] h-[38px] border border-slate-200" title="Beispielsätze">
-                <span>💡</span>
+                <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.674a1 1 0 01.707.293l1.414 1.414a1 1 0 01.293.707V20a1 1 0 01-1 1H8.324a1 1 0 01-1-1v-1a1 1 0 01.293-.707l1.414-1.414a1 1 0 01.707-.293V17zM12 3c-3.313 0-6 2.687-6 6 0 2.126 1.104 3.992 2.76 5.068A1 1 0 019 15h6a1 1 0 01.24-.668c1.656-1.076 2.76-2.942 2.76-5.068 0-3.313-2.687-6-6-6z"/>
+                </svg>
             </button>
             <button id="infoIconBtn" class="mobile-filter-btn hidden p-2 bg-blue-600 text-white rounded-xl shadow-sm active:scale-95 flex items-center justify-center w-[38px] h-[38px] border border-blue-600" title="Zusatzinfos">
                 <span class="font-bold">i</span>
@@ -1986,14 +1990,16 @@
                     class="block w-full text-left px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100"><span data-i18n="menu_impressum">Impressum & Lizenzen</span></button>
 
                 <!-- NEW: App Language Switcher -->
-                <div class="px-4 py-2 border-b border-slate-100 bg-slate-50/50">
-                    <span class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wide" data-i18n="menu_app_language_title">App Sprache</span>
+                <div class="px-3 py-2 border-b border-slate-100 bg-slate-50/50">
+                    <span class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wide" data-i18n="menu_app_language_title">App Sprache</span>
                     <div class="flex gap-2">
-                        <button id="btnLangUI_de" class="flex-1 py-1.5 px-2 text-sm bg-white border border-slate-200 rounded-lg shadow-sm font-medium focus:ring-2 focus:ring-blue-500 hover:bg-slate-50 transition-colors">
-                            🇩🇪 DE
+                        <button id="btnLangUI_de" class="flex-1 py-1 px-1 text-[10px] sm:text-xs bg-white border border-slate-200 rounded-lg shadow-sm font-bold focus:ring-2 focus:ring-blue-500 hover:bg-slate-50 transition-colors flex items-center justify-center gap-1 min-w-0 overflow-hidden">
+                            <svg class="w-4 h-3 flex-shrink-0" viewBox="0 0 5 3"><rect width="5" height="3" fill="#000"/><rect width="5" height="2" fill="#D00"/><rect width="5" height="1" fill="#FFCE00"/></svg>
+                            <span>DE</span>
                         </button>
-                        <button id="btnLangUI_en" class="flex-1 py-1.5 px-2 text-sm bg-white border border-slate-200 rounded-lg shadow-sm font-medium focus:ring-2 focus:ring-blue-500 hover:bg-slate-50 transition-colors">
-                            🇬🇧 EN
+                        <button id="btnLangUI_en" class="flex-1 py-1 px-1 text-[10px] sm:text-xs bg-white border border-slate-200 rounded-lg shadow-sm font-bold focus:ring-2 focus:ring-blue-500 hover:bg-slate-50 transition-colors flex items-center justify-center gap-1 min-w-0 overflow-hidden">
+                            <svg class="w-4 h-3 flex-shrink-0" viewBox="0 0 60 30"><clipPath id="s_sw_ui"><path d="M0,0 v30 h60 v-30 z"/></clipPath><clipPath id="t_sw_ui"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><g clip-path="url(#s_sw_ui)"><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4" clip-path="url(#t_sw_ui)"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></svg>
+                            <span>EN</span>
                         </button>
                     </div>
                 </div>
@@ -2290,7 +2296,9 @@
                 </div>
                 <!-- Manual Example Sentence Button for Flashcards -->
                 <button id="cardsShowExampleBtn" class="w-full sm:w-auto bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-6 rounded-lg transition-all shadow-md active:transform active:scale-95 text-xs md:text-sm flex items-center justify-center gap-2 mt-2">
-                    <span class="text-sm">💡</span>
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.674a1 1 0 01.707.293l1.414 1.414a1 1 0 01.293.707V20a1 1 0 01-1 1H8.324a1 1 0 01-1-1v-1a1 1 0 01.293-.707l1.414-1.414a1 1 0 01.707-.293V17zM12 3c-3.313 0-6 2.687-6 6 0 2.126 1.104 3.992 2.76 5.068A1 1 0 019 15h6a1 1 0 01.24-.668c1.656-1.076 2.76-2.942 2.76-5.068 0-3.313-2.687-6-6-6z"/>
+                    </svg>
                     <span data-i18n="btn_show_example">Beispielsatz anzeigen</span>
                 </button>
             </div>
@@ -3043,7 +3051,7 @@
                     </table>
                 </div>
                 <div class="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600 italic">
-                    💡 Hinweis: Pronomen stehen normalerweise <b>vor</b> dem konjugierten Verb (z.B. "Lo leggo"), außer
+                    <svg class="w-4 h-4 text-amber-500 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.674a1 1 0 01.707.293l1.414 1.414a1 1 0 01.293.707V20a1 1 0 01-1 1H8.324a1 1 0 01-1-1v-1a1 1 0 01.293-.707l1.414-1.414a1 1 0 01.707-.293V17zM12 3c-3.313 0-6 2.687-6 6 0 2.126 1.104 3.992 2.76 5.068A1 1 0 019 15h6a1 1 0 01.24-.668c1.656-1.076 2.76-2.942 2.76-5.068 0-3.313-2.687-6-6-6z"/></svg> Hinweis: Pronomen stehen normalerweise <b>vor</b> dem konjugierten Verb (z.B. "Lo leggo"), außer
                     beim Imperativ und Infinitiv, wo sie angehängt werden.
                 </div>
             </div><!-- #Pronomi Box -->
