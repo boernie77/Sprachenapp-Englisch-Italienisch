@@ -1180,11 +1180,12 @@
             #toggleExampleSentencesBtn.active,
             #toggleExampleSentencesBtnMobile.active {
                 background-color: #2563eb !important; /* blue-600 */
-                color: white !important;
+                color: #ffffff !important;
                 border-color: #2563eb !important;
             }
-            #toggleExampleSentencesBtn.active span {
-                color: white !important;
+            #toggleExampleSentencesBtn.active span,
+            #toggleExampleSentencesBtnMobile.active span {
+                color: #ffffff !important;
             }
             #toggleExampleSentencesBtnMobile {
                 font-size: 1.25rem;
@@ -5883,12 +5884,12 @@
 
             document.getElementById('toggleExampleSentencesBtn')?.addEventListener('click', () => {
                 showExampleSentences = !showExampleSentences;
-                localStorage.setItem('showExampleSentences', showExampleSentences);
+                localStorage.setItem('ita-show-example-sentences', showExampleSentences);
                 updateExampleToggleUI();
             });
             document.getElementById('toggleExampleSentencesBtnMobile')?.addEventListener('click', () => {
                 showExampleSentences = !showExampleSentences;
-                localStorage.setItem('showExampleSentences', showExampleSentences);
+                localStorage.setItem('ita-show-example-sentences', showExampleSentences);
                 updateExampleToggleUI();
             });
 
@@ -6139,8 +6140,8 @@
             }
         }
 
-        function triggerExampleSentencePopup(wordObj) {
-            if (!showExampleSentences) return;
+        function triggerExampleSentencePopup(wordObj, force = false) {
+            if (!force && !showExampleSentences) return;
             if (!wordObj) return;
 
             const infinitive = (wordObj.it || "").toLowerCase().trim();
@@ -11349,7 +11350,7 @@
         const cardsShowExampleBtn = document.getElementById('cardsShowExampleBtn');
         if (cardsShowExampleBtn) {
             cardsShowExampleBtn.addEventListener('click', () => {
-                if (currentFlashcardTarget) triggerExampleSentencePopup(currentFlashcardTarget);
+                if (currentFlashcardTarget) triggerExampleSentencePopup(currentFlashcardTarget, true);
             });
         }
 
