@@ -1176,15 +1176,15 @@
                 to { opacity: 1; transform: scale(1); }
             }
 
-            /* Toggle Button Style */
-            #toggleExampleSentencesBtn.active {
-                background-color: #3b82f6 !important;
+            /* Example Sentence Buttons */
+            #toggleExampleSentencesBtn.active,
+            #toggleExampleSentencesBtnMobile.active {
+                background-color: #2563eb !important; /* blue-600 */
+                color: white !important;
+                border-color: #2563eb !important;
             }
-            #toggleExampleSentencesBtn.active .dot {
-                transform: translateX(100%);
-            }
-            #toggleExampleSentencesBtn .dot {
-                transition: transform 0.2s ease-in-out;
+            #toggleExampleSentencesBtnMobile {
+                font-size: 1.25rem;
             }
 
             #excelModal .bg-amber-50 {
@@ -1930,6 +1930,10 @@
     <!-- Burgermenü & Filter -->
     <div id="mainAppContent" class="hidden flex flex-col items-center w-full">
         <div class="top-nav-container absolute top-[calc(env(safe-area-inset-top,0px)+8px)] right-2 md:top-4 md:right-4 z-[1000] flex items-center gap-[2px]">
+            <!-- Beispielsätze Mobile Button -->
+            <button id="toggleExampleSentencesBtnMobile" class="md:hidden p-2 bg-white text-slate-700 rounded-xl shadow-sm active:scale-95 flex items-center justify-center w-[38px] h-[38px] border border-slate-200" title="Beispielsätze">
+                <span>💡</span>
+            </button>
             <button id="infoIconBtn" class="mobile-filter-btn hidden p-2 bg-blue-600 text-white rounded-xl shadow-sm active:scale-95 flex items-center justify-center w-[38px] h-[38px] border border-blue-600" title="Zusatzinfos">
                 <span class="font-bold">i</span>
             </button>
@@ -2030,14 +2034,13 @@
                         <span data-i18n="mode_info">Info</span>
                     </button>
                 </div>
+            </div>
 
-                <!-- Example Sentence Toggle -->
-                <div class="flex items-center gap-2 px-2 py-1 bg-white/80 rounded-full shadow-sm border border-slate-200 ml-auto sm:ml-0">
-                    <span class="text-[10px] md:text-xs font-bold text-slate-600 uppercase tracking-wider" data-i18n="btn_example_sentences">Beispielsätze</span>
-                    <button id="toggleExampleSentencesBtn" class="relative inline-flex h-5 w-9 items-center rounded-full bg-slate-200 transition-colors focus:outline-none">
-                        <span class="dot inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform translate-x-[2px]"></span>
-                    </button>
-                </div>
+            <!-- Example Sentence Desktop Button (Centered under Tabs) -->
+            <div id="exampleToggleDesktopWrapper" class="hidden md:flex justify-center mt-3">
+                <button id="toggleExampleSentencesBtn" class="px-6 py-2 rounded-full border border-slate-200 bg-white text-slate-600 font-bold text-xs uppercase tracking-wider transition-all shadow-sm hover:shadow-md active:scale-95 flex items-center gap-2">
+                    <span data-i18n="btn_example_sentences">Beispielsätze</span>
+                </button>
             </div>
         </header>
 
@@ -4879,6 +4882,7 @@
                 example_sentence_title: "Beispielsatz",
                 example_sentence_not_found: "Keinen passenden Satz in der Basisliste gefunden.",
                 btn_ok: "OK",
+                btn_next: "Weiter",
                 stats_done_grammar: "Erledigte Grammatik-Übungen",
                 vocab_search: "Vokabel suchen...",
                 btn_select_all: "Alle auswählen",
@@ -5346,6 +5350,7 @@
                 example_sentence_title: "Example Sentence",
                 example_sentence_not_found: "No matching sentence found in base list.",
                 btn_ok: "OK",
+                btn_next: "Next",
                 stats_done_grammar: "Completed Grammar Exercises",
                 vocab_search: "Search vocabulary...",
                 btn_select_all: "Select all",
@@ -5851,21 +5856,29 @@
 
             // Example Sentence Toggle Logic
             function updateExampleToggleUI() {
-                if (!toggleExampleSentencesBtn) return;
-                const dot = toggleExampleSentencesBtn.querySelector('.dot');
-                if (showExampleSentences) {
-                    toggleExampleSentencesBtn.classList.add('active');
-                    if (dot) dot.style.transform = 'translateX(100%)';
-                } else {
-                    toggleExampleSentencesBtn.classList.remove('active');
-                    if (dot) dot.style.transform = 'translateX(0)';
-                }
+                const btns = [
+                    document.getElementById('toggleExampleSentencesBtn'),
+                    document.getElementById('toggleExampleSentencesBtnMobile')
+                ];
+                btns.forEach(btn => {
+                    if (!btn) return;
+                    if (showExampleSentences) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
             }
             updateExampleToggleUI();
 
-            toggleExampleSentencesBtn?.addEventListener('click', () => {
+            document.getElementById('toggleExampleSentencesBtn')?.addEventListener('click', () => {
                 showExampleSentences = !showExampleSentences;
-                localStorage.setItem('ita-show-example-sentences', showExampleSentences);
+                localStorage.setItem('showExampleSentences', showExampleSentences);
+                updateExampleToggleUI();
+            });
+            document.getElementById('toggleExampleSentencesBtnMobile')?.addEventListener('click', () => {
+                showExampleSentences = !showExampleSentences;
+                localStorage.setItem('showExampleSentences', showExampleSentences);
                 updateExampleToggleUI();
             });
 
