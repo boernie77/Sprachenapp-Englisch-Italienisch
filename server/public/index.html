@@ -24,7 +24,7 @@
     <meta name="theme-color" content="#0f172a">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/197/197626.png">
     <link rel="manifest" href="/manifest.json">
-    <title>Lernapp v2.0.6 - Italienisch & Englisch</title>
+    <title>Lernapp v2.0.7 - Italienisch & Englisch</title>
 
     <!-- Tailwind CSS für modernes, responsives Design -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -5882,8 +5882,18 @@
                     if (!btn) return;
                     if (showExampleSentences) {
                         btn.classList.add('active');
+                        btn.style.setProperty('background-color', '#2563eb', 'important');
+                        btn.style.setProperty('color', '#ffffff', 'important');
+                        btn.style.setProperty('border-color', '#2563eb', 'important');
+                        const span = btn.querySelector('span');
+                        if (span) span.style.setProperty('color', '#ffffff', 'important');
                     } else {
                         btn.classList.remove('active');
+                        btn.style.setProperty('background-color', '', '');
+                        btn.style.setProperty('color', '', '');
+                        btn.style.setProperty('border-color', '', '');
+                        const span = btn.querySelector('span');
+                        if (span) span.style.setProperty('color', '', '');
                     }
                 });
             }
