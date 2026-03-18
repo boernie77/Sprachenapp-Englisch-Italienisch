@@ -8111,10 +8111,12 @@
             const btn = document.getElementById('grammarFocusFilterBtn');
             if (!sel || !list || !label || !btn) return;
 
-            let categories = [...new Set(grammarSentences.map(s => s.category).filter(Boolean))];
+            // Filter categories by language and split by '+' for multi-tag support
+            let categories = [...new Set(grammarSentences
+                .filter(s => s.language === CURRENT_LANG)
+                .flatMap(s => s.category ? s.category.split('+').map(c => c.trim()) : [])
+                .filter(Boolean))];
             
-            // Add default English tenses if they are not already in the categories 
-            // Add default English tenses if they are not already in the categories 
             if (CURRENT_LANG === 'en') {
                 const enTenses = ['Simple Present', 'Present Continuous', 'Simple Past', 'Future', 'Present Perfect', 'Imperativ', 'Conditional'];
                 enTenses.forEach(tense => {
@@ -8123,7 +8125,7 @@
                     }
                 });
             } else if (CURRENT_LANG === 'it') {
-                const itTenses = ['Presente', 'Passato Prossimo', 'Imperfetto', 'Futuro Semplice', 'Condizionale', 'Imperativo', 'Congiuntivo'];
+                const itTenses = ['Presente', 'Passato Prossimo', 'Imperfetto', 'Futuro Semplice', 'Condizionale', 'Imperativo', 'Gerundio', 'Congiuntivo'];
                 itTenses.forEach(tense => {
                     if (!categories.includes(tense)) {
                         categories.push(tense);
@@ -8361,7 +8363,11 @@
             const currentLevel = (grammarLevelFilter && CURRENT_LANG === 'en') ? grammarLevelFilter.value : "Alle";
 
             if (currentFocus !== "Alle") {
-                filteredSentences = filteredSentences.filter(s => s.category === currentFocus);
+                filteredSentences = filteredSentences.filter(s => {
+                    if (!s.category) return false;
+                    const cats = s.category.split('+').map(c => c.trim());
+                    return cats.includes(currentFocus);
+                });
             }
             if (currentLevel !== "Alle") {
                 filteredSentences = filteredSentences.filter(s => s.level === currentLevel);
