@@ -601,10 +601,42 @@
             #onboardingModal .bg-white,
             #onboardingVocabModal .bg-white,
             #guideModal .bg-white,
-            #infoModal .bg-white {
+            #infoModal .bg-white,
+            #adminModal .bg-white {
                 background-color: #0f172a !important;
                 color: #f1f5f9 !important;
                 border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            }
+
+            #adminModal .bg-slate-50, 
+            #adminModal .bg-blue-50, 
+            #adminModal .bg-indigo-50,
+            #adminModal .bg-purple-50,
+            #adminModal .bg-emerald-50,
+            #adminModal .bg-amber-50 {
+                background-color: rgba(255, 255, 255, 0.05) !important;
+                border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            }
+
+            #adminModal .text-slate-800,
+            #adminModal .text-slate-700,
+            #adminModal .text-slate-600,
+            #adminModal .text-blue-600,
+            #adminModal .text-purple-500,
+            #adminModal .text-emerald-600,
+            #adminModal .text-amber-600 {
+                color: #f1f5f9 !important;
+            }
+            
+            #adminModal .text-slate-500,
+            #adminModal .text-slate-400 {
+                color: #94a3b8 !important;
+            }
+
+            #adminModal input {
+                background-color: rgba(15, 23, 42, 0.6) !important;
+                color: white !important;
+                border-color: rgba(255, 255, 255, 0.2) !important;
             }
 
             #statsModal th,
@@ -3831,24 +3863,36 @@
                 <div class="flex gap-4">
                     <button onclick="switchAdminTab('users')" id="adminTabUsers" class="admin-tab-btn active" data-i18n="admin_users_tab">👥 Benutzer</button>
                     <button onclick="switchAdminTab('lists')" id="adminTabLists" class="admin-tab-btn" data-i18n="admin_lists_tab">📚 Listen</button>
-                    <button onclick="switchAdminTab('invites')" id="adminTabInvites" class="admin-tab-btn" data-i18n="admin_invites_tab">🎟️ Einladungen</button>
+                    <button onclick="switchAdminTab('invites')" id="adminTabInvites" class="admin-tab-btn hidden lg:inline-block" data-i18n="admin_invites_tab">🎟️ Einladungen</button>
+                    <button onclick="switchAdminTab('search')" id="adminTabSearch" class="admin-tab-btn" data-i18n="admin_search_tab">🔍 Suche</button>
                 </div>
             </div>
 
             <!-- Tab Content: Users -->
             <div id="adminUserTabContent" class="flex flex-col flex-1 min-h-0">
-                <div class="grid grid-cols-2 gap-2 mb-4 shrink-0">
-                    <div class="bg-blue-50 rounded-xl p-3 text-center border border-blue-100">
-                        <p class="text-[10px] text-blue-500 font-bold uppercase tracking-wide" data-i18n="admin_users_count">Nutzer</p>
-                        <p id="kpiTotalUsers" class="text-lg font-black text-blue-800">-</p>
+                <div class="bg-slate-50 border border-slate-100 rounded-xl p-3 mb-4 flex justify-between items-center shadow-sm">
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" data-i18n="admin_total_users">Anzahl Benutzer</span>
+                        <span id="adminTotalUsersKpi" class="text-xl font-black text-slate-800">-</span>
                     </div>
+                    <div class="flex flex-col text-right">
+                        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" data-i18n="admin_last_online">Letzter Benutzer online</span>
+                        <span id="adminLastOnlineKpi" class="text-xs font-bold text-slate-600">-</span>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-3 mb-4 shadow-sm">
+                    <p class="text-[10px] text-blue-600 font-black uppercase tracking-widest mb-2" data-i18n="admin_recent_activity">Letzte Aktivitäten (Lernen)</p>
+                    <div id="adminRecentActivityList" class="space-y-1.5 min-h-[60px]">
+                        <p class="text-[11px] text-slate-400 italic">Lade Aktivitäten...</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 mb-4 shrink-0">
                     <div class="bg-purple-50 rounded-xl p-3 text-center border border-purple-100">
                         <p class="text-[10px] text-purple-500 font-bold uppercase tracking-wide" data-i18n="admin_open_codes">Offene Codes</p>
                         <p id="kpiOpenInviteCodes" class="text-lg font-black text-purple-800">-</p>
                     </div>
-                </div>
-                
-                <div class="grid grid-cols-2 gap-2 mb-4 shrink-0">
                     <div class="bg-emerald-50 rounded-xl p-3 text-center border border-emerald-100">
                         <p class="text-[10px] text-emerald-600 font-bold uppercase tracking-wide" data-i18n="admin_learned_it">Gelernt (IT)</p>
                         <p id="kpiLearnedVocabIt" class="text-lg font-black text-emerald-800">-</p>
@@ -3984,15 +4028,44 @@
                 </div>
             </div>
 
+
+
             <!-- Tab Content: Invites -->
             <div id="adminInviteTabContent" class="hidden flex flex-col flex-1 min-h-0 overflow-y-auto pr-2">
-                <div class="mb-4 flex gap-2">
+                <div class="mb-4 flex gap-2 shrink-0">
                     <button onclick="generateInviteCode()" data-i18n="admin_btn_gen_invite" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-md active:scale-95">
                         🎟️ Einladungscode generieren
                     </button>
                 </div>
-                <div id="adminInviteList" class="space-y-2">
-                    <!-- Invitations will appear here -->
+                <div id="adminInviteListDesktop" class="space-y-2">
+                    <!-- Invitations will appear here for desktop tab -->
+                </div>
+            </div>
+
+            <!-- Tab Content: Suche -->
+            <div id="adminSearchTabContent" class="hidden flex flex-col flex-1 min-h-0 overflow-y-auto pr-2">
+                <div class="mb-4 shrink-0">
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </span>
+                        <input type="text" id="adminUserSearch" oninput="filterAdminUsers()" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium" placeholder="Benutzer suchen (Name, Email)..." data-i18n-placeholder="admin_search_placeholder">
+                    </div>
+                </div>
+                <div class="flex-1 overflow-y-auto pr-2 mb-2" id="adminSearchList">
+                    <p class="text-slate-500 text-sm text-center py-8 italic" data-i18n="admin_search_empty">Geben Sie einen Suchbegriff ein...</p>
+                </div>
+                <div class="mt-6 pt-6 border-t border-slate-100 shrink-0">
+                    <div class="mb-4 flex gap-2">
+                        <button onclick="generateInviteCode()" data-i18n="admin_btn_gen_invite" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-md active:scale-95">
+                            🎟️ Einladungscode generieren
+                        </button>
+                    </div>
+                    <div id="adminInviteList" class="space-y-2">
+                        <!-- Invitations will appear here -->
+                    </div>
                 </div>
             </div>
 
@@ -5055,7 +5128,7 @@
                 // Dynamic Admin Labels
                 admin_base_list_desc: "Importiert eine kuratierte Liste von derzeit {count} Basis-Vokabeln ({lang})",
                 admin_fallback_vocab: "Importiert eine kuratierte Liste von derzeit {count} Basis-Vokabeln (Offline Fallback {lang})",
-                admin_base_sent_desc: "Importiert eine kuratierte Liste von derzeit {count} Basis-Sätzen ({lang})",
+                admin_base_sent_desc: "Importiert eine kuratierte Liste von derzeit {count} Basis-Sätze ({lang})",
                 admin_fallback_sent: "Importiert Basis-Sätze (Offline Fallback {lang})",
 
                 excel_format_col3: "Spalte 3: Wortart (z.B. Substantiv, Verb)",
@@ -5068,6 +5141,12 @@
                 admin_open_codes: "OFFENE CODES",
                 admin_learned_it: "GELERNT (IT)",
                 admin_learned_en: "GELERNT (EN)",
+                admin_total_users: "Anzahl Benutzer",
+                admin_last_online: "Letzter Benutzer online",
+                admin_recent_activity: "Letzte Aktivitäten (Lernen)",
+                admin_search_placeholder: "Benutzer suchen (Name, Email)...",
+                admin_search_tab: "🔍 Suche",
+                admin_search_empty: "Geben Sie einen Namen oder eine Email ein...",
                 admin_user_name: "Name:",
                 admin_user_reg: "Registriert:",
                 admin_user_last_login: "Letzter Login:",
@@ -10670,36 +10749,54 @@
             const userTab = document.getElementById('adminUserTabContent');
             const excelTab = document.getElementById('adminExcelTabContent');
             const inviteTab = document.getElementById('adminInviteTabContent');
+            const searchTab = document.getElementById('adminSearchTabContent');
+            
             const userBtn = document.getElementById('adminTabUsers');
             const excelBtn = document.getElementById('adminTabLists');
             const inviteBtn = document.getElementById('adminTabInvites');
+            const searchBtn = document.getElementById('adminTabSearch');
 
-            userTab.classList.add('hidden');
-            excelTab.classList.add('hidden');
-            inviteTab.classList.add('hidden');
-            userBtn.classList.remove('active');
-            excelBtn.classList.remove('active');
-            inviteBtn.classList.remove('active');
+            if (userTab) userTab.classList.add('hidden');
+            if (excelTab) excelTab.classList.add('hidden');
+            if (inviteTab) inviteTab.classList.add('hidden');
+            if (searchTab) searchTab.classList.add('hidden');
+            
+            if (userBtn) userBtn.classList.remove('active');
+            if (excelBtn) excelBtn.classList.remove('active');
+            if (inviteBtn) inviteBtn.classList.remove('active');
+            if (searchBtn) searchBtn.classList.remove('active');
 
             if (tabName === 'users') {
-                userTab.classList.remove('hidden');
-                userBtn.classList.add('active');
+                if (userTab) userTab.classList.remove('hidden');
+                if (userBtn) userBtn.classList.add('active');
                 fetchAdminUsers();
             } else if (tabName === 'lists') {
-                excelTab.classList.remove('hidden');
-                excelBtn.classList.add('active');
+                if (excelTab) excelTab.classList.remove('hidden');
+                if (excelBtn) excelBtn.classList.add('active');
                 loadAdminBaseTable();
                 loadAdminGrammarTable();
             } else if (tabName === 'invites') {
-                inviteTab.classList.remove('hidden');
-                inviteBtn.classList.add('active');
+                if (inviteTab) inviteTab.classList.remove('hidden');
+                if (inviteBtn) inviteBtn.classList.add('active');
                 loadAdminInviteCodes();
+            } else if (tabName === 'search') {
+                if (searchTab) searchTab.classList.remove('hidden');
+                if (searchBtn) searchBtn.classList.add('active');
+                const searchInput = document.getElementById('adminUserSearch');
+                if (searchInput) {
+                    searchInput.focus();
+                    filterAdminUsers();
+                }
             }
         }
 
         async function loadAdminInviteCodes() {
             const list = document.getElementById('adminInviteList');
-            list.innerHTML = `<p class="text-slate-500 text-sm center p-4">${getI18n('loading_invites')}</p>`;
+            const desktopList = document.getElementById('adminInviteListDesktop');
+            const loadingMsg = `<p class="text-slate-500 text-sm center p-4">${getI18n('loading_invites')}</p>`;
+            if (list) list.innerHTML = loadingMsg;
+            if (desktopList) desktopList.innerHTML = loadingMsg;
+
             try {
                 const res = await fetch(`${API_BASE_URL}/api/admin/invite-codes`, {
                     headers: { 'Authorization': `Bearer ${API_TOKEN}` }
@@ -10708,11 +10805,13 @@
                 if (!res.ok) throw new Error(codes.error || getI18n('error_loading_generic'));
 
                 if (codes.length === 0) {
-                    list.innerHTML = `<p class="text-slate-500 text-sm text-center p-4">${getI18n('no_invites_generated')}</p>`;
+                    const emptyMsg = `<p class="text-slate-500 text-sm text-center p-4">${getI18n('no_invites_generated')}</p>`;
+                    if (list) list.innerHTML = emptyMsg;
+                    if (desktopList) desktopList.innerHTML = emptyMsg;
                     return;
                 }
 
-                list.innerHTML = codes.map(c => `
+                const html = codes.map(c => `
                     <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                         <div>
                             <div class="flex items-center gap-2">
@@ -10732,8 +10831,13 @@
                         </div>
                     </div>
                 `).join('');
+
+                if (list) list.innerHTML = html;
+                if (desktopList) desktopList.innerHTML = html;
             } catch (err) {
-                list.innerHTML = `<p class="text-red-500 text-sm p-4">${getI18n('error')}: ${err.message}</p>`;
+                const errMsg = `<p class="text-red-500 text-sm p-4">${getI18n('error')}: ${err.message}</p>`;
+                if (list) list.innerHTML = errMsg;
+                if (desktopList) desktopList.innerHTML = errMsg;
             }
         }
 
@@ -10816,28 +10920,66 @@
 
         function renderAdminUsers(users) {
             currentAdminUsers = users;
-            const kpiTotalUsers = document.getElementById('kpiTotalUsers');
             const kpiOpenInviteCodes = document.getElementById('kpiOpenInviteCodes');
-            const kpiLearnedVocab = document.getElementById('kpiLearnedVocab');
+            const kpiLearnedVocabIt = document.getElementById('kpiLearnedVocabIt');
+            const kpiLearnedVocabEn = document.getElementById('kpiLearnedVocabEn');
+            const adminTotalUsersKpi = document.getElementById('adminTotalUsersKpi');
 
             if (!users || users.length === 0) {
                 adminUserList.innerHTML = `<p class="text-slate-500 text-sm text-center">Keine Nutzer gefunden.</p>`;
-                if (kpiTotalUsers) kpiTotalUsers.textContent = '0';
+                if (adminTotalUsersKpi) adminTotalUsersKpi.textContent = '0';
                 if (kpiOpenInviteCodes) kpiOpenInviteCodes.textContent = '0';
-                if (kpiLearnedVocab) kpiLearnedVocab.textContent = '0';
+                if (kpiLearnedVocabIt) kpiLearnedVocabIt.textContent = '0';
+                if (kpiLearnedVocabEn) kpiLearnedVocabEn.textContent = '0';
                 return;
             }
 
             let lVocabIt = 0;
             let lVocabEn = 0;
+            let lastOnlineAny = 0;
+            
+            // For Recent Activity list (3 latest LEARNERS)
+            const latestLearners = [...users]
+                .filter(u => u.lastLearnAt)
+                .sort((a, b) => new Date(b.lastLearnAt) - new Date(a.lastLearnAt))
+                .slice(0, 3);
+
             users.forEach(u => {
                 lVocabIt += (u.stats?.it?.learned || 0);
                 lVocabEn += (u.stats?.en?.learned || 0);
+                
+                const uLogin = u.lastLogin ? new Date(u.lastLogin).getTime() : 0;
+                const uLearn = u.lastLearnAt ? new Date(u.lastLearnAt).getTime() : 0;
+                lastOnlineAny = Math.max(lastOnlineAny, uLogin, uLearn);
             });
 
-            if (kpiTotalUsers) kpiTotalUsers.textContent = users.length;
-            const kpiLearnedVocabIt = document.getElementById('kpiLearnedVocabIt');
-            const kpiLearnedVocabEn = document.getElementById('kpiLearnedVocabEn');
+            // Populate New Top KPIs
+            const adminLastOnlineKpi = document.getElementById('adminLastOnlineKpi');
+            const adminRecentActivityList = document.getElementById('adminRecentActivityList');
+
+            if (adminTotalUsersKpi) adminTotalUsersKpi.textContent = users.length;
+            if (adminLastOnlineKpi) {
+                adminLastOnlineKpi.textContent = lastOnlineAny > 0 
+                    ? new Date(lastOnlineAny).toLocaleString(CURRENT_LANG === 'en' ? 'en-US' : 'de-DE') 
+                    : '-';
+            }
+
+            if (adminRecentActivityList) {
+                if (latestLearners.length === 0) {
+                    adminRecentActivityList.innerHTML = `<p class="text-[11px] text-slate-400 italic">Noch keine Lernaktivität aufgezeichnet.</p>`;
+                } else {
+                    adminRecentActivityList.innerHTML = latestLearners.map(u => {
+                        const dateStr = new Date(u.lastLearnAt).toLocaleString(CURRENT_LANG === 'en' ? 'en-US' : 'de-DE');
+                        return `
+                            <div class="flex justify-between items-center text-[11.5px] border-b border-blue-100/30 pb-1 last:border-0">
+                                <span class="font-bold text-slate-700 truncate mr-2">${u.name || 'User'} <span class="font-normal text-slate-500">(${u.email})</span></span>
+                                <span class="text-blue-600 font-black whitespace-nowrap">${dateStr}</span>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+
             if (kpiLearnedVocabIt) kpiLearnedVocabIt.textContent = lVocabIt;
             if (kpiLearnedVocabEn) kpiLearnedVocabEn.textContent = lVocabEn;
 
@@ -10852,23 +10994,26 @@
             updateAdminBaseVocabCount();
             updateAdminGrammarCount();
 
-            adminUserList.innerHTML = users.map(u => {
-                const isActive = u.isActive !== false;
-                const isPowerUser = u.loginCount && u.loginCount >= 5;
-                const fireSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 inline-block text-orange-500 mr-1"><path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248Z" clip-rule="evenodd" /></svg>';
-                const powerIcon = isPowerUser ? fireSvg : '';
-                const localeStr = CURRENT_LANG === 'en' ? 'en-US' : 'de-DE';
-                const neverStr = CURRENT_LANG === 'en' ? 'Never' : 'Nie';
-                const lockedStr = CURRENT_LANG === 'en' ? '(Locked)' : '(Gesperrt)';
-                const blockStr = CURRENT_LANG === 'en' ? 'Block' : 'Sperren';
-                const unblockStr = CURRENT_LANG === 'en' ? 'Unblock' : 'Entsperren';
-                const deleteStr = CURRENT_LANG === 'en' ? 'Delete' : 'Löschen';
-                
-                const lastLoginStr = u.lastLogin ? new Date(u.lastLogin).toLocaleString(localeStr) : neverStr;
-                const lastActivityStr = u.lastActivity ? new Date(u.lastActivity).toLocaleString(localeStr) : neverStr;
-                const adminSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 inline-block text-amber-500 ml-1"><path d="M22.5 18a1.5 1.5 0 0 1-1.5 1.5H3A1.5 1.5 0 0 1 1.5 18v-1.5h21V18Zm-3.863-4.5H5.362l-1.636-7.362a.75.75 0 0 1 1.171-.77l3.963 2.642 2.618-5.236a.75.75 0 0 1 1.344 0l2.618 5.236 3.963-2.642a.75.75 0 0 1 1.171.77L18.637 13.5Z" /></svg>';
+            adminUserList.innerHTML = users.map(u => renderUserCard(u)).join('');
+        }
 
-                return `
+        function renderUserCard(u) {
+            const isActive = u.isActive !== false;
+            const isPowerUser = u.loginCount && u.loginCount >= 5;
+            const fireSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 inline-block text-orange-500 mr-1"><path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248Z" clip-rule="evenodd" /></svg>';
+            const powerIcon = isPowerUser ? fireSvg : '';
+            const localeStr = CURRENT_LANG === 'en' ? 'en-US' : 'de-DE';
+            const neverStr = CURRENT_LANG === 'en' ? 'Never' : 'Nie';
+            const lockedStr = CURRENT_LANG === 'en' ? '(Locked)' : '(Gesperrt)';
+            const blockStr = CURRENT_LANG === 'en' ? 'Block' : 'Sperren';
+            const unblockStr = CURRENT_LANG === 'en' ? 'Unblock' : 'Entsperren';
+            const deleteStr = CURRENT_LANG === 'en' ? 'Delete' : 'Löschen';
+            
+            const lastLoginStr = u.lastLogin ? new Date(u.lastLogin).toLocaleString(localeStr) : neverStr;
+            const lastActivityStr = u.lastActivity ? new Date(u.lastActivity).toLocaleString(localeStr) : neverStr;
+            const adminSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 inline-block text-amber-500 ml-1"><path d="M22.5 18a1.5 1.5 0 0 1-1.5 1.5H3A1.5 1.5 0 0 1 1.5 18v-1.5h21V18Zm-3.863-4.5H5.362l-1.636-7.362a.75.75 0 0 1 1.171-.77l3.963 2.642 2.618-5.236a.75.75 0 0 1 1.344 0l2.618 5.236 3.963-2.642a.75.75 0 0 1 1.171.77L18.637 13.5Z" /></svg>';
+
+            return `
                 <div class="bg-slate-50 border ${isActive ? 'border-slate-200' : 'border-red-300 opacity-75'} rounded-xl p-4 mb-3 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
                     <div class="w-full md:w-1/2">
                         <p class="font-bold text-slate-800 break-all">${powerIcon} ${u.email} ${u.isAdmin ? adminSvg : ''} ${!isActive ? `<span class="text-red-500 text-xs ml-2">${lockedStr}</span>` : ''}</p>
@@ -10887,7 +11032,29 @@
                         ${!u.isAdmin ? `<button onclick="deleteUser(${u.id})" class="px-3 py-1.5 bg-red-100 text-red-700 hover:bg-red-200 rounded-lg text-xs font-semibold transition-colors">${deleteStr}</button>` : ''}
                     </div>
                 </div>
-            `}).join('');
+            `;
+        }
+
+        function filterAdminUsers() {
+            const query = document.getElementById('adminUserSearch').value.toLowerCase().trim();
+            const resultsList = document.getElementById('adminSearchList');
+            if (!resultsList) return;
+
+            if (!query) {
+                resultsList.innerHTML = `<p class="text-slate-500 text-sm text-center py-8 italic" data-i18n="admin_search_empty">${getI18n('admin_search_empty')}</p>`;
+                return;
+            }
+
+            const filtered = currentAdminUsers.filter(u => 
+                (u.email && u.email.toLowerCase().includes(query)) || 
+                (u.name && u.name.toLowerCase().includes(query))
+            );
+
+            if (filtered.length === 0) {
+                resultsList.innerHTML = `<p class="text-slate-500 text-sm text-center py-8 italic">Keine Ergebnisse für "${query}"</p>`;
+            } else {
+                resultsList.innerHTML = filtered.map(u => renderUserCard(u)).join('');
+            }
         }
 
         window.toggleUserActive = async function (id, currentStatus) {
