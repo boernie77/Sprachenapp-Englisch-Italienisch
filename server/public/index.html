@@ -6120,17 +6120,55 @@
             if (!showExampleSentences) return;
             if (!wordObj) return;
 
-            const word = (wordObj.it || "").toLowerCase().trim();
-            if (!word) return;
+            const infinitive = (wordObj.it || "").toLowerCase().trim();
+            if (!infinitive) return;
 
-            const match = allBaseSentences.find(s => {
-                const sIt = (s.it || "").toLowerCase();
-                // Use a simple regex check for word boundary if possible, or stick to includes
-                // Since Italian has apostrophes (l'amico), we use a flexible regex
-                const escapedWord = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                const regex = new RegExp(`(^|[^a-zA-ZàèéìòùÀÈÉÌÒÙ'])${escapedWord}([^a-zA-ZàèéìòùÀÈÉÌÒÙ']|$)`, 'i');
-                return regex.test(sIt);
-            });
+            // Collect search terms for verbs
+            let searchTerms = [infinitive];
+            if (wordObj.typ === 'Verb' && CURRENT_LANG === 'it') {
+                const formsToExtract = ['praesens', 'imperfetto', 'passato', 'gerundio', 'imperativo'];
+                formsToExtract.forEach(field => {
+                    const val = wordObj[field];
+                    if (val && val !== '-') {
+                        const units = val.split(',');
+                        units.forEach(unit => {
+                            // Strip common prefixes from generateVerbForms results
+                            let cleaned = unit.trim().toLowerCase()
+                                .replace(/^(io|tu|lui\/lei|noi|voi|loro|tu:|lei:|noi:|voi:)\s+/i, '')
+                                .replace(/^(mi|ti|si|ci|vi)\s+/i, '');
+                            
+                            if (cleaned && cleaned.length > 2 && !searchTerms.includes(cleaned)) {
+                                searchTerms.push(cleaned);
+                            }
+                        });
+                    }
+                });
+            }
+            
+            // For English verbs: "to talk" -> search for "talk" as well
+            if (wordObj.typ === 'Verb' && CURRENT_LANG === 'en') {
+                if (infinitive.startsWith('to ')) {
+                    const stem = infinitive.substring(3).trim();
+                    if (stem && stem.length > 2 && !searchTerms.includes(stem)) searchTerms.push(stem);
+                }
+            }
+
+            let match = null;
+            // 1. Try exact infinitive match first
+            const escapedInf = infinitive.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regexInf = new RegExp(`(^|[^a-zA-ZàèéìòùÀÈÉÌÒÙ'])${escapedInf}([^a-zA-ZàèéìòùÀÈÉÌÒÙ']|$)`, 'i');
+            match = allBaseSentences.find(s => regexInf.test((s.it || "").toLowerCase()));
+
+            // 2. If no infinitive found, try conjugated forms (sorted by length for better precision)
+            if (!match && searchTerms.length > 1) {
+                const sortedTerms = searchTerms.slice(1).sort((a,b) => b.length - a.length);
+                for (const term of sortedTerms) {
+                    const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    const regex = new RegExp(`(^|[^a-zA-ZàèéìòùÀÈÉÌÒÙ'])${escapedTerm}([^a-zA-ZàèéìòùÀÈÉÌÒÙ']|$)`, 'i');
+                    match = allBaseSentences.find(s => regex.test((s.it || "").toLowerCase()));
+                    if (match) break;
+                }
+            }
 
             if (match) {
                 exampleSentenceForeign.textContent = match.it;
