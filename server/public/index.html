@@ -3837,8 +3837,26 @@
 
             <!-- Tab Content: Users -->
             <div id="adminUserTabContent" class="flex flex-col flex-1 min-h-0">
+                <div class="bg-slate-50 border border-slate-100 rounded-xl p-3 mb-4 flex justify-between items-center shadow-sm">
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" data-i18n="admin_total_users">Anzahl Benutzer</span>
+                        <span id="adminTotalUsersKpi" class="text-xl font-black text-slate-800">-</span>
+                    </div>
+                    <div class="flex flex-col text-right">
+                        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" data-i18n="admin_last_online">Letzter Benutzer online</span>
+                        <span id="adminLastOnlineKpi" class="text-xs font-bold text-slate-600">-</span>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-3 mb-4 shadow-sm">
+                    <p class="text-[10px] text-blue-600 font-black uppercase tracking-widest mb-2" data-i18n="admin_recent_activity">Letzte Aktivitäten (Lernen)</p>
+                    <div id="adminRecentActivityList" class="space-y-1.5 min-h-[60px]">
+                        <p class="text-[11px] text-slate-400 italic">Lade Aktivitäten...</p>
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-2 gap-2 mb-4 shrink-0">
-                    <div class="bg-blue-50 rounded-xl p-3 text-center border border-blue-100">
+                    <div class="bg-blue-50/50 rounded-xl p-3 text-center border border-blue-100/50">
                         <p class="text-[10px] text-blue-500 font-bold uppercase tracking-wide" data-i18n="admin_users_count">Nutzer</p>
                         <p id="kpiTotalUsers" class="text-lg font-black text-blue-800">-</p>
                     </div>
@@ -5055,7 +5073,7 @@
                 // Dynamic Admin Labels
                 admin_base_list_desc: "Importiert eine kuratierte Liste von derzeit {count} Basis-Vokabeln ({lang})",
                 admin_fallback_vocab: "Importiert eine kuratierte Liste von derzeit {count} Basis-Vokabeln (Offline Fallback {lang})",
-                admin_base_sent_desc: "Importiert eine kuratierte Liste von derzeit {count} Basis-Sätzen ({lang})",
+                admin_base_sent_desc: "Importiert eine kuratierte Liste von derzeit {count} Basis-Sätze ({lang})",
                 admin_fallback_sent: "Importiert Basis-Sätze (Offline Fallback {lang})",
 
                 excel_format_col3: "Spalte 3: Wortart (z.B. Substantiv, Verb)",
@@ -5068,6 +5086,9 @@
                 admin_open_codes: "OFFENE CODES",
                 admin_learned_it: "GELERNT (IT)",
                 admin_learned_en: "GELERNT (EN)",
+                admin_total_users: "Anzahl Benutzer",
+                admin_last_online: "Letzter Benutzer online",
+                admin_recent_activity: "Letzte Aktivitäten (Lernen)",
                 admin_user_name: "Name:",
                 admin_user_reg: "Registriert:",
                 admin_user_last_login: "Letzter Login:",
@@ -10830,10 +10851,50 @@
 
             let lVocabIt = 0;
             let lVocabEn = 0;
+            let lastOnlineAny = 0;
+            
+            // For Recent Activity list (3 latest LEARNERS)
+            const latestLearners = [...users]
+                .filter(u => u.lastLearnAt)
+                .sort((a, b) => new Date(b.lastLearnAt) - new Date(a.lastLearnAt))
+                .slice(0, 3);
+
             users.forEach(u => {
                 lVocabIt += (u.stats?.it?.learned || 0);
                 lVocabEn += (u.stats?.en?.learned || 0);
+                
+                const uLogin = u.lastLogin ? new Date(u.lastLogin).getTime() : 0;
+                const uLearn = u.lastLearnAt ? new Date(u.lastLearnAt).getTime() : 0;
+                lastOnlineAny = Math.max(lastOnlineAny, uLogin, uLearn);
             });
+
+            // Populate New Top KPIs
+            const adminTotalUsersKpi = document.getElementById('adminTotalUsersKpi');
+            const adminLastOnlineKpi = document.getElementById('adminLastOnlineKpi');
+            const adminRecentActivityList = document.getElementById('adminRecentActivityList');
+
+            if (adminTotalUsersKpi) adminTotalUsersKpi.textContent = users.length;
+            if (adminLastOnlineKpi) {
+                adminLastOnlineKpi.textContent = lastOnlineAny > 0 
+                    ? new Date(lastOnlineAny).toLocaleString(CURRENT_LANG === 'en' ? 'en-US' : 'de-DE') 
+                    : '-';
+            }
+
+            if (adminRecentActivityList) {
+                if (latestLearners.length === 0) {
+                    adminRecentActivityList.innerHTML = `<p class="text-[11px] text-slate-400 italic">Noch keine Lernaktivität aufgezeichnet.</p>`;
+                } else {
+                    adminRecentActivityList.innerHTML = latestLearners.map(u => {
+                        const dateStr = new Date(u.lastLearnAt).toLocaleString(CURRENT_LANG === 'en' ? 'en-US' : 'de-DE');
+                        return `
+                            <div class="flex justify-between items-center text-[11.5px] border-b border-blue-100/30 pb-1 last:border-0">
+                                <span class="font-bold text-slate-700 truncate mr-2">${u.name || 'User'} <span class="font-normal text-slate-500">(${u.email})</span></span>
+                                <span class="text-blue-600 font-black whitespace-nowrap">${dateStr}</span>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
 
             if (kpiTotalUsers) kpiTotalUsers.textContent = users.length;
             const kpiLearnedVocabIt = document.getElementById('kpiLearnedVocabIt');

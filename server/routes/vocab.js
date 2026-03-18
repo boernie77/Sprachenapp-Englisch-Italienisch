@@ -61,6 +61,9 @@ router.put('/:id/stats', authenticateToken, asyncHandler(async (req, res) => {
         { presented, correct, incorrect, streak, lastReviewedDate, nextReviewDate },
         { where: { VocabularyId: vocab.id } }
     );
+    // Update the user's last learning activity timestamp
+    await User.update({ lastLearnAt: new Date() }, { where: { id: req.user.id } });
+
     res.json({ message: 'Stats and status updated' });
 }));
 

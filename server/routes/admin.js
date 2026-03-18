@@ -53,7 +53,7 @@ router.delete('/invite-codes/:code', authenticateToken, requireAdmin, asyncHandl
 router.get('/users', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const users = await User.findAll({ 
-      attributes: ['id', 'email', 'name', 'isAdmin', 'isActive', 'lastLogin', 'loginCount', 'createdAt'],
+      attributes: ['id', 'email', 'name', 'isAdmin', 'isActive', 'lastLogin', 'lastLearnAt', 'loginCount', 'createdAt'],
       order: [['id', 'ASC']],
       include: [{
         model: Vocabulary,
