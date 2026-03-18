@@ -5590,8 +5590,14 @@
             }
         };
 
-        function getI18n(key) {
-            return UI_TRANSLATIONS[APP_UI_LANG] && UI_TRANSLATIONS[APP_UI_LANG][key] ? UI_TRANSLATIONS[APP_UI_LANG][key] : key;
+        function getI18n(key, ...args) {
+            let text = UI_TRANSLATIONS[APP_UI_LANG] && UI_TRANSLATIONS[APP_UI_LANG][key] ? UI_TRANSLATIONS[APP_UI_LANG][key] : key;
+            if (args.length > 0) {
+                args.forEach((val, i) => {
+                    text = text.replace('{' + i + '}', val);
+                });
+            }
+            return text;
         }
 
         function applyTranslations() {
@@ -9766,8 +9772,6 @@
                     const loadConfirmed = await showConfirm(getI18n('confirm_load_server_base_vocab', serverBase.length, CURRENT_LANG.toUpperCase()), getI18n('title_load_base_list'));
                     if (!loadConfirmed) return;
 
-                    showToast(getI18n('toast_loading_started'), "info");
-
                     wordsToUpload = serverBase.map(v => ({
                         de: v.de, it: v.it, typ: v.typ, emoji: v.emoji, grammatica: v.grammatica, language: CURRENT_LANG, isOwn: false
                     }));
@@ -9800,6 +9804,8 @@
                 // 2. Choice Modal for Add vs Replace
                 const choice = await showChoice(getI18n('choice_process_vocab', wordsToUpload.length, sourceLabel));
                 if (!choice) return; // Cancel
+
+                showToast(getI18n('toast_loading_started'), "info");
 
                 if (choice === 'replace') {
                     await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Vocab&isOwn=false`, { method: 'DELETE' });
@@ -9851,14 +9857,14 @@
                 const loadConfirmed = await showConfirm(getI18n('confirm_load_server_base_sentences', serverBase.length, CURRENT_LANG.toUpperCase()), getI18n('title_load_base_sentences'));
                 if (!loadConfirmed) return;
 
-                showToast(getI18n('toast_loading_started'), "info");
-
                 const wordsToUpload = serverBase.map(v => ({
                     de: v.de, it: v.it, typ: 'Satz', emoji: '', grammatica: v.category || v.level || '', language: CURRENT_LANG, isOwn: false
                 }));
 
                 const choice = await showChoice(getI18n('choice_process_sentences', wordsToUpload.length));
                 if (!choice) return;
+
+                showToast(getI18n('toast_loading_started'), "info");
 
                 if (choice === 'replace') {
                     await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Satz&isOwn=false`, { method: 'DELETE' });
