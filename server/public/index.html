@@ -6235,21 +6235,31 @@
                 }
             }
 
-            let match = null;
+            let matches = [];
             // 1. Try exact infinitive match first
             const escapedInf = infinitive.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const regexInf = new RegExp(`(^|[^a-zA-ZàèéìòùÀÈÉÌÒÙ])${escapedInf}([^a-zA-ZàèéìòùÀÈÉÌÒÙ]|$)`, 'i');
-            match = allBaseSentences.find(s => regexInf.test((s.it || "").toLowerCase()));
+            matches = (allBaseSentences || []).filter(s => regexInf.test((s.it || "").toLowerCase()));
 
-            // 2. If no infinitive found, try conjugated forms (sorted by length for better precision)
-            if (!match && searchTerms.length > 1) {
+            // 2. If no infinitive matches, try conjugated forms
+            if (matches.length === 0 && searchTerms.length > 1) {
                 const sortedTerms = searchTerms.slice(1).sort((a,b) => b.length - a.length);
                 for (const term of sortedTerms) {
                     const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                     const regex = new RegExp(`(^|[^a-zA-ZàèéìòùÀÈÉÌÒÙ])${escapedTerm}([^a-zA-ZàèéìòùÀÈÉÌÒÙ]|$)`, 'i');
-                    match = allBaseSentences.find(s => regex.test((s.it || "").toLowerCase()));
-                    if (match) break;
+                    const termMatches = (allBaseSentences || []).filter(s => regex.test((s.it || "").toLowerCase()));
+                    if (termMatches.length > 0) {
+                        matches = termMatches;
+                        break;
+                    }
                 }
+            }
+
+            let match = null;
+            if (matches.length > 0) {
+                // Pick a random match from the pool
+                const randomIndex = Math.floor(Math.random() * matches.length);
+                match = matches[randomIndex];
             }
 
             if (match) {
@@ -8122,21 +8132,6 @@
                 .flatMap(s => s.category ? s.category.split('+').map(c => c.trim()) : [])
                 .filter(Boolean))];
             
-            if (CURRENT_LANG === 'en') {
-                const enTenses = ['Simple Present', 'Present Continuous', 'Simple Past', 'Future', 'Present Perfect', 'Imperative', 'Conditional'];
-                enTenses.forEach(tense => {
-                    if (!categories.includes(tense)) {
-                        categories.push(tense);
-                    }
-                });
-            } else if (CURRENT_LANG === 'it') {
-                const itTenses = ['Presente', 'Passato Prossimo', 'Imperfetto', 'Futuro Semplice', 'Condizionale', 'Imperativo', 'Gerundio', 'Congiuntivo'];
-                itTenses.forEach(tense => {
-                    if (!categories.includes(tense)) {
-                        categories.push(tense);
-                    }
-                });
-            }
 
             // Always ensure 'Eigene Sätze' is an available category
             if (!categories.includes('Eigene Sätze')) {
@@ -9443,15 +9438,23 @@
             const container = document.getElementById('sentenceListContainer');
             container.innerHTML = '';
             
+            // Reset "Show All" on search or filter change
+            const isFilterActive = searchVal || catFilter !== 'Alle';
+            
             // Performance Limit: only render first 200 matches
-            const MAX_SENTENCES = 200;
+            const MAX_SENTENCES = (window.sentenceListShowAll) ? words.length : 200;
             const wordsToRender = words.slice(0, MAX_SENTENCES);
             
-            if (words.length > MAX_SENTENCES) {
+            if (words.length > 200 && !window.sentenceListShowAll) {
                 const hint = document.createElement('div');
                 hint.className = 'p-4 text-center text-amber-600 bg-amber-50 font-medium text-sm border-b border-amber-100';
-                hint.innerHTML = `<svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg> Nur die ersten ${MAX_SENTENCES} von ${words.length} Treffern angezeigt. Bitte Suche verfeinern.`;
+                hint.innerHTML = `<svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg> Nur die ersten 200 von ${words.length} Treffern angezeigt (Performance-Limit). <button onclick="window.sentenceListShowAll=true; renderSentenceList()" class="underline font-bold text-amber-700 hover:text-amber-900 ml-1">Alle ${words.length} anzeigen</button>`;
                 container.appendChild(hint);
+            } else if (window.sentenceListShowAll && words.length > 200) {
+                 const hint = document.createElement('div');
+                 hint.className = 'p-2 text-center text-slate-400 bg-slate-50 text-xs border-b border-slate-100';
+                 hint.innerHTML = `Vollständige Liste von ${words.length} Sätzen wird angezeigt. <button onclick="window.sentenceListShowAll=false; renderSentenceList()" class="underline ml-1">Anzeige begrenzen</button>`;
+                 container.appendChild(hint);
             }
 
             wordsToRender.forEach((word) => {
