@@ -9279,7 +9279,11 @@
         });
 
         document.getElementById('vocabListSearch').addEventListener('input', renderVocabList);
-        document.getElementById('sentenceListSearch').addEventListener('input', renderSentenceList);
+        let sentenceSearchTimeout;
+        document.getElementById('sentenceListSearch').addEventListener('input', () => {
+            clearTimeout(sentenceSearchTimeout);
+            sentenceSearchTimeout = setTimeout(renderSentenceList, 300);
+        });
         document.getElementById('sentenceListSortDir').addEventListener('change', renderSentenceList);
         document.getElementById('sentenceListCatFilter').addEventListener('change', renderSentenceList);
 
@@ -9438,7 +9442,19 @@
 
             const container = document.getElementById('sentenceListContainer');
             container.innerHTML = '';
-            words.forEach((word) => {
+            
+            // Performance Limit: only render first 200 matches
+            const MAX_SENTENCES = 200;
+            const wordsToRender = words.slice(0, MAX_SENTENCES);
+            
+            if (words.length > MAX_SENTENCES) {
+                const hint = document.createElement('div');
+                hint.className = 'p-4 text-center text-amber-600 bg-amber-50 font-medium text-sm border-b border-amber-100';
+                hint.innerHTML = `<svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg> Nur die ersten ${MAX_SENTENCES} von ${words.length} Treffern angezeigt. Bitte Suche verfeinern.`;
+                container.appendChild(hint);
+            }
+
+            wordsToRender.forEach((word) => {
                 const li = document.createElement('li');
                 li.className = 'flex items-center justify-between p-3 transition-colors';
                 const isChecked = word.isActive !== false;
@@ -9456,12 +9472,14 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-1.5 ml-2 flex-shrink-0">
+                        ${word.isOwn ? `
                         <button class="edit-btn text-slate-400 hover:text-blue-500 transition-colors p-1" data-id="${word.id}" title="Bearbeiten">
                             <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                         </button>
                         <button class="delete-btn text-slate-400 hover:text-red-500 transition-colors p-1" data-id="${word.id}" title="Löschen">
                             <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                         </button>
+                        ` : ''}
                         <svg class="star-icon w-6 h-6 md:w-7 md:h-7 cursor-pointer ${word.isMarked ? 'marked' : ''}"
                              data-mark-id="${word.id}"
                              onclick="event.stopPropagation(); toggleMark('${word.id}', this)"
@@ -9480,11 +9498,11 @@
                     saveStatToServer(word.id);
                     updateAdminGrammarCount(); // Ensure grammar pool is updated
                 });
-                li.querySelector('.edit-btn').addEventListener('click', (e) => {
+                li.querySelector('.edit-btn')?.addEventListener('click', (e) => {
                     e.stopPropagation();
                     openEditSentenceModal(word);
                 });
-                li.querySelector('.delete-btn').addEventListener('click', async (e) => {
+                li.querySelector('.delete-btn')?.addEventListener('click', async (e) => {
                     e.stopPropagation();
                     if (await showConfirm(getI18n('confirm_delete_sentence'), getI18n('title_delete_entry'))) {
                         try {
