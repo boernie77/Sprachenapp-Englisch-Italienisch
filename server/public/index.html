@@ -601,10 +601,42 @@
             #onboardingModal .bg-white,
             #onboardingVocabModal .bg-white,
             #guideModal .bg-white,
-            #infoModal .bg-white {
+            #infoModal .bg-white,
+            #adminModal .bg-white {
                 background-color: #0f172a !important;
                 color: #f1f5f9 !important;
                 border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            }
+
+            #adminModal .bg-slate-50, 
+            #adminModal .bg-blue-50, 
+            #adminModal .bg-indigo-50,
+            #adminModal .bg-purple-50,
+            #adminModal .bg-emerald-50,
+            #adminModal .bg-amber-50 {
+                background-color: rgba(255, 255, 255, 0.05) !important;
+                border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            }
+
+            #adminModal .text-slate-800,
+            #adminModal .text-slate-700,
+            #adminModal .text-slate-600,
+            #adminModal .text-blue-600,
+            #adminModal .text-purple-500,
+            #adminModal .text-emerald-600,
+            #adminModal .text-amber-600 {
+                color: #f1f5f9 !important;
+            }
+            
+            #adminModal .text-slate-500,
+            #adminModal .text-slate-400 {
+                color: #94a3b8 !important;
+            }
+
+            #adminModal input {
+                background-color: rgba(15, 23, 42, 0.6) !important;
+                color: white !important;
+                border-color: rgba(255, 255, 255, 0.2) !important;
             }
 
             #statsModal th,
@@ -3831,7 +3863,7 @@
                 <div class="flex gap-4">
                     <button onclick="switchAdminTab('users')" id="adminTabUsers" class="admin-tab-btn active" data-i18n="admin_users_tab">👥 Benutzer</button>
                     <button onclick="switchAdminTab('lists')" id="adminTabLists" class="admin-tab-btn" data-i18n="admin_lists_tab">📚 Listen</button>
-                    <button onclick="switchAdminTab('invites')" id="adminTabInvites" class="admin-tab-btn" data-i18n="admin_invites_tab">🎟️ Einladungen</button>
+                    <button onclick="switchAdminTab('invites')" id="adminTabInvites" class="admin-tab-btn hidden lg:inline-block" data-i18n="admin_invites_tab">🎟️ Einladungen</button>
                     <button onclick="switchAdminTab('search')" id="adminTabSearch" class="admin-tab-btn" data-i18n="admin_search_tab">🔍 Suche</button>
                 </div>
             </div>
@@ -3996,9 +4028,18 @@
                 </div>
             </div>
 
+
+
             <!-- Tab Content: Invites -->
             <div id="adminInviteTabContent" class="hidden flex flex-col flex-1 min-h-0 overflow-y-auto pr-2">
-                <!-- Invite Management Content (Existing) -->
+                <div class="mb-4 flex gap-2 shrink-0">
+                    <button onclick="generateInviteCode()" data-i18n="admin_btn_gen_invite" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-md active:scale-95">
+                        🎟️ Einladungscode generieren
+                    </button>
+                </div>
+                <div id="adminInviteListDesktop" class="space-y-2">
+                    <!-- Invitations will appear here for desktop tab -->
+                </div>
             </div>
 
             <!-- Tab Content: Suche -->
@@ -4016,14 +4057,15 @@
                 <div class="flex-1 overflow-y-auto pr-2 mb-2" id="adminSearchList">
                     <p class="text-slate-500 text-sm text-center py-8 italic" data-i18n="admin_search_empty">Geben Sie einen Suchbegriff ein...</p>
                 </div>
-            </div>
-                <div class="mb-4 flex gap-2">
-                    <button onclick="generateInviteCode()" data-i18n="admin_btn_gen_invite" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-md active:scale-95">
-                        🎟️ Einladungscode generieren
-                    </button>
-                </div>
-                <div id="adminInviteList" class="space-y-2">
-                    <!-- Invitations will appear here -->
+                <div class="mt-6 pt-6 border-t border-slate-100 shrink-0">
+                    <div class="mb-4 flex gap-2">
+                        <button onclick="generateInviteCode()" data-i18n="admin_btn_gen_invite" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-md active:scale-95">
+                            🎟️ Einladungscode generieren
+                        </button>
+                    </div>
+                    <div id="adminInviteList" class="space-y-2">
+                        <!-- Invitations will appear here -->
+                    </div>
                 </div>
             </div>
 
@@ -10750,7 +10792,11 @@
 
         async function loadAdminInviteCodes() {
             const list = document.getElementById('adminInviteList');
-            list.innerHTML = `<p class="text-slate-500 text-sm center p-4">${getI18n('loading_invites')}</p>`;
+            const desktopList = document.getElementById('adminInviteListDesktop');
+            const loadingMsg = `<p class="text-slate-500 text-sm center p-4">${getI18n('loading_invites')}</p>`;
+            if (list) list.innerHTML = loadingMsg;
+            if (desktopList) desktopList.innerHTML = loadingMsg;
+
             try {
                 const res = await fetch(`${API_BASE_URL}/api/admin/invite-codes`, {
                     headers: { 'Authorization': `Bearer ${API_TOKEN}` }
@@ -10759,11 +10805,13 @@
                 if (!res.ok) throw new Error(codes.error || getI18n('error_loading_generic'));
 
                 if (codes.length === 0) {
-                    list.innerHTML = `<p class="text-slate-500 text-sm text-center p-4">${getI18n('no_invites_generated')}</p>`;
+                    const emptyMsg = `<p class="text-slate-500 text-sm text-center p-4">${getI18n('no_invites_generated')}</p>`;
+                    if (list) list.innerHTML = emptyMsg;
+                    if (desktopList) desktopList.innerHTML = emptyMsg;
                     return;
                 }
 
-                list.innerHTML = codes.map(c => `
+                const html = codes.map(c => `
                     <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                         <div>
                             <div class="flex items-center gap-2">
@@ -10783,8 +10831,13 @@
                         </div>
                     </div>
                 `).join('');
+
+                if (list) list.innerHTML = html;
+                if (desktopList) desktopList.innerHTML = html;
             } catch (err) {
-                list.innerHTML = `<p class="text-red-500 text-sm p-4">${getI18n('error')}: ${err.message}</p>`;
+                const errMsg = `<p class="text-red-500 text-sm p-4">${getI18n('error')}: ${err.message}</p>`;
+                if (list) list.innerHTML = errMsg;
+                if (desktopList) desktopList.innerHTML = errMsg;
             }
         }
 
