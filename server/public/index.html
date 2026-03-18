@@ -5754,11 +5754,7 @@
 
             const levelWrapper = document.getElementById('grammarLevelFilterWrapper');
             if (levelWrapper) {
-                if (CURRENT_LANG === 'en') {
-                    levelWrapper.classList.remove('hidden');
-                } else {
-                    levelWrapper.classList.add('hidden');
-                }
+                levelWrapper.classList.remove('hidden');
             }
             
             // Sentence Add Modal
@@ -8106,7 +8102,7 @@
                 })) : [];
                 
                 // Merge with global base sentences (already filtered by language during fetch, but double check)
-                const baseS = (allBaseSentences || []).filter(s => (s.language || 'it') === CURRENT_LANG).map(s => ({ ...s, level: 'Basis' }));
+                const baseS = (allBaseSentences || []).filter(s => (s.language || 'it') === CURRENT_LANG).map(s => ({ ...s, level: s.level || 'Basis' }));
                 
                 grammarSentences = [...baseS, ...personalSentences];
                 saveAllDataLocally(); // Save to cache after fetch
@@ -8371,7 +8367,7 @@
 
             let filteredSentences = grammarSentences;
             const currentFocus = grammarFocusFilter ? grammarFocusFilter.value : "Alle";
-            const currentLevel = (grammarLevelFilter && CURRENT_LANG === 'en') ? grammarLevelFilter.value : "Alle";
+            const currentLevel = (grammarLevelFilter) ? grammarLevelFilter.value : "Alle";
 
             if (currentFocus !== "Alle") {
                 filteredSentences = filteredSentences.filter(s => {
