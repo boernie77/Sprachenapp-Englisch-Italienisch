@@ -56,6 +56,10 @@ const User = sequelize.define('User', {
   selectedLanguage: {
     type: DataTypes.STRING,
     defaultValue: 'it'
+  },
+  lastLearnAt: {
+    type: DataTypes.DATE,
+    allowNull: true
   }
 });
 
