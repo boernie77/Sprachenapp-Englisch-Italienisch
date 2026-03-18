@@ -8838,12 +8838,15 @@
             // --- Toggle Example Sentence buttons visibility (Hidden in Flashcards) ---
             const desktopToggle = document.getElementById('exampleToggleDesktopWrapper');
             const mobileToggle = document.getElementById('toggleExampleSentencesBtnMobile');
+            const cardsShowExampleBtn = document.getElementById('cardsShowExampleBtn');
             if (mode === 'cards') {
                 desktopToggle?.classList.add('mode-hidden');
                 mobileToggle?.classList.add('mode-hidden');
+                cardsShowExampleBtn?.classList.add('mode-hidden');
             } else {
                 desktopToggle?.classList.remove('mode-hidden');
                 mobileToggle?.classList.remove('mode-hidden');
+                cardsShowExampleBtn?.classList.remove('mode-hidden');
             }
 
             if (mode === 'info') {
