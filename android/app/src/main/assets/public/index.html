@@ -8849,9 +8849,10 @@
                     mobileToggle.classList.add('mode-hidden');
                     mobileToggle.style.setProperty('display', 'none', 'important');
                 }
+                // cardsShowExampleBtn should STAY VISIBLE in cards mode!
                 if (cardsShowExampleBtn) {
-                    cardsShowExampleBtn.classList.add('mode-hidden');
-                    cardsShowExampleBtn.style.setProperty('display', 'none', 'important');
+                    cardsShowExampleBtn.classList.remove('mode-hidden');
+                    cardsShowExampleBtn.style.display = '';
                 }
             } else {
                 if (desktopToggle) {
