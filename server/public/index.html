@@ -10849,6 +10849,38 @@
         }
 
         // --- Admin Excel/Grammar Logic ---
+        async function uploadInChunks(endpoint, dataKey, dataArray, language, label) {
+            const chunkSize = 500;
+            const total = dataArray.length;
+            let successCount = 0;
+
+            for (let i = 0; i < total; i += chunkSize) {
+                const chunk = dataArray.slice(i, i + chunkSize);
+                const isFirst = (i === 0);
+                
+                const res = await fetch(`${API_BASE_URL}/api${endpoint}`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_TOKEN}`
+                    },
+                    body: JSON.stringify({ 
+                        [dataKey]: chunk, 
+                        language: language,
+                        mode: isFirst ? 'overwrite' : 'append' 
+                    })
+                });
+
+                if (!res.ok) {
+                    const errData = await res.json();
+                    throw new Error(errData.error || `Fehler beim Upload von Teil ${Math.floor(i/chunkSize) + 1}`);
+                }
+                successCount += chunk.length;
+                console.log(`[CHUNKING] Uploaded ${successCount}/${total} ${label}...`);
+            }
+            return successCount;
+        }
+
         window.uploadBaseVocab = async function(lang) {
             const inputId = `adminBaseVocabUpload${lang.charAt(0).toUpperCase() + lang.slice(1)}`;
             const input = document.getElementById(inputId);
@@ -10885,22 +10917,11 @@
 
                     const confirmMsg = `Möchtest du wirklich die ${lang.toUpperCase()}-Basisliste mit ${wordsToUpload.length} neuen Einträgen ÜBERSCHREIBEN?`;
                     if (await showConfirm(confirmMsg, "Import bestätigen")) {
-                        const res = await fetch(`${API_BASE_URL}/api/admin/base-vocab/bulk`, {
-                            method: 'POST',
-                            headers: { 
-                                'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${API_TOKEN}`
-                            },
-                            body: JSON.stringify({ words: wordsToUpload, language: lang })
-                        });
+                        showToast(`Import von ${wordsToUpload.length} Einträgen gestartet...`, "info");
+                        const count = await uploadInChunks('/admin/base-vocab/bulk', 'words', wordsToUpload, lang, 'BaseVocab');
                         
-                        if (res.ok) {
-                            showToast(`${wordsToUpload.length} ${lang.toUpperCase()}-Basis-Vokabeln erfolgreich importiert.`, "success");
-                            updateAdminBaseVocabCount();
-                        } else {
-                            const errData = await res.json();
-                            throw new Error(errData.error || "Serverfehler beim Import");
-                        }
+                        showToast(`${count} ${lang.toUpperCase()}-Basis-Vokabeln erfolgreich importiert.`, "success");
+                        updateAdminBaseVocabCount();
                         input.value = '';
                     }
                 } catch (err) {
@@ -11015,23 +11036,13 @@
                     }
 
                     if (await showConfirm(`Die ${lang.toUpperCase()}-Grammatikliste mit ${sentencesToUpload.length} Sätzen ÜBERSCHREIBEN?`, "Import bestätigen")) {
-                        const res = await fetch(`${API_BASE_URL}/api/admin/grammar-sentences/bulk`, {
-                            method: 'POST',
-                            headers: { 
-                                'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${API_TOKEN}`
-                            },
-                            body: JSON.stringify({ sentences: sentencesToUpload, language: lang })
-                        });
-                        if (res.ok) {
-                            showToast(`${sentencesToUpload.length} Sätze importiert.`, "success");
-                            if (lang === CURRENT_LANG) updateAdminGrammarCount();
-                            updateAdminBaseVocabCount();
-                            if (currentMode === 'grammar') startGrammarRound();
-                        } else {
-                            const errData = await res.json();
-                            throw new Error(errData.error || "Serverfehler");
-                        }
+                        showToast(`Import von ${sentencesToUpload.length} Sätzen gestartet...`, "info");
+                        const count = await uploadInChunks('/admin/grammar-sentences/bulk', 'sentences', sentencesToUpload, lang, 'Grammatik');
+                        
+                        showToast(`${count} Sätze importiert.`, "success");
+                        if (lang === CURRENT_LANG) updateAdminGrammarCount();
+                        updateAdminBaseVocabCount();
+                        if (currentMode === 'grammar') startGrammarRound();
                     }
                     input.value = '';
                 } catch (err) {
