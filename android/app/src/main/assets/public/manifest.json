@@ -1,0 +1,17 @@
+{
+  "name": "Italienisch Lernen",
+  "short_name": "Ital-App",
+  "description": "Lerne Italienisch mit Drag & Drop und Quiz",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/197/197626.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
