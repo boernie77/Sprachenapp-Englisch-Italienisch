@@ -520,6 +520,7 @@
             }
 
             #vocabModal .bg-white,
+            #sentenceModal .bg-white,
             #vocabListModal .bg-white,
             #sentenceListModal .bg-white,
             #editVocabModal .bg-white,
@@ -561,6 +562,7 @@
 
             /* Specific Modal Fixes & Final Layering */
             #statsModal,
+            #sentenceModal,
             #vocabModal,
             #vocabListModal,
             #sentenceListModal,
@@ -585,6 +587,7 @@
             }
 
             #statsModal .bg-white,
+            #sentenceModal .bg-white,
             #vocabModal .bg-white,
             #vocabListModal .bg-white,
             #sentenceListModal .bg-white,
@@ -756,17 +759,20 @@
             }
 
             #vocabListModal .bg-white, #sentenceListModal .bg-white,
+            #sentenceModal .bg-white,
             #vocabModal .bg-white {
                 box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             }
 
             #vocabListModal, #sentenceListModal,
+            #sentenceModal,
             #vocabModal {
                 backdrop-filter: blur(8px);
                 -webkit-backdrop-filter: blur(8px);
             }
 
             #vocabListModal .bg-white, #sentenceListModal .bg-white,
+            #sentenceModal .bg-white,
             #vocabModal .bg-white {
                 animation: modalSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             }
@@ -5035,7 +5041,37 @@
                 reset_submit: "Passwort speichern",
                 
                 // Dialogs
-                confirm_delete_code: "Soll der Code wirklich gelöscht werden?"
+                confirm_delete_code: "Soll der Code wirklich gelöscht werden?",
+                
+                // Impressum
+                imp_title: "Impressum / Lizenzen",
+                imp_info: "Angaben gemäß § 5 TMG",
+                imp_contact: "Kontakt",
+                imp_responsible: "Verantwortlich für den Inhalt",
+                imp_licenses: "Lizenzhinweise",
+                imp_license_desc1: "Diese App verwendet Open-Source-Software unter den Lizenzen MIT und Apache 2.0.",
+                imp_license_desc2: "<strong>Emoji-Grafiken von OpenMoji</strong> – dem Open-Source-Emoji- und Icon-Projekt. Lizenz: <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\" target=\"_blank\" class=\"text-blue-600 hover:underline\">CC BY-SA 4.0</a>",
+                imp_rights: "Alle Rechte vorbehalten.",
+
+                // Quick Guide
+                guide_title: "Kurzanleitung",
+                guide_vocab: "Vokabelverwaltung",
+                guide_vocab_1: "<strong>Basis-Vokabeln:</strong> Lade über \"Excel-Liste verwalten\" (Menü) unsere kuratierte Liste.",
+                guide_vocab_2: "<strong>Eigene Listen:</strong> Du kannst deine eigene Excel-Datei hochladen. Beachte dabei die Spalten (Deutsch, Zielsprache, Wortart).",
+                guide_vocab_3: "<strong>Einzelne Wörter:</strong> Mit \"Vokabel hinzufügen\" kannst du jederzeit neue Wörter eintragen. Diese werden dann in deiner Liste gespeichert.",
+                guide_vocab_4: "<strong>Eigene Sätze:</strong> Wähle beim Hinzufügen einfach die Art <strong>\"Satz\"</strong>. Diese landen automatisch in der Satzliste und können im \"Grammatik\" Bereich geübt werden.",
+                guide_vocab_5: "<strong>Export:</strong> Deine gesamte Liste kann jederzeit wieder in eine Excel-Datei exportiert werden.",
+                guide_list: "Vollständige Vokabelliste",
+                guide_list_desc: "Hier siehst du alle Vokabeln. Du kannst Wörter <strong>auswählen oder abwählen</strong>. Nur die angewählten Vokabeln werden in den Übungen abgefragt. So kannst du gezielt bestimmte Themen üben.",
+                guide_cards: "Karteikarten (Neu)",
+                guide_cards_desc: "Der Klassiker. Lerne Vokabeln wie mit echten Karteikarten. Klicke zum Umdrehen und nutze das Stern-Symbol, um schwierige Wörter als <strong>Favoriten</strong> zu markieren.",
+                guide_areas: "Die 5 Lernbereiche",
+                guide_area_drag: "Ordne die Begriffe zu. <strong>Handy-Tipp:</strong> \"Antippen und Zuweisen\". Zusatzinfos erscheinen nach der Lösung.",
+                guide_area_cards: "Der Klassiker. Mische die Seiten, drehe sie um und markiere deine Favoriten.",
+                guide_area_quiz: "Wähle die richtige Übersetzung aus großen Buttons. Schnell und effektiv.",
+                guide_area_write: "Die Königsdisziplin. Tippe die Übersetzung korrekt ein. Bei Tippfehlern helfen wir dir mit kleinen Hinweisen.",
+                guide_area_grammar: "Lerne ganze Sätze im Kontext. Nutze den Filter <strong>\"Eigene Sätze\"</strong>, um gezielt Sätze zu trainieren, die du selbst angelegt hast.",
+                guide_btn: "Verstanden!"
             },
             en: {
                 // Header
