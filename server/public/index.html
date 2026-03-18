@@ -1162,10 +1162,29 @@
             #adminModal [class*="bg-slate-"],
             #adminModal [class*="bg-white"],
             #guideModal [class*="bg-indigo-"],
-            #guideModal [class*="bg-slate-"],
             #guideModal [class*="bg-white"] {
                 background-color: rgba(255, 255, 255, 0.05) !important;
                 border-color: rgba(255, 255, 255, 0.1) !important;
+            }
+
+            /* Example Sentence Modal Styles */
+            #exampleSentenceModal .modal-content {
+                animation: modalFadeIn 0.3s ease-out;
+            }
+            @keyframes modalFadeIn {
+                from { opacity: 0; transform: scale(0.95); }
+                to { opacity: 1; transform: scale(1); }
+            }
+
+            /* Toggle Button Style */
+            #toggleExampleSentencesBtn.active {
+                background-color: #3b82f6 !important;
+            }
+            #toggleExampleSentencesBtn.active .dot {
+                transform: translateX(100%);
+            }
+            #toggleExampleSentencesBtn .dot {
+                transition: transform 0.2s ease-in-out;
             }
 
             #excelModal .bg-amber-50 {
@@ -1867,6 +1886,21 @@
         </div>
     </div>
 
+    <!-- Example Sentence Popup Modal -->
+    <div id="exampleSentenceModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[30000] items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-[2rem] shadow-2xl max-w-sm w-full p-6 md:p-8 text-center border border-slate-100">
+            <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <span class="text-3xl">💡</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-800 mb-2" data-i18n="example_sentence_title">Beispielsatz</h3>
+            <div id="exampleSentenceBox" class="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-6 text-left">
+                <p id="exampleSentenceForeign" class="text-lg font-bold text-blue-700 mb-2 leading-tight"></p>
+                <p id="exampleSentenceGerman" class="text-sm text-slate-600 italic"></p>
+            </div>
+            <button id="closeExampleSentenceBtn" class="w-full py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl shadow-md transition-all active:scale-95" data-i18n="btn_ok">OK</button>
+        </div>
+    </div>
+
     <!-- Mobile Filter Modal -->
     <div id="mobileFilterModal"
         class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-xl z-[10000] items-center justify-center p-4">
@@ -1994,6 +2028,14 @@
                     </button>
                     <button id="modeInfoBtn" class="hidden md:flex flex-1 md:flex-none px-3 md:px-5 py-1.5 rounded-lg text-slate-500 font-medium hover:text-slate-800 transition-all items-center">
                         <span data-i18n="mode_info">Info</span>
+                    </button>
+                </div>
+
+                <!-- Example Sentence Toggle -->
+                <div class="flex items-center gap-2 px-2 py-1 bg-white/80 rounded-full shadow-sm border border-slate-200 ml-auto sm:ml-0">
+                    <span class="text-[10px] md:text-xs font-bold text-slate-600 uppercase tracking-wider" data-i18n="btn_example_sentences">Beispielsätze</span>
+                    <button id="toggleExampleSentencesBtn" class="relative inline-flex h-5 w-9 items-center rounded-full bg-slate-200 transition-colors focus:outline-none">
+                        <span class="dot inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform translate-x-[2px]"></span>
                     </button>
                 </div>
             </div>
@@ -4731,6 +4773,8 @@
         };
 
         let fullDictionary = [];
+        let allBaseSentences = [];
+        let showExampleSentences = localStorage.getItem('ita-show-example-sentences') === 'true';
         let wordStats = {};
 
         // App UI Language (i18n)
@@ -4831,6 +4875,10 @@
                 info_placeholder_noun: "Klicke oder ziehe ein Wort in der linken Spalte, um das Bild zu sehen.",
                 info_placeholder_all: "Klicke auf ein Wort, um Bilder oder Verbformen zu sehen.",
                 no_vocab_short: "Keine passenden Vokabeln gefunden.",
+                btn_example_sentences: "Beispielsätze",
+                example_sentence_title: "Beispielsatz",
+                example_sentence_not_found: "Keinen passenden Satz in der Basisliste gefunden.",
+                btn_ok: "OK",
                 stats_done_grammar: "Erledigte Grammatik-Übungen",
                 vocab_search: "Vokabel suchen...",
                 btn_select_all: "Alle auswählen",
@@ -5294,6 +5342,10 @@
                 info_placeholder_noun: "Click or drag a word in the left column to see the picture.",
                 info_placeholder_all: "Click on a word to see pictures or verb forms.",
                 no_vocab_short: "No matching vocabulary found.",
+                btn_example_sentences: "Example Sentences",
+                example_sentence_title: "Example Sentence",
+                example_sentence_not_found: "No matching sentence found in base list.",
+                btn_ok: "OK",
                 stats_done_grammar: "Completed Grammar Exercises",
                 vocab_search: "Search vocabulary...",
                 btn_select_all: "Select all",
@@ -5797,6 +5849,31 @@
             document.getElementById('langItBtn')?.addEventListener('click', () => switchLanguage('it'));
             document.getElementById('langEnBtn')?.addEventListener('click', () => switchLanguage('en'));
 
+            // Example Sentence Toggle Logic
+            function updateExampleToggleUI() {
+                if (!toggleExampleSentencesBtn) return;
+                const dot = toggleExampleSentencesBtn.querySelector('.dot');
+                if (showExampleSentences) {
+                    toggleExampleSentencesBtn.classList.add('active');
+                    if (dot) dot.style.transform = 'translateX(100%)';
+                } else {
+                    toggleExampleSentencesBtn.classList.remove('active');
+                    if (dot) dot.style.transform = 'translateX(0)';
+                }
+            }
+            updateExampleToggleUI();
+
+            toggleExampleSentencesBtn?.addEventListener('click', () => {
+                showExampleSentences = !showExampleSentences;
+                localStorage.setItem('ita-show-example-sentences', showExampleSentences);
+                updateExampleToggleUI();
+            });
+
+            closeExampleSentenceBtn?.addEventListener('click', () => {
+                exampleSentenceModal.classList.add('hidden');
+                exampleSentenceModal.classList.remove('flex');
+            });
+
             // UI Language Switcher Listeners (Sidebar)
             document.getElementById('btnLangUI_de')?.addEventListener('click', () => {
                 APP_UI_LANG = 'de';
@@ -5969,6 +6046,13 @@
         const infoContentIt = document.getElementById('infoContentIt');
         const cardsContainer = document.getElementById('cardsContainer');
 
+        // Example Sentence Feature DOM
+        const toggleExampleSentencesBtn = document.getElementById('toggleExampleSentencesBtn');
+        const exampleSentenceModal = document.getElementById('exampleSentenceModal');
+        const exampleSentenceForeign = document.getElementById('exampleSentenceForeign');
+        const exampleSentenceGerman = document.getElementById('exampleSentenceGerman');
+        const closeExampleSentenceBtn = document.getElementById('closeExampleSentenceBtn');
+
         async function apiFetch(endpoint, options = {}) {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 20000); // 20 second timeout
@@ -6023,6 +6107,43 @@
             }
         }
 
+        async function fetchGlobalBaseSentences() {
+            try {
+                const result = await apiFetch(`/grammar-sentences?language=${CURRENT_LANG}`);
+                if (result) allBaseSentences = result;
+            } catch (e) {
+                console.warn("Failed to fetch global base sentences", e);
+            }
+        }
+
+        function triggerExampleSentencePopup(wordObj) {
+            if (!showExampleSentences) return;
+            if (!wordObj) return;
+
+            const word = (wordObj.it || "").toLowerCase().trim();
+            if (!word) return;
+
+            const match = allBaseSentences.find(s => {
+                const sIt = (s.it || "").toLowerCase();
+                // Use a simple regex check for word boundary if possible, or stick to includes
+                // Since Italian has apostrophes (l'amico), we use a flexible regex
+                const escapedWord = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(`(^|[^a-zA-ZàèéìòùÀÈÉÌÒÙ'])${escapedWord}([^a-zA-ZàèéìòùÀÈÉÌÒÙ']|$)`, 'i');
+                return regex.test(sIt);
+            });
+
+            if (match) {
+                exampleSentenceForeign.textContent = match.it;
+                exampleSentenceGerman.textContent = match.de;
+            } else {
+                exampleSentenceForeign.textContent = wordObj.it;
+                exampleSentenceGerman.textContent = getI18n('example_sentence_not_found');
+            }
+
+            exampleSentenceModal.classList.remove('hidden');
+            exampleSentenceModal.classList.add('flex');
+        }
+
         function renderApp() {
             if (currentMode) {
                 switchMode(currentMode);
@@ -6046,6 +6167,7 @@
                         if (cachedStats) wordStats = safeJSONParse(cachedStats, {});
                         
                         // Load Grammar Sentences from cache
+                        await fetchGlobalBaseSentences();
                         const cachedGrammar = localStorage.getItem(`ita-grammar-sentences-${CURRENT_LANG}`);
                         if (cachedGrammar) {
                             grammarSentences = safeJSONParse(cachedGrammar, []);
@@ -6172,6 +6294,7 @@
                     }).catch(e => console.warn("Proactive activity sync failed", e));
                 }
 
+                await fetchGlobalBaseSentences();
                 if (!isSilent) {
                     renderApp();
                     console.log("Full data refresh complete.");
@@ -7000,6 +7123,7 @@
                     stats.lastReviewedDate = Date.now();
                     stats.nextReviewDate = Date.now() + (getIntervalForStreak(stats.streak) * 86400000);
                 }
+                setTimeout(() => triggerExampleSentencePopup(currentWriteTarget), 800);
             } else {
                 writeFeedbackTitle.textContent = "Fast...";
                 writeFeedbackTitle.className = "text-lg md:text-2xl font-bold mb-2 text-red-500";
@@ -7561,6 +7685,7 @@
             if (currentRoundMistakes.has(id)) { wordStats[id].incorrect++; wordStats[id].streak = 0; wordStats[id].lastReviewedDate = Date.now(); wordStats[id].nextReviewDate = Date.now(); }
             else { wordStats[id].correct++; wordStats[id].streak++; wordStats[id].lastReviewedDate = Date.now(); wordStats[id].nextReviewDate = Date.now() + (getIntervalForStreak(wordStats[id].streak) * 86400000); }
             displayExtraInfo(matchedPair, true);
+            triggerExampleSentencePopup(matchedPair);
             dropzone.classList.add('cursor-pointer', 'hover:bg-green-100', 'transition-colors');
             dropzone.addEventListener('click', () => displayExtraInfo(matchedPair, true));
             recordDailyActivity(); saveAllDataLocally();
@@ -7768,6 +7893,7 @@
                     stats.lastReviewedDate = Date.now();
                     stats.nextReviewDate = Date.now() + (getIntervalForStreak(stats.streak) * 86400000);
                 }
+                setTimeout(() => triggerExampleSentencePopup(currentQuizTarget), 600);
             } else {
                 clickedBtn.classList.remove('neutral-dim');
                 clickedBtn.classList.add('wrong-bright', 'shadow-md');
@@ -11115,6 +11241,9 @@
                 cardsQuestionDisplay.textContent = isFlashcardReversed ? deText : itText;
             }
             cardsSubtext.textContent = isFlashcardReversed ? "Lösung gezeigt" : "Klicken zum Wenden";
+            if (isFlashcardReversed) {
+                triggerExampleSentencePopup(currentFlashcardTarget);
+            }
         }
 
         if (cardsFlashcard) {
