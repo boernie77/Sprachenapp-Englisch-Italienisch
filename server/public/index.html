@@ -4830,11 +4830,6 @@
                 info_placeholder_verb: "Hier erscheinen die Zusatzinformationen der richtig zugeordneten Verben.",
                 info_placeholder_noun: "Klicke oder ziehe ein Wort in der linken Spalte, um das Bild zu sehen.",
                 info_placeholder_all: "Klicke auf ein Wort, um Bilder oder Verbformen zu sehen.",
-                verb_praesens: "Präsens",
-                verb_passato: "Passato Prossimo",
-                verb_imperfetto: "Imperfetto",
-                verb_gerundio: "Gerundio",
-                verb_imperativo: "Imperativ",
                 no_vocab_short: "Keine passenden Vokabeln gefunden.",
                 stats_done_grammar: "Erledigte Grammatik-Übungen",
                 vocab_search: "Vokabel suchen...",
@@ -5298,11 +5293,6 @@
                 info_placeholder_verb: "Extra information for correctly matched verbs will appear here.",
                 info_placeholder_noun: "Click or drag a word in the left column to see the picture.",
                 info_placeholder_all: "Click on a word to see pictures or verb forms.",
-                verb_praesens: "Present",
-                verb_passato: "Past Tense",
-                verb_imperfetto: "Imperfect",
-                verb_gerundio: "Gerund",
-                verb_imperativo: "Imperative",
                 no_vocab_short: "No matching vocabulary found.",
                 stats_done_grammar: "Completed Grammar Exercises",
                 vocab_search: "Search vocabulary...",
@@ -7519,14 +7509,28 @@
             if (isVerb) {
                 const infoCard = document.createElement('div');
                 infoCard.className = 'bg-white p-3 md:p-4 rounded-xl border border-blue-200 shadow-sm matched-animation text-left w-full flex-shrink-0';
+                const labels = CURRENT_LANG === 'it' ? {
+                    praesens: 'Presente',
+                    passato: 'Passato Prossimo',
+                    imperfetto: 'Imperfetto',
+                    gerundio: 'Gerundio',
+                    imperativo: 'Imperativo'
+                } : {
+                    praesens: 'Present',
+                    passato: 'Past Tense',
+                    imperfetto: 'Imperfect',
+                    gerundio: 'Gerund',
+                    imperativo: 'Imperative'
+                };
+
                 infoCard.innerHTML = `
                     <div class="font-bold text-slate-800 border-b border-slate-100 pb-2 mb-2">${getFullIt(pair)} <span class="font-normal text-slate-500 text-sm">(${pair.de})</span></div>
                     <div class="flex flex-col gap-2 text-slate-700 text-xs md:text-sm">
-                        <div><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">${getI18n('verb_praesens')}</span>${pair.praesens || '-'}</div>
-                        <div><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">${getI18n('verb_passato')}</span>${pair.passato || '-'}</div>
-                        <div><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">${getI18n('verb_imperfetto')}</span>${pair.imperfetto || '-'}</div>
-                        <div class="pt-1 border-t border-slate-50"><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">${getI18n('verb_gerundio')}</span>${pair.gerundio || '-'}</div>
-                        <div><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">${getI18n('verb_imperativo')}</span><span class="text-blue-600 italic font-medium">${pair.imperativo || '-'}</span></div>
+                        <div><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">${labels.praesens}</span>${pair.praesens || '-'}</div>
+                        <div><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">${labels.passato}</span>${pair.passato || '-'}</div>
+                        <div><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">${labels.imperfetto}</span>${pair.imperfetto || '-'}</div>
+                        <div class="pt-1 border-t border-slate-50"><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">${labels.gerundio}</span>${pair.gerundio || '-'}</div>
+                        <div><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">${labels.imperativo}</span><span class="text-blue-600 italic font-medium">${pair.imperativo || '-'}</span></div>
                     </div>
                 `;
                 infoMain.appendChild(infoCard);
