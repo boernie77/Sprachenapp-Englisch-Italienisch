@@ -8140,7 +8140,8 @@
             let categories = [...new Set(grammarSentences
                 .filter(s => s.language === CURRENT_LANG)
                 .flatMap(s => s.category ? s.category.split('+').map(c => c.trim()) : [])
-                .filter(Boolean))];
+                .filter(Boolean))]
+                .filter(cat => cat !== 'Grammatik');
             
 
             // Always ensure 'Eigene Sätze' is an available category
