@@ -1148,8 +1148,20 @@
             }
 
             #excelModal .text-slate-800,
-            #excelModal .text-slate-500 {
+            #excelModal .text-slate-500,
+            #excelModal .text-indigo-900,
+            #adminModal .text-slate-800,
+            #adminModal .text-slate-700,
+            #adminModal .text-slate-600,
+            #adminModal .text-slate-500,
+            #adminModal .text-slate-400 {
                 color: #f1f5f9 !important;
+            }
+
+            #adminModal .bg-slate-50,
+            #adminModal .bg-white {
+                background-color: rgba(255, 255, 255, 0.05) !important;
+                border-color: rgba(255, 255, 255, 0.2) !important;
             }
 
             #excelModal .bg-amber-50 {
@@ -4937,6 +4949,12 @@
                 excel_format_col1_en: "Spalte 1: Englische Wörter",
                 excel_format_col1_it: "Spalte 1: Italienische Wörter",
                 excel_format_col2: "Spalte 2: Deutsche Übersetzung",
+                // Dynamic Admin Labels
+                admin_base_list_desc: "Importiert eine kuratierte Liste von derzeit {count} Basis-Vokabeln ({lang})",
+                admin_fallback_vocab: "Importiert eine kuratierte Liste von derzeit {count} Basis-Vokabeln (Offline Fallback {lang})",
+                admin_base_sent_desc: "Importiert eine kuratierte Liste von derzeit {count} Basis-Sätzen ({lang})",
+                admin_fallback_sent: "Importiert Basis-Sätze (Offline Fallback {lang})",
+
                 excel_format_col3: "Spalte 3: Wortart (z.B. Substantiv, Verb)",
                 excel_format_col4: "Spalte 4: Emoji (optional)",
                 excel_current_list: "Aktuelle Liste:",
