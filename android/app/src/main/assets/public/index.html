@@ -8839,14 +8839,33 @@
             const desktopToggle = document.getElementById('exampleToggleDesktopWrapper');
             const mobileToggle = document.getElementById('toggleExampleSentencesBtnMobile');
             const cardsShowExampleBtn = document.getElementById('cardsShowExampleBtn');
+            
             if (mode === 'cards') {
-                desktopToggle?.classList.add('mode-hidden');
-                mobileToggle?.classList.add('mode-hidden');
-                cardsShowExampleBtn?.classList.add('mode-hidden');
+                if (desktopToggle) {
+                    desktopToggle.classList.add('mode-hidden');
+                    desktopToggle.style.setProperty('display', 'none', 'important');
+                }
+                if (mobileToggle) {
+                    mobileToggle.classList.add('mode-hidden');
+                    mobileToggle.style.setProperty('display', 'none', 'important');
+                }
+                if (cardsShowExampleBtn) {
+                    cardsShowExampleBtn.classList.add('mode-hidden');
+                    cardsShowExampleBtn.style.setProperty('display', 'none', 'important');
+                }
             } else {
-                desktopToggle?.classList.remove('mode-hidden');
-                mobileToggle?.classList.remove('mode-hidden');
-                cardsShowExampleBtn?.classList.remove('mode-hidden');
+                if (desktopToggle) {
+                    desktopToggle.classList.remove('mode-hidden');
+                    desktopToggle.style.display = '';
+                }
+                if (mobileToggle) {
+                    mobileToggle.classList.remove('mode-hidden');
+                    mobileToggle.style.display = '';
+                }
+                if (cardsShowExampleBtn) {
+                    cardsShowExampleBtn.classList.remove('mode-hidden');
+                    cardsShowExampleBtn.style.display = '';
+                }
             }
 
             if (mode === 'info') {
@@ -9430,7 +9449,27 @@
             const personal = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ === 'Satz');
             const global = (allBaseSentences || []).filter(s => (s.language || 'it') === CURRENT_LANG).map(s => ({ ...s, id: 'base-' + s.id, isActive: true, isMarked: false, isOwn: false }));
             
-            let words = [...global, ...personal];
+            // Deduplicate: If a sentence exists in both global and personal (by content), preference goes to personal (it has its own ID and isActive status)
+            const seen = new Set();
+            let words = [];
+            
+            // First add personal sentences (they are more important/customizable)
+            personal.forEach(p => {
+                const key = `${p.de}|${p.it}`.toLowerCase().trim();
+                if (!seen.has(key)) {
+                    words.push(p);
+                    seen.add(key);
+                }
+            });
+            
+            // Then add global sentences only if they haven't been seen yet
+            global.forEach(g => {
+                const key = `${g.de}|${g.it}`.toLowerCase().trim();
+                if (!seen.has(key)) {
+                    words.push(g);
+                    seen.add(key);
+                }
+            });
 
             // Category filter
             if (catFilter === 'Eigene Sätze') {
