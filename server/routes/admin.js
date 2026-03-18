@@ -147,12 +147,14 @@ router.put('/users/:id/password', authenticateToken, requireAdmin, async (req, r
 });
 
 router.post('/base-vocab/bulk', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
-    const { words, language } = req.body;
+    const { words, language, mode } = req.body;
     if (!language) return res.status(400).json({ error: 'Language required' });
     
     const transaction = await sequelize.transaction();
     try {
-        await BaseVocabulary.destroy({ where: { language }, transaction });
+        if (mode !== 'append') {
+            await BaseVocabulary.destroy({ where: { language }, transaction });
+        }
         const data = words.map(w => ({ ...w, language }));
         const created = await BaseVocabulary.bulkCreate(data, { transaction });
         await transaction.commit();
