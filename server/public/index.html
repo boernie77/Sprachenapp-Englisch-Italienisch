@@ -8510,7 +8510,13 @@
                               if (cleanNoPunct.length > 3) {
                                   if (cleanNoPunct.endsWith('est') || cleanNoPunct === 'most' || cleanNoPunct === 'best' || cleanNoPunct === 'worst') {
                                        eligibleTokens.push({ idx, type: 'superlative', weight: 0.8 }); // Lower weight to prioritize verbs
-                                  } else if (cleanNoPunct.endsWith('er') || cleanNoPunct === 'more' || cleanNoPunct === 'better' || cleanNoPunct === 'worse') {
+                                                                    } else if (cleanNoPunct === 'more') {
+                                       // Check for "one more" or "once more" to avoid incorrect comparative label
+                                       const prevToken = idx > 1 ? tokens[idx - 2].toLowerCase().trim() : "";
+                                       if (prevToken !== 'one' && prevToken !== 'once') {
+                                           eligibleTokens.push({ idx, type: 'comparative', weight: 0.8 });
+                                       }
+                                  } else if (cleanNoPunct.endsWith('er') || cleanNoPunct === 'better' || cleanNoPunct === 'worse') {
                                        eligibleTokens.push({ idx, type: 'comparative', weight: 0.8 }); // Lower weight
                                   }
                               }
