@@ -6378,7 +6378,6 @@
                     }
                 });
                 buildVerbReverseMap();
-                await updateAdminGrammarCount(); // Ensure grammar is loaded before sync finish / render
 
                 const localActivity = safeJSONParse(localStorage.getItem(`ita-daily-activity-${CURRENT_LANG}`), {});
                 const reconstructed = reconstructActivityHistory();
@@ -6415,6 +6414,8 @@
                 }
 
                 await fetchGlobalBaseSentences();
+                await updateAdminGrammarCount();
+                if (typeof sentenceListModal !== 'undefined' && !sentenceListModal.classList.contains('hidden')) renderSentenceList();
                 if (!isSilent) {
                     renderApp();
                     console.log("Full data refresh complete.");
@@ -8079,11 +8080,15 @@
 
         async function updateAdminGrammarCount() {
             try {
-                // Sentences are completely user-managed now. We only load what's actually in their dictionary.
+                // Sentences are both global base sentences and user-managed personal ones.
                 const personalSentences = fullDictionary ? fullDictionary.filter(w => w.typ === 'Satz' && w.isActive !== false).map(v => ({
-                    id: v.id, de: v.de, it: v.it, category: v.grammatica || 'Eigene Sätze', level: 'Eigene'
+                    id: v.id, de: v.de, it: v.it, category: v.grammatica || 'Eigene Sätze', level: 'Eigene', language: v.language || 'it'
                 })) : [];
-                grammarSentences = [...personalSentences];
+                
+                // Merge with global base sentences (already filtered by language during fetch, but double check)
+                const baseS = (allBaseSentences || []).filter(s => (s.language || 'it') === CURRENT_LANG).map(s => ({ ...s, level: 'Basis' }));
+                
+                grammarSentences = [...baseS, ...personalSentences];
                 saveAllDataLocally(); // Save to cache after fetch
                 updateGrammarFocusOptions();
 
@@ -8118,7 +8123,7 @@
                 .filter(Boolean))];
             
             if (CURRENT_LANG === 'en') {
-                const enTenses = ['Simple Present', 'Present Continuous', 'Simple Past', 'Future', 'Present Perfect', 'Imperativ', 'Conditional'];
+                const enTenses = ['Simple Present', 'Present Continuous', 'Simple Past', 'Future', 'Present Perfect', 'Imperative', 'Conditional'];
                 enTenses.forEach(tense => {
                     if (!categories.includes(tense)) {
                         categories.push(tense);
@@ -9402,12 +9407,18 @@
             const sortDir = document.getElementById('sentenceListSortDir').value;
             const catFilter = document.getElementById('sentenceListCatFilter').value;
             const searchVal = document.getElementById('sentenceListSearch').value.toLowerCase().trim();
-
-            let words = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ === 'Satz');
+            
+            // Merge personal sentences from fullDictionary and global base sentences from allBaseSentences
+            const personal = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ === 'Satz');
+            const global = (allBaseSentences || []).filter(s => (s.language || 'it') === CURRENT_LANG).map(s => ({ ...s, id: 'base-' + s.id, isActive: true, isMarked: false, isOwn: false }));
+            
+            let words = [...global, ...personal];
 
             // Category filter
             if (catFilter === 'Eigene Sätze') {
                 words = words.filter(w => w.isOwn === true);
+            } else if (catFilter !== 'Alle') {
+                words = words.filter(w => w.category && w.category.includes(catFilter));
             }
 
             // Search filter
@@ -9881,10 +9892,8 @@
                             const globalChoice = await showChoice(getI18n('choice_admin_global_sentences'), getI18n('title_global_base_sentences'), { confirmText: getI18n('action_replace'), toggleText: getI18n('action_add'), cancelText: getI18n('action_local') });
                             if (globalChoice === 'replace' || globalChoice === 'append') {
                                 const baseSentences = wordsToUpload.map(w => ({ de: w.de, it: w.it, category: w.grammatica, language: CURRENT_LANG }));
-                                await apiFetch('/admin/grammar-sentences/bulk', {
-                                    method: 'POST',
-                                    body: JSON.stringify({ sentences: baseSentences, language: CURRENT_LANG, mode: globalChoice })
-                                });
+                                showToast("Globaler Satz-Upload gestartet...", "info");
+                                await uploadInChunks('/admin/grammar-sentences/bulk', 'sentences', baseSentences, CURRENT_LANG, 'Global Grammar', globalChoice === 'replace' ? 'overwrite' : 'append');
                                 showToast(getI18n('toast_admin_global_sentences_success', globalChoice === 'replace' ? getI18n('action_replaced') : getI18n('action_added')), "success");
                             }
                         }
@@ -9894,16 +9903,14 @@
                         
                         if (choice === 'replace') {
                             const delTyp = excelUploadType === 'sentences' ? 'Satz' : 'Vocab';
-                            await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=${delTyp}`, { method: 'DELETE' });
+                            await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=${delTyp}&isOwn=true`, { method: 'DELETE' });
                         }
 
-                        const result = await apiFetch('/vocab/bulk', {
-                            method: 'POST',
-                            body: JSON.stringify({ words: wordsToUpload })
-                        });
-                        if (result && result.length > 0) {
+                        showToast("Upload gestartet...", "info");
+                        const resultCount = await uploadInChunks('/vocab/bulk', 'words', wordsToUpload, CURRENT_LANG, 'User Data', 'append');
+                        if (resultCount > 0) {
                             loadDataFromServer();
-                            showToast(getI18n('toast_data_loaded_synced', result.length), "success");
+                            showToast(getI18n('toast_data_loaded_synced', resultCount), "success");
                             typeFilterEl.value = 'Alle';
                             excelModal.classList.remove('flex'); excelModal.classList.add('hidden');
                             startDragDropRound();
@@ -10944,7 +10951,7 @@
         }
 
         // --- Admin Excel/Grammar Logic ---
-        async function uploadInChunks(endpoint, dataKey, dataArray, language, label) {
+        async function uploadInChunks(endpoint, dataKey, dataArray, language, label, initialMode = 'overwrite') {
             const chunkSize = 500;
             const total = dataArray.length;
             let successCount = 0;
@@ -10952,6 +10959,7 @@
             for (let i = 0; i < total; i += chunkSize) {
                 const chunk = dataArray.slice(i, i + chunkSize);
                 const isFirst = (i === 0);
+                const mode = isFirst ? initialMode : 'append';
                 
                 const res = await fetch(`${API_BASE_URL}/api${endpoint}`, {
                     method: 'POST',
@@ -10962,7 +10970,7 @@
                     body: JSON.stringify({ 
                         [dataKey]: chunk, 
                         language: language,
-                        mode: isFirst ? 'overwrite' : 'append' 
+                        mode: mode 
                     })
                 });
 
@@ -10970,7 +10978,8 @@
                     const errData = await res.json();
                     throw new Error(errData.error || `Fehler beim Upload von Teil ${Math.floor(i/chunkSize) + 1}`);
                 }
-                successCount += chunk.length;
+                const resData = await res.json();
+                successCount += (resData.length || chunk.length);
                 console.log(`[CHUNKING] Uploaded ${successCount}/${total} ${label}...`);
             }
             return successCount;
