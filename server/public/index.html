@@ -4089,6 +4089,18 @@
                     </p>
                 </section>
 
+                <!-- Beispielsätze -->
+                <section>
+                    <h3 class="text-lg font-bold text-slate-800 mb-2 flex items-center" data-i18n="guide_example_sentences">
+                        Beispielsätze</h3>
+                    <p class="text-sm md:text-base ml-2 mb-3" data-i18n="guide_example_sentences_desc">
+                        Nach einer richtigen Antwort kannst du dir einen Beispielsatz anzeigen lassen, um die Vokabel im Kontext zu verstehen. In der App nutzt du dazu den Button mit der Glühbirne oben rechts:
+                    </p>
+                    <div class="flex justify-center">
+                        <img src="img/lightbulb_button.png" data-i18n-alt="guide_example_sentences_alt" alt="Glühbirne Button" class="w-20 h-20 rounded-2xl shadow-lg border border-slate-100">
+                    </div>
+                </section>
+
                 <section>
                     <h3 id="guideRocketHeader" class="text-lg font-bold text-slate-800 mb-3 flex items-center">Die 5
                         Lernbereiche</h3>
@@ -5158,6 +5170,9 @@
                 guide_list_desc: "Hier siehst du alle Vokabeln. Du kannst Wörter <strong>auswählen oder abwählen</strong>. Nur die angewählten Vokabeln werden in den Übungen abgefragt. So kannst du gezielt bestimmte Themen üben.",
                 guide_cards: "Karteikarten (Neu)",
                 guide_cards_desc: "Der Klassiker. Lerne Vokabeln wie mit echten Karteikarten. Klicke zum Umdrehen und nutze das Stern-Symbol, um schwierige Wörter als <strong>Favoriten</strong> zu markieren.",
+                guide_example_sentences: "Beispielsätze",
+                guide_example_sentences_desc: "Nach einer richtigen Antwort kannst du dir einen passenden Beispielsatz anzeigen lassen, um die Vokabel im Kontext zu verstehen. In der App nutzt du dazu oben rechts den Button mit der Glühbirne:",
+                guide_example_sentences_alt: "Glühbirne Button",
                 guide_areas: "Die 5 Lernbereiche",
                 guide_area_drag: "Ordne die Begriffe zu. <strong>Handy-Tipp:</strong> \"Antippen und Zuweisen\". Zusatzinfos erscheinen nach der Lösung.",
                 guide_area_cards: "Der Klassiker. Mische die Seiten, drehe sie um und markiere deine Favoriten.",
@@ -5526,6 +5541,9 @@
                 guide_list_desc: "Here you can see all your vocabulary. You can <strong>select or deselect</strong> words. Only selected vocabulary will be used in learning modes. This allows you to focus on specific topics.",
                 guide_cards: "Flashcards (New)",
                 guide_cards_desc: "The classic way. Learn vocabulary like with real cards. Click to flip a card and see the translation. Use the star icon to mark difficult words as <strong>Favorites</strong>.",
+                guide_example_sentences: "Example Sentences",
+                guide_example_sentences_desc: "After a correct answer, you can display a matching example sentence to understand the vocabulary in actual use. In the app, use the lightbulb button in the top right corner:",
+                guide_example_sentences_alt: "Lightbulb Button",
                 guide_areas: "The 5 Learning Areas",
                 guide_area_drag: "Match the terms. <strong>Mobile:</strong> \"Tap and Match\". Extra info appears after solving.",
                 guide_area_cards: "The classic way. Learn vocabulary like with real cards. Click to flip and mark favorites.",
@@ -5568,6 +5586,10 @@
             document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
                 const key = el.getAttribute('data-i18n-placeholder');
                 el.placeholder = getI18n(key);
+            });
+            document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+                const key = el.getAttribute('data-i18n-alt');
+                el.alt = getI18n(key);
             });
             updateLangButtonStyles();
             
