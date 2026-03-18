@@ -1183,6 +1183,9 @@
                 color: white !important;
                 border-color: #2563eb !important;
             }
+            #toggleExampleSentencesBtn.active span {
+                color: white !important;
+            }
             #toggleExampleSentencesBtnMobile {
                 font-size: 1.25rem;
             }
@@ -2277,6 +2280,11 @@
                         Nächste Karte <span>→</span>
                     </button>
                 </div>
+                <!-- Manual Example Sentence Button for Flashcards -->
+                <button id="cardsShowExampleBtn" class="w-full sm:w-auto bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-6 rounded-lg transition-all shadow-md active:transform active:scale-95 text-xs md:text-sm flex items-center justify-center gap-2 mt-2">
+                    <span class="text-sm">💡</span>
+                    <span data-i18n="btn_show_example">Beispielsatz anzeigen</span>
+                </button>
             </div>
         </main>
 
@@ -4883,6 +4891,7 @@
                 example_sentence_not_found: "Keinen passenden Satz in der Basisliste gefunden.",
                 btn_ok: "OK",
                 btn_next: "Weiter",
+                btn_show_example: "Beispielsatz anzeigen",
                 stats_done_grammar: "Erledigte Grammatik-Übungen",
                 vocab_search: "Vokabel suchen...",
                 btn_select_all: "Alle auswählen",
@@ -5351,6 +5360,7 @@
                 example_sentence_not_found: "No matching sentence found in base list.",
                 btn_ok: "OK",
                 btn_next: "Next",
+                btn_show_example: "Show Example Sentence",
                 stats_done_grammar: "Completed Grammar Exercises",
                 vocab_search: "Search vocabulary...",
                 btn_select_all: "Select all",
@@ -8748,7 +8758,22 @@
             } else if (mode === 'grammar') {
                 grammarContainer.classList.remove('hidden'); grammarContainer.classList.add('flex');
                 startGrammarRound();
-            } else if (mode === 'info') {
+            }
+
+            // --- Toggle Example Sentence buttons visibility (Hidden in Flashcards) ---
+            const desktopToggle = document.getElementById('exampleToggleDesktopWrapper');
+            const mobileToggle = document.getElementById('toggleExampleSentencesBtnMobile');
+            if (mode === 'cards') {
+                desktopToggle?.classList.add('hidden');
+                desktopToggle?.classList.remove('md:flex');
+                mobileToggle?.classList.add('hidden');
+            } else {
+                desktopToggle?.classList.remove('hidden');
+                desktopToggle?.classList.add('md:flex');
+                mobileToggle?.classList.remove('hidden');
+            }
+
+            if (mode === 'info') {
                 infoTabContainer.classList.add('flex'); infoTabContainer.classList.remove('hidden');
                 renderAllLabels(); // Ensure content is correctly shown for language
                 
@@ -11309,9 +11334,6 @@
                 cardsQuestionDisplay.textContent = isFlashcardReversed ? deText : itText;
             }
             cardsSubtext.textContent = isFlashcardReversed ? "Lösung gezeigt" : "Klicken zum Wenden";
-            if (isFlashcardReversed) {
-                triggerExampleSentencePopup(currentFlashcardTarget);
-            }
         }
 
         if (cardsFlashcard) {
@@ -11323,6 +11345,14 @@
         }
 
         if (cardsNextBtn) cardsNextBtn.addEventListener('click', () => startCardsRound(false));
+        
+        const cardsShowExampleBtn = document.getElementById('cardsShowExampleBtn');
+        if (cardsShowExampleBtn) {
+            cardsShowExampleBtn.addEventListener('click', () => {
+                if (currentFlashcardTarget) triggerExampleSentencePopup(currentFlashcardTarget);
+            });
+        }
+
         const cardsPrevBtn = document.getElementById('cardsPrevBtn');
         if (cardsPrevBtn) cardsPrevBtn.addEventListener('click', showPreviousCard);
 
