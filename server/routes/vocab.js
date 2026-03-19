@@ -67,11 +67,44 @@ router.put('/:id/stats', authenticateToken, asyncHandler(async (req, res) => {
     res.json({ message: 'Stats and status updated' });
 }));
 
+router.put('/stats/reset', authenticateToken, asyncHandler(async (req, res) => {
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.sendStatus(404);
+
+    // 1. Reset User dailyActivity and set reset timestamp
+    user.dailyActivity = {};
+    user.lastResetAt = new Date();
+    user.changed('dailyActivity', true);
+    await user.save();
+
+    // 2. Reset all Stats for this user's vocabulary
+    const vocabIds = (await Vocabulary.findAll({
+        where: { UserId: req.user.id },
+        attributes: ['id']
+    })).map(v => v.id);
+
+    if (vocabIds.length > 0) {
+        await Stats.update(
+            {
+                presented: 0,
+                correct: 0,
+                incorrect: 0,
+                streak: 0,
+                lastReviewedDate: null,
+                nextReviewDate: null
+            },
+            { where: { VocabularyId: vocabIds } }
+        );
+    }
+
+    res.json({ message: 'All statistics reset successfully' });
+}));
+
 router.put('/:id', authenticateToken, asyncHandler(async (req, res) => {
     const { de, it, typ, emoji, grammatica } = req.body;
     const vocab = await Vocabulary.findOne({ where: { id: req.params.id, UserId: req.user.id } });
     if (!vocab) return res.sendStatus(404);
-    
+
     await vocab.update({ de, it, typ, emoji, grammatica });
     res.json(vocab);
 }));
@@ -111,41 +144,6 @@ router.delete('/:id', authenticateToken, asyncHandler(async (req, res) => {
     const deleted = await Vocabulary.destroy({ where: { id: req.params.id, UserId: req.user.id } });
     if (deleted) res.json({ message: 'Deleted' });
     else res.sendStatus(404);
-}));
-
-// Moving this block to avoid route shadow
-
-router.put('/stats/reset', authenticateToken, asyncHandler(async (req, res) => {
-    const user = await User.findByPk(req.user.id);
-    if (!user) return res.sendStatus(404);
-
-    // 1. Reset User dailyActivity and set reset timestamp
-    user.dailyActivity = {};
-    user.lastResetAt = new Date();
-    user.changed('dailyActivity', true);
-    await user.save();
-
-    // 2. Reset all Stats for this user's vocabulary
-    const vocabIds = (await Vocabulary.findAll({
-        where: { UserId: req.user.id },
-        attributes: ['id']
-    })).map(v => v.id);
-
-    if (vocabIds.length > 0) {
-        await Stats.update(
-            {
-                presented: 0,
-                correct: 0,
-                incorrect: 0,
-                streak: 0,
-                lastReviewedDate: null,
-                nextReviewDate: null
-            },
-            { where: { VocabularyId: vocabIds } }
-        );
-    }
-
-    res.json({ message: 'All statistics reset successfully' });
 }));
 
 module.exports = router;

@@ -33,16 +33,18 @@ jobs:
           export DB_PORT=5432
           export DB_NAME=italian_db
           export DB_VOLUME=lernapp_postgres_data_v3
-          
+
           # Sicherstellen, dass das Volume existiert
           docker volume create $DB_VOLUME || true
-          
-          # .env Datei für Docker Compose erstellen
+
+          # .env Datei für Docker Compose erstellen (Secrets kommen aus GitHub)
           echo "APP_PORT=$APP_PORT" > .env
           echo "DB_PORT=$DB_PORT" >> .env
           echo "DB_NAME=$DB_NAME" >> .env
-          echo "DB_PASSWORD=dbpass_test" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD_LIVE }}" >> .env
           echo "DB_VOLUME=$DB_VOLUME" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "SMTP_PASS=${{ secrets.SMTP_PASS }}" >> .env
           
           # AGGRESSIVER CLEANUP: Stoppe alles, was Port 3001 belegt
           CONF_CONTAINER=$(docker ps --filter "publish=$APP_PORT" -q)

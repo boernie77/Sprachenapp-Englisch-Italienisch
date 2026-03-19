@@ -11,6 +11,13 @@ const adminRoutes = require('./routes/admin');
 const grammarRoutes = require('./routes/grammar');
 const baseVocabRoutes = require('./routes/baseVocab');
 
+const KNOWN_WEAK_SECRETS = ['#!Alex2019_TEST_ONLY', 'super-secret-key', 'secret', ''];
+const jwtSecret = process.env.JWT_SECRET;
+if (!jwtSecret || KNOWN_WEAK_SECRETS.includes(jwtSecret) || jwtSecret.length < 32) {
+  console.error('FATAL: JWT_SECRET is missing, too short, or uses a known insecure default. Set a strong secret (min. 32 chars) before starting.');
+  process.exit(1);
+}
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 

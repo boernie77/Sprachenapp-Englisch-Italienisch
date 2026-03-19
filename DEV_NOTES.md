@@ -4,8 +4,8 @@ Dieses Dokument dient dazu, wichtige Projektdaten und spezifische Benutzeranford
 
 ## Testumgebung
 - **Testserver**: http://192.168.2.204:9009
-- **Benutzer**: christian.bernauer@imail.de
-- **Passwort**: #!Alex2019
+- **Benutzer**: test@test.de
+- **Passwort**: 1234567
 
 ## Spezifische UI-Anforderungen
 - **Karteikarten-Modus (Flashcards)**:

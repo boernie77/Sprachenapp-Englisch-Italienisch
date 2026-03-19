@@ -601,42 +601,29 @@
             #onboardingModal .bg-white,
             #onboardingVocabModal .bg-white,
             #guideModal .bg-white,
-            #infoModal .bg-white,
-            #adminModal .bg-white {
+            #infoModal .bg-white {
                 background-color: #0f172a !important;
                 color: #f1f5f9 !important;
                 border: 1px solid rgba(255, 255, 255, 0.2) !important;
             }
 
-            #adminModal .bg-slate-50, 
-            #adminModal .bg-blue-50, 
-            #adminModal .bg-indigo-50,
-            #adminModal .bg-purple-50,
-            #adminModal .bg-emerald-50,
-            #adminModal .bg-amber-50 {
-                background-color: rgba(255, 255, 255, 0.05) !important;
-                border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            /* Recent Activity text fix */
+            #adminRecentActivityList .text-slate-700,
+            #adminRecentActivityList .text-slate-500 {
+                color: #e2e8f0 !important;
             }
 
-            #adminModal .text-slate-800,
-            #adminModal .text-slate-700,
-            #adminModal .text-slate-600,
-            #adminModal .text-blue-600,
-            #adminModal .text-purple-500,
-            #adminModal .text-emerald-600,
-            #adminModal .text-amber-600 {
-                color: #f1f5f9 !important;
+            /* Password Button & Other action buttons fix */
+            #adminModal .bg-blue-600,
+            #adminModal button.bg-blue-600 {
+                background-color: #2563eb !important;
+                color: white !important;
             }
             
-            #adminModal .text-slate-500,
-            #adminModal .text-slate-400 {
-                color: #94a3b8 !important;
-            }
-
-            #adminModal input {
-                background-color: rgba(15, 23, 42, 0.6) !important;
-                color: white !important;
-                border-color: rgba(255, 255, 255, 0.2) !important;
+            #adminModal .bg-green-100,
+            #adminModal .bg-blue-100 {
+                background-color: rgba(255, 255, 255, 0.1) !important;
+                color: #f1f5f9 !important;
             }
 
             #statsModal th,
@@ -1548,6 +1535,104 @@
 
         .cs-list.open {
             display: block !important;
+        }
+
+        /* FINAL ADMIN DARK MODE OVERRIDES */
+        @media (max-width: 1024px) {
+            #adminModal .bg-white,
+            #adminModal .bg-slate-50, 
+            #adminModal .bg-blue-50, 
+            #adminModal .bg-indigo-50,
+            #adminModal .bg-purple-50,
+            #adminModal .bg-emerald-50,
+            #adminModal .bg-amber-50,
+            #adminModal .bg-gradient-to-r,
+            #adminModal .from-blue-50,
+            #adminModal .from-purple-50,
+            #adminModal .from-emerald-50,
+            #adminModal .from-amber-50,
+            #adminModal .to-indigo-50,
+            #adminModal .to-emerald-50,
+            #adminModal .to-amber-50 {
+                background-color: rgba(255, 255, 255, 0.04) !important;
+                background-image: none !important;
+                border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            }
+
+            #adminModal .admin-tab-btn {
+                color: #94a3b8 !important;
+                background: transparent !important;
+                border-bottom: 2px solid transparent !important;
+                border-radius: 0 !important;
+            }
+
+            #adminModal .admin-tab-btn:hover {
+                background: rgba(255, 255, 255, 0.08) !important;
+                color: white !important;
+            }
+
+            #adminModal .admin-tab-btn.active {
+                color: #60a5fa !important;
+                border-bottom-color: #60a5fa !important;
+                background: transparent !important;
+            }
+
+            #adminModal .text-slate-800,
+            #adminModal .text-slate-700,
+            #adminModal .text-slate-600,
+            #adminModal .text-blue-600,
+            #adminModal .text-purple-500,
+            #adminModal .text-emerald-600,
+            #adminModal .text-amber-600 {
+                color: #f1f5f9 !important;
+            }
+            
+            #adminModal .text-slate-500,
+            #adminModal .text-slate-400 {
+                color: #cbd5e1 !important;
+            }
+
+            #adminModal .border-blue-100\/30,
+            #adminModal .border-slate-100,
+            #adminModal .border-slate-200,
+            #adminModal .border-blue-100,
+            #adminModal .border-purple-100,
+            #adminModal .border-emerald-100,
+            #adminModal .border-amber-100 {
+                border-color: rgba(255, 255, 255, 0.1) !important;
+            }
+
+            #adminModal input {
+                background-color: rgba(15, 23, 42, 0.8) !important;
+                color: white !important;
+                border-color: rgba(255, 255, 255, 0.2) !important;
+            }
+            
+            #adminRecentActivityList .text-slate-700,
+            #adminRecentActivityList .text-slate-500 {
+                color: #f1f5f9 !important;
+            }
+
+            #adminModal .bg-blue-600,
+            #adminModal button.bg-blue-600,
+            #adminModal .bg-green-100,
+            #adminModal .bg-blue-100 {
+                background-color: #2563eb !important;
+                color: white !important;
+            }
+            
+            #adminUserList .bg-slate-50,
+            #adminInviteList .bg-slate-50,
+            #adminInviteListDesktop .bg-slate-50 {
+                background-color: rgba(255, 255, 255, 0.03) !important;
+            }
+
+            #adminModal .bg-amber-100,
+            #adminModal .bg-purple-100,
+            #adminModal .bg-emerald-100 {
+                background-color: rgba(255, 255, 255, 0.05) !important;
+                color: white !important;
+            }
         }
     </style>
 </head>
@@ -4047,9 +4132,7 @@
                 <div class="mb-4 shrink-0">
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
+                            🔍
                         </span>
                         <input type="text" id="adminUserSearch" oninput="filterAdminUsers()" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium" placeholder="Benutzer suchen (Name, Email)..." data-i18n-placeholder="admin_search_placeholder">
                     </div>
@@ -11040,6 +11123,15 @@
             const resultsList = document.getElementById('adminSearchList');
             if (!resultsList) return;
 
+            // Android/Stability Fix: Ensure we have users to search
+            if (!currentAdminUsers || currentAdminUsers.length === 0) {
+                resultsList.innerHTML = `<p class="text-slate-500 text-xs text-center py-4 italic animate-pulse">Lade Benutzerdaten für Suche...</p>`;
+                fetchAdminUsers().then(() => {
+                    // Try filtering again after fetch
+                    if (query) filterAdminUsers();
+                });
+                return;
+            }
             if (!query) {
                 resultsList.innerHTML = `<p class="text-slate-500 text-sm text-center py-8 italic" data-i18n="admin_search_empty">${getI18n('admin_search_empty')}</p>`;
                 return;

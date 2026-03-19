@@ -8,14 +8,14 @@ services:
       - "${APP_PORT:-9011}:3001"
     environment:
       - DATABASE_URL=postgres://appuser:${DB_PASSWORD:-dbpass_test}@db:5432/${DB_NAME:-italian_db_test}
-      - JWT_SECRET=${JWT_SECRET:-#!Alex2019_TEST_ONLY}
+      - JWT_SECRET=${JWT_SECRET}
       - NODE_ENV=production
       # --- E-Mail (SMTP) Einstellungen via GMX ---
       - SMTP_HOST=mail.gmx.net
       - SMTP_PORT=587
       - SMTP_SECURE=false
       - SMTP_USER=christian.bernauer@imail.de
-      - SMTP_PASS=Gmxsindbadistvega#1160
+      - SMTP_PASS=${SMTP_PASS}
     depends_on:
       - db
 #    volumes:
