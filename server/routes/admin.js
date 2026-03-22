@@ -118,6 +118,23 @@ router.put('/users/:id/toggle-active', authenticateToken, requireAdmin, async (r
   }
 });
 
+router.put('/users/:id/toggle-admin', authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    if (req.user.id == req.params.id) return res.status(400).json({ error: 'Kann eigenen Admin-Status nicht ändern' });
+    const user = await User.findByPk(req.params.id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    if (user.isAdmin) {
+      const adminCount = await User.count({ where: { isAdmin: true } });
+      if (adminCount <= 1) return res.status(400).json({ error: 'Mindestens ein Admin muss vorhanden sein' });
+    }
+    user.isAdmin = !user.isAdmin;
+    await user.save();
+    res.json({ message: 'Admin-Status aktualisiert', isAdmin: user.isAdmin });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 router.delete('/users/:id', authenticateToken, requireAdmin, async (req, res) => {
   try {
     if (req.user.id == req.params.id) return res.status(400).json({ error: 'Cannot delete yourself' });
