@@ -11149,12 +11149,10 @@
             const isCurrentUser = u.id === CURRENT_USER_ID;
             const adminCount = (currentAdminUsers || []).filter(x => x.isAdmin).length;
             let adminToggleBtn = '';
-            if (!isCurrentUser) {
-                if (u.isAdmin && adminCount >= 2) {
-                    adminToggleBtn = `<button onclick="toggleUserAdmin(${u.id}, true)" class="hidden lg:block px-3 py-1.5 bg-purple-100 text-purple-700 hover:bg-purple-200 rounded-lg text-xs font-semibold transition-colors">${removeAdminStr}</button>`;
-                } else if (!u.isAdmin) {
-                    adminToggleBtn = `<button onclick="toggleUserAdmin(${u.id}, false)" class="hidden lg:block px-3 py-1.5 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-lg text-xs font-semibold transition-colors">${makeAdminStr}</button>`;
-                }
+            if (u.isAdmin && adminCount >= 2) {
+                adminToggleBtn = `<button onclick="toggleUserAdmin(${u.id}, true)" class="hidden lg:block px-3 py-1.5 bg-purple-100 text-purple-700 hover:bg-purple-200 rounded-lg text-xs font-semibold transition-colors">${removeAdminStr}</button>`;
+            } else if (!u.isAdmin && !isCurrentUser) {
+                adminToggleBtn = `<button onclick="toggleUserAdmin(${u.id}, false)" class="hidden lg:block px-3 py-1.5 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-lg text-xs font-semibold transition-colors">${makeAdminStr}</button>`;
             }
 
             return `
