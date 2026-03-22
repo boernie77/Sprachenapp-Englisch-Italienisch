@@ -4688,6 +4688,7 @@
         let API_TOKEN = localStorage.getItem('ita-token');
         let IS_ADMIN = localStorage.getItem('ita-admin') === 'true';
         let CURRENT_USER_NAME = localStorage.getItem('ita-user-name');
+        let CURRENT_USER_ID = parseInt(localStorage.getItem('ita-user-id')) || null;
         let CURRENT_LANG = localStorage.getItem('ita-lang') || 'it';
 
         // Global UI Reference placeholders
@@ -6507,6 +6508,10 @@
                     const profile = await apiFetch('/auth/me');
                     serverActivity = profile.dailyActivity || {};
                     serverLastReset = profile.lastResetAt;
+                    if (profile.id) {
+                        CURRENT_USER_ID = profile.id;
+                        localStorage.setItem('ita-user-id', String(profile.id));
+                    }
                     if (profile.name) {
                         CURRENT_USER_NAME = profile.name;
                         if (userNameEl) userNameEl.textContent = profile.name;
@@ -6955,6 +6960,10 @@
                     if (isLoginMode) {
                         API_TOKEN = data.token;
                         localStorage.setItem('ita-token', API_TOKEN);
+                        if (data.id) {
+                            CURRENT_USER_ID = data.id;
+                            localStorage.setItem('ita-user-id', String(data.id));
+                        }
                         if (data.name) {
                             CURRENT_USER_NAME = data.name;
                             localStorage.setItem('ita-user-name', CURRENT_USER_NAME);
@@ -7092,6 +7101,7 @@
             API_TOKEN = null;
             IS_ADMIN = false;
             CURRENT_USER_NAME = null;
+            CURRENT_USER_ID = null;
             dailyActivity = {};
             wordStats = {};
             fullDictionary = [];
@@ -11129,10 +11139,23 @@
             const blockStr = CURRENT_LANG === 'en' ? 'Block' : 'Sperren';
             const unblockStr = CURRENT_LANG === 'en' ? 'Unblock' : 'Entsperren';
             const deleteStr = CURRENT_LANG === 'en' ? 'Delete' : 'Löschen';
-            
+            const makeAdminStr = CURRENT_LANG === 'en' ? 'Make Admin' : 'Admin machen';
+            const removeAdminStr = CURRENT_LANG === 'en' ? 'Remove Admin' : 'Admin entfernen';
+
             const lastLoginStr = u.lastLogin ? new Date(u.lastLogin).toLocaleString(localeStr) : neverStr;
             const lastActivityStr = u.lastActivity ? new Date(u.lastActivity).toLocaleString(localeStr) : neverStr;
             const adminSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 inline-block text-amber-500 ml-1"><path d="M22.5 18a1.5 1.5 0 0 1-1.5 1.5H3A1.5 1.5 0 0 1 1.5 18v-1.5h21V18Zm-3.863-4.5H5.362l-1.636-7.362a.75.75 0 0 1 1.171-.77l3.963 2.642 2.618-5.236a.75.75 0 0 1 1.344 0l2.618 5.236 3.963-2.642a.75.75 0 0 1 1.171.77L18.637 13.5Z" /></svg>';
+
+            const isCurrentUser = u.id === CURRENT_USER_ID;
+            const adminCount = (currentAdminUsers || []).filter(x => x.isAdmin).length;
+            let adminToggleBtn = '';
+            if (!isCurrentUser) {
+                if (u.isAdmin && adminCount >= 2) {
+                    adminToggleBtn = `<button onclick="toggleUserAdmin(${u.id}, true)" class="hidden lg:block px-3 py-1.5 bg-purple-100 text-purple-700 hover:bg-purple-200 rounded-lg text-xs font-semibold transition-colors">${removeAdminStr}</button>`;
+                } else if (!u.isAdmin) {
+                    adminToggleBtn = `<button onclick="toggleUserAdmin(${u.id}, false)" class="hidden lg:block px-3 py-1.5 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-lg text-xs font-semibold transition-colors">${makeAdminStr}</button>`;
+                }
+            }
 
             return `
                 <div class="bg-slate-50 border ${isActive ? 'border-slate-200' : 'border-red-300 opacity-75'} rounded-xl p-4 mb-3 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
@@ -11149,6 +11172,7 @@
                     </div>
                     <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
                         ${!u.isAdmin ? `<button onclick="toggleUserActive(${u.id}, ${isActive})" class="px-3 py-1.5 ${isActive ? 'bg-orange-100 text-orange-700 hover:bg-orange-200' : 'bg-green-100 text-green-700 hover:bg-green-200'} rounded-lg text-xs font-semibold transition-colors">${isActive ? blockStr : unblockStr}</button>` : ''}
+                        ${adminToggleBtn}
                         <button onclick="resetUserPassword(${u.id})" class="px-3 py-1.5 bg-yellow-100 text-yellow-700 hover:bg-yellow-200 rounded-lg text-xs font-semibold transition-colors">${getI18n('admin_password_btn')}</button>
                         ${!u.isAdmin ? `<button onclick="deleteUser(${u.id})" class="px-3 py-1.5 bg-red-100 text-red-700 hover:bg-red-200 rounded-lg text-xs font-semibold transition-colors">${deleteStr}</button>` : ''}
                     </div>
@@ -11192,6 +11216,25 @@
             if (!(await showConfirm(`Soll dieser Nutzer wirklich ${action} werden?`, 'Nutzerstatus ändern'))) return;
             try {
                 const res = await fetch(`${API_BASE_URL}/api/admin/users/${id}/toggle-active`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${API_TOKEN}` }
+                });
+                if (res.ok) {
+                    fetchAdminUsers();
+                } else {
+                    const data = await res.json();
+                    showToast("Fehler: " + (data.error || 'Unbekannt'), "error");
+                }
+            } catch (err) {
+                showToast("Server nicht erreichbar", "error");
+            }
+        };
+
+        window.toggleUserAdmin = async function (id, currentIsAdmin) {
+            const action = currentIsAdmin ? 'zum normalen Benutzer machen' : 'zum Admin machen';
+            if (!(await showConfirm(`Soll dieser Nutzer wirklich ${action} werden?`, 'Admin-Status ändern'))) return;
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/users/${id}/toggle-admin`, {
                     method: 'PUT',
                     headers: { 'Authorization': `Bearer ${API_TOKEN}` }
                 });

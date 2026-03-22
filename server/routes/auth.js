@@ -60,7 +60,7 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign({ id: user.id, email: user.email, isAdmin: user.isAdmin }, JWT_SECRET, { expiresIn: '24h' });
     if (user.isAdmin) console.log(`[AUTH] Admin login: ${user.email}`);
-    res.json({ token, isAdmin: user.isAdmin, name: user.name, dailyActivity: user.dailyActivity || {} });
+    res.json({ token, id: user.id, isAdmin: user.isAdmin, name: user.name, dailyActivity: user.dailyActivity || {} });
   } else {
     res.status(401).json({ error: 'Invalid credentials' });
   }
