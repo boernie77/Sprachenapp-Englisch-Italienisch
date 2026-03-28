@@ -8035,17 +8035,17 @@
             initWordStat(id); wordStats[id].presented++;
             if (currentRoundMistakes.has(id)) { wordStats[id].incorrect++; wordStats[id].streak = 0; wordStats[id].lastReviewedDate = Date.now(); wordStats[id].nextReviewDate = Date.now(); }
             else { wordStats[id].correct++; wordStats[id].streak++; wordStats[id].lastReviewedDate = Date.now(); wordStats[id].nextReviewDate = Date.now() + (getIntervalForStreak(wordStats[id].streak) * 86400000); }
-            displayExtraInfo(matchedPair, true);
-            triggerExampleSentencePopup(matchedPair);
-            dropzone.classList.add('cursor-pointer', 'hover:bg-green-100', 'transition-colors');
-            dropzone.addEventListener('click', () => displayExtraInfo(matchedPair, true));
-            recordDailyActivity(); saveAllDataLocally();
-            saveStatToServer(id);
             score++; scoreEl.textContent = score;
             const matchedCount = dropzonesContainer.querySelectorAll('.matched').length;
             if (matchedCount >= currentPairs.length && currentPairs.length > 0) {
                 setTimeout(() => { successText.classList.remove('hidden'); nextBtn.classList.remove('hidden'); }, 500);
             }
+            try { displayExtraInfo(matchedPair, true); } catch(e) { console.warn('displayExtraInfo error:', e); }
+            try { triggerExampleSentencePopup(matchedPair); } catch(e) {}
+            dropzone.classList.add('cursor-pointer', 'hover:bg-green-100', 'transition-colors');
+            dropzone.addEventListener('click', () => { try { displayExtraInfo(matchedPair, true); } catch(e) {} });
+            recordDailyActivity(); saveAllDataLocally();
+            saveStatToServer(id);
         }
 
         function renderVerbInfo(pair) {
