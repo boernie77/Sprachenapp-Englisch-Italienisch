@@ -8025,6 +8025,7 @@
 
         function matchSuccess(id, dropzone) {
             const draggedElement = document.querySelector(`#draggables-container div[data-id="${id}"]`);
+            if (!draggedElement) return;
             const draggedText = draggedElement.textContent;
             const matchedPair = currentPairs.find(p => p.id == id);
             draggedElement.remove();
@@ -8041,7 +8042,10 @@
             recordDailyActivity(); saveAllDataLocally();
             saveStatToServer(id);
             score++; scoreEl.textContent = score;
-            if (score === ROUND_SIZE) { setTimeout(() => { successText.classList.remove('hidden'); nextBtn.classList.remove('hidden'); }, 500); }
+            const matchedCount = dropzonesContainer.querySelectorAll('.matched').length;
+            if (matchedCount >= currentPairs.length && currentPairs.length > 0) {
+                setTimeout(() => { successText.classList.remove('hidden'); nextBtn.classList.remove('hidden'); }, 500);
+            }
         }
 
         function renderVerbInfo(pair) {
