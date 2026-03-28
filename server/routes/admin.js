@@ -52,39 +52,47 @@ router.delete('/invite-codes/:code', authenticateToken, requireAdmin, asyncHandl
 
 router.get('/users', authenticateToken, requireAdmin, async (req, res) => {
   try {
-    const users = await User.findAll({ 
-      attributes: ['id', 'email', 'name', 'isAdmin', 'isActive', 'lastLogin', 'lastLearnAt', 'loginCount', 'createdAt'],
-      order: [['id', 'ASC']],
-      include: [{
-        model: Vocabulary,
-        attributes: ['id', 'language'],
+    const [users, baseVocabCounts] = await Promise.all([
+      User.findAll({
+        attributes: ['id', 'email', 'name', 'isAdmin', 'isActive', 'lastLogin', 'lastLearnAt', 'loginCount', 'createdAt'],
+        order: [['id', 'ASC']],
         include: [{
-          model: Stats,
-          attributes: ['presented', 'correct', 'lastReviewedDate']
+          model: Vocabulary,
+          attributes: ['id', 'language'],
+          include: [{
+            model: Stats,
+            attributes: ['presented', 'correct', 'lastReviewedDate']
+          }]
         }]
-      }]
-    });
-    
+      }),
+      BaseVocabulary.findAll({
+        attributes: ['language', [sequelize.fn('COUNT', sequelize.col('id')), 'count']],
+        group: ['language'],
+        raw: true
+      })
+    ]);
+
+    const baseVocabTotal = {};
+    baseVocabCounts.forEach(r => { baseVocabTotal[r.language] = parseInt(r.count); });
+
     const usersData = users.map(user => {
       const u = user.toJSON();
       let lastActivity = user.lastLogin;
       const vocabWithStats = u.Vocabularies || [];
-      
+
       const stats = {
-          it: { total: 0, learned: 0 },
-          en: { total: 0, learned: 0 }
+          it: { learned: 0 },
+          en: { learned: 0 }
       };
-      
+
       vocabWithStats.forEach(v => {
           const lang = v.language || 'it';
-          if (!stats[lang]) stats[lang] = { total: 0, learned: 0 };
-          
-          stats[lang].total++;
-          
+          if (!stats[lang]) stats[lang] = { learned: 0 };
+
           const stat = v.Stat || v.Stats || v.Statistic || v.Statistics;
           if (stat) {
               if (stat.correct > 0) stats[lang].learned++;
-              
+
               if (stat.lastReviewedDate) {
                   const reviewDate = new Date(stat.lastReviewedDate);
                   if (!lastActivity || reviewDate > new Date(lastActivity)) {
@@ -95,7 +103,7 @@ router.get('/users', authenticateToken, requireAdmin, async (req, res) => {
       });
 
       delete u.Vocabularies;
-      return { ...u, stats, lastActivity };
+      return { ...u, stats, baseVocabTotal, lastActivity };
     });
 
     res.json(usersData);
