@@ -52,7 +52,7 @@ router.delete('/invite-codes/:code', authenticateToken, requireAdmin, asyncHandl
 
 router.get('/users', authenticateToken, requireAdmin, async (req, res) => {
   try {
-    const [users, baseVocabCounts] = await Promise.all([
+    const [users] = await Promise.all([
       User.findAll({
         attributes: ['id', 'email', 'name', 'isAdmin', 'isActive', 'lastLogin', 'lastLearnAt', 'loginCount', 'createdAt'],
         order: [['id', 'ASC']],
@@ -65,15 +65,7 @@ router.get('/users', authenticateToken, requireAdmin, async (req, res) => {
           }]
         }]
       }),
-      BaseVocabulary.findAll({
-        attributes: ['language', [sequelize.fn('COUNT', sequelize.col('id')), 'count']],
-        group: ['language'],
-        raw: true
-      })
     ]);
-
-    const baseVocabTotal = {};
-    baseVocabCounts.forEach(r => { baseVocabTotal[r.language] = parseInt(r.count); });
 
     const usersData = users.map(user => {
       const u = user.toJSON();
@@ -81,13 +73,15 @@ router.get('/users', authenticateToken, requireAdmin, async (req, res) => {
       const vocabWithStats = u.Vocabularies || [];
 
       const stats = {
-          it: { learned: 0 },
-          en: { learned: 0 }
+          it: { total: 0, learned: 0 },
+          en: { total: 0, learned: 0 }
       };
 
       vocabWithStats.forEach(v => {
           const lang = v.language || 'it';
-          if (!stats[lang]) stats[lang] = { learned: 0 };
+          if (!stats[lang]) stats[lang] = { total: 0, learned: 0 };
+
+          stats[lang].total++;
 
           const stat = v.Stat || v.Stats || v.Statistic || v.Statistics;
           if (stat) {
@@ -103,7 +97,7 @@ router.get('/users', authenticateToken, requireAdmin, async (req, res) => {
       });
 
       delete u.Vocabularies;
-      return { ...u, stats, baseVocabTotal, lastActivity };
+      return { ...u, stats, lastActivity };
     });
 
     res.json(usersData);
