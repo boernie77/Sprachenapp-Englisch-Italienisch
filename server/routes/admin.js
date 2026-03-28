@@ -58,7 +58,7 @@ router.get('/users', authenticateToken, requireAdmin, async (req, res) => {
         order: [['id', 'ASC']],
         include: [{
           model: Vocabulary,
-          attributes: ['id', 'language'],
+          attributes: ['id', 'language', 'typ'],
           include: [{
             model: Stats,
             attributes: ['presented', 'correct', 'lastReviewedDate']
@@ -78,6 +78,7 @@ router.get('/users', authenticateToken, requireAdmin, async (req, res) => {
       };
 
       vocabWithStats.forEach(v => {
+          if (v.typ === 'Satz') return;
           const lang = v.language || 'it';
           if (!stats[lang]) stats[lang] = { total: 0, learned: 0 };
 
