@@ -7161,6 +7161,12 @@
             }
 
             loadDataFromServer();
+
+            // Show version popup only once per device, after login
+            if (!localStorage.getItem(vKey)) {
+                versionModal.classList.remove('hidden');
+                versionModal.classList.add('flex');
+            }
         }
 
         onboardingSubmitBtn.addEventListener('click', async () => {
@@ -8038,7 +8044,13 @@
             score++; scoreEl.textContent = score;
             const matchedCount = dropzonesContainer.querySelectorAll('.matched').length;
             if (matchedCount >= currentPairs.length && currentPairs.length > 0) {
-                setTimeout(() => { successText.classList.remove('hidden'); nextBtn.classList.remove('hidden'); }, 500);
+                setTimeout(() => {
+                    const successLabel = successText.querySelector('[data-i18n="success_correct"]');
+                    if (successLabel) {
+                        successLabel.textContent = CURRENT_LANG === 'en' ? 'Well done!' : 'Bravissimo!';
+                    }
+                    successText.classList.remove('hidden'); nextBtn.classList.remove('hidden');
+                }, 500);
             }
             try { displayExtraInfo(matchedPair, true); } catch(e) { console.warn('displayExtraInfo error:', e); }
             try { triggerExampleSentencePopup(matchedPair); } catch(e) {}
@@ -9172,10 +9184,6 @@
         const versionModal = document.getElementById('versionUpdateModal');
         const closeVersionBtn = document.getElementById('closeVersionModalBtn');
         const vKey = 'hasSeenVersion_2_0_4';
-        if (!localStorage.getItem(vKey)) {
-            versionModal.classList.remove('hidden');
-            versionModal.classList.add('flex');
-        }
         closeVersionBtn.addEventListener('click', () => {
             localStorage.setItem(vKey, 'true');
             versionModal.classList.add('hidden');
