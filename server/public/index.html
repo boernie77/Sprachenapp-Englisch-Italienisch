@@ -10792,8 +10792,7 @@
                 }
             }
 
-            const forms = typ.toLowerCase().includes('verb') ? generateVerbForms(itWord) : {};
-            const payload = { de: deWord, it: itWord, typ, emoji, grammatica, language: CURRENT_LANG, isOwn: true, ...forms };
+            saveVocabBtn.disabled = true;
 
             const clearFields = () => {
                 vocabInput.value = '';
@@ -10804,8 +10803,10 @@
                 vocabInput.focus();
             };
 
+            let payload = { de: deWord, it: itWord, typ, emoji, grammatica, language: CURRENT_LANG, isOwn: true };
             try {
-                saveVocabBtn.disabled = true;
+                const forms = typ.toLowerCase().includes('verb') ? generateVerbForms(itWord) : {};
+                payload = { ...payload, ...forms };
                 const result = await apiFetch('/vocab', {
                     method: 'POST',
                     body: JSON.stringify(payload)
@@ -10820,10 +10821,8 @@
             } catch (err) {
                 console.warn("Saving to server failed, queuing for sync", err);
                 const tempId = 'temp_' + Date.now();
-                const offlineWord = { ...payload, id: tempId, isOffline: true };
-                fullDictionary.push(offlineWord);
+                fullDictionary.push({ ...payload, id: tempId, isOffline: true });
                 wordStats[tempId] = { presented: 0, correct: 0, incorrect: 0, streak: 0 };
-
                 addToSyncOutbox('addVocab', payload);
                 renderVocabList();
                 clearFields();
