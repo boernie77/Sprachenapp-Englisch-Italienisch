@@ -1759,7 +1759,7 @@
 
     <!-- Forgot Password Modal -->
     <div id="forgotPasswordModal"
-        class="hidden fixed inset-0 bg-slate-900 bg-opacity-90 backdrop-blur-md z-[110] items-center justify-center p-4">
+        class="hidden fixed inset-0 bg-slate-900 bg-opacity-90 backdrop-blur-md z-[60000] items-center justify-center p-4">
         <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative">
             <button id="closeForgotPasswordBtn"
                 class="absolute top-4 right-4 text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
@@ -6161,6 +6161,13 @@
         function safeJSONParse(item, fallback) {
             if (!item || item === 'undefined' || item === 'null') return fallback;
             try { return JSON.parse(item); } catch (e) { return fallback; }
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
         }
 
         let dailyActivity = safeJSONParse(localStorage.getItem(`ita-daily-activity-${CURRENT_LANG}`), {});
@@ -11083,8 +11090,8 @@
             
             // For Recent Activity list (3 latest LEARNERS)
             const latestLearners = [...users]
-                .filter(u => u.lastLearnAt)
-                .sort((a, b) => new Date(b.lastLearnAt) - new Date(a.lastLearnAt))
+                .filter(u => u.lastActivity)
+                .sort((a, b) => new Date(b.lastActivity) - new Date(a.lastActivity))
                 .slice(0, 3);
 
             users.forEach(u => {
@@ -11112,10 +11119,10 @@
                     adminRecentActivityList.innerHTML = `<p class="text-[11px] text-slate-400 italic">Noch keine Lernaktivität aufgezeichnet.</p>`;
                 } else {
                     adminRecentActivityList.innerHTML = latestLearners.map(u => {
-                        const dateStr = new Date(u.lastLearnAt).toLocaleString(APP_UI_LANG === 'en' ? 'en-US' : 'de-DE');
+                        const dateStr = new Date(u.lastActivity).toLocaleString(APP_UI_LANG === 'en' ? 'en-US' : 'de-DE');
                         return `
                             <div class="flex justify-between items-center text-[11.5px] border-b border-blue-100/30 pb-1 last:border-0">
-                                <span class="font-bold text-slate-700 truncate mr-2">${u.name || 'User'} <span class="font-normal text-slate-500">(${u.email})</span></span>
+                                <span class="font-bold text-slate-700 truncate mr-2">${escapeHtml(u.name) || 'User'} <span class="font-normal text-slate-500">(${escapeHtml(u.email)})</span></span>
                                 <span class="text-blue-600 font-black whitespace-nowrap">${dateStr}</span>
                             </div>
                         `;
@@ -11170,8 +11177,8 @@
             return `
                 <div class="bg-slate-50 border ${isActive ? 'border-slate-200' : 'border-red-300 opacity-75'} rounded-xl p-4 mb-3 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
                     <div class="w-full md:w-1/2">
-                        <p class="font-bold text-slate-800 break-all">${powerIcon} ${u.email} ${u.isAdmin ? adminSvg : ''} ${!isActive ? `<span class="text-red-500 text-xs ml-2">${lockedStr}</span>` : ''}</p>
-                        ${u.name ? `<p class="text-xs text-blue-600 font-semibold mt-0.5">${getI18n('admin_user_name')} ${u.name}</p>` : ''}
+                        <p class="font-bold text-slate-800 break-all">${powerIcon} ${escapeHtml(u.email)} ${u.isAdmin ? adminSvg : ''} ${!isActive ? `<span class="text-red-500 text-xs ml-2">${lockedStr}</span>` : ''}</p>
+                        ${u.name ? `<p class="text-xs text-blue-600 font-semibold mt-0.5">${getI18n('admin_user_name')} ${escapeHtml(u.name)}</p>` : ''}
                         <p class="text-[11px] text-slate-500 mt-1">
                             ID: ${u.id} | ${getI18n('admin_user_reg')} ${new Date(u.createdAt).toLocaleDateString(localeStr)}<br/>
                             Logins: ${u.loginCount || 0} | ${getI18n('admin_user_last_login')} ${lastLoginStr}<br/>
