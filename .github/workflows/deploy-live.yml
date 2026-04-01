@@ -12,7 +12,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.HETZNER_SSH_KEY }}" > ~/.ssh/hetzner_key
           chmod 600 ~/.ssh/hetzner_key
-          ssh-keyscan -H 37.27.193.27 >> ~/.ssh/known_hosts
+          ssh-keyscan -H 178.104.130.161 >> ~/.ssh/known_hosts
 
       - name: Deploy to Hetzner
         env:
@@ -20,7 +20,7 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
         run: |
-          ssh -i ~/.ssh/hetzner_key root@37.27.193.27 bash -s << EOF
+          ssh -i ~/.ssh/hetzner_key root@178.104.130.161 bash -s << EOF
             cd /opt/lernapp
 
             # Repo aktualisieren
