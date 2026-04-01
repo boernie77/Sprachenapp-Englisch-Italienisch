@@ -25,9 +25,9 @@ jobs:
 
             # Repo aktualisieren
             git remote set-url origin https://github.com/boernie77/Sprachenapp-Englisch-Italienisch.git
-            git clean -fd
             git fetch origin main
             git reset --hard origin/main
+            git clean -fd --exclude=pgdata
 
             # Umgebungsvariablen für Live
             PROJECT_NAME="lernapp"
