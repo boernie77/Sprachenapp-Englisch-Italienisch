@@ -31,9 +31,4 @@ services:
     ports:
       - "${DB_PORT:-5436}:5432"
     volumes:
-      - db_volume:/var/lib/postgresql/data
-
-volumes:
-  db_volume:
-    external: true
-    name: ${DB_VOLUME:-postgres_data}
+      - ./pgdata:/var/lib/postgresql/data
