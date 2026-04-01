@@ -9521,24 +9521,28 @@
             fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ !== 'Satz').forEach(w => w.isActive = true);
             saveAllDataLocally();
             renderVocabList();
+            apiFetch('/vocab/bulk-active', { method: 'PUT', body: JSON.stringify({ isActive: true, language: CURRENT_LANG, typ: 'vocab' }) }).catch(() => {});
         });
 
         document.getElementById('deselectAllBtn').addEventListener('click', () => {
             fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ !== 'Satz').forEach(w => w.isActive = false);
             saveAllDataLocally();
             renderVocabList();
+            apiFetch('/vocab/bulk-active', { method: 'PUT', body: JSON.stringify({ isActive: false, language: CURRENT_LANG, typ: 'vocab' }) }).catch(() => {});
         });
 
         document.getElementById('selectAllSentencesBtn').addEventListener('click', () => {
             fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ === 'Satz').forEach(w => w.isActive = true);
             saveAllDataLocally();
             renderSentenceList();
+            apiFetch('/vocab/bulk-active', { method: 'PUT', body: JSON.stringify({ isActive: true, language: CURRENT_LANG, typ: 'Satz' }) }).catch(() => {});
         });
 
         document.getElementById('deselectAllSentencesBtn').addEventListener('click', () => {
             fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ === 'Satz').forEach(w => w.isActive = false);
             saveAllDataLocally();
             renderSentenceList();
+            apiFetch('/vocab/bulk-active', { method: 'PUT', body: JSON.stringify({ isActive: false, language: CURRENT_LANG, typ: 'Satz' }) }).catch(() => {});
         });
 
         document.getElementById('vocabListSearch').addEventListener('input', renderVocabList);
