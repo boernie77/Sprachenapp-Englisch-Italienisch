@@ -100,6 +100,17 @@ router.put('/stats/reset', authenticateToken, asyncHandler(async (req, res) => {
     res.json({ message: 'All statistics reset successfully' });
 }));
 
+router.put('/bulk-active', authenticateToken, asyncHandler(async (req, res) => {
+    const { isActive, language, typ } = req.body;
+    if (typeof isActive !== 'boolean') return res.status(400).json({ error: 'isActive must be boolean' });
+    const where = { UserId: req.user.id };
+    if (language) where.language = language;
+    if (typ === 'Satz') where.typ = 'Satz';
+    else if (typ === 'vocab') where.typ = { [Sequelize.Op.ne]: 'Satz' };
+    await Vocabulary.update({ isActive }, { where });
+    res.json({ message: 'Updated' });
+}));
+
 router.put('/:id', authenticateToken, asyncHandler(async (req, res) => {
     const { de, it, typ, emoji, grammatica } = req.body;
     const vocab = await Vocabulary.findOne({ where: { id: req.params.id, UserId: req.user.id } });
