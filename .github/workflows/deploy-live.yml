@@ -19,6 +19,8 @@ jobs:
           DB_PASSWORD_LIVE: ${{ secrets.DB_PASSWORD_LIVE }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          OIDC_CLIENT_ID: ${{ secrets.OIDC_CLIENT_ID }}
+          OIDC_CLIENT_SECRET: ${{ secrets.OIDC_CLIENT_SECRET }}
         run: |
           ssh -i ~/.ssh/hetzner_key root@178.104.130.161 bash -s << EOF
             cd /opt/lernapp
@@ -45,6 +47,10 @@ jobs:
             echo "DB_PASSWORD=${DB_PASSWORD_LIVE}" >> .env
             echo "JWT_SECRET=${JWT_SECRET}" >> .env
             echo "SMTP_PASS=${SMTP_PASS}" >> .env
+            echo "APP_URL=https://vokabeln.bernauer24.com" >> .env
+            echo "OIDC_ISSUER_URL=https://auth.bernauer24.com/application/o/lernapp/" >> .env
+            echo "OIDC_CLIENT_ID=${OIDC_CLIENT_ID}" >> .env
+            echo "OIDC_CLIENT_SECRET=${OIDC_CLIENT_SECRET}" >> .env
 
             # AGGRESSIVER CLEANUP: Stoppe alles, was Port belegt
             CONF_CONTAINER=\$(docker ps --filter "publish=\$APP_PORT" -q)

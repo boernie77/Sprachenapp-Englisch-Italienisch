@@ -29,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/api/health', (req, res) => res.json({ status: 'ok', version: '2.0.3', timestamp: new Date() }));
 
 // Mount routes
+app.use('/api/auth/oidc', require('./routes/oidc'));
 app.use('/api/auth', authRoutes);
 app.use('/api/vocab', vocabRoutes);
 app.use('/api/contact', contactRoutes);
