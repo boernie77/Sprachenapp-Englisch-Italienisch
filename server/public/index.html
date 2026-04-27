@@ -1693,6 +1693,16 @@
                 <button id="authSubmitBtn" data-i18n="auth_submit_login"
                     class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-md active:scale-95">Anmelden</button>
 
+                <div class="flex items-center gap-3 my-3">
+                    <div class="flex-1 h-px bg-slate-200"></div>
+                    <span class="text-xs text-slate-400">oder</span>
+                    <div class="flex-1 h-px bg-slate-200"></div>
+                </div>
+                <button id="ssoLoginBtn" type="button"
+                    class="w-full bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-semibold py-3 rounded-xl transition-all active:scale-95">
+                    Mit Authentik anmelden
+                </button>
+
                 <p class="text-right mt-2"><button id="openForgotPasswordBtn" data-i18n="auth_forgot"
                         class="text-xs text-slate-500 hover:text-blue-600 hover:underline">Passwort vergessen?</button>
                 </p>
@@ -4685,6 +4695,35 @@
             isProdDomain,
             API_BASE_URL: API_BASE_URL || "(relative)"
         });
+        // SSO callback: backend redirected with #sso=<base64url JSON>
+        (function applySsoHash() {
+            const m = window.location.hash.match(/^#sso=([^&]+)/);
+            if (!m) return;
+            try {
+                let b64 = m[1].replace(/-/g, '+').replace(/_/g, '/');
+                while (b64.length % 4) b64 += '=';
+                const data = JSON.parse(atob(b64));
+                if (!data.token) return;
+                localStorage.setItem('ita-token', data.token);
+                if (data.id != null) localStorage.setItem('ita-user-id', String(data.id));
+                if (data.name) localStorage.setItem('ita-user-name', data.name);
+                else localStorage.removeItem('ita-user-name');
+                if (data.isAdmin) localStorage.setItem('ita-admin', 'true');
+                else localStorage.removeItem('ita-admin');
+                window.history.replaceState(null, '', window.location.pathname);
+            } catch (e) {
+                console.error('[sso] hash decode failed:', e);
+            }
+        })();
+        // SSO error: backend redirected with ?sso_error=<msg>
+        (function showSsoError() {
+            const u = new URL(window.location.href);
+            const err = u.searchParams.get('sso_error');
+            if (!err) return;
+            u.searchParams.delete('sso_error');
+            window.history.replaceState(null, '', u.pathname + (u.search ? u.search : ''));
+            setTimeout(() => alert('SSO-Login: ' + err), 100);
+        })();
         let API_TOKEN = localStorage.getItem('ita-token');
         let IS_ADMIN = localStorage.getItem('ita-admin') === 'true';
         let CURRENT_USER_NAME = localStorage.getItem('ita-user-name');
@@ -6957,6 +6996,13 @@
                 authSubmitBtn.click();
             }
         });
+
+        const ssoLoginBtn = document.getElementById('ssoLoginBtn');
+        if (ssoLoginBtn) {
+            ssoLoginBtn.addEventListener('click', () => {
+                window.location.href = `${API_BASE_URL}/api/auth/oidc/login`;
+            });
+        }
 
         authSubmitBtn.addEventListener('click', async () => {
             const email = authEmail.value;

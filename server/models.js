@@ -60,6 +60,11 @@ const User = sequelize.define('User', {
   lastLearnAt: {
     type: DataTypes.DATE,
     allowNull: true
+  },
+  oidcSubject: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    unique: true
   }
 });
 
