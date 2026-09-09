@@ -165,6 +165,19 @@ router.put('/users/:id/password', authenticateToken, requireAdmin, async (req, r
   }
 });
 
+router.put('/users/:id/name', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
+    const { name } = req.body;
+    const trimmedName = typeof name === 'string' ? name.trim() : '';
+    if (!trimmedName || trimmedName.length > 100) {
+        return res.status(400).json({ error: 'Ungültiger Name (1-100 Zeichen erforderlich)' });
+    }
+    const user = await User.findByPk(req.params.id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    user.name = trimmedName;
+    await user.save();
+    res.json({ message: 'Name aktualisiert', name: user.name });
+}));
+
 router.post('/base-vocab/bulk', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
     const { words, language, mode } = req.body;
     if (!language) return res.status(400).json({ error: 'Language required' });

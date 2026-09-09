@@ -5296,6 +5296,8 @@
                 admin_user_vocab_en: "Vokabeln (EN):",
                 admin_user_learned: "gelernt",
                 admin_password_btn: "Passwort",
+                admin_rename_btn: "Name ändern",
+                admin_rename_prompt: "Neuer Name für diesen Nutzer:",
                 type_adj: "Adjektive",
                 type_other: "Sonstiges",
                 type_fav: "Favoriten",
@@ -5673,6 +5675,8 @@
                 admin_user_vocab_en: "Vocabulary (EN):",
                 admin_user_learned: "learned",
                 admin_password_btn: "Password",
+                admin_rename_btn: "Rename",
+                admin_rename_prompt: "New name for this user:",
 
                 grammar_focus_label: "Practice Focus",
                 grammar_focus_all: "Focus All Sentences",
@@ -11254,6 +11258,7 @@
                     <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
                         ${!u.isAdmin ? `<button onclick="toggleUserActive(${u.id}, ${isActive})" class="px-3 py-1.5 ${isActive ? 'bg-orange-100 text-orange-700 hover:bg-orange-200' : 'bg-green-100 text-green-700 hover:bg-green-200'} rounded-lg text-xs font-semibold transition-colors">${isActive ? blockStr : unblockStr}</button>` : ''}
                         ${adminToggleBtn}
+                        <button onclick="renameUser(${u.id})" class="px-3 py-1.5 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-lg text-xs font-semibold transition-colors">${getI18n('admin_rename_btn')}</button>
                         <button onclick="resetUserPassword(${u.id})" class="px-3 py-1.5 bg-yellow-100 text-yellow-700 hover:bg-yellow-200 rounded-lg text-xs font-semibold transition-colors">${getI18n('admin_password_btn')}</button>
                         ${!u.isAdmin ? `<button onclick="deleteUser(${u.id})" class="px-3 py-1.5 bg-red-100 text-red-700 hover:bg-red-200 rounded-lg text-xs font-semibold transition-colors">${deleteStr}</button>` : ''}
                     </div>
@@ -11421,6 +11426,30 @@
                 console.warn("Could not update base vocab counts", err);
             }
         }
+
+        window.renameUser = async function (id) {
+            const existingUser = (currentAdminUsers || []).find(u => u.id === id);
+            const newName = prompt(getI18n('admin_rename_prompt'), existingUser?.name || '');
+            if (newName === null) return;
+            const trimmedName = newName.trim();
+            if (!trimmedName) return showToast("Der Name darf nicht leer sein.", "warning");
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/users/${id}/name`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${API_TOKEN}` },
+                    body: JSON.stringify({ name: trimmedName })
+                });
+                if (res.ok) {
+                    showToast("Name erfolgreich geändert!", "success");
+                    fetchAdminUsers();
+                } else {
+                    const data = await res.json();
+                    showToast(`Fehler: ${data.error}`, "error");
+                }
+            } catch (err) {
+                showToast("Server nicht erreichbar", "error");
+            }
+        };
 
         window.resetUserPassword = async function (id) {
             const newPassword = prompt("Neues Passwort für den Nutzer (min. 6 Zeichen):");

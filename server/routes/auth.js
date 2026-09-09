@@ -140,9 +140,13 @@ router.post('/reset-password', async (req, res) => {
 
 router.put('/profile', authenticateToken, asyncHandler(async (req, res) => {
     const { name } = req.body;
+    const trimmedName = typeof name === 'string' ? name.trim() : '';
+    if (!trimmedName || trimmedName.length > 100) {
+        return res.status(400).json({ error: 'Ungültiger Name (1-100 Zeichen erforderlich)' });
+    }
     const user = await User.findByPk(req.user.id);
     if (!user) return res.sendStatus(404);
-    user.name = name;
+    user.name = trimmedName;
     await user.save();
     res.json({ message: 'Profile updated', name: user.name });
 }));
