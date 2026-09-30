@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET; // Pflicht, server.js bricht ohne sicheren Wert ab
 
 // Middleware to verify JWT
 const authenticateToken = (req, res, next) => {

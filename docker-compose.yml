@@ -14,7 +14,7 @@ services:
       - SMTP_HOST=mail.gmx.net
       - SMTP_PORT=587
       - SMTP_SECURE=false
-      - SMTP_USER=christian.bernauer@imail.de
+      - SMTP_USER=${SMTP_USER}
       - SMTP_PASS=${SMTP_PASS}
       - APP_URL=${APP_URL:-https://vokabeln.bernauer24.com}
       - OIDC_ISSUER_URL=${OIDC_ISSUER_URL:-}
@@ -33,6 +33,6 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD:-ENTFERNT}
       - POSTGRES_DB=${DB_NAME:-italian_db_test}
     ports:
-      - "${DB_PORT:-5436}:5432"
+      - "127.0.0.1:${DB_PORT:-5436}:5432"   # nur lokal, nie ins Internet
     volumes:
       - ./pgdata:/var/lib/postgresql/data
