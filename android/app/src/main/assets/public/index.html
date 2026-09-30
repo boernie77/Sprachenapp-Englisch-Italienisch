@@ -1693,6 +1693,16 @@
                 <button id="authSubmitBtn" data-i18n="auth_submit_login"
                     class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-md active:scale-95">Anmelden</button>
 
+                <div class="flex items-center gap-3 my-3">
+                    <div class="flex-1 h-px bg-slate-200"></div>
+                    <span class="text-xs text-slate-400">oder</span>
+                    <div class="flex-1 h-px bg-slate-200"></div>
+                </div>
+                <button id="ssoLoginBtn" type="button"
+                    class="w-full bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-semibold py-3 rounded-xl transition-all active:scale-95">
+                    Mit Authentik anmelden
+                </button>
+
                 <p class="text-right mt-2"><button id="openForgotPasswordBtn" data-i18n="auth_forgot"
                         class="text-xs text-slate-500 hover:text-blue-600 hover:underline">Passwort vergessen?</button>
                 </p>
@@ -1746,20 +1756,20 @@
                         Lizenz: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"
                             class="text-blue-600 hover:underline">CC BY-SA 4.0</a>
                     </p>
-                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.0.5 Stable</p>
+                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.1.0</p>
                     <p class="text-[10px] text-slate-400" data-i18n="imp_rights">© 2026 Christian Bernauer. Alle Rechte vorbehalten.</p>
                 </div>
             </div>
             <!-- App-Style Bottom Section -->
             <div class="mt-8 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.0.5 Stable</p>
+                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.1.0</p>
             </div>
         </div>
     </div>
 
     <!-- Forgot Password Modal -->
     <div id="forgotPasswordModal"
-        class="hidden fixed inset-0 bg-slate-900 bg-opacity-90 backdrop-blur-md z-[110] items-center justify-center p-4">
+        class="hidden fixed inset-0 bg-slate-900 bg-opacity-90 backdrop-blur-md z-[60000] items-center justify-center p-4">
         <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative">
             <button id="closeForgotPasswordBtn"
                 class="absolute top-4 right-4 text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
@@ -1997,19 +2007,19 @@
             <div class="w-20 h-20 bg-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
                 <svg class="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <h3 class="text-3xl font-black text-slate-800 mb-4">Version 2.0.5 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
+            <h3 class="text-3xl font-black text-slate-800 mb-4">Version 2.1.0 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
             <div class="text-left space-y-4 mb-8">
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Update: <b>Kleine Fehlerverbesserungen</b></p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: <b>Anmeldung per Single Sign-on</b> (optional, z. B. über Authentik)</p>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: <b>Dashboard nun Zweisprachig (Deutsch und Englisch)</b></p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: <b>Namen in der Benutzerverwaltung ändern</b></p>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Neue Funktion: <b>Beispielsätze - können nun auf Wunsch in allen Lernbereichen angezeigt werden, um sich Vokabeln besser einzuprägen.</b></p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Update: <b>Mehr Sicherheit und Stabilität</b></p>
                 </div>
                 <p class="text-slate-500 text-[10px] italic text-center mt-4 px-4 leading-normal">
                     Viel Spaß beim Lernen! Melde Fehler bitte direkt an uns.
@@ -2140,7 +2150,7 @@
                 </div>
                 <div class="px-4 py-1.5 text-[10px] text-slate-400 bg-slate-50/50 flex items-center justify-between border-t border-slate-100/50">
                     <span>App-Version:</span>
-                    <span class="font-mono font-medium text-slate-500">2.0.5 Stable</span>
+                    <span class="font-mono font-medium text-slate-500">2.1.0</span>
                 </div>
                 <input type="file" id="excelUploadEl" accept=".xlsx, .xls" class="hidden">
             </div>
@@ -4685,9 +4695,39 @@
             isProdDomain,
             API_BASE_URL: API_BASE_URL || "(relative)"
         });
+        // SSO callback: backend redirected with #sso=<base64url JSON>
+        (function applySsoHash() {
+            const m = window.location.hash.match(/^#sso=([^&]+)/);
+            if (!m) return;
+            try {
+                let b64 = m[1].replace(/-/g, '+').replace(/_/g, '/');
+                while (b64.length % 4) b64 += '=';
+                const data = JSON.parse(atob(b64));
+                if (!data.token) return;
+                localStorage.setItem('ita-token', data.token);
+                if (data.id != null) localStorage.setItem('ita-user-id', String(data.id));
+                if (data.name) localStorage.setItem('ita-user-name', data.name);
+                else localStorage.removeItem('ita-user-name');
+                if (data.isAdmin) localStorage.setItem('ita-admin', 'true');
+                else localStorage.removeItem('ita-admin');
+                window.history.replaceState(null, '', window.location.pathname);
+            } catch (e) {
+                console.error('[sso] hash decode failed:', e);
+            }
+        })();
+        // SSO error: backend redirected with ?sso_error=<msg>
+        (function showSsoError() {
+            const u = new URL(window.location.href);
+            const err = u.searchParams.get('sso_error');
+            if (!err) return;
+            u.searchParams.delete('sso_error');
+            window.history.replaceState(null, '', u.pathname + (u.search ? u.search : ''));
+            setTimeout(() => alert('SSO-Login: ' + err), 100);
+        })();
         let API_TOKEN = localStorage.getItem('ita-token');
         let IS_ADMIN = localStorage.getItem('ita-admin') === 'true';
         let CURRENT_USER_NAME = localStorage.getItem('ita-user-name');
+        let CURRENT_USER_ID = parseInt(localStorage.getItem('ita-user-id')) || null;
         let CURRENT_LANG = localStorage.getItem('ita-lang') || 'it';
 
         // Global UI Reference placeholders
@@ -5096,6 +5136,12 @@
                 vocab_search: "Vokabel suchen...",
                 btn_select_all: "Alle auswählen",
                 btn_deselect_all: "Alle abwählen",
+                word_de_input: "Deutsches Wort",
+                word_it_input: "Italienisches Wort",
+                word_en_input: "Englisches Wort",
+                word_de_trans: "Deutsche Übersetzung",
+                word_it_trans: "Italienische Übersetzung",
+                word_en_trans: "Englische Übersetzung",
                 confirm_delete_base_sentences: "Möchtest du die importierten Basis-Sätze aus deiner Liste entfernen? Deine eigenen Sätze bleiben erhalten.",
                 title_delete_base_sentences: "Basis-Sätze löschen?",
                 choice_admin_global_sentences: "Möchtest du die globale Sätzeliste ersetzen, ergänzen oder nur lokal speichern?",
@@ -5250,6 +5296,8 @@
                 admin_user_vocab_en: "Vokabeln (EN):",
                 admin_user_learned: "gelernt",
                 admin_password_btn: "Passwort",
+                admin_rename_btn: "Name ändern",
+                admin_rename_prompt: "Neuer Name für diesen Nutzer:",
                 type_adj: "Adjektive",
                 type_other: "Sonstiges",
                 type_fav: "Favoriten",
@@ -5627,6 +5675,8 @@
                 admin_user_vocab_en: "Vocabulary (EN):",
                 admin_user_learned: "learned",
                 admin_password_btn: "Password",
+                admin_rename_btn: "Rename",
+                admin_rename_prompt: "New name for this user:",
 
                 grammar_focus_label: "Practice Focus",
                 grammar_focus_all: "Focus All Sentences",
@@ -6069,10 +6119,19 @@
             CURRENT_LANG = lang;
             localStorage.setItem('ita-lang', lang);
             renderAllLabels();
-            
-            // Reload data
+
             showToast(translations[lang].welcome, 'info');
-            await loadDataFromServer();
+
+            // Wait for any running sync to finish (max 3s), then load silently
+            if (window._isSyncing) {
+                await new Promise(resolve => {
+                    const check = setInterval(() => {
+                        if (!window._isSyncing) { clearInterval(check); resolve(); }
+                    }, 100);
+                    setTimeout(() => { clearInterval(check); resolve(); }, 3000);
+                });
+            }
+            await loadDataFromServer(true);
             await updateAdminGrammarCount(); // Now load for both IT and EN
             
             // Refresh administration/modal stats if needed
@@ -6160,6 +6219,13 @@
         function safeJSONParse(item, fallback) {
             if (!item || item === 'undefined' || item === 'null') return fallback;
             try { return JSON.parse(item); } catch (e) { return fallback; }
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
         }
 
         let dailyActivity = safeJSONParse(localStorage.getItem(`ita-daily-activity-${CURRENT_LANG}`), {});
@@ -6507,6 +6573,10 @@
                     const profile = await apiFetch('/auth/me');
                     serverActivity = profile.dailyActivity || {};
                     serverLastReset = profile.lastResetAt;
+                    if (profile.id) {
+                        CURRENT_USER_ID = profile.id;
+                        localStorage.setItem('ita-user-id', String(profile.id));
+                    }
                     if (profile.name) {
                         CURRENT_USER_NAME = profile.name;
                         if (userNameEl) userNameEl.textContent = profile.name;
@@ -6931,6 +7001,13 @@
             }
         });
 
+        const ssoLoginBtn = document.getElementById('ssoLoginBtn');
+        if (ssoLoginBtn) {
+            ssoLoginBtn.addEventListener('click', () => {
+                window.location.href = `${API_BASE_URL}/api/auth/oidc/login`;
+            });
+        }
+
         authSubmitBtn.addEventListener('click', async () => {
             const email = authEmail.value;
             const password = authPassword.value;
@@ -6955,6 +7032,10 @@
                     if (isLoginMode) {
                         API_TOKEN = data.token;
                         localStorage.setItem('ita-token', API_TOKEN);
+                        if (data.id) {
+                            CURRENT_USER_ID = data.id;
+                            localStorage.setItem('ita-user-id', String(data.id));
+                        }
                         if (data.name) {
                             CURRENT_USER_NAME = data.name;
                             localStorage.setItem('ita-user-name', CURRENT_USER_NAME);
@@ -7092,6 +7173,7 @@
             API_TOKEN = null;
             IS_ADMIN = false;
             CURRENT_USER_NAME = null;
+            CURRENT_USER_ID = null;
             dailyActivity = {};
             wordStats = {};
             fullDictionary = [];
@@ -7151,6 +7233,12 @@
             }
 
             loadDataFromServer();
+
+            // Show version popup only once per device, after login
+            if (!localStorage.getItem(vKey)) {
+                versionModal.classList.remove('hidden');
+                versionModal.classList.add('flex');
+            }
         }
 
         onboardingSubmitBtn.addEventListener('click', async () => {
@@ -8015,6 +8103,7 @@
 
         function matchSuccess(id, dropzone) {
             const draggedElement = document.querySelector(`#draggables-container div[data-id="${id}"]`);
+            if (!draggedElement) return;
             const draggedText = draggedElement.textContent;
             const matchedPair = currentPairs.find(p => p.id == id);
             draggedElement.remove();
@@ -8024,14 +8113,23 @@
             initWordStat(id); wordStats[id].presented++;
             if (currentRoundMistakes.has(id)) { wordStats[id].incorrect++; wordStats[id].streak = 0; wordStats[id].lastReviewedDate = Date.now(); wordStats[id].nextReviewDate = Date.now(); }
             else { wordStats[id].correct++; wordStats[id].streak++; wordStats[id].lastReviewedDate = Date.now(); wordStats[id].nextReviewDate = Date.now() + (getIntervalForStreak(wordStats[id].streak) * 86400000); }
-            displayExtraInfo(matchedPair, true);
-            triggerExampleSentencePopup(matchedPair);
+            score++; scoreEl.textContent = score;
+            const matchedCount = dropzonesContainer.querySelectorAll('.matched').length;
+            if (matchedCount >= currentPairs.length && currentPairs.length > 0) {
+                setTimeout(() => {
+                    const successLabel = successText.querySelector('[data-i18n="success_correct"]');
+                    if (successLabel) {
+                        successLabel.textContent = CURRENT_LANG === 'en' ? 'Well done!' : 'Bravissimo!';
+                    }
+                    successText.classList.remove('hidden'); nextBtn.classList.remove('hidden');
+                }, 500);
+            }
+            try { displayExtraInfo(matchedPair, true); } catch(e) { console.warn('displayExtraInfo error:', e); }
+            try { triggerExampleSentencePopup(matchedPair); } catch(e) {}
             dropzone.classList.add('cursor-pointer', 'hover:bg-green-100', 'transition-colors');
-            dropzone.addEventListener('click', () => displayExtraInfo(matchedPair, true));
+            dropzone.addEventListener('click', () => { try { displayExtraInfo(matchedPair, true); } catch(e) {} });
             recordDailyActivity(); saveAllDataLocally();
             saveStatToServer(id);
-            score++; scoreEl.textContent = score;
-            if (score === ROUND_SIZE) { setTimeout(() => { successText.classList.remove('hidden'); nextBtn.classList.remove('hidden'); }, 500); }
         }
 
         function renderVerbInfo(pair) {
@@ -9157,11 +9255,7 @@
         // Version Update Modal Logic
         const versionModal = document.getElementById('versionUpdateModal');
         const closeVersionBtn = document.getElementById('closeVersionModalBtn');
-        const vKey = 'hasSeenVersion_2_0_4';
-        if (!localStorage.getItem(vKey)) {
-            versionModal.classList.remove('hidden');
-            versionModal.classList.add('flex');
-        }
+        const vKey = 'hasSeenVersion_2_1_0';
         closeVersionBtn.addEventListener('click', () => {
             localStorage.setItem(vKey, 'true');
             versionModal.classList.add('hidden');
@@ -9492,24 +9586,28 @@
             fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ !== 'Satz').forEach(w => w.isActive = true);
             saveAllDataLocally();
             renderVocabList();
+            apiFetch('/vocab/bulk-active', { method: 'PUT', body: JSON.stringify({ isActive: true, language: CURRENT_LANG, typ: 'vocab' }) }).catch(() => {});
         });
 
         document.getElementById('deselectAllBtn').addEventListener('click', () => {
             fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ !== 'Satz').forEach(w => w.isActive = false);
             saveAllDataLocally();
             renderVocabList();
+            apiFetch('/vocab/bulk-active', { method: 'PUT', body: JSON.stringify({ isActive: false, language: CURRENT_LANG, typ: 'vocab' }) }).catch(() => {});
         });
 
         document.getElementById('selectAllSentencesBtn').addEventListener('click', () => {
             fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ === 'Satz').forEach(w => w.isActive = true);
             saveAllDataLocally();
             renderSentenceList();
+            apiFetch('/vocab/bulk-active', { method: 'PUT', body: JSON.stringify({ isActive: true, language: CURRENT_LANG, typ: 'Satz' }) }).catch(() => {});
         });
 
         document.getElementById('deselectAllSentencesBtn').addEventListener('click', () => {
             fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ === 'Satz').forEach(w => w.isActive = false);
             saveAllDataLocally();
             renderSentenceList();
+            apiFetch('/vocab/bulk-active', { method: 'PUT', body: JSON.stringify({ isActive: false, language: CURRENT_LANG, typ: 'Satz' }) }).catch(() => {});
         });
 
         document.getElementById('vocabListSearch').addEventListener('input', renderVocabList);
@@ -10744,8 +10842,7 @@
                 }
             }
 
-            const forms = typ.toLowerCase().includes('verb') ? generateVerbForms(itWord) : {};
-            const payload = { de: deWord, it: itWord, typ, emoji, grammatica, language: CURRENT_LANG, isOwn: true, ...forms };
+            saveVocabBtn.disabled = true;
 
             const clearFields = () => {
                 vocabInput.value = '';
@@ -10756,8 +10853,10 @@
                 vocabInput.focus();
             };
 
+            let payload = { de: deWord, it: itWord, typ, emoji, grammatica, language: CURRENT_LANG, isOwn: true };
             try {
-                saveVocabBtn.disabled = true;
+                const forms = typ.toLowerCase().includes('verb') ? generateVerbForms(itWord) : {};
+                payload = { ...payload, ...forms };
                 const result = await apiFetch('/vocab', {
                     method: 'POST',
                     body: JSON.stringify(payload)
@@ -10772,10 +10871,8 @@
             } catch (err) {
                 console.warn("Saving to server failed, queuing for sync", err);
                 const tempId = 'temp_' + Date.now();
-                const offlineWord = { ...payload, id: tempId, isOffline: true };
-                fullDictionary.push(offlineWord);
+                fullDictionary.push({ ...payload, id: tempId, isOffline: true });
                 wordStats[tempId] = { presented: 0, correct: 0, incorrect: 0, streak: 0 };
-
                 addToSyncOutbox('addVocab', payload);
                 renderVocabList();
                 clearFields();
@@ -11061,8 +11158,8 @@
             
             // For Recent Activity list (3 latest LEARNERS)
             const latestLearners = [...users]
-                .filter(u => u.lastLearnAt)
-                .sort((a, b) => new Date(b.lastLearnAt) - new Date(a.lastLearnAt))
+                .filter(u => u.lastActivity)
+                .sort((a, b) => new Date(b.lastActivity) - new Date(a.lastActivity))
                 .slice(0, 3);
 
             users.forEach(u => {
@@ -11080,8 +11177,8 @@
 
             if (adminTotalUsersKpi) adminTotalUsersKpi.textContent = users.length;
             if (adminLastOnlineKpi) {
-                adminLastOnlineKpi.textContent = lastOnlineAny > 0 
-                    ? new Date(lastOnlineAny).toLocaleString(CURRENT_LANG === 'en' ? 'en-US' : 'de-DE') 
+                adminLastOnlineKpi.textContent = lastOnlineAny > 0
+                    ? new Date(lastOnlineAny).toLocaleString(APP_UI_LANG === 'en' ? 'en-US' : 'de-DE')
                     : '-';
             }
 
@@ -11090,10 +11187,10 @@
                     adminRecentActivityList.innerHTML = `<p class="text-[11px] text-slate-400 italic">Noch keine Lernaktivität aufgezeichnet.</p>`;
                 } else {
                     adminRecentActivityList.innerHTML = latestLearners.map(u => {
-                        const dateStr = new Date(u.lastLearnAt).toLocaleString(CURRENT_LANG === 'en' ? 'en-US' : 'de-DE');
+                        const dateStr = new Date(u.lastActivity).toLocaleString(APP_UI_LANG === 'en' ? 'en-US' : 'de-DE');
                         return `
                             <div class="flex justify-between items-center text-[11.5px] border-b border-blue-100/30 pb-1 last:border-0">
-                                <span class="font-bold text-slate-700 truncate mr-2">${u.name || 'User'} <span class="font-normal text-slate-500">(${u.email})</span></span>
+                                <span class="font-bold text-slate-700 truncate mr-2">${escapeHtml(u.name) || 'User'} <span class="font-normal text-slate-500">(${escapeHtml(u.email)})</span></span>
                                 <span class="text-blue-600 font-black whitespace-nowrap">${dateStr}</span>
                             </div>
                         `;
@@ -11123,22 +11220,33 @@
             const isPowerUser = u.loginCount && u.loginCount >= 5;
             const fireSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 inline-block text-orange-500 mr-1"><path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248Z" clip-rule="evenodd" /></svg>';
             const powerIcon = isPowerUser ? fireSvg : '';
-            const localeStr = CURRENT_LANG === 'en' ? 'en-US' : 'de-DE';
+            const localeStr = APP_UI_LANG === 'en' ? 'en-US' : 'de-DE';
             const neverStr = CURRENT_LANG === 'en' ? 'Never' : 'Nie';
             const lockedStr = CURRENT_LANG === 'en' ? '(Locked)' : '(Gesperrt)';
             const blockStr = CURRENT_LANG === 'en' ? 'Block' : 'Sperren';
             const unblockStr = CURRENT_LANG === 'en' ? 'Unblock' : 'Entsperren';
             const deleteStr = CURRENT_LANG === 'en' ? 'Delete' : 'Löschen';
-            
+            const makeAdminStr = CURRENT_LANG === 'en' ? 'Make Admin' : 'Admin machen';
+            const removeAdminStr = CURRENT_LANG === 'en' ? 'Remove Admin' : 'Admin entfernen';
+
             const lastLoginStr = u.lastLogin ? new Date(u.lastLogin).toLocaleString(localeStr) : neverStr;
             const lastActivityStr = u.lastActivity ? new Date(u.lastActivity).toLocaleString(localeStr) : neverStr;
             const adminSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 inline-block text-amber-500 ml-1"><path d="M22.5 18a1.5 1.5 0 0 1-1.5 1.5H3A1.5 1.5 0 0 1 1.5 18v-1.5h21V18Zm-3.863-4.5H5.362l-1.636-7.362a.75.75 0 0 1 1.171-.77l3.963 2.642 2.618-5.236a.75.75 0 0 1 1.344 0l2.618 5.236 3.963-2.642a.75.75 0 0 1 1.171.77L18.637 13.5Z" /></svg>';
 
+            const isCurrentUser = u.id === CURRENT_USER_ID;
+            const adminCount = (currentAdminUsers || []).filter(x => x.isAdmin).length;
+            let adminToggleBtn = '';
+            if (u.isAdmin && adminCount >= 2) {
+                adminToggleBtn = `<button onclick="toggleUserAdmin(${u.id}, true)" class="hidden lg:block px-3 py-1.5 bg-purple-100 text-purple-700 hover:bg-purple-200 rounded-lg text-xs font-semibold transition-colors">${removeAdminStr}</button>`;
+            } else if (!u.isAdmin && !isCurrentUser) {
+                adminToggleBtn = `<button onclick="toggleUserAdmin(${u.id}, false)" class="hidden lg:block px-3 py-1.5 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-lg text-xs font-semibold transition-colors">${makeAdminStr}</button>`;
+            }
+
             return `
                 <div class="bg-slate-50 border ${isActive ? 'border-slate-200' : 'border-red-300 opacity-75'} rounded-xl p-4 mb-3 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
                     <div class="w-full md:w-1/2">
-                        <p class="font-bold text-slate-800 break-all">${powerIcon} ${u.email} ${u.isAdmin ? adminSvg : ''} ${!isActive ? `<span class="text-red-500 text-xs ml-2">${lockedStr}</span>` : ''}</p>
-                        ${u.name ? `<p class="text-xs text-blue-600 font-semibold mt-0.5">${getI18n('admin_user_name')} ${u.name}</p>` : ''}
+                        <p class="font-bold text-slate-800 break-all">${powerIcon} ${escapeHtml(u.email)} ${u.isAdmin ? adminSvg : ''} ${!isActive ? `<span class="text-red-500 text-xs ml-2">${lockedStr}</span>` : ''}</p>
+                        ${u.name ? `<p class="text-xs text-blue-600 font-semibold mt-0.5">${getI18n('admin_user_name')} ${escapeHtml(u.name)}</p>` : ''}
                         <p class="text-[11px] text-slate-500 mt-1">
                             ID: ${u.id} | ${getI18n('admin_user_reg')} ${new Date(u.createdAt).toLocaleDateString(localeStr)}<br/>
                             Logins: ${u.loginCount || 0} | ${getI18n('admin_user_last_login')} ${lastLoginStr}<br/>
@@ -11149,6 +11257,8 @@
                     </div>
                     <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
                         ${!u.isAdmin ? `<button onclick="toggleUserActive(${u.id}, ${isActive})" class="px-3 py-1.5 ${isActive ? 'bg-orange-100 text-orange-700 hover:bg-orange-200' : 'bg-green-100 text-green-700 hover:bg-green-200'} rounded-lg text-xs font-semibold transition-colors">${isActive ? blockStr : unblockStr}</button>` : ''}
+                        ${adminToggleBtn}
+                        <button onclick="renameUser(${u.id})" class="px-3 py-1.5 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-lg text-xs font-semibold transition-colors">${getI18n('admin_rename_btn')}</button>
                         <button onclick="resetUserPassword(${u.id})" class="px-3 py-1.5 bg-yellow-100 text-yellow-700 hover:bg-yellow-200 rounded-lg text-xs font-semibold transition-colors">${getI18n('admin_password_btn')}</button>
                         ${!u.isAdmin ? `<button onclick="deleteUser(${u.id})" class="px-3 py-1.5 bg-red-100 text-red-700 hover:bg-red-200 rounded-lg text-xs font-semibold transition-colors">${deleteStr}</button>` : ''}
                     </div>
@@ -11192,6 +11302,25 @@
             if (!(await showConfirm(`Soll dieser Nutzer wirklich ${action} werden?`, 'Nutzerstatus ändern'))) return;
             try {
                 const res = await fetch(`${API_BASE_URL}/api/admin/users/${id}/toggle-active`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${API_TOKEN}` }
+                });
+                if (res.ok) {
+                    fetchAdminUsers();
+                } else {
+                    const data = await res.json();
+                    showToast("Fehler: " + (data.error || 'Unbekannt'), "error");
+                }
+            } catch (err) {
+                showToast("Server nicht erreichbar", "error");
+            }
+        };
+
+        window.toggleUserAdmin = async function (id, currentIsAdmin) {
+            const action = currentIsAdmin ? 'zum normalen Benutzer machen' : 'zum Admin machen';
+            if (!(await showConfirm(`Soll dieser Nutzer wirklich ${action} werden?`, 'Admin-Status ändern'))) return;
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/users/${id}/toggle-admin`, {
                     method: 'PUT',
                     headers: { 'Authorization': `Bearer ${API_TOKEN}` }
                 });
@@ -11297,6 +11426,30 @@
                 console.warn("Could not update base vocab counts", err);
             }
         }
+
+        window.renameUser = async function (id) {
+            const existingUser = (currentAdminUsers || []).find(u => u.id === id);
+            const newName = prompt(getI18n('admin_rename_prompt'), existingUser?.name || '');
+            if (newName === null) return;
+            const trimmedName = newName.trim();
+            if (!trimmedName) return showToast("Der Name darf nicht leer sein.", "warning");
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/users/${id}/name`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${API_TOKEN}` },
+                    body: JSON.stringify({ name: trimmedName })
+                });
+                if (res.ok) {
+                    showToast("Name erfolgreich geändert!", "success");
+                    fetchAdminUsers();
+                } else {
+                    const data = await res.json();
+                    showToast(`Fehler: ${data.error}`, "error");
+                }
+            } catch (err) {
+                showToast("Server nicht erreichbar", "error");
+            }
+        };
 
         window.resetUserPassword = async function (id) {
             const newPassword = prompt("Neues Passwort für den Nutzer (min. 6 Zeichen):");
