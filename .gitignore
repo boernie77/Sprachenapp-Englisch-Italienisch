@@ -34,3 +34,4 @@ server/uploads/
 *.apk
 *Zugangsdaten*
 keystore.properties
+server/database.sqlite

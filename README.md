@@ -1,0 +1,50 @@
+# Lernapp – Vokabeltrainer Italienisch & Englisch
+
+Vokabel- und Grammatiktrainer mit Quiz, Karteikarten, Drag & Drop und freiem Schreiben.
+Eigene Vokabellisten lassen sich anlegen oder als Excel-Datei importieren; der Lernfortschritt
+steuert gezielte Wiederholungen.
+
+- **Web & Desktop** im Browser, dazu Apps für **iOS und Android** (Capacitor)
+- **Self-hosted:** Node.js/Express-Backend mit PostgreSQL, als Docker-Stack
+- Projektseite und Demo: <https://byboernie.de/lernapp.html>
+
+## Selbst hosten
+
+Voraussetzung: Docker mit Docker Compose.
+
+```bash
+git clone https://github.com/boernie77/Sprachenapp-Englisch-Italienisch.git
+cd Sprachenapp-Englisch-Italienisch
+cp .env.example .env      # Werte ausfüllen (siehe unten)
+docker-compose up -d
+```
+
+Die App läuft danach auf `http://localhost:9011` (Port über `APP_PORT` änderbar).
+Die Datenbank ist nur lokal auf dem Server erreichbar (`127.0.0.1`), die Daten liegen in `./pgdata`.
+
+### Wichtige Einstellungen in `.env`
+
+| Variable | Bedeutung |
+|---|---|
+| `JWT_SECRET` | **Pflicht**, mindestens 32 zufällige Zeichen (z. B. `openssl rand -base64 48`). Ohne sicheren Wert startet der Server nicht. |
+| `DB_PASSWORD` | Passwort der Datenbank. Nur Buchstaben, Zahlen und `_` verwenden. |
+| `DB_NAME`, `DB_PORT` | Name und lokaler Port der Datenbank |
+| `APP_PORT` | Port der Web-App |
+| `APP_URL` | Öffentliche Adresse der App (für Links in E-Mails) |
+| `SMTP_USER`, `SMTP_PASS` | Postfach für Registrierungs- und Passwort-Mails (optional) |
+| `OIDC_ISSUER_URL`, `OIDC_CLIENT_ID`, `OIDC_CLIENT_SECRET` | Optionaler Login per Single Sign-on (z. B. Authentik) |
+
+**Niemals** eine ausgefüllte `.env`, Keystores (`*.jks`) oder App-Pakete (`*.aab`) einchecken –
+sie sind in `.gitignore` ausgeschlossen.
+
+## Entwicklung
+
+```bash
+cd server && npm install && npm start     # Backend + Web-Oberfläche aus server/public
+npx cap sync                              # Web-Code in die iOS-/Android-Projekte übernehmen
+```
+
+## Lizenz
+
+Siehe [LICENSE](LICENSE): Quellcode zum Lernen und für die private Nutzung; keine kommerzielle
+Weitergabe oder Veränderung ohne schriftliche Zustimmung.
