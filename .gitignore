@@ -26,3 +26,11 @@ Thumbs.db
 # Project specific
 uploads/
 server/uploads/
+
+# Signatur & Build-Artefakte – nie ins Repo
+*.jks
+*.keystore
+*.aab
+*.apk
+*Zugangsdaten*
+keystore.properties
