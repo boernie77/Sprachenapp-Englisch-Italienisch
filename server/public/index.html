@@ -1756,13 +1756,13 @@
                         Lizenz: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"
                             class="text-blue-600 hover:underline">CC BY-SA 4.0</a>
                     </p>
-                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.1.0</p>
+                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.1.1</p>
                     <p class="text-[10px] text-slate-400" data-i18n="imp_rights">© 2026 Christian Bernauer. Alle Rechte vorbehalten.</p>
                 </div>
             </div>
             <!-- App-Style Bottom Section -->
             <div class="mt-8 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.1.0</p>
+                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.1.1</p>
             </div>
         </div>
     </div>
@@ -2007,7 +2007,7 @@
             <div class="w-20 h-20 bg-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
                 <svg class="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <h3 class="text-3xl font-black text-slate-800 mb-4">Version 2.1.0 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
+            <h3 class="text-3xl font-black text-slate-800 mb-4">Version 2.1.1 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
             <div class="text-left space-y-4 mb-8">
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
@@ -2020,6 +2020,10 @@
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
                     <p class="text-slate-600 font-medium leading-tight text-sm">Update: <b>Mehr Sicherheit und Stabilität</b></p>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Fix: <b>Vokabelsuche in Firefox</b> findet wieder alle Wörter</p>
                 </div>
                 <p class="text-slate-500 text-[10px] italic text-center mt-4 px-4 leading-normal">
                     Viel Spaß beim Lernen! Melde Fehler bitte direkt an uns.
@@ -2150,7 +2154,7 @@
                 </div>
                 <div class="px-4 py-1.5 text-[10px] text-slate-400 bg-slate-50/50 flex items-center justify-between border-t border-slate-100/50">
                     <span>App-Version:</span>
-                    <span class="font-mono font-medium text-slate-500">2.1.0</span>
+                    <span class="font-mono font-medium text-slate-500">2.1.1</span>
                 </div>
                 <input type="file" id="excelUploadEl" accept=".xlsx, .xls" class="hidden">
             </div>
@@ -2202,7 +2206,7 @@
                     <div id="directionFilterContainer" class="w-full">
                         <label
                             class="block text-xs md:text-sm font-semibold text-slate-700 mb-1.5 mobile-white" data-i18n="filter_direction">Lernrichtung</label>
-                        <select id="directionFilter" style="display:none">
+                        <select id="directionFilter" autocomplete="off" style="display:none">
                             <option value="de-it">de-it</option>
                             <option value="it-de">it-de</option>
                         </select>
@@ -2225,7 +2229,7 @@
                     <div class="w-full">
                         <label class="block text-xs md:text-sm font-semibold text-slate-700 mb-1.5" data-i18n="filter_type">Was möchtest du
                             lernen?</label>
-                        <select id="typeFilter" style="display:none">
+                        <select id="typeFilter" autocomplete="off" style="display:none">
                             <option value="Alle">Alle mischen</option>
                             <option value="Substantiv">Substantive</option>
                             <option value="VerbInfinitiv">Verben</option>
@@ -2267,7 +2271,7 @@
                     <div id="grammarFocusFilterLabelParent">
                         <label class="block text-xs md:text-sm font-semibold text-slate-700 mb-1.5" data-i18n="grammar_focus_label">Übungs-Focus</label>
                     </div>
-                    <select id="grammarFocusFilter" style="display:none">
+                    <select id="grammarFocusFilter" autocomplete="off" style="display:none">
                         <option value="Alle">Focus Alle Sätze</option>
                     </select>
                     <div style="position:relative">
@@ -2289,7 +2293,7 @@
                     <div>
                         <label class="block text-xs md:text-sm font-semibold text-slate-700 mb-1.5" data-i18n="grammar_level_label">Sprachniveau</label>
                     </div>
-                    <select id="grammarLevelFilter" style="display:none">
+                    <select id="grammarLevelFilter" autocomplete="off" style="display:none">
                         <option value="Alle">Alle Niveaus</option>
                         <option value="A1">A1 (Anfänger)</option>
                         <option value="A2">A2 (Grundlagen)</option>
@@ -3653,7 +3657,7 @@
 
             <div class="flex flex-col md:flex-row gap-2 mb-3">
                 <div class="flex-1" style="position:relative">
-                    <select id="vocabListSortDir" style="display:none">
+                    <select id="vocabListSortDir" autocomplete="off" style="display:none">
                         <option value="de">Deutsch Italienisch</option>
                         <option value="it">Italienisch Deutsch</option>
                     </select>
@@ -3671,7 +3675,7 @@
                 </div>
                 <!-- Category filter custom dropdown -->
                 <div class="flex-1" style="position:relative">
-                    <select id="vocabListCatFilter" style="display:none">
+                    <select id="vocabListCatFilter" autocomplete="off" style="display:none">
                         <option value="Alle">Alle Kategorien</option>
                         <option value="Substantiv">Substantive</option>
                         <option value="Verb">Verben</option>
@@ -3750,7 +3754,7 @@
 
             <div class="flex flex-col md:flex-row gap-2 mb-3">
                 <div class="flex-1" style="position:relative">
-                    <select id="sentenceListSortDir" style="display:none">
+                    <select id="sentenceListSortDir" autocomplete="off" style="display:none">
                         <option value="de">Deutsch Italienisch</option>
                         <option value="it">Italienisch Deutsch</option>
                     </select>
@@ -3768,7 +3772,7 @@
                 </div>
                 <!-- Category filter custom dropdown -->
                 <div class="flex-1" style="position:relative">
-                    <select id="sentenceListCatFilter" style="display:none">
+                    <select id="sentenceListCatFilter" autocomplete="off" style="display:none">
                         <option value="Alle">Alle Kategorien</option>
                         <option value="Eigene Sätze">Eigene Sätze</option>
                     </select>
@@ -3847,7 +3851,7 @@
             <div class="flex gap-3 mb-5">
                 <div class="flex-1">
                     <label class="block text-xs font-semibold text-slate-700 mb-1.5" data-i18n="vocab_type">Wortart</label>
-                    <select id="vocabTyp" class="hidden">
+                    <select id="vocabTyp" autocomplete="off" class="hidden">
                         <option value="Substantiv" selected>Substantiv</option>
                         <option value="Verb">Verb</option>
                         <option value="Adjektiv">Adjektiv</option>
@@ -3873,7 +3877,7 @@
                 </div>
                 <div class="flex-1">
                     <label class="block text-xs font-semibold text-slate-700 mb-1.5" data-i18n="vocab_grammar">Grammatik (optional)</label>
-                    <select id="vocabGrammatica" class="hidden">
+                    <select id="vocabGrammatica" autocomplete="off" class="hidden">
                         <option value="">Keine/Andere</option>
                         <option value="m-sg">maskulin (sg)</option>
                         <option value="f-sg">feminin (sg)</option>
@@ -9255,7 +9259,7 @@
         // Version Update Modal Logic
         const versionModal = document.getElementById('versionUpdateModal');
         const closeVersionBtn = document.getElementById('closeVersionModalBtn');
-        const vKey = 'hasSeenVersion_2_1_0';
+        const vKey = 'hasSeenVersion_2_1_1';
         closeVersionBtn.addEventListener('click', () => {
             localStorage.setItem(vKey, 'true');
             versionModal.classList.add('hidden');
@@ -9401,6 +9405,13 @@
             if (!btn || !list || !label || !sel) return;
 
             const opts = list.querySelectorAll('.cs-opt');
+
+            // Label an den echten Select-Wert angleichen (Browser wie Firefox stellen Formularwerte nach Reload wieder her)
+            const initialOpt = Array.from(opts).find(o => o.dataset.value === sel.value);
+            if (initialOpt) {
+                label.innerHTML = initialOpt.innerHTML;
+                opts.forEach(o => o.classList.toggle('selected', o === initialOpt));
+            }
 
             btn.addEventListener('click', e => {
                 e.stopPropagation();
