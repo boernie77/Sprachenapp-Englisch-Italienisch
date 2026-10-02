@@ -2,15 +2,15 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Übergabe / Aktueller Stand (2026-10-02) – zuerst lesen
+## Übergabe / Aktueller Stand (2026-10-02, MacBook) – zuerst lesen
 
-- **Live läuft 2.1.2** (`/api/health` auf vokabeln.bernauer24.com). Letzte Commits: `31a591e` (Fix + Versionsnummern), `cd67238` (Mobile Web-Assets).
-- **Nächster Schritt auf dem MacBook: Mobile-Builds 2.1.2 erstellen.**
-  1. `git pull`
-  2. `npm install` (falls nötig) und `npx cap sync`. Die Web-Assets in `android/app/src/main/assets/public` und `ios/App/App/public` sind schon auf 2.1.2 committet, `cap sync` sollte daran nichts mehr ändern.
-  3. iOS: Xcode, Scheme „Vokabeln Multi“, Team `SYQL3PUXA9`, Version 2.1.2 / Build 19 (steht in `project.pbxproj`).
-  4. Android: versionCode 19 / versionName 2.1.2 (in `android/app/build.gradle`). Signing-Werte liegen in `~/.gradle/gradle.properties` und der Keystore lokal (beides **nicht** im Repo). Fehlen sie auf dem MacBook, müssen sie vom Linux-Rechner übertragen werden.
-- Noch offen: Git-Tags `v2.1.1` / `v2.1.2`, Einreichung bei Apple (2.1.0 wurde nie eingereicht), SMTP-Passwort ändern, Upload-Key-Reset in der Play Console.
+- **Live (Web) läuft 2.1.2** (`/api/health` auf vokabeln.bernauer24.com). Git-Tags `v2.1.1` (`5598798`) und `v2.1.2` (`31a591e`) sind gesetzt.
+- **Mobile-Builds 2.1.2 sind gebaut** (MacBook, nach `npx cap sync` – keine Änderungen an den Web-Assets):
+  - **Android:** `app-release-v2.1.2-v19.aab` im Repo-Root (gitignored), versionCode 19 / versionName 2.1.2. Signiert mit dem Release-Keystore (`vokabeln-release.jks`, SHA256 `7E:85:B2:33:…:54:F1`), also mit demselben Zertifikat wie das bisher akzeptierte AAB 2.0.5. **Noch nicht in die Play Console hochgeladen** (es gibt kein fastlane/Play-Publisher-Setup, Upload also manuell).
+  - **iOS:** Archiv `~/Projekte/Neue_Lernapp/build/VokabelnMulti-2.1.2-19.xcarchive` (außerhalb des Repos), Version 2.1.2 / Build 19, Team `SYQL3PUXA9`. Auf dem iPhone 15 Pro zum Testen installiert. **Noch nicht zu App Store Connect hochgeladen**: im Xcode-Organizer „Distribute App“ → App Store Connect wählen, oder `xcodebuild -exportArchive` mit `method=app-store-connect`, `destination=upload`.
+  - Das Scheme „Vokabeln Multi“ ist jetzt als Shared Scheme im Repo (`xcshareddata/xcschemes`).
+- **Hinweis zum Teamwechsel:** Alte Installationen auf Geräten sind noch mit Team `YP6683AT3R` signiert. Ein Update mit `SYQL3PUXA9` wird abgelehnt (CoreDeviceError 3002, „application-identifier … does not match“). Dann zuerst die alte App löschen. Dabei gehen die lokalen App-Daten verloren. Über den App Store sollte das Problem nicht auftreten, wenn die Bundle-ID schon im neuen Team liegt; das bitte bei der ersten Einreichung prüfen.
+- **Noch offen:** AAB in der Play Console hochladen, iOS-Upload und Einreichung bei Apple (2.1.0 wurde nie eingereicht), SMTP-Passwort ändern, Upload-Key-Reset in der Play Console. Nach dem Reset müssen AABs mit `vokabeln-upload-2026.jks` signiert werden (die Werte `VOKABELN_UPLOAD_*` stehen in `~/.gradle/gradle.properties`); dafür `signingConfigs` in `android/app/build.gradle` umstellen.
 
 ## Project Overview
 
