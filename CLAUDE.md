@@ -1,0 +1,181 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Übergabe / Aktueller Stand (2026-10-02) – zuerst lesen
+
+- **Live läuft 2.1.2** (`/api/health` auf vokabeln.bernauer24.com). Letzte Commits: `31a591e` (Fix + Versionsnummern), `cd67238` (Mobile Web-Assets).
+- **Nächster Schritt auf dem MacBook: Mobile-Builds 2.1.2 erstellen.**
+  1. `git pull`
+  2. `npm install` (falls nötig) und `npx cap sync`. Die Web-Assets in `android/app/src/main/assets/public` und `ios/App/App/public` sind schon auf 2.1.2 committet, `cap sync` sollte daran nichts mehr ändern.
+  3. iOS: Xcode, Scheme „Vokabeln Multi“, Team `SYQL3PUXA9`, Version 2.1.2 / Build 19 (steht in `project.pbxproj`).
+  4. Android: versionCode 19 / versionName 2.1.2 (in `android/app/build.gradle`). Signing-Werte liegen in `~/.gradle/gradle.properties` und der Keystore lokal (beides **nicht** im Repo). Fehlen sie auf dem MacBook, müssen sie vom Linux-Rechner übertragen werden.
+- Noch offen: Git-Tags `v2.1.1` / `v2.1.2`, Einreichung bei Apple (2.1.0 wurde nie eingereicht), SMTP-Passwort ändern, Upload-Key-Reset in der Play Console.
+
+## Project Overview
+
+**Sprachenapp-Test** is a language learning app (Italian/English) with vocabulary, grammar, quiz, flashcard, and drag-and-drop exercises. Stack: Vanilla JS SPA frontend, Node.js/Express backend, PostgreSQL, Capacitor for iOS/Android.
+
+## Commands
+
+### Backend
+
+```bash
+cd server
+npm install
+npm start          # Starts Express on port 3001 (or $PORT)
+```
+
+### Docker (recommended for full stack)
+
+```bash
+docker-compose up -d       # Start app + PostgreSQL
+docker-compose down        # Stop containers
+docker-compose logs -f     # Follow logs
+```
+
+### Mobile (Capacitor)
+
+```bash
+npx cap sync               # Sync web assets to native projects
+npx cap build android      # Build Android
+npx cap open android       # Open in Android Studio
+npx cap open ios           # Open in Xcode
+```
+
+### Environment Variables
+
+Key vars (see `docker-compose.yml` for defaults):
+
+| Variable | Purpose |
+|----------|---------|
+| `DATABASE_URL` | PostgreSQL connection string |
+| `JWT_SECRET` | JWT signing key |
+| `PORT` | Server port (default 3001) |
+| `SMTP_HOST/PORT/USER/PASS` | Email for password resets/invites |
+| `NODE_ENV` | `production` disables Sequelize logging |
+
+## Architecture
+
+### Frontend (`server/public/index.html`)
+
+Single monolithic file (~11,800 lines) containing all HTML, CSS, and JavaScript. No build step — Tailwind CSS and SheetJS load from CDN. Key patterns:
+
+- **State**: Global JS variables (`currentVocabList`, `userStats`, `currentMode`, etc.)
+- **API**: Fetch calls with JWT Bearer token from `localStorage`
+- **Modes**: `drag-drop`, `quiz`, `flashcard`, `writing` — controlled by `currentMode`
+- **i18n**: UI language (`APP_UI_LANG`: de/en) and learning content language (`CURRENT_LANG`: it/en) are separate. Grammar verb tenses always display in the learning language.
+- **Search**: 300ms debounce, capped at 200 results with "load more"
+- **Excel import**: SheetJS, chunked in batches of 500 for large imports
+
+### Backend (`server/`)
+
+Express REST API with Sequelize ORM.
+
+| File | Role |
+|------|------|
+| `server.js` | App entry, route mounting, health check at `/api/health` |
+| `models.js` | All Sequelize model definitions (User, Vocabulary, Stats, BaseVocabulary, GrammarSentence, InviteCode) |
+| `middleware/auth.js` | JWT verification, admin guard, error handler |
+| `utils/mailer.js` | Nodemailer SMTP for invites and password resets |
+
+API routes under `/api/`:
+
+| Route | File |
+|-------|------|
+| `/auth` | `routes/auth.js` — login, register, password reset, profile |
+| `/vocab` | `routes/vocab.js` — user vocabulary CRUD + learning stats |
+| `/base-vocab` | `routes/baseVocab.js` — read-only pre-loaded vocabulary |
+| `/grammar-sentences` | `routes/grammar.js` — grammar content by language |
+| `/admin` | `routes/admin.js` — user management, invite codes, bulk ops |
+| `/contact` | `routes/contact.js` — contact form |
+
+### Data Model Concepts
+
+- **BaseVocabulary**: Pre-loaded, shared, read-only for regular users (admin only for edits)
+- **Vocabulary**: User-created custom entries
+- **Stats**: Per-user, per-vocabulary learning statistics (for streak tracking)
+- **InviteCode**: Controls registration access; first registered user becomes admin automatically
+- **Static bypass codes**: `START-ITA-24`, `APP-MOBIL-2026` (hardcoded in auth route)
+
+### Authentication
+
+JWT tokens with 24h expiration, stored in `localStorage`, sent as `Authorization: Bearer <token>`.
+
+### Mobile
+
+Capacitor wraps the SPA as a native iOS/Android app. Web dir is `server/public`. Dark mode is enforced for mobile/narrow viewports (≤1024px). Uses Capacitor Keyboard plugin for native scroll control and DragDropTouch polyfill for iOS drag-and-drop.
+
+#### iOS Release-Builds auf Gerät installieren
+
+Das Xcode-Projekt ist für Release-Builds auf physischen Geräten konfiguriert (`LaunchAction buildConfiguration = Release`). Wichtige Hinweise:
+
+- `CODE_SIGN_IDENTITY = "Apple Development"` ist explizit in allen vier Build-Configs gesetzt (Project + Target, Debug + Release) — nötig damit Xcode 16 kein Distribution-Zertifikat für Release wählt
+- **CoreDeviceError 3002**: Tritt auf wenn eine alte App-Version (anderes Signing) noch auf dem Gerät ist → App auf iPhone löschen, Clean Build Folder (Shift+Cmd+K), erneut Run
+
+### CI/CD
+
+GitHub Actions (`.github/workflows/`):
+- `deploy-test.yml` → test environment (port 9009), läuft **automatisch** bei Push auf `main`, self-hosted runner auf 192.168.2.204
+- `deploy-live.yml` → production, muss **manuell** ausgelöst werden (Actions → Run workflow), deployt per SSH auf Hetzner VPS
+
+**Test-Deploy hängt in `queued`?** Der self-hosted Runner (`la2`) läuft nur, wenn der Heimserver an und erreichbar ist. Prüfen mit `gh api repos/boernie77/Sprachenapp-Englisch-Italienisch/actions/runners` (Status `offline` oder Runner fehlt ganz) sowie `ping`/`ssh` gegen `192.168.2.204`. Von extern (z.B. Hetzner oder Cloud-Sessions) ist der Heimserver ggf. gar nicht im LAN erreichbar — dann muss vor Ort nachgesehen werden, ob Server/Runner-Dienst laufen. Kein SSH-Zugang zum Heimserver in diesem Repo hinterlegt.
+
+#### Server-Pfade
+| System | Server | Verzeichnis | Container App | Container DB | Port |
+|--------|--------|-------------|---------------|--------------|------|
+| Live | Hetzner VPS (IP lokal) | `/opt/lernapp` | `lernapp-app-1` | `lernapp-db-1` | 9011 |
+| Test | Heimserver `192.168.2.204` | `/home/systemv/multilang-9009` | `multilang-9009-app-1` | `multilang-9009-db-1` | 9009 |
+
+#### SSH-Zugang Hetzner (Live)
+Steht **nicht** im Repo (öffentlich). Siehe lokale `../CLAUDE.md` auf dem Linux-Rechner (Ordner `Neue_Lernapp/`).
+
+#### Wichtig: DB_PASSWORD darf keine URL-Sonderzeichen enthalten
+`#`, `@`, `/`, `?` in `DB_PASSWORD` brechen die `DATABASE_URL` in `docker-compose.yml`. Nur Buchstaben, Zahlen und `_` verwenden.
+
+#### GitHub Secrets (alle 6 müssen gesetzt sein)
+`JWT_SECRET`, `JWT_SECRET_TEST`, `DB_PASSWORD_LIVE`, `DB_PASSWORD_TEST`, `SMTP_PASS`, `HETZNER_SSH_KEY`
+
+#### Datenpersistenz (KRITISCH)
+
+PostgreSQL-Daten liegen als **Bind-Mount** unter `./pgdata` (kein Docker named volume). Das Verzeichnis ist in `.gitignore` eingetragen. Der Deploy-Script nutzt `git clean -fd --exclude=pgdata` als zusätzliche Schutzebene. Reihenfolge in `deploy-live.yml` ist zwingend: `git fetch` → `git reset --hard` → `git clean -fd --exclude=pgdata` → `mkdir -p pgdata`. **Nie diese Reihenfolge ändern** — falsche Reihenfolge hat in der Vergangenheit 3× zu Datenverlust geführt.
+
+## Key Development Notes (from DEV_NOTES.md)
+
+- Flashcard example sentence toggles: hidden globally, shown per-card only
+- Version number: displayed only in hamburger menu, not in main header
+- Example sentences: shown as popups after success in drag-drop, quiz, and writing modes
+- Grammar category filters are dynamic and derived from Excel import data
+- Dark mode is required on mobile and in narrow browser windows
+- `escapeHtml()` Funktion im Frontend (nach `safeJSONParse`) — muss für alle User-Inhalte in innerHTML-Kontexten verwendet werden (XSS-Schutz)
+- `window._isSyncing` Flag verhindert Race Conditions beim 60s-Hintergrund-Sync; `switchLanguage()` wartet darauf, bevor `loadDataFromServer()` aufgerufen wird
+- Vocab-Modal Save-Handler: `saveVocabBtn.disabled = true` und `generateVerbForms()` müssen AUSSERHALB/VOR dem try-Block stehen, damit `finally` immer läuft
+
+## Sicherheit / Signatur (seit 2026-09-30)
+- Repo war öffentlich mit Keystore, Keystore-Passwörtern und SMTP-Passwort → Repo auf **privat**, History zweimal mit `git filter-repo` bereinigt (Keystore, *.aab, Passwort-Zeilen → `ENTFERNT`), Force-Push. Sicherung des alten Stands: `Neue_Lernapp/Sicherung-Repo-vor-Bereinigung-20260930/` (enthält Geheimnisse, nur lokal!).
+- Android-Signatur liegt **nicht mehr im Repo**: Werte `VOKABELN_RELEASE_*` in `~/.gradle/gradle.properties`, Keystore `android/app/vokabeln-release.jks` lokal (gitignored).
+- Neuer Upload-Schlüssel `android/app/vokabeln-upload-2026.jks` (Werte `VOKABELN_UPLOAD_*` in `~/.gradle/gradle.properties`), Zertifikat `Neue_Lernapp/upload_certificate_lernapp_2026.pem` für den Upload-Key-Reset in der Play Console. Nach Googles Bestätigung in `build.gradle` auf `VOKABELN_UPLOAD_*` umstellen.
+- Erledigt 2026-09-30: History 4× bereinigt (auch DEV_NOTES-Zugangsdaten, alter Test-Secret-Wert), DB-Port 5436 nur noch 127.0.0.1 (auch direkt auf dem VPS, Sicherung `/root/lernapp-db-20260930.sql.gz`), JWT-Fallback entfernt, `SMTP_USER` als GitHub-Secret, README.
+- **Achtung:** Solange das Repo privat ist, kann der VPS nicht `git fetch`en → Live-Deploy baut still den alten Stand neu. Erst nach dem Wieder-Öffentlich-Stellen (oder mit Deploy-Key) deployen. Stand 2026-10-02: Repo ist wieder **öffentlich**, Live-Deploy funktioniert (vor jedem Deploy mit `gh repo view --json visibility` prüfen).
+- Offen (nur der Nutzer kann das): SMTP-Passwort beim Mailanbieter ändern + `gh secret set SMTP_PASS`; Upload-Key-Reset in der Play Console mit `upload_certificate_lernapp_2026.pem`. Danach Repo wieder öffentlich.
+
+## Version 2.1.2 (2026-10-02) – live deployt
+- Fix: `checkDuplicate()` sperrte Speichern, sobald die **deutsche** Seite schon existierte (oppure → „oder“, weil oder → o vorhanden), sogar sprachübergreifend. Jetzt zählt nur das Fremdwort innerhalb `CURRENT_LANG`; Hinweis zeigt „Bereits vorhanden: de → it“ (i18n-Key `tag_duplicate`).
+- Commit `31a591e`, Android versionCode 19, iOS Build 19. Mobile Builds noch nicht erstellt, kein Tag.
+- Mobile Web-Assets in Commit `cd67238` nachgezogen (Build auf dem MacBook).
+
+## Version 2.1.1 (2026-10-02) – live deployt
+- Fix: Firefox stellt nach Reload Werte versteckter `<select>`-Felder wieder her → Custom-Dropdown zeigte „Alle Kategorien“, filterte aber nach altem Wert. Lösung: `autocomplete="off"` an allen versteckten Selects + `setupCustomDropdown` gleicht Label beim Start an `sel.value` an. **Neue versteckte Selects immer mit `autocomplete="off"` anlegen.**
+- Versionsnummer an: `package.json`, `server/package.json`, `server.js` (`/api/health`), `index.html` (3 Anzeigen + „Neu“-Fenster + `hasSeenVersion_2_1_1`), `android/app/build.gradle` (versionCode 18), `project.pbxproj` (Build 18).
+- Commit `5598798` auf `main`, Live-Deploy erfolgreich (`/api/health` meldet 2.1.1). Mobile Builds für 2.1.1 noch nicht erstellt (`npx cap sync` + Build), kein Git-Tag.
+- **Bei jedem Deploy die Versionsnummer erhöhen** (Wunsch des Nutzers) – alle Stellen siehe oben.
+- Fehlersuche-Tipp: Funktioniert etwas nur in einem Browser nicht, zuerst wiederhergestellte Formularwerte / localStorage dieses Browsers verdächtigen. Live-DB lesend abfragen: SQL-Datei per SSH auf den VPS (`… 'docker exec -i lernapp-db-1 sh -c "psql -U \$POSTGRES_USER -d \$POSTGRES_DB"' < datei.sql` (vermeidet Quoting-Probleme).
+- Die Kopien in `ios/App/App/public` und `android/app/src/main/assets/public` stehen in `.gitignore`, sind aber **getrackt**. Für Mobile-Builds auf dem MacBook `server/public/index.html` dorthin kopieren und mit `git commit -- <pfade>` committen (`git add` verweigert ignorierte Pfade).
+- Lokales Git hat keine globale Identität – Commits mit `git -c user.name=boernie77 -c user.email=115419572+boernie77@users.noreply.github.com commit …`.
+
+## Version 2.1.0 (2026-09-30)
+- Einheitlich 2.1.0: `package.json`, `server/package.json`, `/api/health`, Web-Anzeige + „Neu“-Fenster (`hasSeenVersion_2_1_0`), Android versionCode 17, iOS Build 17.
+- iOS `Info.plist` liest jetzt `$(MARKETING_VERSION)` / `$(CURRENT_PROJECT_VERSION)` – Version nur noch in `project.pbxproj` pflegen (vorher stand 2.0.6/16 fest in der Info.plist).
+- Xcode-Scheme heißt „Vokabeln Multi“ (nur lokal unter xcshareddata, nicht im Repo).
+- iOS-Signierung: bezahltes Team `SYQL3PUXA9` (im Projekt eingetragen). Die Bundle-ID `com.bernauer24.vokabeln` ist noch nicht ausdrücklich im bezahlten Team registriert, bisher greift das Wildcard-Profil. Beim ersten Archiv mit `-allowProvisioningUpdates` prüfen.
+- Git-Tag + GitHub-Release `v2.1.0`. Noch NICHT bei Apple eingereicht. Live inzwischen durch 2.1.1 abgelöst.
