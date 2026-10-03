@@ -7,8 +7,9 @@ const LEVELS = ['A1', 'A2', 'B1', 'B2'];
 
 const BASE_CATEGORIES = {
     it: ['Presente', 'Passato Prossimo', 'Imperfetto', 'Gerundio', 'Preposizioni Articolate'],
-    en: ['Present Simple', 'Present Continuous', 'Simple Past', 'Present Perfect', 'Modalverb',
-        'Imperative', 'Conditional 1', 'Conditional 2', 'Future (will)', 'Future (be going to)']
+    // Namen wie nach dem Admin-Import (uploadGrammar vereinheitlicht die englischen Kategorien)
+    en: ['Simple Present', 'Present Continuous', 'Simple Past', 'Present Perfect', 'Modalverb',
+        'Imperativ', 'Conditional', 'Future']
 };
 
 // Neu für die KI-Auswahl (Imperativ, Konjunktiv, Zukunft); im Englischen gibt es Imperative und Future schon
@@ -31,11 +32,13 @@ const HINTS = {
     'Congiuntivo': 'Congiuntivo presente oder passato, z.B. nach penso che, spero che, bisogna che',
     'Futuro Semplice': 'Futuro semplice',
     'Modalverb': 'Satz mit einem Modalverb (can, must, should, may, might, have to)',
-    'Imperative': 'Imperative',
-    'Conditional 1': 'First conditional (if + present, will + infinitive)',
-    'Conditional 2': 'Second conditional (if + past, would + infinitive)',
-    'Future (will)': 'Future with will',
-    'Future (be going to)': 'Future with be going to',
+    'Simple Present': 'Present simple',
+    'Present Continuous': 'Present continuous (nur mit Handlungsverben, keine Zustandsverben wie love/know)',
+    'Simple Past': 'Simple past',
+    'Present Perfect': 'Present perfect',
+    'Imperativ': 'Imperative',
+    'Conditional': 'First conditional (if + present, will) oder second conditional (if + past, would)',
+    'Future': 'Future mit will oder be going to',
     'Subjunctive': 'Subjunctive, z.B. If I were…, I suggest that he be…, I wish I were…'
 };
 
@@ -53,7 +56,7 @@ async function getCategories(language) {
         .flatMap(r => (r.category || '').split('+').map(c => c.trim()))
         .filter(c => c && !EXCLUDED.has(c))
         // Englische Zusätze wie "Present Simple (Comparative)" sind keine eigene Zeitform
-        .filter(c => language !== 'en' || !/\(.*\)$/.test(c) || BASE_CATEGORIES.en.includes(c));
+        .filter(c => language !== 'en' || !/\(.*\)$/.test(c));
     const all = [...BASE_CATEGORIES[language], ...fromDb, ...NEW_CATEGORIES[language]];
     return [...new Set(all)];
 }
