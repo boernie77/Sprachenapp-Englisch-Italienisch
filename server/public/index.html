@@ -38,6 +38,7 @@
 
     <!-- SheetJS zum Einlesen von Excel-Dateien -->
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <script src="grammar-help.js"></script>
 
     <style>
         body {
@@ -522,6 +523,7 @@
 
             #vocabModal .bg-white,
             #aiSentenceModal .bg-white,
+            #conjugationModal .bg-white,
             #sentenceModal .bg-white,
             #vocabListModal .bg-white,
             #sentenceListModal .bg-white,
@@ -567,6 +569,7 @@
             #sentenceModal,
             #vocabModal,
             #aiSentenceModal,
+            #conjugationModal,
             #vocabListModal,
             #sentenceListModal,
             #excelModal,
@@ -593,6 +596,7 @@
             #sentenceModal .bg-white,
             #vocabModal .bg-white,
             #aiSentenceModal .bg-white,
+            #conjugationModal .bg-white,
             #vocabListModal .bg-white,
             #sentenceListModal .bg-white,
             #editVocabModal .bg-white,
@@ -784,14 +788,16 @@
             #vocabListModal .bg-white, #sentenceListModal .bg-white,
             #sentenceModal .bg-white,
             #vocabModal .bg-white,
-            #aiSentenceModal .bg-white {
+            #aiSentenceModal .bg-white,
+            #conjugationModal .bg-white {
                 box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             }
 
             #vocabListModal, #sentenceListModal,
             #sentenceModal,
             #vocabModal,
-            #aiSentenceModal {
+            #aiSentenceModal,
+            #conjugationModal {
                 backdrop-filter: blur(8px);
                 -webkit-backdrop-filter: blur(8px);
             }
@@ -799,7 +805,8 @@
             #vocabListModal .bg-white, #sentenceListModal .bg-white,
             #sentenceModal .bg-white,
             #vocabModal .bg-white,
-            #aiSentenceModal .bg-white {
+            #aiSentenceModal .bg-white,
+            #conjugationModal .bg-white {
                 animation: modalSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             }
 
@@ -807,8 +814,10 @@
             #vocabListModal select, #sentenceListModal select,
             #vocabModal input,
             #aiSentenceModal input,
+            #conjugationModal input,
             #vocabModal select,
-            #aiSentenceModal select {
+            #aiSentenceModal select,
+            #conjugationModal select {
                 font-family: 'DM Sans', sans-serif;
             }
 
@@ -820,12 +829,16 @@
             #vocabListModal span, #sentenceListModal span,
             #vocabModal label,
             #aiSentenceModal label,
+            #conjugationModal label,
             #vocabModal h2,
             #aiSentenceModal h2,
+            #conjugationModal h2,
             #vocabModal p,
             #aiSentenceModal p,
+            #conjugationModal p,
             #vocabModal span,
-            #aiSentenceModal span {
+            #aiSentenceModal span,
+            #conjugationModal span {
                 letter-spacing: -0.01em;
             }
 
@@ -1008,10 +1021,13 @@
             /* Final Contrast Fixes for Inputs and Tables */
             #vocabModal input,
             #aiSentenceModal input,
+            #conjugationModal input,
             #vocabModal select,
             #aiSentenceModal select,
+            #conjugationModal select,
             #vocabModal textarea,
             #aiSentenceModal textarea,
+            #conjugationModal textarea,
             #vocabListModal input,
             #vocabListModal select,
             #authOverlay input,
@@ -1028,8 +1044,10 @@
 
             #vocabModal label,
             #aiSentenceModal label,
+            #conjugationModal label,
             #vocabModal h2,
             #aiSentenceModal h2,
+            #conjugationModal h2,
             #vocabListModal label,
             #vocabListModal h2,
             #vocabListModal h3,
@@ -1115,8 +1133,10 @@
             #sentenceListModal .cs-list,
             #vocabModal .cs-btn,
             #aiSentenceModal .cs-btn,
+            #conjugationModal .cs-btn,
             #vocabModal .cs-list,
             #aiSentenceModal .cs-list,
+            #conjugationModal .cs-list,
             #editVocabModal .cs-btn,
             #editVocabModal .cs-list,
             #editSentenceModal .cs-btn,
@@ -1130,6 +1150,7 @@
             #sentenceListModal .cs-opt,
             #vocabModal .cs-opt,
             #aiSentenceModal .cs-opt,
+            #conjugationModal .cs-opt,
             #editVocabModal .cs-opt,
             #editSentenceModal .cs-opt {
                 color: #cbd5e1 !important;
@@ -1140,6 +1161,7 @@
             #sentenceListModal .cs-opt:hover,
             #vocabModal .cs-opt:hover,
             #aiSentenceModal .cs-opt:hover,
+            #conjugationModal .cs-opt:hover,
             #editVocabModal .cs-opt:hover,
             #editSentenceModal .cs-opt:hover {
                 background-color: rgba(255, 255, 255, 0.1) !important;
@@ -1149,6 +1171,7 @@
             #sentenceListModal .cs-opt.selected,
             #vocabModal .cs-opt.selected,
             #aiSentenceModal .cs-opt.selected,
+            #conjugationModal .cs-opt.selected,
             #editVocabModal .cs-opt.selected,
             #editSentenceModal .cs-opt.selected {
                 color: #60a5fa !important;
@@ -1159,6 +1182,7 @@
             #sentenceListModal .cs-chevron,
             #vocabModal .cs-chevron,
             #aiSentenceModal .cs-chevron,
+            #conjugationModal .cs-chevron,
             #editVocabModal .cs-chevron,
             #editSentenceModal .cs-chevron {
                 color: #94a3b8 !important;
@@ -1169,6 +1193,7 @@
             #sentenceListModal input,
             #vocabModal input,
             #aiSentenceModal input,
+            #conjugationModal input,
             #editVocabModal input,
             #editSentenceModal input,
             #editVocabModal select,
@@ -1182,6 +1207,7 @@
             #sentenceListModal input::placeholder,
             #vocabModal input::placeholder,
             #aiSentenceModal input::placeholder,
+            #conjugationModal input::placeholder,
             #editVocabModal input::placeholder,
             #editSentenceModal input::placeholder {
                 color: #64748b !important;
@@ -1529,6 +1555,7 @@
             #authOverlay,
             #vocabModal,
             #aiSentenceModal,
+            #conjugationModal,
             #statsModal,
             #excelModal {
                 align-items: flex-start !important;
@@ -1660,6 +1687,18 @@
                 background-color: rgba(255, 255, 255, 0.05) !important;
                 color: white !important;
             }
+        }
+    </style>
+    <style>
+        /* Grammatik-Hilfe und Konjugationstabelle im (mobilen) Dark Mode */
+        @media (max-width: 1024px) {
+            #grammarHelpBox { background: rgba(79, 70, 229, 0.15) !important; border-color: rgba(129, 140, 248, 0.35) !important; }
+            #grammarHelpBox p, #grammarHelpBox span { color: #cbd5e1 !important; }
+            #grammarHelpBox .gh-title { color: #a5b4fc !important; }
+            #grammarHelpBox .gh-rule { background: rgba(15, 23, 42, 0.6) !important; color: #c7d2fe !important; }
+            #grammarHelpBox button { background: rgba(15, 23, 42, 0.6) !important; color: #a5b4fc !important; border-color: rgba(129, 140, 248, 0.4) !important; }
+            #conjugationModal .conj-highlight { background: rgba(79, 70, 229, 0.2) !important; border-color: rgba(129, 140, 248, 0.5) !important; }
+            #conjugationModal .conj-highlight p { color: #a5b4fc !important; }
         }
     </style>
 </head>
@@ -2550,6 +2589,8 @@
                 </div>
 
                 <div id="grammarFeedback" class="hidden w-full mt-6 p-4 rounded-xl text-center font-bold"></div>
+
+                <div id="grammarHelpBox" class="hidden w-full mt-4 p-4 rounded-xl bg-indigo-50 border border-indigo-100 text-left text-sm text-slate-700 space-y-3"></div>
 
                 <div class="mt-8 flex gap-3 w-full max-w-md">
                     <button id="grammarSubmitBtn"
@@ -4010,6 +4051,22 @@
         </div>
     </div>
 
+    <!-- Konjugations-Modal -->
+    <div id="conjugationModal"
+        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-2xl w-full shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="flex justify-between items-start mb-3 shrink-0 gap-3">
+                <div>
+                    <h2 id="conjTitle" class="text-xl font-bold text-slate-800"></h2>
+                    <p id="conjSubtitle" class="text-xs text-slate-500 mt-1"></p>
+                </div>
+                <button id="closeConjugationModalBtn" class="text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
+            </div>
+            <div id="conjBody" class="overflow-y-auto pr-1 flex-1 min-h-0 grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+            <p class="text-[11px] text-slate-400 mt-3 shrink-0" data-i18n="conj_hint">Automatisch erzeugt – bei seltenen unregelmäßigen Verben bitte im Wörterbuch nachprüfen.</p>
+        </div>
+    </div>
+
     <!-- Satz-Eingabe Modal -->
     <div id="sentenceModal"
         class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
@@ -5428,6 +5485,13 @@
                 excel_current_list: "Aktuelle Liste:",
                 admin_users_tab: "Benutzer",
                 admin_lists_tab: "Listen",
+                conj_hint: "Automatisch erzeugt – bei seltenen unregelmäßigen Verben bitte im Wörterbuch nachprüfen.",
+                conj_modal: "Modalverb: unveränderlich, danach Infinitiv ohne „to“",
+                conj_aux: "Hilfsverb",
+                conj_participle: "Partizip",
+                conj_in_sentence: "im Satz",
+                conj_open: "Konjugationstabelle öffnen",
+                conj_tap_hint: "Tippe auf ein Verb für die Konjugationstabelle:",
                 admin_ai_tab: "KI",
                 admin_ai_title: "🤖 KI-Einstellungen",
                 admin_ai_desc: "Die KI erzeugt Beispielsätze zu neuen Vokabeln. Der API-Schlüssel wird verschlüsselt auf dem Server gespeichert und nie wieder angezeigt.",
@@ -5860,6 +5924,13 @@
                 excel_current_list: "Current List:",
                 admin_users_tab: "Users",
                 admin_lists_tab: "Lists",
+                conj_hint: "Generated automatically – please double-check rare irregular verbs in a dictionary.",
+                conj_modal: "Modal verb: never changes, followed by the infinitive without “to”",
+                conj_aux: "Auxiliary",
+                conj_participle: "Participle",
+                conj_in_sentence: "in the sentence",
+                conj_open: "Open conjugation table",
+                conj_tap_hint: "Tap a verb to see its conjugation table:",
                 admin_ai_tab: "AI",
                 admin_ai_title: "🤖 AI settings",
                 admin_ai_desc: "The AI creates example sentences for new vocabulary. The API key is stored encrypted on the server and never shown again.",
@@ -6484,6 +6555,8 @@
         let currentGrammarSentence = null;
         let grammarAnswers = [];
         let verbReverseMap = {}; // Maps conjugatedForm -> infinitive
+        let grammarVerbEls = []; // Verben des aktuellen Grammatik-Satzes (für die Konjugationstabelle)
+        const grammarHelpBox = document.getElementById('grammarHelpBox');
         let selectedSourceCard = null;
         let updateEmojiPreview = (emoji) => { }; // Placeholder for picker logic
 
@@ -9208,6 +9281,15 @@
             const maxGaps = (CURRENT_LANG === 'en' && sentenceObj.category && sentenceObj.category.toLowerCase().includes('conditional')) ? 3 : 2;
             const selected = eligibleTokens.slice(0, maxGaps);
 
+            // Verben im Satz merken: nach dem Prüfen kann man sie für die Konjugationstabelle antippen
+            grammarVerbEls = [];
+            const verbInfByIdx = {};
+            eligibleTokens.filter(t => t.type === 'verb').forEach(t => {
+                const inf = grammarVerbInfinitive(tokens[t.idx]);
+                if (inf) verbInfByIdx[t.idx] = inf;
+            });
+            if (grammarHelpBox) { grammarHelpBox.classList.add('hidden'); grammarHelpBox.innerHTML = ''; }
+
             grammarQuestionDisplay.innerHTML = '';
             grammarFeedback.classList.add('hidden');
             grammarSubmitBtn.classList.remove('hidden');
@@ -9269,6 +9351,7 @@
                         label.textContent = ` (${displayInf}) `;
                         label.className = 'text-sm md:text-base text-blue-500 font-medium ml-1';
                         span.appendChild(label);
+                        if (verbInfByIdx[idx]) grammarVerbEls.push({ el: label, inf: verbInfByIdx[idx] });
                     } else if (CURRENT_LANG === 'en' && gap.type === 'comparative') {
                         const label = document.createElement('span');
                         label.textContent = ` (Komparativ) `;
@@ -9285,6 +9368,7 @@
                     const textSpan = document.createElement('span');
                     textSpan.textContent = token;
                     grammarQuestionDisplay.appendChild(textSpan);
+                    if (verbInfByIdx[idx]) grammarVerbEls.push({ el: textSpan, inf: verbInfByIdx[idx] });
                 }
             });
 
@@ -9327,11 +9411,127 @@
                 grammarActivityCount++;
                 recordDailyActivity();
                 saveAllDataLocally();
-                grammarFeedback.innerHTML = `Nicht ganz richtig. <br> Lösung: <span class="font-bold">${grammarAnswers.join(', ')}</span>`;
+                grammarFeedback.innerHTML = `Nicht ganz richtig. <br> Lösung: <span class="font-bold">${escapeHtml(grammarAnswers.join(', '))}</span>`;
                 grammarFeedback.classList.add('bg-red-50', 'text-red-700');
                 grammarSubmitBtn.classList.add('hidden');
                 grammarNextBtn.classList.remove('hidden');
             }
+            showGrammarHelp();
+        }
+
+        // --- Grammatik-Hilfe: Erklärung + Konjugationstabellen (grammar-help.js) ---
+        const conjugationModal = document.getElementById('conjugationModal');
+        const closeConjugationModal = setupModal(conjugationModal, null, document.getElementById('closeConjugationModalBtn'));
+
+        // Infinitiv eines Satz-Tokens, nur wenn sich daraus eine Tabelle erzeugen lässt
+        function grammarVerbInfinitive(token) {
+            if (!window.GrammarHelp) return null;
+            const clean = token.replace(/[.,:;?!()"«»]/g, '').trim();
+            if (!clean || /\s/.test(clean)) return null; // "is going to" u.ä. nicht
+            const inf = CURRENT_LANG === 'it' ? deriveInfinitive(clean) : deriveInfinitiveEn(clean);
+            if (!inf || ['Future', 'Conditional', 'Modal'].includes(inf)) return null;
+            if (CURRENT_LANG === 'it' && !/(are|ere|ire|rre|rsi)$/i.test(inf)) return null;
+            return window.GrammarHelp.conjugate(inf, CURRENT_LANG) ? inf.toLowerCase() : null;
+        }
+
+        function openConjugation(inf) {
+            const conj = window.GrammarHelp.conjugate(inf, CURRENT_LANG);
+            if (!conj) return;
+            const preferred = currentGrammarSentence ? window.GrammarHelp.preferredTense(currentGrammarSentence.category, CURRENT_LANG) : null;
+            const dictEntry = fullDictionary.find(w => w.typ === 'Verb' && w.it && w.it.toLowerCase() === conj.infinitive);
+            document.getElementById('conjTitle').textContent = `📖 ${CURRENT_LANG === 'en' ? 'to ' : ''}${conj.infinitive}${dictEntry ? ' – ' + dictEntry.de : ''}`;
+            const sub = [];
+            if (conj.modal) sub.push(getI18n('conj_modal'));
+            if (conj.aux) sub.push(`${getI18n('conj_aux')}: ${conj.aux}`);
+            if (conj.participio) sub.push(`${getI18n('conj_participle')}: ${conj.participio}`);
+            if (conj.pastSimple) sub.push(`Simple Past: ${conj.pastSimple}`);
+            if (conj.gerundio) sub.push(`${CURRENT_LANG === 'en' ? '-ing' : 'Gerundio'}: ${conj.gerundio}`);
+            document.getElementById('conjSubtitle').textContent = sub.join(' · ');
+
+            const body = document.getElementById('conjBody');
+            body.innerHTML = '';
+            const tenses = [...conj.tenses].sort((a, b) => (b.id === preferred) - (a.id === preferred));
+            tenses.forEach(tense => {
+                const card = document.createElement('div');
+                const highlight = tense.id === preferred;
+                card.className = `p-3 rounded-xl border ${highlight ? 'conj-highlight bg-indigo-50 border-indigo-300 sm:col-span-2' : 'bg-slate-50 border-slate-100'}`;
+                const h = document.createElement('p');
+                h.className = `text-xs font-black uppercase tracking-wider mb-2 ${highlight ? 'text-indigo-700' : 'text-slate-500'}`;
+                h.textContent = tense.name + (highlight ? ` · ${getI18n('conj_in_sentence')}` : '');
+                card.appendChild(h);
+                const grid = document.createElement('div');
+                grid.className = 'grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-sm';
+                const persons = tense.personsOverride || conj.persons;
+                tense.forms.forEach((form, i) => {
+                    if (!form) return;
+                    const p = document.createElement('span');
+                    p.className = 'text-slate-400';
+                    p.textContent = conj.noPersonColumn ? '' : persons[i];
+                    const f = document.createElement('span');
+                    f.className = 'font-semibold text-slate-800';
+                    f.textContent = form;
+                    grid.append(p, f);
+                });
+                card.appendChild(grid);
+                if (tense.extra) {
+                    const x = document.createElement('p');
+                    x.className = 'text-[11px] text-slate-500 mt-1.5';
+                    x.textContent = tense.extra;
+                    card.appendChild(x);
+                }
+                body.appendChild(card);
+            });
+            conjugationModal.classList.remove('hidden');
+            conjugationModal.classList.add('flex');
+        }
+
+        function showGrammarHelp() {
+            if (!grammarHelpBox || !window.GrammarHelp || !currentGrammarSentence) return;
+            grammarHelpBox.innerHTML = '';
+            const explanations = window.GrammarHelp.getExplanations(currentGrammarSentence.category, CURRENT_LANG);
+            explanations.forEach(ex => {
+                const block = document.createElement('div');
+                const title = document.createElement('p');
+                title.className = 'gh-title font-bold text-indigo-800';
+                title.textContent = '📘 ' + ex.title;
+                const text = document.createElement('p');
+                text.className = 'mt-1';
+                text.textContent = ex.text;
+                const rule = document.createElement('p');
+                rule.className = 'gh-rule mt-1 font-mono text-xs bg-white/70 rounded-lg px-2 py-1 text-indigo-900';
+                rule.textContent = ex.rule;
+                const example = document.createElement('p');
+                example.className = 'mt-1 text-xs italic text-slate-500';
+                example.textContent = ex.example;
+                block.append(title, text, rule, example);
+                grammarHelpBox.appendChild(block);
+            });
+
+            // Verben im Satz antippbar machen + als Knöpfe auflisten
+            const seen = new Set();
+            const chips = document.createElement('div');
+            chips.className = 'flex flex-wrap gap-2 items-center';
+            grammarVerbEls.forEach(({ el, inf }) => {
+                el.classList.add('cursor-pointer', 'underline', 'decoration-dotted', 'decoration-indigo-400', 'underline-offset-4');
+                el.title = getI18n('conj_open');
+                el.onclick = () => openConjugation(inf);
+                if (seen.has(inf)) return;
+                seen.add(inf);
+                const chip = document.createElement('button');
+                chip.type = 'button';
+                chip.className = 'px-3 py-1 rounded-full bg-white border border-indigo-200 text-indigo-700 text-xs font-semibold hover:bg-indigo-100';
+                chip.textContent = `📖 ${CURRENT_LANG === 'en' ? 'to ' : ''}${inf}`;
+                chip.addEventListener('click', () => openConjugation(inf));
+                chips.appendChild(chip);
+            });
+            if (seen.size > 0) {
+                const label = document.createElement('span');
+                label.className = 'text-xs text-slate-500 w-full';
+                label.textContent = getI18n('conj_tap_hint');
+                chips.prepend(label);
+                grammarHelpBox.appendChild(chips);
+            }
+            grammarHelpBox.classList.toggle('hidden', grammarHelpBox.children.length === 0);
         }
 
         grammarSubmitBtn.addEventListener('click', handleGrammarSubmit);
