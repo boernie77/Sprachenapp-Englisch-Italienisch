@@ -173,6 +173,13 @@ PostgreSQL-Daten liegen als **Bind-Mount** unter `./pgdata` (kein Docker named v
 - **Achtung:** Solange das Repo privat ist, kann der VPS nicht `git fetch`en → Live-Deploy baut still den alten Stand neu. Erst nach dem Wieder-Öffentlich-Stellen (oder mit Deploy-Key) deployen. Stand 2026-10-02: Repo ist wieder **öffentlich**, Live-Deploy funktioniert (vor jedem Deploy mit `gh repo view --json visibility` prüfen).
 - Offen (nur der Nutzer kann das): SMTP-Passwort beim Mailanbieter ändern + `gh secret set SMTP_PASS`; Upload-Key-Reset in der Play Console mit `upload_certificate_lernapp_2026.pem`. Danach Repo wieder öffentlich.
 
+## Ungetestet/Unreleased (2026-10-03, nach 2.2.0)
+- **KI-Sätze umgebaut:** Statt Dialog pro Wort jetzt Menü „✨ KI-Beispielsätze“ (`aiSentenceModal`, wiederverwendet) mit allgemeinen Einstellungen: Automatik an/aus, Niveau, Grammatikarten (je Sprache), Sätze pro Wort. Pro Nutzer auf dem Server: `Users.aiPrefs` (JSON), `PUT /api/ai/preferences`, `GET /api/ai/options` liefert `prefs`.
+- Automatik (`runAiAuto()` im Frontend): erzeugt im Hintergrund für jedes aktive Wort ohne KI-Sätze Sätze (`/ai/sentences` + `/vocab/bulk`), gestartet nach `loadDataFromServer` und nach neuer Vokabel; stoppt bei Tageslimit/3 Fehlern in Folge. Sätze tragen `Vocabularies.forWord` (Fremdwort) und sind normale eigene Sätze (`typ: 'Satz'`).
+- Grammatik-Modus: Knopf „Sätze zu einem Wort anzeigen“ → `wordSentencesModal` mit Suche (zeigt Sätze je `forWord`).
+- Vollständige Vokabelliste zeigt „Aktiv: X von Y“ (`updateVocabActiveCount`).
+- Desktop-Fenster: kleine Fenster verkleinern `html { font-size }` per Media Query (Ende des `<style>` im `<head>`), große Monitore unverändert. Im Browser noch nicht visuell geprüft.
+
 ## Version 2.2.0 (2026-10-03) – live deployt
 - **KI-Beispielsätze:** Admin → Tab „KI“ (Anbieter Claude/OpenAI, Modell, API-Schlüssel, an/aus, Tageslimit pro Nutzer, Verbindungstest, „Modelle laden“). Einstellungen in Tabelle `Settings` (Schlüssel `ai.config`), API-Schlüssel AES-256-GCM-verschlüsselt (`server/utils/secretBox.js`, Schlüssel per HKDF aus `JWT_SECRET` → wird `JWT_SECRET` geändert, Schlüssel neu eintragen). Nutzungszähler in Tabelle `AiUsage`.
   - Server: `server/utils/ai/` (`providers.js` = Adapter Anthropic/OpenAI über die offiziellen SDKs, `index.js` = Einstellungen + Prompt + Schema, `grammar.js` = Niveaus und Grammatikarten), Routen `server/routes/ai.js` (`GET /api/ai/options`, `POST /api/ai/sentences`) und `/api/admin/ai-settings*` in `routes/admin.js`.
