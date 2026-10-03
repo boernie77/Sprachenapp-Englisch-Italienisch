@@ -1756,13 +1756,13 @@
                         Lizenz: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"
                             class="text-blue-600 hover:underline">CC BY-SA 4.0</a>
                     </p>
-                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.1.3</p>
+                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.1.4</p>
                     <p class="text-[10px] text-slate-400" data-i18n="imp_rights">© 2026 Christian Bernauer. Alle Rechte vorbehalten.</p>
                 </div>
             </div>
             <!-- App-Style Bottom Section -->
             <div class="mt-8 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.1.3</p>
+                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.1.4</p>
             </div>
         </div>
     </div>
@@ -2007,7 +2007,7 @@
             <div class="w-20 h-20 bg-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
                 <svg class="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <h3 class="text-3xl font-black text-slate-800 mb-4">Version 2.1.3 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
+            <h3 class="text-3xl font-black text-slate-800 mb-4">Version 2.1.4 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
             <div class="text-left space-y-4 mb-8">
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
@@ -2032,6 +2032,10 @@
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
                     <p class="text-slate-600 font-medium leading-tight text-sm">Fix: <b>Du bleibst angemeldet</b> – kein tägliches Neu-Anmelden mehr</p>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Fix: <b>Offline-Änderungen bleiben erhalten</b>, auch nach einer Abmeldung</p>
                 </div>
                 <p class="text-slate-500 text-[10px] italic text-center mt-4 px-4 leading-normal">
                     Viel Spaß beim Lernen! Melde Fehler bitte direkt an uns.
@@ -2162,7 +2166,7 @@
                 </div>
                 <div class="px-4 py-1.5 text-[10px] text-slate-400 bg-slate-50/50 flex items-center justify-between border-t border-slate-100/50">
                     <span>App-Version:</span>
-                    <span class="font-mono font-medium text-slate-500">2.1.3</span>
+                    <span class="font-mono font-medium text-slate-500">2.1.4</span>
                 </div>
                 <input type="file" id="excelUploadEl" accept=".xlsx, .xls" class="hidden">
             </div>
@@ -6812,8 +6816,19 @@
 
         // --- Offline Sync Outbox ---
         let syncOutbox = safeJSONParse(localStorage.getItem('ita-sync-outbox'), []);
+        let lastLoggedOutUserId = null;
 
         function addToSyncOutbox(type, payload) {
+            if (!API_TOKEN) {
+                // Nach einer Abmeldung eintreffend (z. B. Token abgelaufen): beim abgemeldeten Nutzer parken
+                if (lastLoggedOutUserId) {
+                    const key = pendingOutboxKey(lastLoggedOutUserId);
+                    const parked = safeJSONParse(localStorage.getItem(key), []);
+                    parked.push({ type, payload, timestamp: Date.now() });
+                    localStorage.setItem(key, JSON.stringify(parked));
+                }
+                return;
+            }
             if (type === 'daily-activity') {
                 const existing = syncOutbox.find(item => item.type === 'daily-activity');
                 if (existing) {
@@ -6844,14 +6859,36 @@
             localStorage.setItem('ita-sync-outbox', JSON.stringify(syncOutbox));
         }
 
-        async function processSyncOutbox() {
-            if (!navigator.onLine || syncOutbox.length === 0) return;
+        // Offline gemerkte Statistik senden – mit dem lokalen Stand zusammengeführt (höherer Wert gewinnt)
+        async function sendQueuedStat(payload) {
+            const q = payload.data || {};
+            const cur = wordStats[payload.wordId] || {};
+            const max = (k) => Math.max(q[k] || 0, cur[k] || 0);
+            const toIso = (k) => max(k) ? new Date(max(k)).toISOString() : undefined;
+            await apiFetch(`/vocab/${payload.wordId}/stats`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    presented: max('presented'),
+                    correct: max('correct'),
+                    incorrect: max('incorrect'),
+                    streak: max('streak'),
+                    lastReviewedDate: toIso('lastReviewedDate'),
+                    nextReviewDate: toIso('nextReviewDate'),
+                    isActive: payload.isActive !== false,
+                    isMarked: payload.isMarked === true
+                })
+            });
+        }
 
-            const remaining = [];
-            for (const task of syncOutbox) {
+        async function processSyncOutbox() {
+            if (!navigator.onLine || !API_TOKEN || syncOutbox.length === 0) return;
+
+            for (const task of [...syncOutbox]) {
+                // Abgemeldet (z. B. Token abgelaufen): logout() hat den Rest bereits für diesen Nutzer gesichert
+                if (!API_TOKEN) return;
                 try {
                     if (task.type === 'stats') {
-                        await saveStatToServer(task.payload.wordId);
+                        await sendQueuedStat(task.payload);
                     } else if (task.type === 'addVocab') {
                         await apiFetch('/vocab', {
                             method: 'POST',
@@ -6863,13 +6900,45 @@
                             body: JSON.stringify(task.payload)
                         });
                     }
+                    // Erst nach Erfolg austragen – so sieht logout() jederzeit nur noch Unerledigtes
+                    syncOutbox = syncOutbox.filter(t => t !== task);
                 } catch (err) {
-                    remaining.push(task);
+                    // bleibt in der Warteschlange
                 }
             }
-            syncOutbox = remaining;
-            localStorage.setItem('ita-sync-outbox', JSON.stringify(syncOutbox));
+            if (API_TOKEN) localStorage.setItem('ita-sync-outbox', JSON.stringify(syncOutbox));
         }
+
+        // Offline-Änderungen überstehen eine Abmeldung: pro Nutzer außerhalb der ita-*-Keys geparkt
+        const pendingOutboxKey = (userId) => `lernapp-pending-outbox-${userId}`;
+
+        function userIdFromToken(token) {
+            try {
+                const b64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+                return JSON.parse(atob(b64)).id || null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function stashOutboxForUser(userId) {
+            if (!userId || syncOutbox.length === 0) return;
+            const key = pendingOutboxKey(userId);
+            const parked = safeJSONParse(localStorage.getItem(key), []);
+            localStorage.setItem(key, JSON.stringify([...parked, ...syncOutbox]));
+        }
+
+        function restorePendingOutbox() {
+            if (!CURRENT_USER_ID) return;
+            const key = pendingOutboxKey(CURRENT_USER_ID);
+            const parked = safeJSONParse(localStorage.getItem(key), []);
+            localStorage.removeItem(key);
+            if (parked.length === 0) return;
+            syncOutbox = [...parked, ...syncOutbox];
+            localStorage.setItem('ita-sync-outbox', JSON.stringify(syncOutbox));
+            console.log(`[sync] ${parked.length} offline gespeicherte Änderung(en) wiederhergestellt`);
+        }
+        restorePendingOutbox();
 
         async function checkConnection() {
             try {
@@ -7093,7 +7162,9 @@
                         // Lade dailyActivity vom Server (user-spezifisch)
                         dailyActivity = data.dailyActivity || {};
 
+                        restorePendingOutbox();
                         showApp();
+                        processSyncOutbox();
                     } else {
                         isLoginMode = true;
                         authToggleBtn.click();
@@ -7209,6 +7280,9 @@
         });
 
         function logout() {
+            lastLoggedOutUserId = CURRENT_USER_ID || (API_TOKEN && userIdFromToken(API_TOKEN)) || null;
+            stashOutboxForUser(lastLoggedOutUserId);
+            syncOutbox = [];
             API_TOKEN = null;
             IS_ADMIN = false;
             CURRENT_USER_NAME = null;
@@ -9294,7 +9368,7 @@
         // Version Update Modal Logic
         const versionModal = document.getElementById('versionUpdateModal');
         const closeVersionBtn = document.getElementById('closeVersionModalBtn');
-        const vKey = 'hasSeenVersion_2_1_3';
+        const vKey = 'hasSeenVersion_2_1_4';
         closeVersionBtn.addEventListener('click', () => {
             localStorage.setItem(vKey, 'true');
             versionModal.classList.add('hidden');
