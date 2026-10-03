@@ -204,11 +204,14 @@ router.post('/grammar-sentences/bulk', authenticateToken, requireAdmin, asyncHan
 
     const transaction = await sequelize.transaction();
     try {
-        if (mode !== 'append') {
-            // KI-Sätze des Admins (forWord gesetzt) bleiben beim Ersetzen der Excel-Liste erhalten
+        if (mode === 'overwrite-all') {
+            // Vollständige Sicherung (Datei enthält KI-Sätze mit Wort): alles ersetzen, keine Doppelten
+            await GrammarSentence.destroy({ where: { language }, transaction });
+        } else if (mode !== 'append') {
+            // Reine Excel-Liste ohne KI-Sätze: vorhandene KI-Sätze (forWord gesetzt) bleiben erhalten
             await GrammarSentence.destroy({ where: { language, forWord: null }, transaction });
         }
-        const data = sentences.map(s => ({ ...s, language }));
+        const data = sentences.map(s => ({ it: s.it, de: s.de, category: s.category, level: s.level, forWord: s.forWord || null, language }));
         const created = await GrammarSentence.bulkCreate(data, { transaction });
         await transaction.commit();
         res.json(created);
