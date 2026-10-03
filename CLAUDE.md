@@ -5,7 +5,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Übergabe / Aktueller Stand (2026-10-03) – zuerst lesen
 
 - **NEU: Live (Web) läuft 2.1.4**: Anmeldung bleibt erhalten (2.1.3) und Offline-Änderungen überstehen eine Abmeldung (2.1.4), Details unten. Versionsnummern schon erhöht: Android versionCode 21 / 2.1.4, iOS Build 21 / 2.1.4. Web-Assets für Android/iOS sind mitcommittet.
-- **Nächster Schritt auf dem MacBook: Mobile-Builds 2.1.4 erstellen** (`git pull`, `npx cap sync`, bauen wie bei 2.1.2), aufs iPhone installieren und **statt** der 2.1.2-Builds hochladen. Tags `v2.1.3` (`fea3c30`) und `v2.1.4` setzen.
+- **Mobile-Builds 2.1.4 sind gebaut (MacBook, 2026-10-03)**. `npx cap sync` hat nichts verändert. Tags `v2.1.3` (`fea3c30`) und `v2.1.4` (`5545d2f`) sind gesetzt.
+  - **Android:** `app-release-v2.1.4-v21.aab` im Repo-Root (gitignored), versionCode 21, signiert mit dem Release-Keystore (SHA256 `7E:85:B2:33:…:54:F1`).
+  - **iOS:** `~/Projekte/Neue_Lernapp/build/VokabelnMulti-2.1.4-21.xcarchive`, Build 21, Team `SYQL3PUXA9`. Auf dem iPhone 15 Pro installiert, als normales Update über 2.1.2 ohne Löschen.
+  - **Noch nicht hochgeladen.** Diese Builds kommen **statt** der 2.1.2-Builds in die Stores: iOS über den Xcode-Organizer → „Distribute App“, Android manuell in der Play Console.
 
 ### Stand vom MacBook (2026-10-02, Builds 2.1.2)
 
