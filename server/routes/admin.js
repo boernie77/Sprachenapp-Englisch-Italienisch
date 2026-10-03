@@ -2,6 +2,7 @@ const express = require('express');
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const { User, Vocabulary, Stats, InviteCode, BaseVocabulary, GrammarSentence, sequelize } = require('../models');
+const ai = require('../utils/ai');
 const { authenticateToken, requireAdmin, asyncHandler } = require('../middleware/auth');
 const transporter = require('../utils/mailer');
 
@@ -221,6 +222,64 @@ router.delete('/grammar-sentences', authenticateToken, requireAdmin, asyncHandle
     if (!language) return res.status(400).json({ error: 'Language required' });
     await GrammarSentence.destroy({ where: { language } });
     res.json({ message: 'Grammar sentences deleted' });
+}));
+
+// --- KI-Einstellungen ---
+// Der API-Schlüssel wird nur geschrieben, nie zurückgegeben (nur "hinterlegt ••••1234").
+
+router.get('/ai-settings', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
+    res.json(ai.publicConfig(await ai.loadConfig()));
+}));
+
+router.put('/ai-settings', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
+    const { provider, model, enabled, dailyLimit, apiKey, clearKey } = req.body;
+    const config = await ai.loadConfig();
+
+    if (provider !== undefined) {
+        ai.getProvider(provider); // wirft bei unbekanntem Anbieter
+        config.provider = provider;
+    }
+    const target = provider || config.provider;
+
+    if (model !== undefined) {
+        if (typeof model !== 'string' || !/^[\w.:\-\/]{1,100}$/.test(model.trim())) return res.status(400).json({ error: 'Ungültiger Modellname' });
+        config.models[target] = model.trim();
+    }
+    if (enabled !== undefined) config.enabled = enabled === true;
+    if (dailyLimit !== undefined) {
+        const limit = parseInt(dailyLimit, 10);
+        if (!Number.isInteger(limit) || limit < 0 || limit > 1000) return res.status(400).json({ error: 'Tageslimit muss zwischen 0 und 1000 liegen' });
+        config.dailyLimit = limit;
+    }
+    if (clearKey === true) delete config.keys[target];
+    if (typeof apiKey === 'string' && apiKey.trim()) {
+        if (apiKey.trim().length > 500) return res.status(400).json({ error: 'API-Schlüssel zu lang' });
+        config.keys[target] = ai.encrypt(apiKey.trim());
+    }
+
+    await ai.saveConfig(config);
+    res.json(ai.publicConfig(config));
+}));
+
+// Prüft Schlüssel + Modell des gewählten Anbieters mit einem kostenlosen Modell-Abruf
+router.post('/ai-settings/test', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
+    const config = await ai.loadConfig();
+    const providerId = req.body.provider || config.provider;
+    const provider = ai.getProvider(providerId);
+    const apiKey = ai.getApiKey(config, providerId);
+    if (!apiKey) return res.status(400).json({ error: config.keys[providerId] ? 'Gespeicherter Schlüssel lässt sich nicht mehr entschlüsseln (JWT_SECRET geändert?). Bitte neu eintragen.' : 'Kein API-Schlüssel hinterlegt' });
+    const model = config.models[providerId];
+    await provider.checkModel({ apiKey, model });
+    res.json({ ok: true, message: `Verbindung zu ${provider.label} funktioniert, Modell ${model} ist verfügbar.` });
+}));
+
+router.get('/ai-settings/models', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
+    const config = await ai.loadConfig();
+    const providerId = req.query.provider || config.provider;
+    const provider = ai.getProvider(providerId);
+    const apiKey = ai.getApiKey(config, providerId);
+    if (!apiKey) return res.json({ models: provider.suggestedModels.map(id => ({ id, name: id })), fromProvider: false });
+    res.json({ models: await provider.listModels({ apiKey }), fromProvider: true });
 }));
 
 module.exports = router;
