@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Übergabe / Aktueller Stand (2026-10-03, abends) – zuerst lesen
 
-- **Live läuft 2.2.3** (Commit siehe `git log`; 2.2.1 = `0ee17f1`; davor 2.2.0 = `e541f90`, Tag `v2.2.0`, Live-Deploy erfolgreich, Container auf Node 22). KI-Beispielsätze, Grammatik-Erklärungen, Konjugationstabellen. Details unten unter „Version 2.2.0“.
+- **Live läuft 2.2.4** (2.2.3 startete nicht: `pricing.js` fehlte im Commit – neue Dateien immer mit `git add` prüfen, `commit -a` nimmt sie nicht mit) (Commit siehe `git log`; 2.2.1 = `0ee17f1`; davor 2.2.0 = `e541f90`, Tag `v2.2.0`, Live-Deploy erfolgreich, Container auf Node 22). KI-Beispielsätze, Grammatik-Erklärungen, Konjugationstabellen. Details unten unter „Version 2.2.0“.
 - **Live-Datenbank korrigiert (2026-10-03):** `GrammarSentences` komplett durch die korrigierten Listen ersetzt (IT 2.926, EN 2.972; vorher 3.176/2.972), 46 Kopien in der eigenen Liste eines Nutzers (`Vocabularies`, `typ='Satz'`, `isOwn=false`) per exaktem Textvergleich korrigiert. Sicherung davor: `/root/lernapp-db-20261003-vor-2.2.0.sql.gz` auf dem VPS. 3.176 alte IT-Kopien ohne Besitzer (`UserId IS NULL`, von gelöschten Nutzern) sind unverändert.
 - **Mobile-Builds 2.2.0 sind gebaut (MacBook):** Web-Assets committet (Commit nach `e541f90`, inkl. `grammar-help.js` per `git add -f`).
   - **Android:** `app-release-v2.2.0-v22.aab` im Repo-Root (gitignored), versionCode 22, Release-Keystore (SHA256 `7E:85:B2:33:…:54:F1`).
