@@ -18,9 +18,9 @@ router.get('/', authenticateToken, asyncHandler(async (req, res) => {
 }));
 
 router.post('/', authenticateToken, asyncHandler(async (req, res) => {
-    const { de, it, typ, emoji, grammatica, level, isActive, isMarked, isOwn, language } = req.body;
+    const { de, it, typ, emoji, grammatica, level, forWord, isActive, isMarked, isOwn, language } = req.body;
     const finalLang = language || req.query.language || 'it';
-    const vocab = await Vocabulary.create({ de, it, typ, emoji, grammatica, level: level || null, isActive: isActive !== false, isMarked: isMarked === true, isOwn: isOwn !== false, language: finalLang, UserId: req.user.id });
+    const vocab = await Vocabulary.create({ de, it, typ, emoji, grammatica, level: level || null, forWord: forWord || null, isActive: isActive !== false, isMarked: isMarked === true, isOwn: isOwn !== false, language: finalLang, UserId: req.user.id });
     const stats = await Stats.create({ VocabularyId: vocab.id });
     res.status(201).json({ ...vocab.toJSON(), Stat: stats });
 }));
@@ -29,9 +29,9 @@ router.post('/bulk', authenticateToken, asyncHandler(async (req, res) => {
     const { words, language } = req.body;
     const createdWords = [];
     for (const word of words) {
-      const { de, it, typ, emoji, grammatica, level, isActive, isMarked, isOwn } = word;
+      const { de, it, typ, emoji, grammatica, level, forWord, isActive, isMarked, isOwn } = word;
       const vocab = await Vocabulary.create({ 
-        de, it, typ, emoji, grammatica, level: level || null,
+        de, it, typ, emoji, grammatica, level: level || null, forWord: forWord || null,
         isActive: isActive !== false, 
         isMarked: isMarked === true, 
         isOwn: isOwn === undefined ? true : isOwn === true,

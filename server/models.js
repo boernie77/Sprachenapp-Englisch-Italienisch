@@ -65,7 +65,8 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: true,
     unique: true
-  }
+  },
+  aiPrefs: { type: DataTypes.TEXT, allowNull: true } // JSON: Einstellungen der automatischen KI-Beispielsätze
 });
 
 const Vocabulary = sequelize.define('Vocabulary', {
@@ -78,6 +79,7 @@ const Vocabulary = sequelize.define('Vocabulary', {
   isMarked: { type: DataTypes.BOOLEAN, defaultValue: false },
   isOwn: { type: DataTypes.BOOLEAN, defaultValue: false },
   level: { type: DataTypes.STRING, allowNull: true }, // Niveau eigener Sätze (A1–B2), z.B. von der KI erzeugt
+  forWord: { type: DataTypes.STRING, allowNull: true }, // Fremdsprachiges Wort, zu dem die KI diesen Satz erzeugt hat
   language: { type: DataTypes.STRING, defaultValue: 'it' }
 });
 
