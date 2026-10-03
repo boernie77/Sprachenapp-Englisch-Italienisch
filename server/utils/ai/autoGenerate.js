@@ -10,9 +10,11 @@ const { parsePrefs, prefsForLanguage, remainingToday, addUsage } = require('./us
 const LANGUAGES = ['it', 'en'];
 const TICK_MS = 60 * 1000;
 const MAX_FAILURES = 3;
+const BULK_THRESHOLD = 50; // ab so vielen offenen Wörtern startet die Automatik erst nach Freigabe durch den Nutzer
 const ARTICLES = { it: ['il', 'lo', 'la', 'l', 'i', 'gli', 'le', 'un', 'uno', 'una'], en: ['to', 'the', 'a', 'an'] };
 
 let running = false;
+const bulkConfirmed = new Set(); // `${userId}:${language}` – freigegebene große Mengen; endet, wenn keine Wörter mehr offen sind
 const backfillRequests = new Set(); // `${userId}:${language}` – vom Nutzer angestoßenes Nachrüsten fehlender Niveaus
 const failedWords = new Set(); // `${userId}:${wordId}` – nach einem Fehler bis zum nächsten Serverstart nicht erneut versuchen
 
@@ -101,6 +103,9 @@ async function processUser(userId, language, config) {
     const allowed = await getCategories(language);
     let failures = 0;
     const words = await pendingWords(userId, language);
+    const bulkKey = `${userId}:${language}`;
+    if (words.length === 0) bulkConfirmed.delete(bulkKey);
+    if (words.length > BULK_THRESHOLD && !bulkConfirmed.has(bulkKey)) return; // große Menge: erst nach Freigabe im KI-Dialog
 
     for (const word of words) {
         const user = await User.findByPk(userId); // frisch lesen: Abschalten wirkt sofort
@@ -201,6 +206,8 @@ function start() {
     setInterval(runOnce, TICK_MS);
 }
 
+const needsBulkConfirmation = (userId, language, pendingCount) => pendingCount > BULK_THRESHOLD && !bulkConfirmed.has(`${userId}:${language}`);
+const confirmBulk = (userId, language) => { bulkConfirmed.add(`${userId}:${language}`); trigger(); };
 const requestBackfill = (userId, language) => { backfillRequests.add(`${userId}:${language}`); trigger(); };
 
-module.exports = { start, trigger, pendingWords, backfillCandidates, requestBackfill };
+module.exports = { start, trigger, pendingWords, backfillCandidates, requestBackfill, needsBulkConfirmation, confirmBulk, BULK_THRESHOLD };

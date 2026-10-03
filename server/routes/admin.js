@@ -221,7 +221,8 @@ router.post('/grammar-sentences/bulk', authenticateToken, requireAdmin, asyncHan
 router.delete('/grammar-sentences', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
     const { language } = req.query;
     if (!language) return res.status(400).json({ error: 'Language required' });
-    await GrammarSentence.destroy({ where: { language } });
+    // KI-Sätze (forWord gesetzt) bleiben erhalten, damit sie nicht neu bezahlt werden müssen
+    await GrammarSentence.destroy({ where: { language, forWord: null } });
     res.json({ message: 'Grammar sentences deleted' });
 }));
 

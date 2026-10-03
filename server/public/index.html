@@ -4052,6 +4052,11 @@
                 </div>
                 <p id="aiRemaining" class="text-[11px] text-slate-400 mb-2"></p>
                 <p id="aiAutoStatus" class="text-xs font-semibold text-purple-700"></p>
+                <div id="aiBulkBox" class="hidden mt-3 p-3 rounded-xl bg-amber-50 border border-amber-200">
+                    <p id="aiBulkText" class="text-xs text-amber-800 mb-2"></p>
+                    <button id="aiBulkBtn" type="button"
+                        class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2.5 rounded-xl transition-all shadow-md text-sm" data-i18n="ai_bulk_btn">Jetzt erzeugen</button>
+                </div>
                 <div id="aiBackfillBox" class="hidden mt-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
                     <p id="aiBackfillText" class="text-xs text-slate-600 mb-2"></p>
                     <button id="aiBackfillBtn" type="button"
@@ -5657,6 +5662,10 @@
                 ai_prefs_saved: "KI-Einstellungen gespeichert",
                 ai_save_error: "Speichern fehlgeschlagen: {0}",
                 ai_cost_suffix: " – geschätzt ca. {0}",
+                ai_bulk_btn: "Jetzt für alle erzeugen",
+                ai_bulk_text: "{0} Wörter ohne Satz warten auf deine Freigabe (mehr als {1} startet nicht automatisch).",
+                ai_bulk_confirm: "Für {0} Wörter ohne Satz werden jetzt Sätze erzeugt ({1} pro Wort). Jetzt starten?",
+                ai_bulk_started: "Freigegeben – der Server erzeugt die Sätze im Hintergrund",
                 ai_backfill_btn: "Fehlende Niveaus nachrüsten",
                 ai_backfill_text: "Für {0} Wörter fehlen noch Sätze in {1} ({2} Sätze pro Wort).",
                 ai_backfill_confirm: "Für {0} Wörter, die schon KI-Sätze haben, werden Sätze in den fehlenden Niveaus ({1}) erzeugt, {2} Sätze pro Wort. Jetzt starten?",
@@ -6130,6 +6139,10 @@
                 ai_prefs_saved: "AI settings saved",
                 ai_save_error: "Saving failed: {0}",
                 ai_cost_suffix: " – estimated approx. {0}",
+                ai_bulk_btn: "Create for all now",
+                ai_bulk_text: "{0} words without a sentence are waiting for your approval (more than {1} does not start automatically).",
+                ai_bulk_confirm: "Sentences will now be created for {0} words without a sentence ({1} per word). Start now?",
+                ai_bulk_started: "Approved – the server creates the sentences in the background",
                 ai_backfill_btn: "Add missing levels",
                 ai_backfill_text: "{0} words still lack sentences in {1} ({2} sentences per word).",
                 ai_backfill_confirm: "For {0} words that already have AI sentences, sentences in the missing levels ({1}) will be created, {2} sentences per word. Start now?",
@@ -11730,6 +11743,7 @@
         async function renderAiStatus() {
             aiAutoStatusEl.textContent = '';
             document.getElementById('aiBackfillBox').classList.add('hidden');
+            document.getElementById('aiBulkBox').classList.add('hidden');
             try {
                 const status = await apiFetch(`/ai/auto-status?language=${CURRENT_LANG}`);
                 if (!aiSentenceModal.classList.contains('flex')) return;
@@ -11738,6 +11752,10 @@
                     ? getI18n('ai_status_pending_off', status.pending)
                     : getI18n(status.pending > 0 ? 'ai_status_pending' : 'ai_status_all_done', status.pending))
                     + (status.pending > 0 ? euro(status.estimate && status.estimate.pendingEur) : '');
+                if (status.needsConfirm) {
+                    document.getElementById('aiBulkText').textContent = getI18n('ai_bulk_text', status.pending, status.threshold) + euro(status.estimate && status.estimate.pendingEur);
+                    document.getElementById('aiBulkBox').classList.remove('hidden');
+                }
                 if (status.backfillWords > 0) {
                     document.getElementById('aiBackfillText').textContent = getI18n('ai_backfill_text', status.backfillWords, status.levels.join(', '), status.count)
                         + euro(status.estimate && status.estimate.backfillEur);
@@ -11837,9 +11855,29 @@
                 if (await saveAiPrefs()) {
                     showToast(getI18n('ai_prefs_saved'), 'success');
                     closeAiSentenceModal();
+                    if (aiOptions.prefs.enabled) offerBulkStart().catch(() => {}); // viele offene Wörter: gleich nach der Freigabe fragen
                 }
             } finally {
                 aiSaveBtn.disabled = false;
+            }
+        });
+
+        // Große Mengen offener Wörter: Zahlen (für Admins Kosten) zeigen und nach Bestätigung freigeben
+        async function offerBulkStart() {
+            const status = await apiFetch(`/ai/auto-status?language=${CURRENT_LANG}`);
+            if (!status.needsConfirm) return false;
+            const cost = status.estimate ? getI18n('ai_cost_suffix', formatEuro(status.estimate.pendingEur)) : '';
+            if (!(await showConfirm(getI18n('ai_bulk_confirm', status.pending, status.count) + cost, getI18n('ai_bulk_btn')))) return false;
+            await apiFetch('/ai/confirm-bulk', { method: 'POST', body: JSON.stringify({ language: CURRENT_LANG }) });
+            showToast(getI18n('ai_bulk_started'), 'success');
+            return true;
+        }
+
+        document.getElementById('aiBulkBtn').addEventListener('click', async () => {
+            try {
+                if (await offerBulkStart()) closeAiSentenceModal(); else renderAiStatus();
+            } catch (err) {
+                showToast(getI18n('ai_save_error', err.message), 'error');
             }
         });
 

@@ -65,7 +65,11 @@ async function workStatus(user, language) {
         auto.backfillCandidates(user.id, language, prefs.levels),
         loadConfig()
     ]);
-    const status = { pending: pending.length, backfillWords: backfill.length, levels: prefs.levels, count: prefs.count, estimate: null };
+    const status = {
+        pending: pending.length, backfillWords: backfill.length, levels: prefs.levels, count: prefs.count, estimate: null,
+        // Große Mengen startet die Automatik erst nach Freigabe (Schutz vor unerwarteten Kosten)
+        needsConfirm: prefs.enabled && auto.needsBulkConfirmation(user.id, language, pending.length), threshold: auto.BULK_THRESHOLD
+    };
     if (user.isAdmin) {
         const model = config.models[config.provider];
         const call = await estimateCall(model, prefs.count, model);
@@ -88,6 +92,14 @@ router.get('/auto-status', authenticateToken, asyncHandler(async (req, res) => {
     const user = await User.findByPk(req.user.id);
     if (!user) return res.sendStatus(401);
     res.json(await workStatus(user, language));
+}));
+
+// Große Menge offener Wörter freigeben (nach Bestätigung im Dialog)
+router.post('/confirm-bulk', authenticateToken, asyncHandler(async (req, res) => {
+    const language = req.body.language;
+    if (!isSupportedLanguage(language)) return res.status(400).json({ error: 'Sprache nicht unterstützt' });
+    auto.confirmBulk(req.user.id, language);
+    res.json({ confirmed: true });
 }));
 
 // Fehlende Niveaus für Wörter mit KI-Sätzen nachrüsten (nach Bestätigung im Dialog)
