@@ -1,8 +1,8 @@
 // Hintergrunddienst: erzeugt für Nutzer mit eingeschalteter Automatik zu jedem aktiven Wort Beispielsätze.
-// Ein Wort gilt als versorgt, wenn es schon in irgendeinem Satz vorkommt (eigene Sätze, KI-Sätze, globale
-// Grammatiksätze). Das Erkennen der Wortformen ist eine Näherung (Artikel weg, Verbstamm, grobe Endungen).
+// Ein Wort gilt als versorgt, wenn es schon in irgendeinem Satz vorkommt (eigene Sätze und die globale Liste, egal wer
+// sie erzeugt hat) – so wird für dasselbe Wort nie doppelt erzeugt. Das Erkennen der Wortformen ist eine Näherung (Artikel weg, Verbstamm, grobe Endungen).
 const { Op } = require('sequelize');
-const { User, Vocabulary, Stats, GrammarSentence } = require('../../models');
+const { User, Vocabulary, GrammarSentence } = require('../../models');
 const { loadConfig, generateSentences } = require('./index');
 const { getCategories } = require('./grammar');
 const { parsePrefs, prefsForLanguage, remainingToday, addUsage } = require('./usage');
@@ -84,18 +84,10 @@ async function processUser(userId, language, config) {
                 word: word.it, translation: word.de || null, language,
                 levels: prefs.levels, categories, count: prefs.count
             });
-            if (user.isAdmin) {
-                // Admin-Sätze gelten für alle Nutzer (globale Liste); jeder Nutzer kann sie in seiner Satzliste abwählen
-                await GrammarSentence.bulkCreate(sentences.map(s => ({
-                    it: s.foreign, de: s.german, category: s.category, level: s.level, forWord: word.it, language
-                })));
-            } else {
-                const rows = await Vocabulary.bulkCreate(sentences.map(s => ({
-                    de: s.german, it: s.foreign, typ: 'Satz', emoji: '', grammatica: s.category, level: s.level,
-                    forWord: word.it, isActive: true, isMarked: false, isOwn: true, language, UserId: userId
-                })), { returning: true });
-                await Stats.bulkCreate(rows.map(r => ({ VocabularyId: r.id })));
-            }
+            // KI-Sätze erweitern immer die globale Liste; ob sie für einen Nutzer aktiv sind, hängt von dessen Satz-Modus ab
+            await GrammarSentence.bulkCreate(sentences.map(s => ({
+                it: s.foreign, de: s.german, category: s.category, level: s.level, forWord: word.it, language
+            })));
             await addUsage(userId, sentences.length, usage);
             failures = 0;
         } catch (err) {

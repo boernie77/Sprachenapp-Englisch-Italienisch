@@ -2110,7 +2110,7 @@
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: Vom Admin erzeugte Sätze gelten <b>für alle</b> – das Niveau wählst du in der Übung selbst</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: KI-Sätze erweitern die <b>globale Liste</b> – in „Alle Sätze“ kannst du sie ab- und anwählen</p>
                 </div>
                 <p class="text-slate-500 text-[10px] italic text-center mt-4 px-4 leading-normal">
                     Viel Spaß beim Lernen! Melde Fehler bitte direkt an uns.
@@ -3831,6 +3831,12 @@
                 Hinweis: Nur die hier ausgewählten Sätze werden in den Übungen zum Lernen verwendet.
             </p>
 
+            <label class="flex items-center justify-between gap-3 p-3 rounded-xl bg-purple-50 border border-purple-100 mb-2 cursor-pointer">
+                <span class="text-xs md:text-sm font-semibold text-slate-800" data-i18n="sentence_mode_auto">Sätze automatisch nach aktiven Wörtern</span>
+                <input id="sentenceModeAuto" type="checkbox" class="w-5 h-5 accent-purple-600" checked>
+            </label>
+            <p class="text-[11px] text-slate-500 mb-3" data-i18n="sentence_mode_hint">An: KI-Sätze sind aktiv, wenn ihr Wort in der Vokabelliste aktiv ist (Sätze aus Excel-Listen bleiben aktiv). Aus: Du wählst alle, keine oder einzelne Sätze selbst aus.</p>
+
             <div class="flex gap-2 mb-3">
                 <button id="selectAllSentencesBtn"
                     class="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-600 font-semibold py-2 px-4 rounded-xl text-sm transition-colors border border-blue-200 shadow-sm active:transform active:scale-95" data-i18n="sentence_select_all">Alle wählen</button>
@@ -5271,6 +5277,58 @@
 
         let fullDictionary = [];
         let allBaseSentences = [];
+        // Globale Sätze: 'auto' = KI-Sätze sind aktiv, wenn ihr Wort in der Vokabelliste aktiv ist (Excel-Sätze immer);
+        // 'manual' = eigene Auswahl (manualActive vom Server). Abgewählte Sätze zählen nicht für Übung und Beispiel-Popups.
+        let sentenceMode = 'auto';
+        const ARTICLE_WORDS = { it: ['il', 'lo', 'la', 'l', 'i', 'gli', 'le', 'un', 'uno', 'una'], en: ['to', 'the', 'a', 'an'] };
+        // Fremdwort ohne Artikel, klein geschrieben – gleicher Schlüssel für "la casa" und "casa"
+        function wordKey(text) {
+            const parts = String(text || '').toLowerCase().replace(/[’']/g, ' ').split(/[^\p{L}]+/u).filter(Boolean);
+            if (parts.length > 1 && (ARTICLE_WORDS[CURRENT_LANG] || []).includes(parts[0])) parts.shift();
+            return parts.join(' ');
+        }
+        function activeWordKeys() {
+            const keys = new Set();
+            fullDictionary.forEach(w => {
+                if (w.typ !== 'Satz' && w.isActive !== false && (w.language || 'it') === CURRENT_LANG) keys.add(wordKey(w.it));
+            });
+            return keys;
+        }
+        function isBaseSentenceActive(s, keys) {
+            if (sentenceMode === 'manual') return s.manualActive !== false;
+            return !s.forWord || (keys || activeWordKeys()).has(wordKey(s.forWord));
+        }
+        const activeBaseSentences = () => {
+            const keys = sentenceMode === 'auto' ? activeWordKeys() : null;
+            return (allBaseSentences || []).filter(s => isBaseSentenceActive(s, keys));
+        };
+        // Wählt globale Sätze für diesen Nutzer an/ab (ids) oder alle der aktuellen Sprache (ids = null); nur im manuellen Modus
+        async function setBaseSentencesActive(ids, isActive) {
+            await apiFetch('/grammar-sentences/active', {
+                method: 'PUT',
+                body: JSON.stringify(ids ? { ids, isActive } : { all: true, language: CURRENT_LANG, isActive })
+            });
+            const only = ids ? new Set(ids) : null;
+            (allBaseSentences || []).forEach(s => {
+                if (only ? only.has(s.id) : (s.language || 'it') === CURRENT_LANG) s.manualActive = isActive;
+            });
+        }
+        // Modus wechseln; beim ersten Wechsel auf manuell wird der bisherige Automatik-Zustand der KI-Sätze übernommen
+        async function setSentenceMode(mode) {
+            const body = { mode, language: CURRENT_LANG };
+            if (mode === 'manual') {
+                const keys = activeWordKeys();
+                body.activeIds = (allBaseSentences || []).filter(s => s.forWord && (s.language || 'it') === CURRENT_LANG && keys.has(wordKey(s.forWord))).map(s => s.id);
+            }
+            await apiFetch('/grammar-sentences/settings', { method: 'PUT', body: JSON.stringify(body) });
+            sentenceMode = mode;
+            if (mode === 'manual') await fetchGlobalBaseSentences(); // manuelle Auswahl neu vom Server holen
+            updateSentenceModeUi();
+        }
+        function updateSentenceModeUi() {
+            const box = document.getElementById('sentenceModeAuto');
+            if (box) box.checked = sentenceMode === 'auto';
+        }
         let showExampleSentences = localStorage.getItem('ita-show-example-sentences') === 'true';
         let wordStats = {};
 
@@ -5498,6 +5556,8 @@
                 sentence_translation: "Übersetzung",
                 sentence_submit_btn: "Satz hinzufügen",
                 vocab_list_hint: "Hinweis: Nur die hier ausgewählten Vokabeln werden in den Übungen zum Lernen verwendet.",
+                sentence_mode_auto: "Sätze automatisch nach aktiven Wörtern",
+                sentence_mode_hint: "An: KI-Sätze sind aktiv, wenn ihr Wort in der Vokabelliste aktiv ist (Sätze aus Excel-Listen bleiben aktiv). Aus: Du wählst alle, keine oder einzelne Sätze selbst aus.",
                 sentence_list_hint: "Hinweis: Nur die hier ausgewählten Sätze werden in den Übungen zum Lernen verwendet.",
                 sentence_select_all: "Alle wählen",
                 sentence_deselect_all: "Alle abwählen",
@@ -5964,6 +6024,8 @@
                 sentence_translation: "Translation",
                 sentence_submit_btn: "Add Sentence",
                 vocab_list_hint: "Note: Only the selected vocabulary here will be used in the learning exercises.",
+                sentence_mode_auto: "Sentences automatically by active words",
+                sentence_mode_hint: "On: AI sentences are active when their word is active in the vocabulary list (sentences from Excel lists stay active). Off: you choose all, none or single sentences yourself.",
                 sentence_list_hint: "Note: Only selected sentences will be used in learning exercises.",
                 sentence_select_all: "Select all",
                 sentence_deselect_all: "Deselect all",
@@ -6858,6 +6920,8 @@
             try {
                 const result = await apiFetch(`/grammar-sentences?language=${CURRENT_LANG}`);
                 if (result) allBaseSentences = result;
+                sentenceMode = (await apiFetch('/grammar-sentences/settings')).mode;
+                updateSentenceModeUi();
             } catch (e) {
                 console.warn("Failed to fetch global base sentences", e);
             }
@@ -6910,7 +6974,7 @@
             // 1. Try exact infinitive match first
             const escapedInf = infinitive.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const regexInf = new RegExp(`(^|[^a-zA-ZàèéìòùÀÈÉÌÒÙ])${escapedInf}([^a-zA-ZàèéìòùÀÈÉÌÒÙ]|$)`, 'i');
-            matches = (allBaseSentences || []).filter(s => regexInf.test((s.it || "").toLowerCase()));
+            matches = activeBaseSentences().filter(s => regexInf.test((s.it || "").toLowerCase()));
 
             // 2. If no infinitive matches, try conjugated forms
             if (matches.length === 0 && searchTerms.length > 1) {
@@ -6918,7 +6982,7 @@
                 for (const term of sortedTerms) {
                     const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                     const regex = new RegExp(`(^|[^a-zA-ZàèéìòùÀÈÉÌÒÙ])${escapedTerm}([^a-zA-ZàèéìòùÀÈÉÌÒÙ]|$)`, 'i');
-                    const termMatches = (allBaseSentences || []).filter(s => regex.test((s.it || "").toLowerCase()));
+                    const termMatches = activeBaseSentences().filter(s => regex.test((s.it || "").toLowerCase()));
                     if (termMatches.length > 0) {
                         matches = termMatches;
                         break;
@@ -8898,7 +8962,7 @@
                 })) : [];
                 
                 // Merge with global base sentences (already filtered by language during fetch, but double check)
-                const baseS = (allBaseSentences || []).filter(s => (s.language || 'it') === CURRENT_LANG).map(s => ({ ...s, level: s.level || 'Basis' }));
+                const baseS = activeBaseSentences().filter(s => (s.language || 'it') === CURRENT_LANG).map(s => ({ ...s, level: s.level || 'Basis' }));
                 
                 grammarSentences = [...baseS, ...personalSentences];
                 saveAllDataLocally(); // Save to cache after fetch
@@ -10216,6 +10280,7 @@
             saveAllDataLocally();
             renderVocabList();
             apiFetch('/vocab/bulk-active', { method: 'PUT', body: JSON.stringify({ isActive: true, language: CURRENT_LANG, typ: 'vocab' }) }).catch(() => {});
+            updateAdminGrammarCount(); // KI-Sätze folgen den aktiven Wörtern
         });
 
         document.getElementById('deselectAllBtn').addEventListener('click', () => {
@@ -10223,11 +10288,13 @@
             saveAllDataLocally();
             renderVocabList();
             apiFetch('/vocab/bulk-active', { method: 'PUT', body: JSON.stringify({ isActive: false, language: CURRENT_LANG, typ: 'vocab' }) }).catch(() => {});
+            updateAdminGrammarCount(); // KI-Sätze folgen den aktiven Wörtern
         });
 
         document.getElementById('selectAllSentencesBtn').addEventListener('click', () => {
             fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ === 'Satz').forEach(w => w.isActive = true);
             saveAllDataLocally();
+            (async () => { if (sentenceMode === 'auto') await setSentenceMode('manual'); await setBaseSentencesActive(null, true); renderSentenceList(); updateAdminGrammarCount(); })().catch(() => {});
             renderSentenceList();
             apiFetch('/vocab/bulk-active', { method: 'PUT', body: JSON.stringify({ isActive: true, language: CURRENT_LANG, typ: 'Satz' }) }).catch(() => {});
         });
@@ -10235,10 +10302,22 @@
         document.getElementById('deselectAllSentencesBtn').addEventListener('click', () => {
             fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ === 'Satz').forEach(w => w.isActive = false);
             saveAllDataLocally();
+            (async () => { if (sentenceMode === 'auto') await setSentenceMode('manual'); await setBaseSentencesActive(null, false); renderSentenceList(); updateAdminGrammarCount(); })().catch(() => {});
             renderSentenceList();
             apiFetch('/vocab/bulk-active', { method: 'PUT', body: JSON.stringify({ isActive: false, language: CURRENT_LANG, typ: 'Satz' }) }).catch(() => {});
         });
 
+        document.getElementById('sentenceModeAuto').addEventListener('change', async (e) => {
+            const wantAuto = e.target.checked;
+            try {
+                await setSentenceMode(wantAuto ? 'auto' : 'manual');
+                renderSentenceList();
+                updateAdminGrammarCount();
+            } catch (err) {
+                e.target.checked = !wantAuto;
+                showToast(getI18n('toast_save_error_generic'), 'error');
+            }
+        });
         document.getElementById('vocabListSearch').addEventListener('input', renderVocabList);
         let sentenceSearchTimeout;
         document.getElementById('sentenceListSearch').addEventListener('input', () => {
@@ -10386,7 +10465,8 @@
             
             // Merge personal sentences from fullDictionary and global base sentences from allBaseSentences
             const personal = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ === 'Satz');
-            const global = (allBaseSentences || []).filter(s => (s.language || 'it') === CURRENT_LANG).map(s => ({ ...s, id: 'base-' + s.id, isActive: true, isMarked: false, isOwn: false }));
+            const baseKeys = sentenceMode === 'auto' ? activeWordKeys() : null;
+            const global = (allBaseSentences || []).filter(s => (s.language || 'it') === CURRENT_LANG).map(s => ({ ...s, id: 'base-' + s.id, isActive: isBaseSentenceActive(s, baseKeys), isMarked: false, isOwn: false }));
             
             // Deduplicate: If a sentence exists in both global and personal (by content), preference goes to personal (it has its own ID and isActive status)
             const seen = new Set();
@@ -10469,6 +10549,7 @@
                             <span class="text-slate-400 mx-1 text-xs md:text-sm">|</span>
                             <span class="font-bold text-blue-600 text-sm md:text-base">${secondary}</span>
                             ${word.typ ? `<span class="ml-1 text-xs text-slate-400 italic">${word.typ}</span>` : ''}
+                            ${word.forWord ? `<span class="ml-1 text-[10px] font-semibold text-purple-600">KI · ${escapeHtml(word.forWord)}</span>` : ''}
                         </div>
                     </div>
                     <div class="flex items-center gap-1.5 ml-2 flex-shrink-0">
@@ -10492,8 +10573,23 @@
                         </label>
                     </div>
                 `;
-                li.querySelector('.vocab-checkbox').addEventListener('change', (e) => {
-                    word.isActive = e.target.checked;
+                li.querySelector('.vocab-checkbox').addEventListener('change', async (e) => {
+                    const checkbox = e.target;
+                    const wantActive = checkbox.checked;
+                    if (String(word.id).startsWith('base-')) {
+                        // Globaler Satz: die Auswahl gilt nur für diesen Nutzer und liegt auf dem Server
+                        try {
+                            if (sentenceMode === 'auto') await setSentenceMode('manual'); // eigene Auswahl beendet den Automatik-Modus
+                            await setBaseSentencesActive([Number(String(word.id).slice(5))], wantActive);
+                            word.isActive = wantActive;
+                        } catch (err) {
+                            checkbox.checked = !wantActive;
+                            showToast(getI18n('toast_save_error_generic'), 'error');
+                        }
+                        updateAdminGrammarCount();
+                        return;
+                    }
+                    word.isActive = wantActive;
                     saveAllDataLocally();
                     saveStatToServer(word.id);
                     updateAdminGrammarCount(); // Ensure grammar pool is updated

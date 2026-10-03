@@ -66,7 +66,8 @@ const User = sequelize.define('User', {
     allowNull: true,
     unique: true
   },
-  aiPrefs: { type: DataTypes.TEXT, allowNull: true } // JSON: Einstellungen der automatischen KI-Beispielsätze
+  aiPrefs: { type: DataTypes.TEXT, allowNull: true }, // JSON: Einstellungen der automatischen KI-Beispielsätze
+  sentenceMode: { type: DataTypes.STRING, defaultValue: 'auto' } // 'auto': KI-Sätze folgen den aktiven Wörtern, 'manual': eigene Auswahl
 });
 
 const Vocabulary = sequelize.define('Vocabulary', {
@@ -106,8 +107,15 @@ const GrammarSentence = sequelize.define('GrammarSentence', {
   de: { type: DataTypes.STRING, allowNull: false },
   category: { type: DataTypes.STRING, allowNull: true },
   level: { type: DataTypes.STRING, allowNull: true },
-  forWord: { type: DataTypes.STRING, allowNull: true }, // gesetzt bei KI-Sätzen des Admins: Fremdwort, zu dem der Satz erzeugt wurde
+  forWord: { type: DataTypes.STRING, allowNull: true }, // gesetzt bei KI-Sätzen: Fremdwort, zu dem der Satz erzeugt wurde
   language: { type: DataTypes.STRING, defaultValue: 'it' }
+});
+
+// Persönliche Auswahl globaler Sätze (nur im manuellen Modus). Ohne Eintrag gilt: Excel-Sätze aktiv, KI-Sätze (forWord) inaktiv.
+const SentenceChoice = sequelize.define('SentenceChoice', {
+  isActive: { type: DataTypes.BOOLEAN, allowNull: false }
+}, {
+  indexes: [{ unique: true, fields: ['UserId', 'GrammarSentenceId'] }]
 });
 
 const InviteCode = sequelize.define('InviteCode', {
@@ -145,6 +153,10 @@ InviteCode.belongsTo(User, { as: 'usedByUser', foreignKey: 'userId' });
 User.hasOne(InviteCode, { foreignKey: 'userId' });
 
 User.hasMany(AiUsage, { onDelete: 'CASCADE' });
+User.hasMany(SentenceChoice, { onDelete: 'CASCADE' });
+GrammarSentence.hasMany(SentenceChoice, { onDelete: 'CASCADE' });
+SentenceChoice.belongsTo(User);
+SentenceChoice.belongsTo(GrammarSentence);
 AiUsage.belongsTo(User);
 
-module.exports = { sequelize, User, Vocabulary, Stats, BaseVocabulary, GrammarSentence, InviteCode, Setting, AiUsage };
+module.exports = { sequelize, User, Vocabulary, Stats, BaseVocabulary, GrammarSentence, InviteCode, Setting, AiUsage, SentenceChoice };
