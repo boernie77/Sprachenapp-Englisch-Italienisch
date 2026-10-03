@@ -106,7 +106,13 @@ const GrammarSentence = sequelize.define('GrammarSentence', {
   de: { type: DataTypes.STRING, allowNull: false },
   category: { type: DataTypes.STRING, allowNull: true },
   level: { type: DataTypes.STRING, allowNull: true },
+  forWord: { type: DataTypes.STRING, allowNull: true }, // gesetzt bei KI-Sätzen des Admins: Fremdwort, zu dem der Satz erzeugt wurde
   language: { type: DataTypes.STRING, defaultValue: 'it' }
+});
+
+// Globale Sätze, die ein Nutzer für sich abgewählt hat (alle anderen gelten für ihn als aktiv)
+const DisabledSentence = sequelize.define('DisabledSentence', {}, {
+  indexes: [{ unique: true, fields: ['UserId', 'GrammarSentenceId'] }]
 });
 
 const InviteCode = sequelize.define('InviteCode', {
@@ -144,6 +150,10 @@ InviteCode.belongsTo(User, { as: 'usedByUser', foreignKey: 'userId' });
 User.hasOne(InviteCode, { foreignKey: 'userId' });
 
 User.hasMany(AiUsage, { onDelete: 'CASCADE' });
+User.hasMany(DisabledSentence, { onDelete: 'CASCADE' });
+GrammarSentence.hasMany(DisabledSentence, { onDelete: 'CASCADE' });
+DisabledSentence.belongsTo(User);
+DisabledSentence.belongsTo(GrammarSentence);
 AiUsage.belongsTo(User);
 
-module.exports = { sequelize, User, Vocabulary, Stats, BaseVocabulary, GrammarSentence, InviteCode, Setting, AiUsage };
+module.exports = { sequelize, User, Vocabulary, Stats, BaseVocabulary, GrammarSentence, InviteCode, Setting, AiUsage, DisabledSentence };

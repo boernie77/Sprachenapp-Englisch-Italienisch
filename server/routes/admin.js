@@ -205,7 +205,8 @@ router.post('/grammar-sentences/bulk', authenticateToken, requireAdmin, asyncHan
     const transaction = await sequelize.transaction();
     try {
         if (mode !== 'append') {
-            await GrammarSentence.destroy({ where: { language }, transaction });
+            // KI-Sätze des Admins (forWord gesetzt) bleiben beim Ersetzen der Excel-Liste erhalten
+            await GrammarSentence.destroy({ where: { language, forWord: null }, transaction });
         }
         const data = sentences.map(s => ({ ...s, language }));
         const created = await GrammarSentence.bulkCreate(data, { transaction });
