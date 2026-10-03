@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Übergabe / Aktueller Stand (2026-10-03, abends) – zuerst lesen
 
-- **Live läuft 2.2.1** (Commit `0ee17f1`; davor 2.2.0 = `e541f90`, Tag `v2.2.0`, Live-Deploy erfolgreich, Container auf Node 22). KI-Beispielsätze, Grammatik-Erklärungen, Konjugationstabellen. Details unten unter „Version 2.2.0“.
+- **Live läuft 2.2.2** (Commit siehe `git log`; 2.2.1 = `0ee17f1`; davor 2.2.0 = `e541f90`, Tag `v2.2.0`, Live-Deploy erfolgreich, Container auf Node 22). KI-Beispielsätze, Grammatik-Erklärungen, Konjugationstabellen. Details unten unter „Version 2.2.0“.
 - **Live-Datenbank korrigiert (2026-10-03):** `GrammarSentences` komplett durch die korrigierten Listen ersetzt (IT 2.926, EN 2.972; vorher 3.176/2.972), 46 Kopien in der eigenen Liste eines Nutzers (`Vocabularies`, `typ='Satz'`, `isOwn=false`) per exaktem Textvergleich korrigiert. Sicherung davor: `/root/lernapp-db-20261003-vor-2.2.0.sql.gz` auf dem VPS. 3.176 alte IT-Kopien ohne Besitzer (`UserId IS NULL`, von gelöschten Nutzern) sind unverändert.
 - **Mobile-Builds 2.2.0 sind gebaut (MacBook):** Web-Assets committet (Commit nach `e541f90`, inkl. `grammar-help.js` per `git add -f`).
   - **Android:** `app-release-v2.2.0-v22.aab` im Repo-Root (gitignored), versionCode 22, Release-Keystore (SHA256 `7E:85:B2:33:…:54:F1`).
@@ -176,7 +176,7 @@ PostgreSQL-Daten liegen als **Bind-Mount** unter `./pgdata` (kein Docker named v
 ## Version 2.2.1 (2026-10-03) – live deployt (Mobile-Builds noch nicht erstellt, im Browser nicht visuell geprüft)
 - **KI-Sätze umgebaut:** Statt Dialog pro Wort jetzt Menü „✨ KI-Beispielsätze“ (`aiSentenceModal`, wiederverwendet) mit allgemeinen Einstellungen: Automatik an/aus, Niveau, Grammatikarten (je Sprache), Sätze pro Wort. Pro Nutzer auf dem Server: `Users.aiPrefs` (JSON), `PUT /api/ai/preferences`, `GET /api/ai/options` liefert `prefs`.
 - Automatik (`runAiAuto()` im Frontend): erzeugt im Hintergrund für jedes aktive Wort ohne KI-Sätze Sätze (`/ai/sentences` + `/vocab/bulk`), gestartet nach `loadDataFromServer` und nach neuer Vokabel; stoppt bei Tageslimit/3 Fehlern in Folge. Sätze tragen `Vocabularies.forWord` (Fremdwort) und sind normale eigene Sätze (`typ: 'Satz'`).
-- **Mehrere Niveaus + feste Verteilung (nach 2.2.1, noch nicht live):** `aiPrefs.levels` (Array; alte `level`-Werte werden gelesen), `/ai/sentences` nimmt `levels`. `buildPlan()` in `utils/ai/index.js` weist jedem Satz zufällig eine Grammatikart und ein Niveau zu (Reihenfolge je Wort gemischt), die KI schreibt nur nach Plan; `category`/`level` kommen aus dem Plan, nicht aus der KI-Antwort. Weniger Sätze als Arten → pro Wort nur ein Teil, über alle Wörter gleichmäßig.
+- **Mehrere Niveaus + feste Verteilung (Version 2.2.2):** `aiPrefs.levels` (Array; alte `level`-Werte werden gelesen), `/ai/sentences` nimmt `levels`. `buildPlan()` in `utils/ai/index.js` weist jedem Satz zufällig eine Grammatikart und ein Niveau zu (Reihenfolge je Wort gemischt), die KI schreibt nur nach Plan; `category`/`level` kommen aus dem Plan, nicht aus der KI-Antwort. Weniger Sätze als Arten → pro Wort nur ein Teil, über alle Wörter gleichmäßig.
 - Grammatik-Modus: Knopf „Sätze zu einem Wort anzeigen“ → `wordSentencesModal` mit Suche (zeigt Sätze je `forWord`).
 - Vollständige Vokabelliste zeigt „Aktiv: X von Y“ (`updateVocabActiveCount`).
 - Desktop-Fenster: kleine Fenster verkleinern `html { font-size }` per Media Query (Ende des `<style>` im `<head>`), große Monitore unverändert. Im Browser noch nicht visuell geprüft.
