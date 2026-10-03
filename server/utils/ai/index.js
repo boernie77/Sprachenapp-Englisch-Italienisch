@@ -4,6 +4,7 @@ const { Setting } = require('../../models');
 const { encrypt, decrypt } = require('../secretBox');
 const { PROVIDERS, AiError } = require('./providers');
 const { HINTS } = require('./grammar');
+const { costUsd } = require('./pricing');
 
 const SETTINGS_KEY = 'ai.config';
 
@@ -12,6 +13,7 @@ const DEFAULTS = {
     enabled: false,
     dailyLimit: 50,
     models: Object.fromEntries(Object.entries(PROVIDERS).map(([id, p]) => [id, p.defaultModel])),
+    usdToEur: 0.86, // Umrechnung für die Kostenanzeige im Admin-Bereich
     keys: {} // provider -> verschlüsselter Schlüssel
 };
 
@@ -53,7 +55,7 @@ function publicConfig(config) {
             keyHint: plain ? `••••${plain.slice(-4)}` : null
         };
     }
-    return { provider: config.provider, enabled: config.enabled, dailyLimit: config.dailyLimit, providers };
+    return { provider: config.provider, enabled: config.enabled, dailyLimit: config.dailyLimit, usdToEur: config.usdToEur, providers };
 }
 
 function getProvider(id) {
@@ -142,9 +144,10 @@ async function generateSentences({ word, translation, language, levels, categori
     const apiKey = getApiKey(config, config.provider);
     if (!apiKey) throw new AiError('Kein gültiger API-Schlüssel hinterlegt', 503);
 
-    const result = await provider.generateJson({
+    const model = config.models[config.provider];
+    const { data: result, usage } = await provider.generateJson({
         apiKey,
-        model: config.models[config.provider],
+        model,
         system: SYSTEM_PROMPT,
         prompt: buildPrompt({ word, translation, language, plan }),
         schema: sentenceSchema(categories, levels)
@@ -160,7 +163,7 @@ async function generateSentences({ word, translation, language, levels, categori
         }))
         .filter(sen => sen.foreign && sen.german && sen.foreign.length <= MAX_SENTENCE_LENGTH && sen.german.length <= MAX_SENTENCE_LENGTH);
     if (sentences.length === 0) throw new AiError('Die KI hat keine verwertbaren Sätze geliefert', 502);
-    return sentences;
+    return { sentences, usage: { input: usage.input, output: usage.output, costUsd: costUsd(model, usage.input, usage.output) } };
 }
 
 module.exports = { loadConfig, saveConfig, publicConfig, getApiKey, getProvider, generateSentences, encrypt, AiError, PROVIDERS };

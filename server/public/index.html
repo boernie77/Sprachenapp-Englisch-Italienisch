@@ -1827,13 +1827,13 @@
                         Lizenz: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"
                             class="text-blue-600 hover:underline">CC BY-SA 4.0</a>
                     </p>
-                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.2</p>
+                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.3</p>
                     <p class="text-[10px] text-slate-400" data-i18n="imp_rights">© 2026 Christian Bernauer. Alle Rechte vorbehalten.</p>
                 </div>
             </div>
             <!-- App-Style Bottom Section -->
             <div class="mt-8 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.2</p>
+                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.3</p>
             </div>
         </div>
     </div>
@@ -2078,7 +2078,7 @@
             <div class="w-20 h-20 bg-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
                 <svg class="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <h3 class="text-3xl font-black text-slate-800 mb-4">Version 2.2.2 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
+            <h3 class="text-3xl font-black text-slate-800 mb-4">Version 2.2.3 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
             <div class="text-left space-y-4 mb-8">
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
@@ -2099,6 +2099,10 @@
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
                     <p class="text-slate-600 font-medium leading-tight text-sm">Neu: KI-Sätze mit <b>mehreren Niveaus</b> und gleichmäßiger Verteilung auf die Grammatikarten</p>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Admin: <b>Token und Kosten</b> der KI-Sätze im Tab „KI“</p>
                 </div>
                 <p class="text-slate-500 text-[10px] italic text-center mt-4 px-4 leading-normal">
                     Viel Spaß beim Lernen! Melde Fehler bitte direkt an uns.
@@ -2231,7 +2235,7 @@
                 </div>
                 <div class="px-4 py-1.5 text-[10px] text-slate-400 bg-slate-50/50 flex items-center justify-between border-t border-slate-100/50">
                     <span>App-Version:</span>
-                    <span class="font-mono font-medium text-slate-500">2.2.2</span>
+                    <span class="font-mono font-medium text-slate-500">2.2.3</span>
                 </div>
                 <input type="file" id="excelUploadEl" accept=".xlsx, .xls" class="hidden">
             </div>
@@ -4373,11 +4377,38 @@
                         <input id="adminAiLimit" type="number" min="0" max="1000" class="w-32 bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
                     </div>
 
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="adminAiRate" data-i18n="admin_ai_rate">Umrechnungskurs 1 US-Dollar in Euro (für die Kostenanzeige)</label>
+                        <input id="adminAiRate" type="number" min="0.01" max="9.99" step="0.01" class="w-32 bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
+                    </div>
+
                     <div class="flex gap-2 pt-1">
                         <button type="button" id="adminAiSaveBtn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-md" data-i18n="admin_ai_save">Speichern</button>
                         <button type="button" id="adminAiTestBtn" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-md" data-i18n="admin_ai_test">Verbindung testen</button>
                     </div>
                     <p id="adminAiTestResult" class="text-xs hidden"></p>
+                    <div class="pt-3 mt-2 border-t border-slate-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-sm font-bold text-slate-700" data-i18n="admin_ai_usage_title">📊 Verbrauch und Kosten</h3>
+                            <button type="button" id="adminAiUsageRefreshBtn" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg border border-slate-200 text-xs font-semibold" data-i18n="admin_ai_usage_refresh">Aktualisieren</button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-xs text-left">
+                                <thead><tr class="text-slate-500 border-b border-slate-200">
+                                    <th class="py-1.5 pr-2 font-semibold"></th>
+                                    <th class="py-1.5 px-2 font-semibold text-right" data-i18n="admin_ai_col_calls">Aufrufe</th>
+                                    <th class="py-1.5 px-2 font-semibold text-right" data-i18n="admin_ai_col_sentences">Sätze</th>
+                                    <th class="py-1.5 px-2 font-semibold text-right" data-i18n="admin_ai_col_tokens">Token (Ein / Aus)</th>
+                                    <th class="py-1.5 pl-2 font-semibold text-right" data-i18n="admin_ai_col_cost">Kosten</th>
+                                </tr></thead>
+                                <tbody id="adminAiUsageBody"></tbody>
+                            </table>
+                        </div>
+                        <p id="adminAiUsagePerSentence" class="text-[11px] text-slate-500 mt-2"></p>
+                        <h4 class="text-xs font-bold text-slate-600 mt-3 mb-1" data-i18n="admin_ai_usage_users">Nutzer (letzte 30 Tage)</h4>
+                        <div id="adminAiUsageUsers" class="text-xs text-slate-600 space-y-1"></div>
+                        <p class="text-[10px] text-slate-400 mt-2" data-i18n="admin_ai_usage_hint">Kosten nach Anthropic-Listenpreis des jeweiligen Modells; bei Modellen ohne bekannten Preis (z.B. OpenAI) werden nur Token gezählt. Gezählt wird ab diesem Update.</p>
+                    </div>
                     <p class="text-[11px] text-slate-400" data-i18n="admin_ai_jwt_hint">Hinweis: Wird JWT_SECRET auf dem Server geändert, muss der Schlüssel neu eingetragen werden.</p>
                 </div>
             </div>
@@ -5493,6 +5524,20 @@
                 conj_in_sentence: "im Satz",
                 conj_open: "Konjugationstabelle öffnen",
                 conj_tap_hint: "Tippe auf ein Verb für die Konjugationstabelle:",
+                admin_ai_rate: "Umrechnungskurs 1 US-Dollar in Euro (für die Kostenanzeige)",
+                admin_ai_usage_title: "📊 Verbrauch und Kosten",
+                admin_ai_usage_refresh: "Aktualisieren",
+                admin_ai_col_calls: "Aufrufe",
+                admin_ai_col_sentences: "Sätze",
+                admin_ai_col_tokens: "Token (Ein / Aus)",
+                admin_ai_col_cost: "Kosten",
+                admin_ai_row_today: "Heute",
+                admin_ai_row_30: "30 Tage",
+                admin_ai_row_total: "Gesamt",
+                admin_ai_per_sentence: "Durchschnitt: {0} Token und {1} pro Satz",
+                admin_ai_usage_users: "Nutzer (letzte 30 Tage)",
+                admin_ai_usage_none: "Noch keine Nutzung erfasst.",
+                admin_ai_usage_hint: "Kosten nach Anthropic-Listenpreis des jeweiligen Modells; bei Modellen ohne bekannten Preis (z.B. OpenAI) werden nur Token gezählt. Gezählt wird ab diesem Update.",
                 admin_ai_tab: "KI",
                 admin_ai_title: "🤖 KI-Einstellungen",
                 admin_ai_desc: "Die KI erzeugt Beispielsätze zu neuen Vokabeln. Der API-Schlüssel wird verschlüsselt auf dem Server gespeichert und nie wieder angezeigt.",
@@ -5940,6 +5985,20 @@
                 conj_in_sentence: "in the sentence",
                 conj_open: "Open conjugation table",
                 conj_tap_hint: "Tap a verb to see its conjugation table:",
+                admin_ai_rate: "Exchange rate 1 US dollar to euro (for the cost display)",
+                admin_ai_usage_title: "📊 Usage and cost",
+                admin_ai_usage_refresh: "Refresh",
+                admin_ai_col_calls: "Calls",
+                admin_ai_col_sentences: "Sentences",
+                admin_ai_col_tokens: "Tokens (in / out)",
+                admin_ai_col_cost: "Cost",
+                admin_ai_row_today: "Today",
+                admin_ai_row_30: "30 days",
+                admin_ai_row_total: "Total",
+                admin_ai_per_sentence: "Average: {0} tokens and {1} per sentence",
+                admin_ai_usage_users: "Users (last 30 days)",
+                admin_ai_usage_none: "No usage recorded yet.",
+                admin_ai_usage_hint: "Cost uses the Anthropic list price of the model; for models without a known price (e.g. OpenAI) only tokens are counted. Counting starts with this update.",
                 admin_ai_tab: "AI",
                 admin_ai_title: "🤖 AI settings",
                 admin_ai_desc: "The AI creates example sentences for new vocabulary. The API key is stored encrypted on the server and never shown again.",
@@ -9814,7 +9873,7 @@
         // Version Update Modal Logic
         const versionModal = document.getElementById('versionUpdateModal');
         const closeVersionBtn = document.getElementById('closeVersionModalBtn');
-        const vKey = 'hasSeenVersion_2_2_2';
+        const vKey = 'hasSeenVersion_2_2_3';
         closeVersionBtn.addEventListener('click', () => {
             localStorage.setItem(vKey, 'true');
             versionModal.classList.add('hidden');
@@ -11794,6 +11853,7 @@
         const adminAiKeyStatus = document.getElementById('adminAiKeyStatus');
         const adminAiEnabled = document.getElementById('adminAiEnabled');
         const adminAiLimit = document.getElementById('adminAiLimit');
+        const adminAiRate = document.getElementById('adminAiRate');
         const adminAiTestResult = document.getElementById('adminAiTestResult');
 
         function fillAdminAiModelList(models) {
@@ -11834,6 +11894,7 @@
             adminAiProviderSel.value = adminAiConfig.provider;
             adminAiEnabled.checked = adminAiConfig.enabled;
             adminAiLimit.value = adminAiConfig.dailyLimit;
+            adminAiRate.value = adminAiConfig.usdToEur;
             adminAiTestResult.classList.add('hidden');
             renderAdminAiProvider();
         }
@@ -11842,6 +11903,7 @@
             try {
                 adminAiConfig = await apiFetch('/admin/ai-settings');
                 renderAdminAi();
+                loadAdminAiUsage();
             } catch (err) {
                 showToast(getI18n('admin_ai_load_error', err.message), 'error');
             }
@@ -11853,6 +11915,7 @@
                 model: adminAiModelInput.value.trim(),
                 enabled: adminAiEnabled.checked,
                 dailyLimit: adminAiLimit.value,
+                usdToEur: adminAiRate.value,
                 ...extra
             };
             const key = adminAiKeyInput.value.trim();
@@ -11860,6 +11923,52 @@
             adminAiConfig = await apiFetch('/admin/ai-settings', { method: 'PUT', body: JSON.stringify(body) });
             renderAdminAi();
         }
+
+        // Verbrauch und Kosten (Admin-Tab KI)
+        const fmtInt = (n) => Math.round(n).toLocaleString(APP_UI_LANG === 'en' ? 'en-US' : 'de-DE');
+        const fmtEur = (usd) => (usd * (adminAiConfig ? adminAiConfig.usdToEur : 1)).toLocaleString(APP_UI_LANG === 'en' ? 'en-US' : 'de-DE', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 4 });
+        const fmtTokens = (u) => `${fmtInt(u.inputTokens)} / ${fmtInt(u.outputTokens)}`;
+
+        async function loadAdminAiUsage() {
+            const body = document.getElementById('adminAiUsageBody');
+            try {
+                const usage = await apiFetch('/admin/ai-usage');
+                body.innerHTML = '';
+                [['admin_ai_row_today', usage.today], ['admin_ai_row_30', usage.last30], ['admin_ai_row_total', usage.total]].forEach(([key, u]) => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'border-b border-slate-100';
+                    [getI18n(key), fmtInt(u.calls), fmtInt(u.sentences), fmtTokens(u), fmtEur(u.costUsd)].forEach((text, i) => {
+                        const td = document.createElement('td');
+                        td.className = i === 0 ? 'py-1.5 pr-2 font-semibold text-slate-700' : `py-1.5 ${i === 4 ? 'pl-2' : 'px-2'} text-right`;
+                        td.textContent = text;
+                        tr.appendChild(td);
+                    });
+                    body.appendChild(tr);
+                });
+                document.getElementById('adminAiUsagePerSentence').textContent = usage.total.sentences > 0
+                    ? getI18n('admin_ai_per_sentence', fmtInt(usage.total.sentences ? (usage.total.inputTokens + usage.total.outputTokens) / usage.total.sentences : 0), fmtEur(usage.total.costUsd / usage.total.sentences))
+                    : '';
+                const users = document.getElementById('adminAiUsageUsers');
+                users.innerHTML = '';
+                if (usage.perUser.length === 0) users.textContent = getI18n('admin_ai_usage_none');
+                usage.perUser.forEach(u => {
+                    const row = document.createElement('div');
+                    row.className = 'flex justify-between gap-3';
+                    const name = document.createElement('span');
+                    name.className = 'truncate';
+                    name.textContent = u.email || '–';
+                    const value = document.createElement('span');
+                    value.className = 'shrink-0 text-slate-500';
+                    value.textContent = `${fmtInt(u.sentences)} ${getI18n('admin_ai_col_sentences')} · ${fmtInt(u.inputTokens + u.outputTokens)} Token · ${fmtEur(u.costUsd)}`;
+                    row.append(name, value);
+                    users.appendChild(row);
+                });
+            } catch (err) {
+                body.innerHTML = '';
+                document.getElementById('adminAiUsagePerSentence').textContent = getI18n('admin_ai_load_error', err.message);
+            }
+        }
+        document.getElementById('adminAiUsageRefreshBtn').addEventListener('click', loadAdminAiUsage);
 
         adminAiProviderSel.addEventListener('change', renderAdminAiProvider);
 

@@ -121,10 +121,14 @@ const Setting = sequelize.define('Setting', {
   value: { type: DataTypes.TEXT, allowNull: true }
 });
 
-// Zählt erzeugte KI-Sätze pro Nutzer und Tag (für das Tageslimit)
+// Zählt erzeugte KI-Sätze pro Nutzer und Tag (für das Tageslimit) sowie Aufrufe, Token und Kosten
 const AiUsage = sequelize.define('AiUsage', {
   day: { type: DataTypes.DATEONLY, allowNull: false },
-  count: { type: DataTypes.INTEGER, defaultValue: 0 }
+  count: { type: DataTypes.INTEGER, defaultValue: 0 },
+  calls: { type: DataTypes.INTEGER, defaultValue: 0 },
+  inputTokens: { type: DataTypes.BIGINT, defaultValue: 0 },
+  outputTokens: { type: DataTypes.BIGINT, defaultValue: 0 },
+  costUsd: { type: DataTypes.DOUBLE, defaultValue: 0 } // nur Modelle mit bekanntem Preis
 }, {
   indexes: [{ unique: true, fields: ['UserId', 'day'] }]
 });
