@@ -100,23 +100,44 @@ Jeder Satz muss:
 
 Verteile die Sätze gleichmäßig auf die angegebenen Grammatikarten und wiederhole keine Satzmuster.`;
 
-function buildPrompt({ word, translation, language, level, categories, count }) {
+// Verteilt die Sätze fest auf die gewählten Grammatikarten und Niveaus (zufällige Reihenfolge je Wort,
+// damit bei wenigen Sätzen pro Wort über viele Wörter alle Arten gleich oft vorkommen)
+function shuffled(list) {
+    const copy = [...list];
+    for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+}
+
+function buildPlan(categories, levels, count) {
+    const cats = shuffled(categories);
+    const lvls = shuffled(levels);
+    return Array.from({ length: count }, (_, i) => ({ category: cats[i % cats.length], level: lvls[i % lvls.length] }));
+}
+
+function buildPrompt({ word, translation, language, plan }) {
+    const categories = [...new Set(plan.map(p => p.category))];
     const categoryLines = categories.map(c => `- ${c}${HINTS[c] ? ` (${HINTS[c]})` : ''}`).join('\n');
+    const planLines = plan.map((p, i) => `${i + 1}. Grammatikart: ${p.category}, Niveau: ${p.level}`).join('\n');
     return `Sprache: ${LANGUAGE_NAMES[language]}
 Wort: ${word}${translation ? `\nDeutsche Bedeutung: ${translation}` : ''}
-Sprachniveau: ${level}
-Anzahl Sätze: ${count}
+
 Grammatikarten:
 ${categoryLines}
 
-Schreibe ${count} Sätze auf ${LANGUAGE_NAMES[language]} mit deutscher Übersetzung. Setze "category" auf genau eine der Grammatikarten oben und "level" auf ${level}.`;
+Schreibe genau ${plan.length} Sätze auf ${LANGUAGE_NAMES[language]} mit deutscher Übersetzung, in dieser Reihenfolge:
+${planLines}
+Setze "category" und "level" jedes Satzes genau wie in seiner Zeile oben.`;
 }
 
 const MAX_SENTENCE_LENGTH = 250; // Spalten it/de sind VARCHAR(255)
 
-async function generateSentences({ word, translation, language, level, categories, count }) {
+async function generateSentences({ word, translation, language, levels, categories, count }) {
     const config = await loadConfig();
     if (!config.enabled) throw new AiError('Die KI-Funktion ist nicht aktiviert', 409); // kein 403: das Frontend meldet bei 403 ab
+    const plan = buildPlan(categories, levels, count);
     const provider = getProvider(config.provider);
     const apiKey = getApiKey(config, config.provider);
     if (!apiKey) throw new AiError('Kein gültiger API-Schlüssel hinterlegt', 503);
@@ -125,19 +146,19 @@ async function generateSentences({ word, translation, language, level, categorie
         apiKey,
         model: config.models[config.provider],
         system: SYSTEM_PROMPT,
-        prompt: buildPrompt({ word, translation, language, level, categories, count }),
-        schema: sentenceSchema(categories, [level])
+        prompt: buildPrompt({ word, translation, language, plan }),
+        schema: sentenceSchema(categories, levels)
     });
 
     const sentences = (Array.isArray(result && result.sentences) ? result.sentences : [])
-        .map(s => ({
-            foreign: String(s.foreign || '').trim(),
-            german: String(s.german || '').trim(),
-            category: categories.includes(s.category) ? s.category : categories[0],
-            level
+        .slice(0, count)
+        .map((sen, i) => ({
+            foreign: String(sen.foreign || '').trim(),
+            german: String(sen.german || '').trim(),
+            category: plan[i].category,
+            level: plan[i].level
         }))
-        .filter(s => s.foreign && s.german && s.foreign.length <= MAX_SENTENCE_LENGTH && s.german.length <= MAX_SENTENCE_LENGTH)
-        .slice(0, count);
+        .filter(sen => sen.foreign && sen.german && sen.foreign.length <= MAX_SENTENCE_LENGTH && sen.german.length <= MAX_SENTENCE_LENGTH);
     if (sentences.length === 0) throw new AiError('Die KI hat keine verwertbaren Sätze geliefert', 502);
     return sentences;
 }

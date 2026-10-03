@@ -9,7 +9,14 @@ const router = express.Router();
 const MAX_COUNT = 10;
 const today = () => new Date().toISOString().slice(0, 10);
 
-const DEFAULT_PREFS = { enabled: false, level: 'A1', categories: [], count: 3 };
+const DEFAULT_PREFS = { enabled: false, levels: ['A1'], categories: [], count: 3 };
+
+// Frühere Einstellungen kannten nur ein Niveau (level)
+function storedLevels(prefs) {
+    const raw = Array.isArray(prefs.levels) ? prefs.levels : (prefs.level ? [prefs.level] : []);
+    const valid = LEVELS.filter(l => raw.includes(l));
+    return valid.length ? valid : DEFAULT_PREFS.levels;
+}
 
 function parsePrefs(user) {
     let stored = {};
@@ -20,7 +27,7 @@ function parsePrefs(user) {
 // Einstellungen pro Sprache: Grammatikarten unterscheiden sich zwischen Italienisch und Englisch
 const prefsForLanguage = (prefs, language) => ({
     enabled: prefs.enabled === true,
-    level: LEVELS.includes(prefs.level) ? prefs.level : DEFAULT_PREFS.level,
+    levels: storedLevels(prefs),
     count: Number.isInteger(prefs.count) ? Math.min(MAX_COUNT, Math.max(1, prefs.count)) : DEFAULT_PREFS.count,
     categories: Array.isArray(prefs.categoriesByLang && prefs.categoriesByLang[language]) ? prefs.categoriesByLang[language] : []
 });
@@ -60,11 +67,12 @@ router.get('/options', authenticateToken, asyncHandler(async (req, res) => {
 
 // Allgemeine KI-Einstellungen des Nutzers (gelten für alle Wörter): Automatik, Niveau, Grammatikarten, Sätze pro Wort
 router.put('/preferences', authenticateToken, asyncHandler(async (req, res) => {
-    const { language, enabled, level, categories } = req.body;
+    const { language, enabled, categories } = req.body;
+    const levels = LEVELS.filter(l => Array.isArray(req.body.levels) && req.body.levels.includes(l));
     const count = parseInt(req.body.count, 10);
     if (!isSupportedLanguage(language)) return res.status(400).json({ error: 'Sprache nicht unterstützt' });
     if (typeof enabled !== 'boolean') return res.status(400).json({ error: 'Ungültige Einstellung' });
-    if (!LEVELS.includes(level)) return res.status(400).json({ error: 'Ungültiges Niveau' });
+    if (levels.length === 0) return res.status(400).json({ error: 'Bitte mindestens ein Niveau wählen' });
     if (!Number.isInteger(count) || count < 1 || count > MAX_COUNT) return res.status(400).json({ error: `Anzahl muss zwischen 1 und ${MAX_COUNT} liegen` });
 
     const allowed = await getCategories(language);
@@ -75,7 +83,7 @@ router.put('/preferences', authenticateToken, asyncHandler(async (req, res) => {
     if (!user) return res.sendStatus(401);
     const stored = parsePrefs(user);
     const next = {
-        enabled, level, count,
+        enabled, levels, count,
         categoriesByLang: { ...(stored.categoriesByLang || {}), [language]: chosen }
     };
     await user.update({ aiPrefs: JSON.stringify(next) });
@@ -83,13 +91,14 @@ router.put('/preferences', authenticateToken, asyncHandler(async (req, res) => {
 }));
 
 router.post('/sentences', authenticateToken, asyncHandler(async (req, res) => {
-    const { word, translation, language, level, categories } = req.body;
+    const { word, translation, language, categories } = req.body;
+    const levels = LEVELS.filter(l => Array.isArray(req.body.levels) && req.body.levels.includes(l));
     const count = parseInt(req.body.count, 10);
 
     if (!isSupportedLanguage(language)) return res.status(400).json({ error: 'Sprache nicht unterstützt' });
     if (typeof word !== 'string' || !word.trim() || word.length > 100) return res.status(400).json({ error: 'Bitte ein Wort angeben (max. 100 Zeichen)' });
     if (translation != null && (typeof translation !== 'string' || translation.length > 100)) return res.status(400).json({ error: 'Übersetzung zu lang' });
-    if (!LEVELS.includes(level)) return res.status(400).json({ error: 'Ungültiges Niveau' });
+    if (levels.length === 0) return res.status(400).json({ error: 'Bitte mindestens ein Niveau wählen' });
     if (!Number.isInteger(count) || count < 1 || count > MAX_COUNT) return res.status(400).json({ error: `Anzahl muss zwischen 1 und ${MAX_COUNT} liegen` });
 
     // Nur bekannte Grammatikarten zulassen, damit nichts Beliebiges in den Prompt gelangt
@@ -107,7 +116,7 @@ router.post('/sentences', authenticateToken, asyncHandler(async (req, res) => {
     const sentences = await generateSentences({
         word: word.trim(),
         translation: translation ? translation.trim() : null,
-        language, level, categories: chosen, count
+        language, levels, categories: chosen, count
     });
     if (!user.isAdmin) await addUsage(user.id, sentences.length);
 
