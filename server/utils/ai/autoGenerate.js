@@ -84,11 +84,18 @@ async function processUser(userId, language, config) {
                 word: word.it, translation: word.de || null, language,
                 levels: prefs.levels, categories, count: prefs.count
             });
-            const rows = await Vocabulary.bulkCreate(sentences.map(s => ({
-                de: s.german, it: s.foreign, typ: 'Satz', emoji: '', grammatica: s.category, level: s.level,
-                forWord: word.it, isActive: true, isMarked: false, isOwn: true, language, UserId: userId
-            })), { returning: true });
-            await Stats.bulkCreate(rows.map(r => ({ VocabularyId: r.id })));
+            if (user.isAdmin) {
+                // Admin-Sätze gelten für alle Nutzer (globale Liste); jeder Nutzer kann sie in seiner Satzliste abwählen
+                await GrammarSentence.bulkCreate(sentences.map(s => ({
+                    it: s.foreign, de: s.german, category: s.category, level: s.level, forWord: word.it, language
+                })));
+            } else {
+                const rows = await Vocabulary.bulkCreate(sentences.map(s => ({
+                    de: s.german, it: s.foreign, typ: 'Satz', emoji: '', grammatica: s.category, level: s.level,
+                    forWord: word.it, isActive: true, isMarked: false, isOwn: true, language, UserId: userId
+                })), { returning: true });
+                await Stats.bulkCreate(rows.map(r => ({ VocabularyId: r.id })));
+            }
             await addUsage(userId, sentences.length, usage);
             failures = 0;
         } catch (err) {
