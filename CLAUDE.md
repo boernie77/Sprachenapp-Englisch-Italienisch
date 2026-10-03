@@ -4,8 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Übergabe / Aktueller Stand (2026-10-03) – zuerst lesen
 
-- **NEU: Live (Web) läuft 2.1.3** (Commit `fea3c30`): Anmeldung bleibt erhalten (Details unten bei „Version 2.1.3“). Versionsnummern schon erhöht: Android versionCode 20 / 2.1.3, iOS Build 20 / 2.1.3. Web-Assets für Android/iOS sind mitcommittet.
-- **Nächster Schritt auf dem MacBook: Mobile-Builds 2.1.3 erstellen** (`git pull`, `npx cap sync`, bauen wie bei 2.1.2) und **statt** der 2.1.2-Builds hochladen, weil sie das tägliche Abmelden beheben. Tag `v2.1.3` setzen.
+- **NEU: Live (Web) läuft 2.1.4**: Anmeldung bleibt erhalten (2.1.3) und Offline-Änderungen überstehen eine Abmeldung (2.1.4), Details unten. Versionsnummern schon erhöht: Android versionCode 21 / 2.1.4, iOS Build 21 / 2.1.4. Web-Assets für Android/iOS sind mitcommittet.
+- **Nächster Schritt auf dem MacBook: Mobile-Builds 2.1.4 erstellen** (`git pull`, `npx cap sync`, bauen wie bei 2.1.2), aufs iPhone installieren und **statt** der 2.1.2-Builds hochladen. Tags `v2.1.3` (`fea3c30`) und `v2.1.4` setzen.
 
 ### Stand vom MacBook (2026-10-02, Builds 2.1.2)
 
@@ -164,9 +164,14 @@ PostgreSQL-Daten liegen als **Bind-Mount** unter `./pgdata` (kein Docker named v
 - **Achtung:** Solange das Repo privat ist, kann der VPS nicht `git fetch`en → Live-Deploy baut still den alten Stand neu. Erst nach dem Wieder-Öffentlich-Stellen (oder mit Deploy-Key) deployen. Stand 2026-10-02: Repo ist wieder **öffentlich**, Live-Deploy funktioniert (vor jedem Deploy mit `gh repo view --json visibility` prüfen).
 - Offen (nur der Nutzer kann das): SMTP-Passwort beim Mailanbieter ändern + `gh secret set SMTP_PASS`; Upload-Key-Reset in der Play Console mit `upload_certificate_lernapp_2026.pem`. Danach Repo wieder öffentlich.
 
+## Version 2.1.4 (2026-10-03) – live deployt
+- Offline-Änderungen (`syncOutbox`) gehen bei Abmeldung nicht mehr verloren: `logout()` parkt sie unter `lernapp-pending-outbox-<userId>` (bewusst **kein** `ita-`-Präfix, damit sie das Löschen überstehen). `restorePendingOutbox()` holt sie beim Start und nach dem Login **nur für denselben Nutzer** zurück.
+- `processSyncOutbox()` trägt Aufgaben erst nach Erfolg einzeln aus und bricht ab, sobald abgemeldet wurde. Vorher schrieb es nach einer Abmeldung mitten im Sync die Warteschlange zurück, wo sie beim nächsten Nutzer gelandet wäre. Einträge, die nach der Abmeldung noch eintreffen, parkt `addToSyncOutbox()` beim abgemeldeten Nutzer.
+- Stats aus der Warteschlange sendet jetzt `sendQueuedStat()` mit den gemerkten Werten, zusammengeführt mit `wordStats` (Maximum je Feld). Vorher wurde `saveStatToServer()` mit dem aktuellen `wordStats` aufgerufen, nach einer Neuanmeldung also mit Serverwerten. Der Server überschreibt Stats (`PUT /vocab/:id/stats`) und führt nichts zusammen.
+
 ## Version 2.1.3 (2026-10-03) – live deployt
 - Fix: Nutzer wurden täglich abgemeldet, weil der JWT nur 24 h galt und nie verlängert wurde. Jetzt: `signToken()` in `middleware/auth.js` (30 Tage, von `routes/auth.js` und `routes/oidc.js` genutzt) + `POST /api/auth/refresh` (prüft, ob User existiert und aktiv ist). Frontend `refreshTokenIfDue()` erneuert den Token beim Start und beim 60s-Sync, sobald er älter als 12 h ist → wer die App mindestens alle 30 Tage öffnet, bleibt angemeldet.
-- Achtung: `logout()` löscht alle `ita-*`-Keys inkl. `ita-sync-outbox` → offline gespeicherte, noch nicht synchronisierte Änderungen gehen bei einer erzwungenen Abmeldung verloren.
+- (Verlust von Offline-Änderungen bei Abmeldung ist seit 2.1.4 behoben.)
 
 ## Version 2.1.2 (2026-10-02) – live deployt
 - Fix: `checkDuplicate()` sperrte Speichern, sobald die **deutsche** Seite schon existierte (oppure → „oder“, weil oder → o vorhanden), sogar sprachübergreifend. Jetzt zählt nur das Fremdwort innerhalb `CURRENT_LANG`; Hinweis zeigt „Bereits vorhanden: de → it“ (i18n-Key `tag_duplicate`).
