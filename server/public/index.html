@@ -5689,7 +5689,8 @@
                 wordsent_search: "Wort suchen (Deutsch oder Fremdsprache)…",
                 wordsent_hint: "Mindestens 2 Buchstaben eingeben.",
                 wordsent_none: "Kein passendes Wort gefunden.",
-                wordsent_no_sentences: "Noch keine KI-Sätze für dieses Wort.",
+                wordsent_no_sentences: "Noch keine Sätze mit diesem Wort.",
+                wordsent_other: "Weitere Sätze mit dem Wort (z.B. aus Excel-Listen)",
                 wordsent_more: "Nur die ersten {0} von {1} Wörtern angezeigt – bitte Suche verfeinern.",
                 vocab_active_count: "Aktiv: {0} von {1} Vokabeln",
                 admin_invites_tab: "Einladungen",
@@ -6166,7 +6167,8 @@
                 wordsent_search: "Search word (German or foreign language)…",
                 wordsent_hint: "Enter at least 2 letters.",
                 wordsent_none: "No matching word found.",
-                wordsent_no_sentences: "No AI sentences for this word yet.",
+                wordsent_no_sentences: "No sentences with this word yet.",
+                wordsent_other: "More sentences containing the word (e.g. from Excel lists)",
                 wordsent_more: "Only the first {0} of {1} words shown – please refine your search.",
                 vocab_active_count: "Active: {0} of {1} words",
                 admin_invites_tab: "Invites",
@@ -11915,6 +11917,24 @@
         const wordSentencesSearch = document.getElementById('wordSentencesSearch');
         const wordSentencesResults = document.getElementById('wordSentencesResults');
         const MAX_WORD_MATCHES = 30;
+        const MAX_OTHER_SENTENCES = 10;
+
+        // Prüft näherungsweise, ob ein Satz das Wort enthält (Artikel weg, Verbstamm, grobe Endungen) – wie auf dem Server
+        function sentenceTokens(text) {
+            return String(text || '').toLowerCase().replace(/[’']/g, ' ').split(/[^\p{L}]+/u).filter(Boolean);
+        }
+        function wordMatcher(word) {
+            const tokens = wordKey(word.it).split(' ').filter(Boolean);
+            if (tokens.length === 0) return null;
+            const isVerb = /verb/i.test(word.typ || '');
+            const parts = tokens.map(t => {
+                let stem = t;
+                if (CURRENT_LANG === 'it' && isVerb && /(are|ere|ire)$/.test(t) && t.length > 4) stem = t.slice(0, -3);
+                else if (t.length >= 5) stem = t.slice(0, -1);
+                return { t, stem };
+            });
+            return (forms) => parts.every(({ t, stem }) => forms.has(t) || (stem.length >= 3 && stem !== t && [...forms].some(f => f.startsWith(stem) && f.length <= t.length + 3)));
+        }
 
         function renderWordSentences() {
             const query = wordSentencesSearch.value.toLowerCase().trim();
@@ -11934,7 +11954,7 @@
             const sentencesByWord = new Map();
             fullDictionary.forEach(w => {
                 if (w.typ !== 'Satz' || !w.forWord || (w.language || 'it') !== CURRENT_LANG) return;
-                const key = w.forWord.toLowerCase();
+                const key = wordKey(w.forWord);
                 if (!sentencesByWord.has(key)) sentencesByWord.set(key, []);
                 sentencesByWord.get(key).push(w);
             });
@@ -11942,10 +11962,16 @@
             // Globale KI-Sätze (vom Admin erzeugt) gehören ebenfalls zum Wort
             (allBaseSentences || []).forEach(g => {
                 if (!g.forWord || (g.language || 'it') !== CURRENT_LANG) return;
-                const key = g.forWord.toLowerCase();
+                const key = wordKey(g.forWord);
                 if (!sentencesByWord.has(key)) sentencesByWord.set(key, []);
                 sentencesByWord.get(key).push({ it: g.it, de: g.de, grammatica: g.category, level: g.level });
             });
+
+            // Alle Sätze (eigene und globale), die das Wort enthalten – auch die ohne KI, z.B. aus Excel-Listen
+            const allSentences = [
+                ...fullDictionary.filter(w => w.typ === 'Satz' && (w.language || 'it') === CURRENT_LANG).map(w => ({ it: w.it, de: w.de, grammatica: w.grammatica, level: w.level, forWord: w.forWord })),
+                ...(allBaseSentences || []).filter(g => (g.language || 'it') === CURRENT_LANG).map(g => ({ it: g.it, de: g.de, grammatica: g.category, level: g.level, forWord: g.forWord }))
+            ].map(sen => ({ ...sen, forms: new Set(sentenceTokens(sen.it)) }));
 
             words.sort((a, b) => (a.it || '').localeCompare(b.it || '', 'de', { sensitivity: 'base' }));
             words.slice(0, MAX_WORD_MATCHES).forEach(word => {
@@ -11955,13 +11981,7 @@
                 head.className = 'font-bold text-slate-800 text-sm mb-2';
                 head.textContent = `${word.it} | ${word.de}`;
                 card.appendChild(head);
-                const sentences = sentencesByWord.get((word.it || '').toLowerCase()) || [];
-                if (sentences.length === 0) {
-                    const none = document.createElement('p');
-                    none.className = 'text-xs text-slate-400 italic';
-                    none.textContent = getI18n('wordsent_no_sentences');
-                    card.appendChild(none);
-                }
+                const sentences = sentencesByWord.get(wordKey(word.it)) || [];
                 sentences.forEach(sen => {
                     const row = document.createElement('div');
                     row.className = 'mb-2 last:mb-0';
@@ -11977,6 +11997,34 @@
                     row.append(foreign, german, tag);
                     card.appendChild(row);
                 });
+                // Weitere Sätze mit dem Wort (ohne die KI-Sätze, die oben schon stehen)
+                const matcher = wordMatcher(word);
+                const own = new Set(sentences.map(sen => sen.it));
+                const others = matcher ? allSentences.filter(sen => !own.has(sen.it) && matcher(sen.forms)).slice(0, MAX_OTHER_SENTENCES) : [];
+                if (others.length > 0) {
+                    const title = document.createElement('p');
+                    title.className = 'text-[11px] font-semibold text-slate-500 mt-3 mb-1';
+                    title.textContent = getI18n('wordsent_other');
+                    card.appendChild(title);
+                    others.forEach(sen => {
+                        const row = document.createElement('div');
+                        row.className = 'mb-2 last:mb-0';
+                        const foreign = document.createElement('p');
+                        foreign.className = 'text-sm font-semibold text-slate-700';
+                        foreign.textContent = sen.it;
+                        const german = document.createElement('p');
+                        german.className = 'text-sm text-slate-600';
+                        german.textContent = sen.de;
+                        row.append(foreign, german);
+                        card.appendChild(row);
+                    });
+                }
+                if (sentences.length === 0 && others.length === 0) {
+                    const none = document.createElement('p');
+                    none.className = 'text-xs text-slate-400 italic';
+                    none.textContent = getI18n('wordsent_no_sentences');
+                    card.appendChild(none);
+                }
                 wordSentencesResults.appendChild(card);
             });
             if (words.length > MAX_WORD_MATCHES) note(getI18n('wordsent_more', MAX_WORD_MATCHES, words.length));
