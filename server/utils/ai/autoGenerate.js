@@ -13,6 +13,7 @@ const MAX_FAILURES = 3;
 const ARTICLES = { it: ['il', 'lo', 'la', 'l', 'i', 'gli', 'le', 'un', 'uno', 'una'], en: ['to', 'the', 'a', 'an'] };
 
 let running = false;
+const backfillRequests = new Set(); // `${userId}:${language}` – vom Nutzer angestoßenes Nachrüsten fehlender Niveaus
 const failedWords = new Set(); // `${userId}:${wordId}` – nach einem Fehler bis zum nächsten Serverstart nicht erneut versuchen
 
 const tokenize = (text) => String(text || '').toLowerCase().replace(/[’']/g, ' ').split(/[^\p{L}]+/u).filter(Boolean);
@@ -64,6 +65,38 @@ async function pendingWords(userId, language) {
     return words.filter(w => w.it && w.it.length <= 100 && !isCovered(w, language, index) && !failedWords.has(`${userId}:${w.id}`));
 }
 
+// Fremdwort ohne Artikel, klein geschrieben (gleicher Schlüssel für "la casa" und "casa")
+function wordKey(text, language) {
+    const tokens = tokenize(text);
+    if (tokens.length > 1 && ARTICLES[language].includes(tokens[0])) tokens.shift();
+    return tokens.join(' ');
+}
+
+// Aktive Wörter, zu denen es schon KI-Sätze gibt, aber nicht in allen gewählten Niveaus: [{ ...Wort, missing: [Niveaus] }]
+async function backfillCandidates(userId, language, levels) {
+    const [kiSentences, words] = await Promise.all([
+        GrammarSentence.findAll({ where: { language, forWord: { [Op.ne]: null } }, attributes: ['forWord', 'level'], raw: true }),
+        Vocabulary.findAll({
+            where: { UserId: userId, language, isActive: true, typ: { [Op.or]: [{ [Op.ne]: 'Satz' }, { [Op.is]: null }] } },
+            attributes: ['id', 'it', 'de', 'typ'], order: [['id', 'ASC']], raw: true
+        })
+    ]);
+    const levelsByWord = new Map();
+    kiSentences.forEach(s => {
+        const key = wordKey(s.forWord, language);
+        if (!levelsByWord.has(key)) levelsByWord.set(key, new Set());
+        levelsByWord.get(key).add(s.level);
+    });
+    const result = [];
+    words.forEach(w => {
+        const have = levelsByWord.get(wordKey(w.it, language));
+        if (!have || !w.it || w.it.length > 100 || failedWords.has(`${userId}:${w.id}`)) return;
+        const missing = levels.filter(l => !have.has(l));
+        if (missing.length > 0) result.push({ ...w, missing });
+    });
+    return result;
+}
+
 async function processUser(userId, language, config) {
     const allowed = await getCategories(language);
     let failures = 0;
@@ -98,6 +131,46 @@ async function processUser(userId, language, config) {
     }
 }
 
+// Erzeugt für Wörter mit KI-Sätzen die fehlenden Niveaus nach (mit den gespeicherten Einstellungen)
+async function processBackfill(userId, language, config) {
+    const allowed = await getCategories(language);
+    let failures = 0;
+    let limitReached = false;
+    const first = await User.findByPk(userId);
+    if (!first) return true;
+    const startPrefs = prefsForLanguage(parsePrefs(first), language);
+    const words = await backfillCandidates(userId, language, startPrefs.levels);
+
+    for (const word of words) {
+        const user = await User.findByPk(userId);
+        if (!user || user.isActive === false) return true;
+        const prefs = prefsForLanguage(parsePrefs(user), language);
+        const categories = prefs.categories.filter(c => allowed.includes(c));
+        if (categories.length === 0) return true;
+        const levels = word.missing.filter(l => prefs.levels.includes(l));
+        if (levels.length === 0) continue;
+
+        const remaining = await remainingToday(user, config.dailyLimit);
+        if (remaining !== null && remaining < prefs.count) { limitReached = true; break; } // morgen weiter
+
+        try {
+            const { sentences, usage } = await generateSentences({
+                word: word.it, translation: word.de || null, language, levels, categories, count: prefs.count
+            });
+            await GrammarSentence.bulkCreate(sentences.map(s => ({
+                it: s.foreign, de: s.german, category: s.category, level: s.level, forWord: word.it, language
+            })));
+            await addUsage(userId, sentences.length, usage);
+            failures = 0;
+        } catch (err) {
+            console.warn(`KI-Nachrüsten: Wort "${word.it}" (Nutzer ${userId}) fehlgeschlagen: ${err.message}`);
+            failedWords.add(`${userId}:${word.id}`);
+            if (++failures >= MAX_FAILURES) return true;
+        }
+    }
+    return !limitReached; // bei Tageslimit bleibt die Anfrage bestehen und läuft am nächsten Tag weiter
+}
+
 async function runOnce() {
     if (running) return;
     running = true;
@@ -106,8 +179,12 @@ async function runOnce() {
         if (!config.enabled || !config.keys[config.provider]) return;
         const users = await User.findAll({ where: { aiPrefs: { [Op.ne]: null }, isActive: { [Op.ne]: false } }, attributes: ['id', 'aiPrefs'] });
         for (const user of users) {
-            if (parsePrefs(user).enabled !== true) continue;
-            for (const language of LANGUAGES) await processUser(user.id, language, config);
+            const autoOn = parsePrefs(user).enabled === true;
+            for (const language of LANGUAGES) {
+                if (autoOn) await processUser(user.id, language, config);
+                const requestKey = `${user.id}:${language}`;
+                if (backfillRequests.has(requestKey) && await processBackfill(user.id, language, config)) backfillRequests.delete(requestKey);
+            }
         }
     } catch (err) {
         console.warn('KI-Automatik abgebrochen:', err.message);
@@ -124,4 +201,6 @@ function start() {
     setInterval(runOnce, TICK_MS);
 }
 
-module.exports = { start, trigger, pendingWords };
+const requestBackfill = (userId, language) => { backfillRequests.add(`${userId}:${language}`); trigger(); };
+
+module.exports = { start, trigger, pendingWords, backfillCandidates, requestBackfill };

@@ -298,6 +298,31 @@ router.get('/ai-usage', authenticateToken, requireAdmin, asyncHandler(async (req
     });
 }));
 
+// Kostenvorschau für ein (noch nicht gespeichertes) Modell: pro Aufruf, pro Wort und pro Satz, mit den Einstellungen des Admins
+router.get('/ai-estimate', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
+    const { estimateCall } = require('../utils/ai/estimate');
+    const { parsePrefs, prefsForLanguage } = require('../utils/ai/usage');
+    const auto = require('../utils/ai/autoGenerate');
+    const language = ['it', 'en'].includes(req.query.language) ? req.query.language : 'it';
+    const config = await ai.loadConfig();
+    const model = String(req.query.model || config.models[config.provider]).slice(0, 100);
+    const currentModel = config.models[req.query.provider || config.provider];
+    const admin = await User.findByPk(req.user.id);
+    const prefs = prefsForLanguage(parsePrefs(admin), language);
+    const call = await estimateCall(model, prefs.count, currentModel);
+    const [pending, backfill] = await Promise.all([auto.pendingWords(admin.id, language), auto.backfillCandidates(admin.id, language, prefs.levels)]);
+    const eur = (usd) => (usd === null ? null : usd * config.usdToEur);
+    res.json({
+        model, basis: call.basis, count: prefs.count,
+        priceKnown: call.costUsd !== null,
+        perWordEur: eur(call.costUsd),
+        perSentenceEur: call.costUsd === null ? null : eur(call.costUsd) / prefs.count,
+        pendingWords: pending.length, backfillWords: backfill.length,
+        pendingEur: eur(call.costUsd === null ? null : call.costUsd * pending.length),
+        backfillEur: eur(call.costUsd === null ? null : call.costUsd * backfill.length)
+    });
+}));
+
 // Prüft Schlüssel + Modell des gewählten Anbieters mit einem kostenlosen Modell-Abruf
 router.post('/ai-settings/test', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
     const config = await ai.loadConfig();

@@ -5,6 +5,7 @@ const { loadConfig, generateSentences, PROVIDERS } = require('../utils/ai');
 const { LEVELS, NEW_CATEGORIES, getCategories, isSupportedLanguage } = require('../utils/ai/grammar');
 const { MAX_COUNT, parsePrefs, prefsForLanguage, remainingToday, addUsage } = require('../utils/ai/usage');
 const auto = require('../utils/ai/autoGenerate');
+const { estimateCall } = require('../utils/ai/estimate');
 
 const router = express.Router();
 
@@ -55,11 +56,51 @@ router.put('/preferences', authenticateToken, asyncHandler(async (req, res) => {
     res.json(prefsForLanguage(next, language));
 }));
 
-// Wie viele aktive Wörter noch in keinem Satz vorkommen (der Server erzeugt die Sätze selbst im Hintergrund)
+// Offene Arbeit für den Nutzer: Wörter ohne Satz und Wörter, denen gewählte Niveaus fehlen (Nachrüsten).
+// Nur Admins bekommen eine Kostenschätzung in Euro.
+async function workStatus(user, language) {
+    const prefs = prefsForLanguage(parsePrefs(user), language);
+    const [pending, backfill, config] = await Promise.all([
+        auto.pendingWords(user.id, language),
+        auto.backfillCandidates(user.id, language, prefs.levels),
+        loadConfig()
+    ]);
+    const status = { pending: pending.length, backfillWords: backfill.length, levels: prefs.levels, count: prefs.count, estimate: null };
+    if (user.isAdmin) {
+        const model = config.models[config.provider];
+        const call = await estimateCall(model, prefs.count, model);
+        if (call.costUsd !== null) {
+            status.estimate = {
+                perCallEur: call.costUsd * config.usdToEur,
+                pendingEur: pending.length * call.costUsd * config.usdToEur,
+                backfillEur: backfill.length * call.costUsd * config.usdToEur,
+                basis: call.basis
+            };
+        }
+    }
+    return status;
+}
+
+// Der Server erzeugt die Sätze selbst im Hintergrund; hier steht, wie viel noch offen ist
 router.get('/auto-status', authenticateToken, asyncHandler(async (req, res) => {
     const language = req.query.language;
     if (!isSupportedLanguage(language)) return res.status(400).json({ error: 'Sprache nicht unterstützt' });
-    res.json({ pending: (await auto.pendingWords(req.user.id, language)).length });
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.sendStatus(401);
+    res.json(await workStatus(user, language));
+}));
+
+// Fehlende Niveaus für Wörter mit KI-Sätzen nachrüsten (nach Bestätigung im Dialog)
+router.post('/backfill', authenticateToken, asyncHandler(async (req, res) => {
+    const language = req.body.language;
+    if (!isSupportedLanguage(language)) return res.status(400).json({ error: 'Sprache nicht unterstützt' });
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.sendStatus(401);
+    const prefs = prefsForLanguage(parsePrefs(user), language);
+    if (prefs.categories.length === 0) return res.status(400).json({ error: 'Bitte zuerst Grammatikarten wählen und speichern' });
+    const status = await workStatus(user, language);
+    auto.requestBackfill(user.id, language);
+    res.json({ words: status.backfillWords });
 }));
 
 router.post('/sentences', authenticateToken, asyncHandler(async (req, res) => {
