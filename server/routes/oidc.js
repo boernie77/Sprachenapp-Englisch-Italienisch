@@ -1,8 +1,7 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
 const { Issuer, generators } = require('openid-client');
 const { User } = require('../models');
-const { JWT_SECRET } = require('../middleware/auth');
+const { signToken } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -85,7 +84,7 @@ router.get('/callback', async (req, res) => {
     user.lastLogin = new Date();
     await user.save();
 
-    const token = jwt.sign({ id: user.id, email: user.email, isAdmin: user.isAdmin }, JWT_SECRET, { expiresIn: '24h' });
+    const token = signToken(user);
     const payload = {
       token,
       id: user.id,
