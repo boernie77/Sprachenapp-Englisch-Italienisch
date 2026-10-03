@@ -77,6 +77,7 @@ const Vocabulary = sequelize.define('Vocabulary', {
   isActive: { type: DataTypes.BOOLEAN, defaultValue: true },
   isMarked: { type: DataTypes.BOOLEAN, defaultValue: false },
   isOwn: { type: DataTypes.BOOLEAN, defaultValue: false },
+  level: { type: DataTypes.STRING, allowNull: true }, // Niveau eigener Sätze (A1–B2), z.B. von der KI erzeugt
   language: { type: DataTypes.STRING, defaultValue: 'it' }
 });
 
@@ -112,6 +113,20 @@ const InviteCode = sequelize.define('InviteCode', {
   isUsed: { type: DataTypes.BOOLEAN, defaultValue: false }
 });
 
+// App-weite Einstellungen (z.B. KI-Anbieter). Geheime Werte liegen verschlüsselt in `value`.
+const Setting = sequelize.define('Setting', {
+  key: { type: DataTypes.STRING, allowNull: false, unique: true },
+  value: { type: DataTypes.TEXT, allowNull: true }
+});
+
+// Zählt erzeugte KI-Sätze pro Nutzer und Tag (für das Tageslimit)
+const AiUsage = sequelize.define('AiUsage', {
+  day: { type: DataTypes.DATEONLY, allowNull: false },
+  count: { type: DataTypes.INTEGER, defaultValue: 0 }
+}, {
+  indexes: [{ unique: true, fields: ['UserId', 'day'] }]
+});
+
 // Relationships
 User.hasMany(Vocabulary);
 Vocabulary.belongsTo(User);
@@ -122,4 +137,7 @@ Stats.belongsTo(Vocabulary);
 InviteCode.belongsTo(User, { as: 'usedByUser', foreignKey: 'userId' });
 User.hasOne(InviteCode, { foreignKey: 'userId' });
 
-module.exports = { sequelize, User, Vocabulary, Stats, BaseVocabulary, GrammarSentence, InviteCode };
+User.hasMany(AiUsage, { onDelete: 'CASCADE' });
+AiUsage.belongsTo(User);
+
+module.exports = { sequelize, User, Vocabulary, Stats, BaseVocabulary, GrammarSentence, InviteCode, Setting, AiUsage };

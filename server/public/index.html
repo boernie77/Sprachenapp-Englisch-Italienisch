@@ -521,6 +521,7 @@
             }
 
             #vocabModal .bg-white,
+            #aiSentenceModal .bg-white,
             #sentenceModal .bg-white,
             #vocabListModal .bg-white,
             #sentenceListModal .bg-white,
@@ -565,6 +566,7 @@
             #statsModal,
             #sentenceModal,
             #vocabModal,
+            #aiSentenceModal,
             #vocabListModal,
             #sentenceListModal,
             #excelModal,
@@ -590,6 +592,7 @@
             #statsModal .bg-white,
             #sentenceModal .bg-white,
             #vocabModal .bg-white,
+            #aiSentenceModal .bg-white,
             #vocabListModal .bg-white,
             #sentenceListModal .bg-white,
             #editVocabModal .bg-white,
@@ -780,27 +783,32 @@
 
             #vocabListModal .bg-white, #sentenceListModal .bg-white,
             #sentenceModal .bg-white,
-            #vocabModal .bg-white {
+            #vocabModal .bg-white,
+            #aiSentenceModal .bg-white {
                 box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             }
 
             #vocabListModal, #sentenceListModal,
             #sentenceModal,
-            #vocabModal {
+            #vocabModal,
+            #aiSentenceModal {
                 backdrop-filter: blur(8px);
                 -webkit-backdrop-filter: blur(8px);
             }
 
             #vocabListModal .bg-white, #sentenceListModal .bg-white,
             #sentenceModal .bg-white,
-            #vocabModal .bg-white {
+            #vocabModal .bg-white,
+            #aiSentenceModal .bg-white {
                 animation: modalSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             }
 
             #vocabListModal input, #sentenceListModal input,
             #vocabListModal select, #sentenceListModal select,
             #vocabModal input,
-            #vocabModal select {
+            #aiSentenceModal input,
+            #vocabModal select,
+            #aiSentenceModal select {
                 font-family: 'DM Sans', sans-serif;
             }
 
@@ -811,9 +819,13 @@
             #vocabListModal p, #sentenceListModal p,
             #vocabListModal span, #sentenceListModal span,
             #vocabModal label,
+            #aiSentenceModal label,
             #vocabModal h2,
+            #aiSentenceModal h2,
             #vocabModal p,
-            #vocabModal span {
+            #aiSentenceModal p,
+            #vocabModal span,
+            #aiSentenceModal span {
                 letter-spacing: -0.01em;
             }
 
@@ -995,8 +1007,11 @@
 
             /* Final Contrast Fixes for Inputs and Tables */
             #vocabModal input,
+            #aiSentenceModal input,
             #vocabModal select,
+            #aiSentenceModal select,
             #vocabModal textarea,
+            #aiSentenceModal textarea,
             #vocabListModal input,
             #vocabListModal select,
             #authOverlay input,
@@ -1012,7 +1027,9 @@
             }
 
             #vocabModal label,
+            #aiSentenceModal label,
             #vocabModal h2,
+            #aiSentenceModal h2,
             #vocabListModal label,
             #vocabListModal h2,
             #vocabListModal h3,
@@ -1097,7 +1114,9 @@
             #sentenceListModal .cs-btn,
             #sentenceListModal .cs-list,
             #vocabModal .cs-btn,
+            #aiSentenceModal .cs-btn,
             #vocabModal .cs-list,
+            #aiSentenceModal .cs-list,
             #editVocabModal .cs-btn,
             #editVocabModal .cs-list,
             #editSentenceModal .cs-btn,
@@ -1110,6 +1129,7 @@
             #vocabListModal .cs-opt,
             #sentenceListModal .cs-opt,
             #vocabModal .cs-opt,
+            #aiSentenceModal .cs-opt,
             #editVocabModal .cs-opt,
             #editSentenceModal .cs-opt {
                 color: #cbd5e1 !important;
@@ -1119,6 +1139,7 @@
             #vocabListModal .cs-opt:hover,
             #sentenceListModal .cs-opt:hover,
             #vocabModal .cs-opt:hover,
+            #aiSentenceModal .cs-opt:hover,
             #editVocabModal .cs-opt:hover,
             #editSentenceModal .cs-opt:hover {
                 background-color: rgba(255, 255, 255, 0.1) !important;
@@ -1127,6 +1148,7 @@
             #vocabListModal .cs-opt.selected,
             #sentenceListModal .cs-opt.selected,
             #vocabModal .cs-opt.selected,
+            #aiSentenceModal .cs-opt.selected,
             #editVocabModal .cs-opt.selected,
             #editSentenceModal .cs-opt.selected {
                 color: #60a5fa !important;
@@ -1136,6 +1158,7 @@
             #vocabListModal .cs-chevron,
             #sentenceListModal .cs-chevron,
             #vocabModal .cs-chevron,
+            #aiSentenceModal .cs-chevron,
             #editVocabModal .cs-chevron,
             #editSentenceModal .cs-chevron {
                 color: #94a3b8 !important;
@@ -1145,6 +1168,7 @@
             #vocabListModal input,
             #sentenceListModal input,
             #vocabModal input,
+            #aiSentenceModal input,
             #editVocabModal input,
             #editSentenceModal input,
             #editVocabModal select,
@@ -1157,6 +1181,7 @@
             #vocabListModal input::placeholder,
             #sentenceListModal input::placeholder,
             #vocabModal input::placeholder,
+            #aiSentenceModal input::placeholder,
             #editVocabModal input::placeholder,
             #editSentenceModal input::placeholder {
                 color: #64748b !important;
@@ -1503,6 +1528,7 @@
             div[id$="Modal"], 
             #authOverlay,
             #vocabModal,
+            #aiSentenceModal,
             #statsModal,
             #excelModal {
                 align-items: flex-start !important;
@@ -2310,6 +2336,8 @@
                         <option value="A1">A1 (Anfänger)</option>
                         <option value="A2">A2 (Grundlagen)</option>
                         <option value="B1">B1 (Fortgeschritten)</option>
+                        <option value="B2">B2 (Selbstständig)</option>
+                        <option value="Eigene">Eigene</option>
                     </select>
                     <div style="position:relative">
                         <button type="button" class="cs-btn w-full" id="grammarLevelFilterBtn">
@@ -2325,6 +2353,8 @@
                             <div class="cs-opt" data-value="A1">A1</div>
                             <div class="cs-opt" data-value="A2">A2</div>
                             <div class="cs-opt" data-value="B1">B1</div>
+                            <div class="cs-opt" data-value="B2">B2</div>
+                            <div class="cs-opt" data-value="Eigene">Eigene</div>
                         </div>
                     </div>
                 </div>
@@ -3887,7 +3917,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex-1">
+                <div class="flex-1" id="vocabGrammaticaCol">
                     <label class="block text-xs font-semibold text-slate-700 mb-1.5" data-i18n="vocab_grammar">Grammatik (optional)</label>
                     <select id="vocabGrammatica" autocomplete="off" class="hidden">
                         <option value="">Keine/Andere</option>
@@ -3926,6 +3956,57 @@
                 class="w-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
                 <span data-i18n="vocab_submit_btn">Vokabel hinzufügen</span> <span class="vocab-btn-arrow"></span>
             </button>
+            <button id="openAiSentencesBtn" type="button"
+                class="hidden w-full mt-3 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 font-semibold py-2.5 rounded-xl transition-all text-sm"
+                data-i18n="ai_open_btn">✨ Beispielsätze mit KI erzeugen</button>
+        </div>
+    </div>
+
+    <!-- KI-Sätze Modal -->
+    <div id="aiSentenceModal"
+        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-xl w-full shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="flex justify-between items-center mb-4 shrink-0">
+                <h2 class="text-xl font-bold text-slate-800" data-i18n="ai_title">✨ Beispielsätze mit KI</h2>
+                <button id="closeAiSentenceModalBtn" class="text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
+            </div>
+            <div class="overflow-y-auto pr-1 flex-1 min-h-0">
+                <div class="flex gap-3 mb-3">
+                    <div class="flex-1">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="aiWord" data-i18n="ai_word">Wort (Fremdsprache)</label>
+                        <input id="aiWord" type="text" maxlength="100" autocomplete="off"
+                            class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
+                    </div>
+                    <div class="flex-1">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="aiTranslation" data-i18n="ai_translation">Deutsch</label>
+                        <input id="aiTranslation" type="text" maxlength="100" autocomplete="off"
+                            class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
+                    </div>
+                </div>
+                <p class="text-xs font-semibold text-slate-700 mb-1.5" data-i18n="ai_level">Niveau</p>
+                <div id="aiLevelChips" class="flex flex-wrap gap-2 mb-3"></div>
+                <p class="text-xs font-semibold text-slate-700 mb-1.5" data-i18n="ai_grammar">Grammatikarten (mehrere möglich)</p>
+                <div id="aiGrammarChips" class="flex flex-wrap gap-2 mb-3"></div>
+                <div class="flex items-end gap-3 mb-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="aiCount" data-i18n="ai_count">Anzahl</label>
+                        <input id="aiCount" type="number" min="1" max="10" value="5"
+                            class="w-20 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
+                    </div>
+                    <button id="aiGenerateBtn" type="button"
+                        class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2.5 rounded-xl transition-all shadow-md text-sm" data-i18n="ai_generate">Sätze erzeugen</button>
+                </div>
+                <p id="aiRemaining" class="text-[11px] text-slate-400 mb-3"></p>
+                <div id="aiResults" class="space-y-2"></div>
+            </div>
+            <div id="aiSaveArea" class="hidden shrink-0 pt-4 border-t border-slate-100 mt-3 space-y-2">
+                <label id="aiGlobalWrap" class="hidden flex items-center gap-2 text-xs font-semibold text-slate-600">
+                    <input type="checkbox" id="aiSaveGlobal" class="w-4 h-4">
+                    <span data-i18n="ai_save_global">Zusätzlich in die globale Basisliste übernehmen (für alle Nutzer)</span>
+                </label>
+                <button id="aiSaveBtn" type="button"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-md" data-i18n="ai_save">Ausgewählte Sätze speichern</button>
+            </div>
         </div>
     </div>
 
@@ -3988,6 +4069,7 @@
                     <button onclick="switchAdminTab('lists')" id="adminTabLists" class="admin-tab-btn" data-i18n="admin_lists_tab">📚 Listen</button>
                     <button onclick="switchAdminTab('invites')" id="adminTabInvites" class="admin-tab-btn hidden lg:inline-block" data-i18n="admin_invites_tab">🎟️ Einladungen</button>
                     <button onclick="switchAdminTab('search')" id="adminTabSearch" class="admin-tab-btn" data-i18n="admin_search_tab">🔍 Suche</button>
+                    <button onclick="switchAdminTab('ai')" id="adminTabAi" class="admin-tab-btn" data-i18n="admin_ai_tab">KI</button>
                 </div>
             </div>
 
@@ -4187,6 +4269,58 @@
                     <div id="adminInviteList" class="space-y-2">
                         <!-- Invitations will appear here -->
                     </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: KI-Einstellungen -->
+            <div id="adminAiTabContent" class="hidden flex flex-col flex-1 min-h-0 overflow-y-auto pr-2">
+                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-4">
+                    <h3 class="text-sm font-bold text-slate-700" data-i18n="admin_ai_title">🤖 KI-Einstellungen</h3>
+                    <p class="text-xs text-slate-500" data-i18n="admin_ai_desc">Die KI erzeugt Beispielsätze zu neuen Vokabeln. Der API-Schlüssel wird verschlüsselt auf dem Server gespeichert und nie wieder angezeigt.</p>
+
+                    <label class="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                        <input type="checkbox" id="adminAiEnabled" class="w-4 h-4">
+                        <span data-i18n="admin_ai_enabled">KI-Funktion für Nutzer aktivieren</span>
+                    </label>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="adminAiProvider" data-i18n="admin_ai_provider">Anbieter</label>
+                        <select id="adminAiProvider" autocomplete="off" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400"></select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="adminAiModel" data-i18n="admin_ai_model">Modell</label>
+                        <div class="flex gap-2">
+                            <input id="adminAiModel" type="text" list="adminAiModelList" autocomplete="off"
+                                class="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
+                            <datalist id="adminAiModelList"></datalist>
+                            <button type="button" id="adminAiLoadModelsBtn" class="px-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl border border-slate-200 text-xs font-semibold" data-i18n="admin_ai_load_models">Modelle laden</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="adminAiKey">
+                            <span data-i18n="admin_ai_key">API-Schlüssel</span>
+                            <span id="adminAiKeyStatus" class="ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded-full"></span>
+                        </label>
+                        <div class="flex gap-2">
+                            <input id="adminAiKey" type="password" autocomplete="new-password" placeholder="Neuen Schlüssel eintragen" data-i18n-placeholder="admin_ai_key_placeholder"
+                                class="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
+                            <button type="button" id="adminAiClearKeyBtn" class="w-10 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl flex items-center justify-center border border-red-100" title="Schlüssel löschen">🗑️</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="adminAiLimit" data-i18n="admin_ai_limit">Tageslimit pro Nutzer (Sätze, Admins unbegrenzt)</label>
+                        <input id="adminAiLimit" type="number" min="0" max="1000" class="w-32 bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
+                    </div>
+
+                    <div class="flex gap-2 pt-1">
+                        <button type="button" id="adminAiSaveBtn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-md" data-i18n="admin_ai_save">Speichern</button>
+                        <button type="button" id="adminAiTestBtn" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-md" data-i18n="admin_ai_test">Verbindung testen</button>
+                    </div>
+                    <p id="adminAiTestResult" class="text-xs hidden"></p>
+                    <p class="text-[11px] text-slate-400" data-i18n="admin_ai_jwt_hint">Hinweis: Wird JWT_SECRET auf dem Server geändert, muss der Schlüssel neu eingetragen werden.</p>
                 </div>
             </div>
 
@@ -5294,6 +5428,52 @@
                 excel_current_list: "Aktuelle Liste:",
                 admin_users_tab: "Benutzer",
                 admin_lists_tab: "Listen",
+                admin_ai_tab: "KI",
+                admin_ai_title: "🤖 KI-Einstellungen",
+                admin_ai_desc: "Die KI erzeugt Beispielsätze zu neuen Vokabeln. Der API-Schlüssel wird verschlüsselt auf dem Server gespeichert und nie wieder angezeigt.",
+                admin_ai_enabled: "KI-Funktion für Nutzer aktivieren",
+                admin_ai_provider: "Anbieter",
+                admin_ai_model: "Modell",
+                admin_ai_load_models: "Modelle laden",
+                admin_ai_key: "API-Schlüssel",
+                admin_ai_key_placeholder: "Neuen Schlüssel eintragen",
+                admin_ai_limit: "Tageslimit pro Nutzer (Sätze, Admins unbegrenzt)",
+                admin_ai_save: "Speichern",
+                admin_ai_test: "Verbindung testen",
+                admin_ai_jwt_hint: "Hinweis: Wird JWT_SECRET auf dem Server geändert, muss der Schlüssel neu eingetragen werden.",
+                admin_ai_key_set: "hinterlegt {0}",
+                admin_ai_key_unreadable: "nicht lesbar – neu eintragen",
+                admin_ai_key_missing: "nicht hinterlegt",
+                admin_ai_load_error: "KI-Einstellungen konnten nicht geladen werden: {0}",
+                admin_ai_saved: "KI-Einstellungen gespeichert",
+                admin_ai_save_error: "Speichern fehlgeschlagen: {0}",
+                admin_ai_clear_confirm: "Den gespeicherten API-Schlüssel für diesen Anbieter wirklich löschen?",
+                admin_ai_clear_title: "Schlüssel löschen?",
+                admin_ai_key_cleared: "API-Schlüssel gelöscht",
+                admin_ai_testing: "Teste Verbindung…",
+                admin_ai_models_loaded: "{0} Modelle vom Anbieter geladen",
+                admin_ai_models_need_key: "Ohne gespeicherten Schlüssel nur Vorschläge – erst Schlüssel speichern",
+                ai_open_btn: "✨ Beispielsätze mit KI erzeugen",
+                ai_title: "✨ Beispielsätze mit KI",
+                ai_word: "Wort (Fremdsprache)",
+                ai_translation: "Deutsch",
+                ai_level: "Niveau",
+                ai_grammar: "Grammatikarten (mehrere möglich)",
+                ai_count: "Anzahl",
+                ai_generate: "Sätze erzeugen",
+                ai_generating: "KI schreibt…",
+                ai_save_global: "Zusätzlich in die globale Basisliste übernehmen (für alle Nutzer)",
+                ai_save: "Ausgewählte Sätze speichern",
+                ai_remaining: "Heute noch {0} von {1} Sätzen · {2}",
+                ai_remaining_unlimited: "Admin: kein Tageslimit · {0}",
+                ai_not_available: "Die KI-Funktion ist derzeit nicht verfügbar",
+                ai_need_word: "Bitte ein Wort eingeben",
+                ai_need_grammar: "Bitte mindestens eine Grammatikart wählen",
+                ai_count_range: "Anzahl zwischen 1 und {0}",
+                ai_generate_error: "Sätze konnten nicht erzeugt werden: {0}",
+                ai_nothing_selected: "Kein Satz ausgewählt",
+                ai_saved: "{0} Sätze gespeichert",
+                ai_save_error: "Speichern fehlgeschlagen: {0}",
                 admin_invites_tab: "Einladungen",
                 admin_users_count: "BENUTZER",
                 admin_open_codes: "OFFENE CODES",
@@ -5680,6 +5860,52 @@
                 excel_current_list: "Current List:",
                 admin_users_tab: "Users",
                 admin_lists_tab: "Lists",
+                admin_ai_tab: "AI",
+                admin_ai_title: "🤖 AI settings",
+                admin_ai_desc: "The AI creates example sentences for new vocabulary. The API key is stored encrypted on the server and never shown again.",
+                admin_ai_enabled: "Enable AI feature for users",
+                admin_ai_provider: "Provider",
+                admin_ai_model: "Model",
+                admin_ai_load_models: "Load models",
+                admin_ai_key: "API key",
+                admin_ai_key_placeholder: "Enter new key",
+                admin_ai_limit: "Daily limit per user (sentences, admins unlimited)",
+                admin_ai_save: "Save",
+                admin_ai_test: "Test connection",
+                admin_ai_jwt_hint: "Note: if JWT_SECRET changes on the server, the key must be entered again.",
+                admin_ai_key_set: "stored {0}",
+                admin_ai_key_unreadable: "unreadable – enter again",
+                admin_ai_key_missing: "not set",
+                admin_ai_load_error: "Could not load AI settings: {0}",
+                admin_ai_saved: "AI settings saved",
+                admin_ai_save_error: "Saving failed: {0}",
+                admin_ai_clear_confirm: "Really delete the stored API key for this provider?",
+                admin_ai_clear_title: "Delete key?",
+                admin_ai_key_cleared: "API key deleted",
+                admin_ai_testing: "Testing connection…",
+                admin_ai_models_loaded: "{0} models loaded from provider",
+                admin_ai_models_need_key: "Suggestions only without a stored key – save the key first",
+                ai_open_btn: "✨ Create example sentences with AI",
+                ai_title: "✨ Example sentences with AI",
+                ai_word: "Word (foreign language)",
+                ai_translation: "German",
+                ai_level: "Level",
+                ai_grammar: "Grammar types (multiple allowed)",
+                ai_count: "Count",
+                ai_generate: "Create sentences",
+                ai_generating: "AI is writing…",
+                ai_save_global: "Also add to the global base list (for all users)",
+                ai_save: "Save selected sentences",
+                ai_remaining: "{0} of {1} sentences left today · {2}",
+                ai_remaining_unlimited: "Admin: no daily limit · {0}",
+                ai_not_available: "The AI feature is currently unavailable",
+                ai_need_word: "Please enter a word",
+                ai_need_grammar: "Please choose at least one grammar type",
+                ai_count_range: "Count between 1 and {0}",
+                ai_generate_error: "Could not create sentences: {0}",
+                ai_nothing_selected: "No sentence selected",
+                ai_saved: "{0} sentences saved",
+                ai_save_error: "Saving failed: {0}",
                 admin_invites_tab: "Invites",
                 admin_users_count: "USERS",
                 admin_open_codes: "OPEN CODES",
@@ -6422,7 +6648,7 @@
 
         async function apiFetch(endpoint, options = {}) {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 20000); // 20 second timeout
+            const timeoutId = setTimeout(() => controller.abort(), options.timeoutMs || 20000); // Standard 20 s, KI-Aufrufe länger
 
             if (!navigator.onLine && options.method && options.method !== 'GET') {
                 clearTimeout(timeoutId);
@@ -8512,7 +8738,7 @@
             try {
                 // Sentences are both global base sentences and user-managed personal ones.
                 const personalSentences = fullDictionary ? fullDictionary.filter(w => w.typ === 'Satz' && w.isActive !== false).map(v => ({
-                    id: v.id, de: v.de, it: v.it, category: v.grammatica || 'Eigene Sätze', level: 'Eigene', language: v.language || 'it'
+                    id: v.id, de: v.de, it: v.it, category: v.grammatica || 'Eigene Sätze', level: v.level || 'Eigene', language: v.language || 'it'
                 })) : [];
                 
                 // Merge with global base sentences (already filtered by language during fetch, but double check)
@@ -10925,6 +11151,7 @@
             });
 
             // Toggle Emoji Picker availability depending on Wortart
+            const vocabGrammaticaCol = document.getElementById('vocabGrammaticaCol');
             vocabTyp.addEventListener('change', () => {
                 if (vocabTyp.value !== 'Substantiv') {
                     vocabEmoji.value = '';
@@ -11055,6 +11282,328 @@
             }
         });
 
+        // --- KI-Beispielsätze ---
+        const aiSentenceModal = document.getElementById('aiSentenceModal');
+        const openAiSentencesBtn = document.getElementById('openAiSentencesBtn');
+        const aiWordInput = document.getElementById('aiWord');
+        const aiTranslationInput = document.getElementById('aiTranslation');
+        const aiLevelChips = document.getElementById('aiLevelChips');
+        const aiGrammarChips = document.getElementById('aiGrammarChips');
+        const aiCountInput = document.getElementById('aiCount');
+        const aiGenerateBtn = document.getElementById('aiGenerateBtn');
+        const aiRemainingEl = document.getElementById('aiRemaining');
+        const aiResults = document.getElementById('aiResults');
+        const aiSaveArea = document.getElementById('aiSaveArea');
+        const aiSaveBtn = document.getElementById('aiSaveBtn');
+        const aiGlobalWrap = document.getElementById('aiGlobalWrap');
+        const aiSaveGlobal = document.getElementById('aiSaveGlobal');
+        let aiOptions = null;
+        let aiSelectedLevel = 'A1';
+        const aiSelectedCategories = new Set();
+        let aiGenerated = [];
+
+        const AI_CHIP_BASE = 'px-3 py-1.5 rounded-full text-xs font-semibold border transition-all';
+        const AI_CHIP_ON = 'bg-purple-600 text-white border-purple-600';
+        const AI_CHIP_OFF = 'bg-white text-slate-600 border-slate-200 hover:border-purple-300';
+
+        function renderAiRemaining() {
+            if (!aiOptions) return;
+            aiRemainingEl.textContent = aiOptions.remaining === null
+                ? getI18n('ai_remaining_unlimited', aiOptions.provider)
+                : getI18n('ai_remaining', aiOptions.remaining, aiOptions.dailyLimit, aiOptions.provider);
+        }
+
+        function renderAiChips() {
+            aiLevelChips.innerHTML = '';
+            aiOptions.levels.forEach(level => {
+                const chip = document.createElement('button');
+                chip.type = 'button';
+                chip.className = `${AI_CHIP_BASE} ${level === aiSelectedLevel ? AI_CHIP_ON : AI_CHIP_OFF}`;
+                chip.textContent = level;
+                chip.addEventListener('click', () => { aiSelectedLevel = level; renderAiChips(); });
+                aiLevelChips.appendChild(chip);
+            });
+            aiGrammarChips.innerHTML = '';
+            aiOptions.categories.forEach(cat => {
+                const chip = document.createElement('button');
+                chip.type = 'button';
+                const on = aiSelectedCategories.has(cat);
+                chip.className = `${AI_CHIP_BASE} ${on ? AI_CHIP_ON : AI_CHIP_OFF}`;
+                chip.textContent = cat + (aiOptions.newCategories.includes(cat) ? ' ✨' : '');
+                chip.addEventListener('click', () => {
+                    if (on) aiSelectedCategories.delete(cat); else aiSelectedCategories.add(cat);
+                    renderAiChips();
+                });
+                aiGrammarChips.appendChild(chip);
+            });
+        }
+
+        // Zeigt den KI-Knopf im Vokabel-Dialog nur, wenn ein Admin die Funktion eingerichtet hat
+        async function refreshAiAvailability() {
+            try {
+                aiOptions = await apiFetch(`/ai/options?language=${CURRENT_LANG}`);
+                openAiSentencesBtn.classList.toggle('hidden', !aiOptions.enabled);
+            } catch (err) {
+                aiOptions = null;
+                openAiSentencesBtn.classList.add('hidden');
+            }
+        }
+        if (openVocabModalBtn) openVocabModalBtn.addEventListener('click', refreshAiAvailability);
+
+        function renderAiResults() {
+            aiResults.innerHTML = '';
+            aiGenerated.forEach((s, i) => {
+                const row = document.createElement('div');
+                row.className = 'p-3 bg-slate-50 rounded-xl border border-slate-100 flex gap-3 items-start';
+                const check = document.createElement('input');
+                check.type = 'checkbox';
+                check.checked = s.selected;
+                check.className = 'w-4 h-4 mt-2 shrink-0';
+                check.addEventListener('change', () => { aiGenerated[i].selected = check.checked; });
+                const fields = document.createElement('div');
+                fields.className = 'flex-1 space-y-1.5';
+                const mkInput = (key) => {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.maxLength = 250;
+                    input.value = s[key];
+                    input.className = 'w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-sm text-slate-800 outline-none focus:border-blue-400';
+                    input.addEventListener('input', () => { aiGenerated[i][key] = input.value; });
+                    return input;
+                };
+                const tag = document.createElement('span');
+                tag.className = 'text-[10px] font-semibold text-purple-600';
+                tag.textContent = `${s.category} · ${s.level}`;
+                fields.append(mkInput('foreign'), mkInput('german'), tag);
+                row.append(check, fields);
+                aiResults.appendChild(row);
+            });
+            aiSaveArea.classList.toggle('hidden', aiGenerated.length === 0);
+        }
+
+        const closeAiSentenceModal = setupModal(aiSentenceModal, null, document.getElementById('closeAiSentenceModalBtn'));
+
+        openAiSentencesBtn.addEventListener('click', async () => {
+            // Wort aus dem Vokabel-Dialog übernehmen, egal in welche Richtung eingegeben wurde
+            const foreignWord = (vocabInputLang === CURRENT_LANG ? vocabInput.value : vocabTranslation.value).trim();
+            const germanWord = (vocabInputLang === 'de' ? vocabInput.value : vocabTranslation.value).trim();
+            if (!aiOptions || !aiOptions.enabled) await refreshAiAvailability();
+            if (!aiOptions || !aiOptions.enabled) return showToast(getI18n('ai_not_available'), 'warning');
+
+            aiWordInput.value = foreignWord;
+            aiTranslationInput.value = germanWord;
+            aiGenerated = [];
+            renderAiResults();
+            for (const cat of [...aiSelectedCategories]) if (!aiOptions.categories.includes(cat)) aiSelectedCategories.delete(cat);
+            renderAiChips();
+            renderAiRemaining();
+            aiGlobalWrap.classList.toggle('hidden', !IS_ADMIN);
+            aiSaveGlobal.checked = false;
+
+            vocabModal.classList.remove('flex'); vocabModal.classList.add('hidden');
+            aiSentenceModal.classList.remove('hidden'); aiSentenceModal.classList.add('flex');
+        });
+
+        aiGenerateBtn.addEventListener('click', async () => {
+            const word = aiWordInput.value.trim();
+            const count = parseInt(aiCountInput.value, 10);
+            if (!word) return showToast(getI18n('ai_need_word'), 'warning');
+            if (aiSelectedCategories.size === 0) return showToast(getI18n('ai_need_grammar'), 'warning');
+            if (!Number.isInteger(count) || count < 1 || count > aiOptions.maxCount) return showToast(getI18n('ai_count_range', aiOptions.maxCount), 'warning');
+
+            aiGenerateBtn.disabled = true;
+            const originalLabel = aiGenerateBtn.textContent;
+            aiGenerateBtn.textContent = getI18n('ai_generating');
+            try {
+                const result = await apiFetch('/ai/sentences', {
+                    method: 'POST',
+                    timeoutMs: 150000,
+                    body: JSON.stringify({
+                        word,
+                        translation: aiTranslationInput.value.trim() || null,
+                        language: CURRENT_LANG,
+                        level: aiSelectedLevel,
+                        categories: [...aiSelectedCategories],
+                        count
+                    })
+                });
+                aiGenerated = result.sentences.map(s => ({ ...s, selected: true }));
+                aiOptions.remaining = result.remaining;
+                renderAiResults();
+                renderAiRemaining();
+            } catch (err) {
+                showToast(getI18n('ai_generate_error', err.message), 'error');
+            } finally {
+                aiGenerateBtn.disabled = false;
+                aiGenerateBtn.textContent = originalLabel;
+            }
+        });
+
+        aiSaveBtn.addEventListener('click', async () => {
+            const chosen = aiGenerated
+                .filter(s => s.selected)
+                .map(s => ({ ...s, foreign: s.foreign.trim(), german: s.german.trim() }))
+                .filter(s => s.foreign && s.german);
+            if (chosen.length === 0) return showToast(getI18n('ai_nothing_selected'), 'warning');
+
+            aiSaveBtn.disabled = true;
+            try {
+                const words = chosen.map(s => ({ de: s.german, it: s.foreign, typ: 'Satz', emoji: '', grammatica: s.category, level: s.level, language: CURRENT_LANG, isOwn: true }));
+                const created = await apiFetch('/vocab/bulk', {
+                    method: 'POST',
+                    body: JSON.stringify({ words, language: CURRENT_LANG })
+                });
+                created.forEach(v => {
+                    fullDictionary.push(v);
+                    wordStats[v.id] = v.Stat || { presented: 0, correct: 0, incorrect: 0, streak: 0 };
+                });
+
+                if (IS_ADMIN && aiSaveGlobal.checked) {
+                    const sentences = chosen.map(s => ({ it: s.foreign, de: s.german, category: s.category, level: s.level }));
+                    await apiFetch('/admin/grammar-sentences/bulk', {
+                        method: 'POST',
+                        body: JSON.stringify({ sentences, language: CURRENT_LANG, mode: 'append' })
+                    });
+                    allBaseSentences = [...(allBaseSentences || []), ...sentences.map(s => ({ ...s, language: CURRENT_LANG }))];
+                }
+
+                renderVocabList();
+                updateAdminGrammarCount();
+                saveAllDataLocally();
+                showToast(getI18n('ai_saved', created.length), 'success');
+                closeAiSentenceModal();
+            } catch (err) {
+                showToast(getI18n('ai_save_error', err.message), 'error');
+            } finally {
+                aiSaveBtn.disabled = false;
+            }
+        });
+
+        // --- Admin: KI-Einstellungen ---
+        let adminAiConfig = null;
+        const adminAiProviderSel = document.getElementById('adminAiProvider');
+        const adminAiModelInput = document.getElementById('adminAiModel');
+        const adminAiModelList = document.getElementById('adminAiModelList');
+        const adminAiKeyInput = document.getElementById('adminAiKey');
+        const adminAiKeyStatus = document.getElementById('adminAiKeyStatus');
+        const adminAiEnabled = document.getElementById('adminAiEnabled');
+        const adminAiLimit = document.getElementById('adminAiLimit');
+        const adminAiTestResult = document.getElementById('adminAiTestResult');
+
+        function fillAdminAiModelList(models) {
+            adminAiModelList.innerHTML = '';
+            models.forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = m.id;
+                if (m.name && m.name !== m.id) opt.label = m.name;
+                adminAiModelList.appendChild(opt);
+            });
+        }
+
+        function renderAdminAiProvider() {
+            const p = adminAiConfig.providers[adminAiProviderSel.value];
+            adminAiModelInput.value = p.model;
+            fillAdminAiModelList(p.suggestedModels.map(id => ({ id })));
+            adminAiKeyInput.value = '';
+            if (p.keyReadable) {
+                adminAiKeyStatus.textContent = getI18n('admin_ai_key_set', p.keyHint);
+                adminAiKeyStatus.className = 'ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700';
+            } else if (p.keySet) {
+                adminAiKeyStatus.textContent = getI18n('admin_ai_key_unreadable');
+                adminAiKeyStatus.className = 'ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-red-50 text-red-600';
+            } else {
+                adminAiKeyStatus.textContent = getI18n('admin_ai_key_missing');
+                adminAiKeyStatus.className = 'ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-500';
+            }
+        }
+
+        function renderAdminAi() {
+            adminAiProviderSel.innerHTML = '';
+            Object.entries(adminAiConfig.providers).forEach(([id, p]) => {
+                const opt = document.createElement('option');
+                opt.value = id;
+                opt.textContent = p.label;
+                adminAiProviderSel.appendChild(opt);
+            });
+            adminAiProviderSel.value = adminAiConfig.provider;
+            adminAiEnabled.checked = adminAiConfig.enabled;
+            adminAiLimit.value = adminAiConfig.dailyLimit;
+            adminAiTestResult.classList.add('hidden');
+            renderAdminAiProvider();
+        }
+
+        async function loadAdminAiSettings() {
+            try {
+                adminAiConfig = await apiFetch('/admin/ai-settings');
+                renderAdminAi();
+            } catch (err) {
+                showToast(getI18n('admin_ai_load_error', err.message), 'error');
+            }
+        }
+
+        async function saveAdminAiSettings(extra = {}) {
+            const body = {
+                provider: adminAiProviderSel.value,
+                model: adminAiModelInput.value.trim(),
+                enabled: adminAiEnabled.checked,
+                dailyLimit: adminAiLimit.value,
+                ...extra
+            };
+            const key = adminAiKeyInput.value.trim();
+            if (key) body.apiKey = key;
+            adminAiConfig = await apiFetch('/admin/ai-settings', { method: 'PUT', body: JSON.stringify(body) });
+            renderAdminAi();
+        }
+
+        adminAiProviderSel.addEventListener('change', renderAdminAiProvider);
+
+        document.getElementById('adminAiSaveBtn').addEventListener('click', async () => {
+            try {
+                await saveAdminAiSettings();
+                showToast(getI18n('admin_ai_saved'), 'success');
+            } catch (err) {
+                showToast(getI18n('admin_ai_save_error', err.message), 'error');
+            }
+        });
+
+        document.getElementById('adminAiClearKeyBtn').addEventListener('click', async () => {
+            if (!(await showConfirm(getI18n('admin_ai_clear_confirm'), getI18n('admin_ai_clear_title')))) return;
+            try {
+                adminAiKeyInput.value = '';
+                await saveAdminAiSettings({ clearKey: true });
+                showToast(getI18n('admin_ai_key_cleared'), 'success');
+            } catch (err) {
+                showToast(getI18n('admin_ai_save_error', err.message), 'error');
+            }
+        });
+
+        document.getElementById('adminAiTestBtn').addEventListener('click', async () => {
+            adminAiTestResult.classList.remove('hidden');
+            adminAiTestResult.className = 'text-xs text-slate-500';
+            adminAiTestResult.textContent = getI18n('admin_ai_testing');
+            try {
+                await saveAdminAiSettings(); // erst speichern, damit genau die angezeigten Werte getestet werden
+                const result = await apiFetch('/admin/ai-settings/test', { method: 'POST', body: JSON.stringify({}), timeoutMs: 30000 });
+                adminAiTestResult.classList.remove('hidden');
+                adminAiTestResult.className = 'text-xs font-semibold text-emerald-600';
+                adminAiTestResult.textContent = '✅ ' + result.message;
+            } catch (err) {
+                adminAiTestResult.classList.remove('hidden');
+                adminAiTestResult.className = 'text-xs font-semibold text-red-600';
+                adminAiTestResult.textContent = '❌ ' + err.message;
+            }
+        });
+
+        document.getElementById('adminAiLoadModelsBtn').addEventListener('click', async () => {
+            try {
+                const result = await apiFetch(`/admin/ai-settings/models?provider=${encodeURIComponent(adminAiProviderSel.value)}`, { timeoutMs: 30000 });
+                fillAdminAiModelList(result.models);
+                showToast(result.fromProvider ? getI18n('admin_ai_models_loaded', result.models.length) : getI18n('admin_ai_models_need_key'), result.fromProvider ? 'success' : 'info');
+            } catch (err) {
+                showToast(getI18n('admin_ai_load_error', err.message), 'error');
+            }
+        });
+
         // --- Admin Dashboard Script ---
         try {
             function setupAdminTrigger() {
@@ -11091,6 +11640,10 @@
             const excelTab = document.getElementById('adminExcelTabContent');
             const inviteTab = document.getElementById('adminInviteTabContent');
             const searchTab = document.getElementById('adminSearchTabContent');
+            const aiTab = document.getElementById('adminAiTabContent');
+            const aiBtn = document.getElementById('adminTabAi');
+            if (aiTab) aiTab.classList.add('hidden');
+            if (aiBtn) aiBtn.classList.remove('active');
             
             const userBtn = document.getElementById('adminTabUsers');
             const excelBtn = document.getElementById('adminTabLists');
@@ -11120,6 +11673,10 @@
                 if (inviteTab) inviteTab.classList.remove('hidden');
                 if (inviteBtn) inviteBtn.classList.add('active');
                 loadAdminInviteCodes();
+            } else if (tabName === 'ai') {
+                if (aiTab) aiTab.classList.remove('hidden');
+                if (aiBtn) aiBtn.classList.add('active');
+                loadAdminAiSettings();
             } else if (tabName === 'search') {
                 if (searchTab) searchTab.classList.remove('hidden');
                 if (searchBtn) searchBtn.classList.add('active');
@@ -11827,8 +12384,8 @@
                 if (!sentences || sentences.length === 0) return showToast(`Die ${lang.toUpperCase()}-Grammatikliste ist leer.`, "info");
 
                 const wsData = [
-                    [lang === 'it' ? "Italienisch" : "Englisch", "Deutsch", "Kategorie"],
-                    ...sentences.map(s => [s.it, s.de, s.category || "Allgemein"])
+                    [lang === 'it' ? "Italienisch" : "Englisch", "Deutsch", "Kategorie", "Niveau"],
+                    ...sentences.map(s => [s.it, s.de, s.category || "Allgemein", s.level || ""])
                 ];
                 const ws = XLSX.utils.aoa_to_sheet(wsData);
                 const wb = XLSX.utils.book_new();
