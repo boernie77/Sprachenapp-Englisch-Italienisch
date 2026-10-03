@@ -1,5 +1,5 @@
 // Adapter für die KI-Anbieter. Jeder Adapter bietet dieselben drei Funktionen:
-//   generateJson({ apiKey, model, system, prompt, schema }) -> geparstes JSON-Objekt
+//   generateJson({ apiKey, model, system, prompt, schema }) -> { data: geparstes JSON-Objekt, usage: { input, output } }
 //   checkModel({ apiKey, model })                           -> wirft bei ungültigem Schlüssel/Modell
 //   listModels({ apiKey })                                  -> [{ id, name }]
 const Anthropic = require('@anthropic-ai/sdk');
@@ -28,6 +28,8 @@ const mapSdkError = (err, SdkModule) => {
 // Modelle, die den serverseitigen Fallback bei Ablehnungen unterstützen
 const ANTHROPIC_FALLBACK_MODELS = new Set(['claude-fable-5-1', 'claude-opus-5-5', 'claude-opus-5', 'claude-sonnet-5-5']);
 
+const ANTHROPIC_EFFORT_MODELS = /^claude-(opus|sonnet|fable|mythos)-5/;
+
 const anthropic = {
     label: 'Claude (Anthropic)',
     defaultModel: 'claude-opus-5-5',
@@ -40,7 +42,8 @@ const anthropic = {
             max_tokens: 16000,
             system,
             messages: [{ role: 'user', content: prompt }],
-            output_config: { format: { type: 'json_schema', schema } }
+            // Die Aufgabe ist einfach: bei den Modellen mit immer aktivem Nachdenken kostet niedrige Denktiefe deutlich weniger
+            output_config: { format: { type: 'json_schema', schema }, ...(ANTHROPIC_EFFORT_MODELS.test(model) ? { effort: 'low' } : {}) }
         };
         try {
             const response = ANTHROPIC_FALLBACK_MODELS.has(model)
@@ -50,7 +53,7 @@ const anthropic = {
             if (response.stop_reason === 'refusal') throw new AiError('Die KI hat die Anfrage abgelehnt', 422);
             if (response.stop_reason === 'max_tokens') throw new AiError('Antwort der KI war zu lang, bitte weniger Sätze anfordern', 502);
             const text = response.content.filter(b => b.type === 'text').map(b => b.text).join('');
-            return JSON.parse(text);
+            return { data: JSON.parse(text), usage: { input: response.usage.input_tokens || 0, output: response.usage.output_tokens || 0 } };
         } catch (err) {
             if (err instanceof SyntaxError) throw new AiError('Antwort der KI war kein gültiges JSON', 502);
             throw mapSdkError(err, Anthropic);
@@ -102,7 +105,7 @@ const openai = {
             if (!choice) throw new AiError('Leere Antwort der KI', 502);
             if (choice.message.refusal) throw new AiError('Die KI hat die Anfrage abgelehnt', 422);
             if (choice.finish_reason === 'length') throw new AiError('Antwort der KI war zu lang, bitte weniger Sätze anfordern', 502);
-            return JSON.parse(choice.message.content);
+            return { data: JSON.parse(choice.message.content), usage: { input: completion.usage?.prompt_tokens || 0, output: completion.usage?.completion_tokens || 0 } };
         } catch (err) {
             if (err instanceof SyntaxError) throw new AiError('Antwort der KI war kein gültiges JSON', 502);
             throw mapSdkError(err, OpenAI);

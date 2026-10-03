@@ -232,7 +232,7 @@ router.get('/ai-settings', authenticateToken, requireAdmin, asyncHandler(async (
 }));
 
 router.put('/ai-settings', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
-    const { provider, model, enabled, dailyLimit, apiKey, clearKey } = req.body;
+    const { provider, model, enabled, dailyLimit, apiKey, clearKey, usdToEur } = req.body;
     const config = await ai.loadConfig();
 
     if (provider !== undefined) {
@@ -251,6 +251,11 @@ router.put('/ai-settings', authenticateToken, requireAdmin, asyncHandler(async (
         if (!Number.isInteger(limit) || limit < 0 || limit > 1000) return res.status(400).json({ error: 'Tageslimit muss zwischen 0 und 1000 liegen' });
         config.dailyLimit = limit;
     }
+    if (usdToEur !== undefined) {
+        const rate = Number(usdToEur);
+        if (!(rate > 0 && rate < 10)) return res.status(400).json({ error: 'Umrechnungskurs muss zwischen 0 und 10 liegen' });
+        config.usdToEur = rate;
+    }
     if (clearKey === true) delete config.keys[target];
     if (typeof apiKey === 'string' && apiKey.trim()) {
         if (apiKey.trim().length > 500) return res.status(400).json({ error: 'API-Schlüssel zu lang' });
@@ -259,6 +264,37 @@ router.put('/ai-settings', authenticateToken, requireAdmin, asyncHandler(async (
 
     await ai.saveConfig(config);
     res.json(ai.publicConfig(config));
+}));
+
+// Verbrauch und Kosten der KI-Sätze: heute, letzte 30 Tage, gesamt und je Nutzer (30 Tage)
+router.get('/ai-usage', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
+    const { AiUsage, User } = require('../models');
+    const { fn, col, Op } = require('sequelize');
+    const sums = [
+        [fn('SUM', col('AiUsage.count')), 'sentences'], [fn('SUM', col('AiUsage.calls')), 'calls'],
+        [fn('SUM', col('AiUsage.inputTokens')), 'inputTokens'], [fn('SUM', col('AiUsage.outputTokens')), 'outputTokens'],
+        [fn('SUM', col('AiUsage.costUsd')), 'costUsd']
+    ];
+    const toNumbers = (row) => Object.fromEntries(Object.entries(row || {}).map(([k, v]) => [k, Number(v) || 0]));
+    const dayString = (offset) => new Date(Date.now() - offset * 86400000).toISOString().slice(0, 10);
+    const period = async (since) => toNumbers(await AiUsage.findOne({ attributes: sums, where: since ? { day: { [Op.gte]: since } } : {}, raw: true }));
+
+    const perUser = await AiUsage.findAll({
+        attributes: ['UserId', ...sums],
+        where: { day: { [Op.gte]: dayString(29) } },
+        include: [{ model: User, attributes: ['email'] }],
+        group: ['AiUsage.UserId', 'User.id'],
+        order: [[fn('SUM', col('AiUsage.costUsd')), 'DESC'], [fn('SUM', col('AiUsage.count')), 'DESC']],
+        limit: 20,
+        raw: true
+    });
+
+    res.json({
+        today: await period(dayString(0)),
+        last30: await period(dayString(29)),
+        total: await period(null),
+        perUser: perUser.map(r => ({ email: r['User.email'], ...toNumbers({ sentences: r.sentences, calls: r.calls, inputTokens: r.inputTokens, outputTokens: r.outputTokens, costUsd: r.costUsd }) }))
+    });
 }));
 
 // Prüft Schlüssel + Modell des gewählten Anbieters mit einem kostenlosen Modell-Abruf

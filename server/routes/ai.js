@@ -39,9 +39,15 @@ async function remainingToday(user, dailyLimit) {
     return Math.max(0, dailyLimit - (usage ? usage.count : 0));
 }
 
-async function addUsage(userId, amount) {
-    const [usage] = await AiUsage.findOrCreate({ where: { UserId: userId, day: today() }, defaults: { count: 0 } });
-    await usage.increment('count', { by: amount });
+async function addUsage(userId, sentences, usage) {
+    const [row] = await AiUsage.findOrCreate({ where: { UserId: userId, day: today() }, defaults: { count: 0 } });
+    await row.increment({
+        count: sentences,
+        calls: 1,
+        inputTokens: usage.input,
+        outputTokens: usage.output,
+        costUsd: usage.costUsd || 0
+    });
 }
 
 // Auswahl für den Dialog: ob die Funktion aktiv ist, Niveaus, Grammatikarten, Restkontingent
@@ -113,12 +119,12 @@ router.post('/sentences', authenticateToken, asyncHandler(async (req, res) => {
         return res.status(429).json({ error: remaining === 0 ? 'Tageslimit für KI-Sätze erreicht' : `Heute ${remaining === 1 ? 'ist nur noch 1 Satz' : `sind nur noch ${remaining} Sätze`} möglich`, remaining });
     }
 
-    const sentences = await generateSentences({
+    const { sentences, usage } = await generateSentences({
         word: word.trim(),
         translation: translation ? translation.trim() : null,
         language, levels, categories: chosen, count
     });
-    if (!user.isAdmin) await addUsage(user.id, sentences.length);
+    await addUsage(user.id, sentences.length, usage); // auch Admins: Verbrauch und Kosten werden immer gezählt
 
     res.json({ sentences, remaining: remaining === null ? null : remaining - sentences.length });
 }));
