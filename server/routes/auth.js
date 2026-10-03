@@ -1,9 +1,8 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
-const jwt = require('jsonwebtoken');
 const { User, InviteCode } = require('../models');
-const { authenticateToken, asyncHandler, JWT_SECRET } = require('../middleware/auth');
+const { authenticateToken, asyncHandler, signToken } = require('../middleware/auth');
 const transporter = require('../utils/mailer');
 
 const router = express.Router();
@@ -58,7 +57,7 @@ router.post('/login', async (req, res) => {
     user.lastLogin = new Date();
     await user.save();
 
-    const token = jwt.sign({ id: user.id, email: user.email, isAdmin: user.isAdmin }, JWT_SECRET, { expiresIn: '24h' });
+    const token = signToken(user);
     if (user.isAdmin) console.log(`[AUTH] Admin login: ${user.email}`);
     res.json({ token, id: user.id, isAdmin: user.isAdmin, name: user.name, dailyActivity: user.dailyActivity || {} });
   } else {
@@ -96,6 +95,13 @@ router.post('/forgot-password', async (req, res) => {
     res.status(500).json({ error: 'E-Mail konnte nicht versendet werden. SMTP nicht konfiguriert?' });
   }
 });
+
+// Gültigen Token gegen einen frischen tauschen (hält die Anmeldung bei regelmäßiger Nutzung aktiv)
+router.post('/refresh', authenticateToken, asyncHandler(async (req, res) => {
+    const user = await User.findByPk(req.user.id);
+    if (!user || user.isActive === false) return res.sendStatus(401);
+    res.json({ token: signToken(user), isAdmin: user.isAdmin, name: user.name });
+}));
 
 router.get('/me', authenticateToken, asyncHandler(async (req, res) => {
     const user = await User.findByPk(req.user.id);

@@ -17,6 +17,11 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
+// Login-Token: 30 Tage gültig, wird vom Client per /auth/refresh laufend erneuert
+const TOKEN_LIFETIME = '30d';
+const signToken = (user) =>
+  jwt.sign({ id: user.id, email: user.email, isAdmin: user.isAdmin }, JWT_SECRET, { expiresIn: TOKEN_LIFETIME });
+
 // Middleware to verify Admin
 const requireAdmin = async (req, res, next) => {
   try {
@@ -37,5 +42,6 @@ module.exports = {
     authenticateToken,
     requireAdmin,
     asyncHandler,
+    signToken,
     JWT_SECRET
 };
