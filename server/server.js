@@ -10,7 +10,6 @@ const contactRoutes = require('./routes/contact');
 const adminRoutes = require('./routes/admin');
 const grammarRoutes = require('./routes/grammar');
 const baseVocabRoutes = require('./routes/baseVocab');
-const aiRoutes = require('./routes/ai');
 
 const KNOWN_WEAK_SECRETS = ['super-secret-key', 'secret', 'changeme', ''];
 const jwtSecret = process.env.JWT_SECRET;
@@ -37,7 +36,6 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/grammar-sentences', grammarRoutes);
 app.use('/api/base-vocab', baseVocabRoutes);
-app.use('/api/ai', aiRoutes);
 
 // Serve frontend
 app.get('*', (req, res) => {
