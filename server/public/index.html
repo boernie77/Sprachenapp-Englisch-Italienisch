@@ -1827,13 +1827,13 @@
                         Lizenz: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"
                             class="text-blue-600 hover:underline">CC BY-SA 4.0</a>
                     </p>
-                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.7</p>
+                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.8</p>
                     <p class="text-[10px] text-slate-400" data-i18n="imp_rights">© 2026 Christian Bernauer. Alle Rechte vorbehalten.</p>
                 </div>
             </div>
             <!-- App-Style Bottom Section -->
             <div class="mt-8 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.7</p>
+                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.8</p>
             </div>
         </div>
     </div>
@@ -2078,7 +2078,7 @@
             <div class="w-20 h-20 bg-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
                 <svg class="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <h3 class="text-3xl font-black text-slate-800 mb-4">Version 2.2.7 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
+            <h3 class="text-3xl font-black text-slate-800 mb-4">Version 2.2.8 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
             <div class="text-left space-y-4 mb-8">
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
@@ -2110,7 +2110,7 @@
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: Vom Admin erzeugte Sätze gelten <b>für alle</b> – in der Satzliste wählt jeder selbst ab, was er nicht üben will</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: Vom Admin erzeugte Sätze gelten <b>für alle</b> – das Niveau wählst du in der Übung selbst</p>
                 </div>
                 <p class="text-slate-500 text-[10px] italic text-center mt-4 px-4 leading-normal">
                     Viel Spaß beim Lernen! Melde Fehler bitte direkt an uns.
@@ -2243,7 +2243,7 @@
                 </div>
                 <div class="px-4 py-1.5 text-[10px] text-slate-400 bg-slate-50/50 flex items-center justify-between border-t border-slate-100/50">
                     <span>App-Version:</span>
-                    <span class="font-mono font-medium text-slate-500">2.2.7</span>
+                    <span class="font-mono font-medium text-slate-500">2.2.8</span>
                 </div>
                 <input type="file" id="excelUploadEl" accept=".xlsx, .xls" class="hidden">
             </div>
@@ -5271,22 +5271,6 @@
 
         let fullDictionary = [];
         let allBaseSentences = [];
-        // Globale Sätze, die dieser Nutzer abgewählt hat (IDs aus GrammarSentences); alle anderen gelten als aktiv
-        let disabledBaseSentenceIds = new Set(safeJSONParse(localStorage.getItem('ita-disabled-base-sentences'), []));
-        const activeBaseSentences = () => (allBaseSentences || []).filter(s => !disabledBaseSentenceIds.has(s.id));
-        function saveDisabledBaseSentences() {
-            try { localStorage.setItem('ita-disabled-base-sentences', JSON.stringify([...disabledBaseSentenceIds])); } catch (e) { /* Cache ist optional */ }
-        }
-        // Wählt globale Sätze für diesen Nutzer an/ab (ids) oder alle der aktuellen Sprache (ids = null)
-        async function setBaseSentencesActive(ids, isActive) {
-            await apiFetch('/grammar-sentences/active', {
-                method: 'PUT',
-                body: JSON.stringify(ids ? { ids, isActive } : { all: true, language: CURRENT_LANG, isActive })
-            });
-            const affected = ids || (allBaseSentences || []).filter(s => (s.language || 'it') === CURRENT_LANG).map(s => s.id);
-            affected.forEach(id => { if (isActive) disabledBaseSentenceIds.delete(id); else disabledBaseSentenceIds.add(id); });
-            saveDisabledBaseSentences();
-        }
         let showExampleSentences = localStorage.getItem('ita-show-example-sentences') === 'true';
         let wordStats = {};
 
@@ -6874,8 +6858,6 @@
             try {
                 const result = await apiFetch(`/grammar-sentences?language=${CURRENT_LANG}`);
                 if (result) allBaseSentences = result;
-                disabledBaseSentenceIds = new Set(await apiFetch('/grammar-sentences/disabled'));
-                saveDisabledBaseSentences();
             } catch (e) {
                 console.warn("Failed to fetch global base sentences", e);
             }
@@ -6928,7 +6910,7 @@
             // 1. Try exact infinitive match first
             const escapedInf = infinitive.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const regexInf = new RegExp(`(^|[^a-zA-ZàèéìòùÀÈÉÌÒÙ])${escapedInf}([^a-zA-ZàèéìòùÀÈÉÌÒÙ]|$)`, 'i');
-            matches = activeBaseSentences().filter(s => regexInf.test((s.it || "").toLowerCase()));
+            matches = (allBaseSentences || []).filter(s => regexInf.test((s.it || "").toLowerCase()));
 
             // 2. If no infinitive matches, try conjugated forms
             if (matches.length === 0 && searchTerms.length > 1) {
@@ -6936,7 +6918,7 @@
                 for (const term of sortedTerms) {
                     const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                     const regex = new RegExp(`(^|[^a-zA-ZàèéìòùÀÈÉÌÒÙ])${escapedTerm}([^a-zA-ZàèéìòùÀÈÉÌÒÙ]|$)`, 'i');
-                    const termMatches = activeBaseSentences().filter(s => regex.test((s.it || "").toLowerCase()));
+                    const termMatches = (allBaseSentences || []).filter(s => regex.test((s.it || "").toLowerCase()));
                     if (termMatches.length > 0) {
                         matches = termMatches;
                         break;
@@ -8916,7 +8898,7 @@
                 })) : [];
                 
                 // Merge with global base sentences (already filtered by language during fetch, but double check)
-                const baseS = activeBaseSentences().filter(s => (s.language || 'it') === CURRENT_LANG).map(s => ({ ...s, level: s.level || 'Basis' }));
+                const baseS = (allBaseSentences || []).filter(s => (s.language || 'it') === CURRENT_LANG).map(s => ({ ...s, level: s.level || 'Basis' }));
                 
                 grammarSentences = [...baseS, ...personalSentences];
                 saveAllDataLocally(); // Save to cache after fetch
@@ -9895,7 +9877,7 @@
         // Version Update Modal Logic
         const versionModal = document.getElementById('versionUpdateModal');
         const closeVersionBtn = document.getElementById('closeVersionModalBtn');
-        const vKey = 'hasSeenVersion_2_2_7';
+        const vKey = 'hasSeenVersion_2_2_8';
         closeVersionBtn.addEventListener('click', () => {
             localStorage.setItem(vKey, 'true');
             versionModal.classList.add('hidden');
@@ -10246,7 +10228,6 @@
         document.getElementById('selectAllSentencesBtn').addEventListener('click', () => {
             fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ === 'Satz').forEach(w => w.isActive = true);
             saveAllDataLocally();
-            setBaseSentencesActive(null, true).then(() => { renderSentenceList(); updateAdminGrammarCount(); }).catch(() => {});
             renderSentenceList();
             apiFetch('/vocab/bulk-active', { method: 'PUT', body: JSON.stringify({ isActive: true, language: CURRENT_LANG, typ: 'Satz' }) }).catch(() => {});
         });
@@ -10254,7 +10235,6 @@
         document.getElementById('deselectAllSentencesBtn').addEventListener('click', () => {
             fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ === 'Satz').forEach(w => w.isActive = false);
             saveAllDataLocally();
-            setBaseSentencesActive(null, false).then(() => { renderSentenceList(); updateAdminGrammarCount(); }).catch(() => {});
             renderSentenceList();
             apiFetch('/vocab/bulk-active', { method: 'PUT', body: JSON.stringify({ isActive: false, language: CURRENT_LANG, typ: 'Satz' }) }).catch(() => {});
         });
@@ -10406,7 +10386,7 @@
             
             // Merge personal sentences from fullDictionary and global base sentences from allBaseSentences
             const personal = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ === 'Satz');
-            const global = (allBaseSentences || []).filter(s => (s.language || 'it') === CURRENT_LANG).map(s => ({ ...s, id: 'base-' + s.id, isActive: !disabledBaseSentenceIds.has(s.id), isMarked: false, isOwn: false }));
+            const global = (allBaseSentences || []).filter(s => (s.language || 'it') === CURRENT_LANG).map(s => ({ ...s, id: 'base-' + s.id, isActive: true, isMarked: false, isOwn: false }));
             
             // Deduplicate: If a sentence exists in both global and personal (by content), preference goes to personal (it has its own ID and isActive status)
             const seen = new Set();
@@ -10512,22 +10492,8 @@
                         </label>
                     </div>
                 `;
-                li.querySelector('.vocab-checkbox').addEventListener('change', async (e) => {
-                    const checkbox = e.target;
-                    const wantActive = checkbox.checked;
-                    if (String(word.id).startsWith('base-')) {
-                        // Globaler Satz: die Auswahl gilt nur für diesen Nutzer und liegt auf dem Server
-                        try {
-                            await setBaseSentencesActive([Number(String(word.id).slice(5))], wantActive);
-                            word.isActive = wantActive;
-                        } catch (err) {
-                            checkbox.checked = !wantActive;
-                            showToast(getI18n('toast_save_error_generic'), 'error');
-                        }
-                        updateAdminGrammarCount();
-                        return;
-                    }
-                    word.isActive = wantActive;
+                li.querySelector('.vocab-checkbox').addEventListener('change', (e) => {
+                    word.isActive = e.target.checked;
                     saveAllDataLocally();
                     saveStatToServer(word.id);
                     updateAdminGrammarCount(); // Ensure grammar pool is updated
