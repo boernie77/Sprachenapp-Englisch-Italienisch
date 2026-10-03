@@ -4,10 +4,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Übergabe / Aktueller Stand (2026-10-03, abends) – zuerst lesen
 
-- **Version 2.2.0** (Android versionCode 22, iOS Build 22): KI-Beispielsätze, Grammatik-Erklärungen, Konjugationstabellen, korrigierte Satzlisten. Details unten unter „Version 2.2.0“.
-- **Mobile-Builds 2.2.0 noch nicht erstellt.** Die 2.1.4-Builds (AAB `app-release-v2.1.4-v21.aab`, Archiv `~/Projekte/Neue_Lernapp/build/VokabelnMulti-2.1.4-21.xcarchive`) sind nie hochgeladen worden und werden durch 2.2.0 ersetzt. Für 2.2.0: `npx cap sync` (kopiert auch `grammar-help.js`), dann bauen wie bei 2.1.2.
+- **Live läuft 2.2.0** (Commit `e541f90`, Tag `v2.2.0`, Live-Deploy erfolgreich, Container auf Node 22). KI-Beispielsätze, Grammatik-Erklärungen, Konjugationstabellen. Details unten unter „Version 2.2.0“.
+- **Live-Datenbank korrigiert (2026-10-03):** `GrammarSentences` komplett durch die korrigierten Listen ersetzt (IT 2.926, EN 2.972; vorher 3.176/2.972), 46 Kopien in der eigenen Liste eines Nutzers (`Vocabularies`, `typ='Satz'`, `isOwn=false`) per exaktem Textvergleich korrigiert. Sicherung davor: `/root/lernapp-db-20261003-vor-2.2.0.sql.gz` auf dem VPS. 3.176 alte IT-Kopien ohne Besitzer (`UserId IS NULL`, von gelöschten Nutzern) sind unverändert.
+- **Mobile-Builds 2.2.0 sind gebaut (MacBook):** Web-Assets committet (Commit nach `e541f90`, inkl. `grammar-help.js` per `git add -f`).
+  - **Android:** `app-release-v2.2.0-v22.aab` im Repo-Root (gitignored), versionCode 22, Release-Keystore (SHA256 `7E:85:B2:33:…:54:F1`).
+  - **iOS:** `~/Projekte/Neue_Lernapp/build/VokabelnMulti-2.2.0-22.xcarchive`, Build 22, Team `SYQL3PUXA9`, auf dem iPhone 15 Pro installiert.
+  - **Noch nicht hochgeladen** (ersetzt die nie hochgeladenen 2.1.2/2.1.4-Builds): iOS über Xcode-Organizer → „Distribute App“ (Upload per `xcodebuild -exportArchive` blockiert der Auto-Mode), Android manuell in der Play Console.
+- **KI noch nicht mit echtem Schlüssel getestet:** Im Admin-Tab „KI“ Schlüssel eintragen, „Verbindung testen“, aktivieren. Lokal nur mit Attrappe getestet.
 - **Nextcloud:** `~/Projekte` wurde per Nextcloud zwischen den Rechnern synchronisiert. Das hat am 2026-10-03 Dateien im Repo und in `.git` auf alte Stände zurückgesetzt („conflicted copy“). Der Sync für `~/Projekte` ist jetzt aus. Rechner nur noch per `git pull`/`git push` abgleichen und vor Commits nach `*conflicted copy*` suchen.
-- **Noch offen:** Mobile-Builds 2.2.0 + Upload (Apple-Einreichung steht seit 2.1.0 aus), SMTP-Passwort ändern, Upload-Key-Reset in der Play Console, API-Schlüssel für die KI im Admin-Bereich eintragen und echten Test machen.
+- **Test-Deploy** (self-hosted Runner auf dem Heimserver) hängt seit 2026-10-03 in `queued` → Runner offline, siehe unten. Live ist davon unabhängig.
+- **Noch offen:** Uploads 2.2.0 (Apple-Einreichung steht seit 2.1.0 aus), SMTP-Passwort ändern, Upload-Key-Reset in der Play Console.
 
 ### Stand vom MacBook (2026-10-02, Builds 2.1.2)
 
@@ -167,7 +173,7 @@ PostgreSQL-Daten liegen als **Bind-Mount** unter `./pgdata` (kein Docker named v
 - **Achtung:** Solange das Repo privat ist, kann der VPS nicht `git fetch`en → Live-Deploy baut still den alten Stand neu. Erst nach dem Wieder-Öffentlich-Stellen (oder mit Deploy-Key) deployen. Stand 2026-10-02: Repo ist wieder **öffentlich**, Live-Deploy funktioniert (vor jedem Deploy mit `gh repo view --json visibility` prüfen).
 - Offen (nur der Nutzer kann das): SMTP-Passwort beim Mailanbieter ändern + `gh secret set SMTP_PASS`; Upload-Key-Reset in der Play Console mit `upload_certificate_lernapp_2026.pem`. Danach Repo wieder öffentlich.
 
-## Version 2.2.0 (2026-10-03)
+## Version 2.2.0 (2026-10-03) – live deployt
 - **KI-Beispielsätze:** Admin → Tab „KI“ (Anbieter Claude/OpenAI, Modell, API-Schlüssel, an/aus, Tageslimit pro Nutzer, Verbindungstest, „Modelle laden“). Einstellungen in Tabelle `Settings` (Schlüssel `ai.config`), API-Schlüssel AES-256-GCM-verschlüsselt (`server/utils/secretBox.js`, Schlüssel per HKDF aus `JWT_SECRET` → wird `JWT_SECRET` geändert, Schlüssel neu eintragen). Nutzungszähler in Tabelle `AiUsage`.
   - Server: `server/utils/ai/` (`providers.js` = Adapter Anthropic/OpenAI über die offiziellen SDKs, `index.js` = Einstellungen + Prompt + Schema, `grammar.js` = Niveaus und Grammatikarten), Routen `server/routes/ai.js` (`GET /api/ai/options`, `POST /api/ai/sentences`) und `/api/admin/ai-settings*` in `routes/admin.js`.
   - Englische Kategorien heißen wie nach dem Admin-Import (`uploadGrammar` vereinheitlicht: Simple Present, Future, Imperativ, Conditional). Neue Kategorien: Imperativo, Congiuntivo, Futuro Semplice (IT), Subjunctive (EN). Niveaus A1–B2.
@@ -175,7 +181,7 @@ PostgreSQL-Daten liegen als **Bind-Mount** unter `./pgdata` (kein Docker named v
   - `apiFetch` meldet bei HTTP 403 ab → KI-Fehler nie mit 403 beantworten (deaktiviert = 409). `apiFetch` kennt jetzt `options.timeoutMs` (KI-Aufruf 150 s).
   - Dockerfile auf `node:22-slim` (OpenAI-SDK braucht Node 22).
 - **Grammatik-Hilfe** (`server/public/grammar-help.js`, eigene Datei, per `<script src>` eingebunden): Nach dem Prüfen im Grammatik-Modus Erklärung zur Kategorie (`EXPLANATIONS`) und antippbare Verben → Konjugationstabelle (`conjugationModal`). Eigener Konjugator für IT (regelmäßig, -isc-, Rechtschreibregeln, unregelmäßige/reflexive Verben, Vorsilben) und EN. In Node testbar: `require('./server/public/grammar-help.js')`.
-- **Satzlisten korrigiert:** 767 Funde aus einer Logik-/Grammatikprüfung übernommen, 249 Schablonen-Sätze (IT, alte Zeilen 2929–3177) und eine doppelte Kopfzeile gelöscht. Korrigierte Excel-Dateien: `Neue_Lernapp/Excellisten für Lernapp/*_korrigiert_2026-10-03.xlsx`, Fundliste `Satzpruefung_Funde_2026-10-03.xlsx`.
+- **Satzlisten korrigiert** (auch live in der DB, siehe Übergabe): 767 Funde aus einer Logik-/Grammatikprüfung übernommen, 249 Schablonen-Sätze (IT, alte Zeilen 2929–3177) und eine doppelte Kopfzeile gelöscht. Korrigierte Excel-Dateien: `Neue_Lernapp/Excellisten für Lernapp/*_korrigiert_2026-10-03.xlsx`, Fundliste `Satzpruefung_Funde_2026-10-03.xlsx`.
 - Fixes: `vocabGrammaticaCol` war nicht definiert (Wortart-Wechsel im Vokabel-Dialog brach ab); Lösung im Grammatik-Feedback wird escaped.
 - Mobile-Dark-Mode: neue Dialoge übernehmen die `#vocabModal`-Regeln (Selektoren ergänzt); eigener Style-Block für `#grammarHelpBox`/`.conj-highlight` am Ende von `<head>`.
 
