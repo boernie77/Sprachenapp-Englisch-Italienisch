@@ -2,13 +2,12 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Übergabe / Aktueller Stand (2026-10-03) – zuerst lesen
+## Übergabe / Aktueller Stand (2026-10-03, abends) – zuerst lesen
 
-- **NEU: Live (Web) läuft 2.1.4**: Anmeldung bleibt erhalten (2.1.3) und Offline-Änderungen überstehen eine Abmeldung (2.1.4), Details unten. Versionsnummern schon erhöht: Android versionCode 21 / 2.1.4, iOS Build 21 / 2.1.4. Web-Assets für Android/iOS sind mitcommittet.
-- **Mobile-Builds 2.1.4 sind gebaut (MacBook, 2026-10-03)**. `npx cap sync` hat nichts verändert. Tags `v2.1.3` (`fea3c30`) und `v2.1.4` (`5545d2f`) sind gesetzt.
-  - **Android:** `app-release-v2.1.4-v21.aab` im Repo-Root (gitignored), versionCode 21, signiert mit dem Release-Keystore (SHA256 `7E:85:B2:33:…:54:F1`).
-  - **iOS:** `~/Projekte/Neue_Lernapp/build/VokabelnMulti-2.1.4-21.xcarchive`, Build 21, Team `SYQL3PUXA9`. Auf dem iPhone 15 Pro installiert, als normales Update über 2.1.2 ohne Löschen.
-  - **Noch nicht hochgeladen.** Diese Builds kommen **statt** der 2.1.2-Builds in die Stores: iOS über den Xcode-Organizer → „Distribute App“, Android manuell in der Play Console.
+- **Version 2.2.0** (Android versionCode 22, iOS Build 22): KI-Beispielsätze, Grammatik-Erklärungen, Konjugationstabellen, korrigierte Satzlisten. Details unten unter „Version 2.2.0“.
+- **Mobile-Builds 2.2.0 noch nicht erstellt.** Die 2.1.4-Builds (AAB `app-release-v2.1.4-v21.aab`, Archiv `~/Projekte/Neue_Lernapp/build/VokabelnMulti-2.1.4-21.xcarchive`) sind nie hochgeladen worden und werden durch 2.2.0 ersetzt. Für 2.2.0: `npx cap sync` (kopiert auch `grammar-help.js`), dann bauen wie bei 2.1.2.
+- **Nextcloud:** `~/Projekte` wurde per Nextcloud zwischen den Rechnern synchronisiert. Das hat am 2026-10-03 Dateien im Repo und in `.git` auf alte Stände zurückgesetzt („conflicted copy“). Der Sync für `~/Projekte` ist jetzt aus. Rechner nur noch per `git pull`/`git push` abgleichen und vor Commits nach `*conflicted copy*` suchen.
+- **Noch offen:** Mobile-Builds 2.2.0 + Upload (Apple-Einreichung steht seit 2.1.0 aus), SMTP-Passwort ändern, Upload-Key-Reset in der Play Console, API-Schlüssel für die KI im Admin-Bereich eintragen und echten Test machen.
 
 ### Stand vom MacBook (2026-10-02, Builds 2.1.2)
 
@@ -83,7 +82,7 @@ Express REST API with Sequelize ORM.
 | File | Role |
 |------|------|
 | `server.js` | App entry, route mounting, health check at `/api/health` |
-| `models.js` | All Sequelize model definitions (User, Vocabulary, Stats, BaseVocabulary, GrammarSentence, InviteCode) |
+| `models.js` | All Sequelize model definitions (User, Vocabulary, Stats, BaseVocabulary, GrammarSentence, InviteCode, Setting, AiUsage) |
 | `middleware/auth.js` | JWT verification, admin guard, error handler |
 | `utils/mailer.js` | Nodemailer SMTP for invites and password resets |
 
@@ -95,7 +94,8 @@ API routes under `/api/`:
 | `/vocab` | `routes/vocab.js` — user vocabulary CRUD + learning stats |
 | `/base-vocab` | `routes/baseVocab.js` — read-only pre-loaded vocabulary |
 | `/grammar-sentences` | `routes/grammar.js` — grammar content by language |
-| `/admin` | `routes/admin.js` — user management, invite codes, bulk ops |
+| `/admin` | `routes/admin.js` — user management, invite codes, bulk ops, KI-Einstellungen |
+| `/ai` | `routes/ai.js` — KI-Beispielsätze (Optionen, Erzeugung mit Tageslimit) |
 | `/contact` | `routes/contact.js` — contact form |
 
 ### Data Model Concepts
@@ -166,6 +166,18 @@ PostgreSQL-Daten liegen als **Bind-Mount** unter `./pgdata` (kein Docker named v
 - Erledigt 2026-09-30: History 4× bereinigt (auch DEV_NOTES-Zugangsdaten, alter Test-Secret-Wert), DB-Port 5436 nur noch 127.0.0.1 (auch direkt auf dem VPS, Sicherung `/root/lernapp-db-20260930.sql.gz`), JWT-Fallback entfernt, `SMTP_USER` als GitHub-Secret, README.
 - **Achtung:** Solange das Repo privat ist, kann der VPS nicht `git fetch`en → Live-Deploy baut still den alten Stand neu. Erst nach dem Wieder-Öffentlich-Stellen (oder mit Deploy-Key) deployen. Stand 2026-10-02: Repo ist wieder **öffentlich**, Live-Deploy funktioniert (vor jedem Deploy mit `gh repo view --json visibility` prüfen).
 - Offen (nur der Nutzer kann das): SMTP-Passwort beim Mailanbieter ändern + `gh secret set SMTP_PASS`; Upload-Key-Reset in der Play Console mit `upload_certificate_lernapp_2026.pem`. Danach Repo wieder öffentlich.
+
+## Version 2.2.0 (2026-10-03)
+- **KI-Beispielsätze:** Admin → Tab „KI“ (Anbieter Claude/OpenAI, Modell, API-Schlüssel, an/aus, Tageslimit pro Nutzer, Verbindungstest, „Modelle laden“). Einstellungen in Tabelle `Settings` (Schlüssel `ai.config`), API-Schlüssel AES-256-GCM-verschlüsselt (`server/utils/secretBox.js`, Schlüssel per HKDF aus `JWT_SECRET` → wird `JWT_SECRET` geändert, Schlüssel neu eintragen). Nutzungszähler in Tabelle `AiUsage`.
+  - Server: `server/utils/ai/` (`providers.js` = Adapter Anthropic/OpenAI über die offiziellen SDKs, `index.js` = Einstellungen + Prompt + Schema, `grammar.js` = Niveaus und Grammatikarten), Routen `server/routes/ai.js` (`GET /api/ai/options`, `POST /api/ai/sentences`) und `/api/admin/ai-settings*` in `routes/admin.js`.
+  - Englische Kategorien heißen wie nach dem Admin-Import (`uploadGrammar` vereinheitlicht: Simple Present, Future, Imperativ, Conditional). Neue Kategorien: Imperativo, Congiuntivo, Futuro Semplice (IT), Subjunctive (EN). Niveaus A1–B2.
+  - Frontend: Knopf „✨ Beispielsätze mit KI“ im Vokabel-Dialog → Dialog `aiSentenceModal`; gespeichert als eigene Sätze (`typ: 'Satz'`, `grammatica` = Kategorie, neue Spalte `Vocabularies.level`), Admins optional zusätzlich global.
+  - `apiFetch` meldet bei HTTP 403 ab → KI-Fehler nie mit 403 beantworten (deaktiviert = 409). `apiFetch` kennt jetzt `options.timeoutMs` (KI-Aufruf 150 s).
+  - Dockerfile auf `node:22-slim` (OpenAI-SDK braucht Node 22).
+- **Grammatik-Hilfe** (`server/public/grammar-help.js`, eigene Datei, per `<script src>` eingebunden): Nach dem Prüfen im Grammatik-Modus Erklärung zur Kategorie (`EXPLANATIONS`) und antippbare Verben → Konjugationstabelle (`conjugationModal`). Eigener Konjugator für IT (regelmäßig, -isc-, Rechtschreibregeln, unregelmäßige/reflexive Verben, Vorsilben) und EN. In Node testbar: `require('./server/public/grammar-help.js')`.
+- **Satzlisten korrigiert:** 767 Funde aus einer Logik-/Grammatikprüfung übernommen, 249 Schablonen-Sätze (IT, alte Zeilen 2929–3177) und eine doppelte Kopfzeile gelöscht. Korrigierte Excel-Dateien: `Neue_Lernapp/Excellisten für Lernapp/*_korrigiert_2026-10-03.xlsx`, Fundliste `Satzpruefung_Funde_2026-10-03.xlsx`.
+- Fixes: `vocabGrammaticaCol` war nicht definiert (Wortart-Wechsel im Vokabel-Dialog brach ab); Lösung im Grammatik-Feedback wird escaped.
+- Mobile-Dark-Mode: neue Dialoge übernehmen die `#vocabModal`-Regeln (Selektoren ergänzt); eigener Style-Block für `#grammarHelpBox`/`.conj-highlight` am Ende von `<head>`.
 
 ## Version 2.1.4 (2026-10-03) – live deployt
 - Offline-Änderungen (`syncOutbox`) gehen bei Abmeldung nicht mehr verloren: `logout()` parkt sie unter `lernapp-pending-outbox-<userId>` (bewusst **kein** `ita-`-Präfix, damit sie das Löschen überstehen). `restorePendingOutbox()` holt sie beim Start und nach dem Login **nur für denselben Nutzer** zurück.
