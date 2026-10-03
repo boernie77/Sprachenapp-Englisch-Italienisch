@@ -1827,13 +1827,13 @@
                         Lizenz: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"
                             class="text-blue-600 hover:underline">CC BY-SA 4.0</a>
                     </p>
-                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.5</p>
+                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.6</p>
                     <p class="text-[10px] text-slate-400" data-i18n="imp_rights">© 2026 Christian Bernauer. Alle Rechte vorbehalten.</p>
                 </div>
             </div>
             <!-- App-Style Bottom Section -->
             <div class="mt-8 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.5</p>
+                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.6</p>
             </div>
         </div>
     </div>
@@ -2078,7 +2078,7 @@
             <div class="w-20 h-20 bg-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
                 <svg class="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <h3 class="text-3xl font-black text-slate-800 mb-4">Version 2.2.5 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
+            <h3 class="text-3xl font-black text-slate-800 mb-4">Version 2.2.6 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
             <div class="text-left space-y-4 mb-8">
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
@@ -2103,6 +2103,10 @@
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
                     <p class="text-slate-600 font-medium leading-tight text-sm">Admin: <b>Token und Kosten</b> der KI-Sätze im Tab „KI“</p>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: Der <b>Server erzeugt KI-Sätze im Hintergrund</b> – nur für Wörter, die noch in keinem Satz vorkommen</p>
                 </div>
                 <p class="text-slate-500 text-[10px] italic text-center mt-4 px-4 leading-normal">
                     Viel Spaß beim Lernen! Melde Fehler bitte direkt an uns.
@@ -2235,7 +2239,7 @@
                 </div>
                 <div class="px-4 py-1.5 text-[10px] text-slate-400 bg-slate-50/50 flex items-center justify-between border-t border-slate-100/50">
                     <span>App-Version:</span>
-                    <span class="font-mono font-medium text-slate-500">2.2.5</span>
+                    <span class="font-mono font-medium text-slate-500">2.2.6</span>
                 </div>
                 <input type="file" id="excelUploadEl" accept=".xlsx, .xls" class="hidden">
             </div>
@@ -4017,7 +4021,7 @@
                 <button id="closeAiSentenceModalBtn" class="text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
             </div>
             <div class="overflow-y-auto pr-1 flex-1 min-h-0">
-                <p class="text-xs text-slate-500 mb-4" data-i18n="ai_intro">Diese Einstellungen gelten für alle Wörter. Ist die Funktion eingeschaltet, erzeugt die KI im Hintergrund zu jedem aktiven Wort Beispielsätze und speichert sie.</p>
+                <p class="text-xs text-slate-500 mb-4" data-i18n="ai_intro">Diese Einstellungen gelten für alle Wörter. Ist die Funktion eingeschaltet, erzeugt der Server im Hintergrund zu jedem aktiven Wort Beispielsätze, das noch in keinem Satz vorkommt, und speichert sie.</p>
                 <label class="flex items-center justify-between gap-3 p-3 rounded-xl bg-purple-50 border border-purple-100 mb-4 cursor-pointer">
                     <span class="text-sm font-semibold text-slate-800" data-i18n="ai_auto_label">Sätze automatisch erzeugen</span>
                     <input id="aiAutoEnabled" type="checkbox" class="w-5 h-5 accent-purple-600">
@@ -5563,7 +5567,7 @@
                 admin_ai_models_loaded: "{0} Modelle vom Anbieter geladen",
                 admin_ai_models_need_key: "Ohne gespeicherten Schlüssel nur Vorschläge – erst Schlüssel speichern",
                 ai_title: "✨ KI-Beispielsätze",
-                ai_intro: "Diese Einstellungen gelten für alle Wörter. Ist die Funktion eingeschaltet, erzeugt die KI im Hintergrund zu jedem aktiven Wort Beispielsätze und speichert sie.",
+                ai_intro: "Diese Einstellungen gelten für alle Wörter. Ist die Funktion eingeschaltet, erzeugt der Server im Hintergrund zu jedem aktiven Wort Beispielsätze, das noch in keinem Satz vorkommt, und speichert sie.",
                 ai_auto_label: "Sätze automatisch erzeugen",
                 ai_level: "Niveaus (mehrere möglich)",
                 ai_need_level: "Bitte mindestens ein Niveau wählen",
@@ -5578,10 +5582,9 @@
                 ai_count_range: "Anzahl zwischen 1 und {0}",
                 ai_prefs_saved: "KI-Einstellungen gespeichert",
                 ai_save_error: "Speichern fehlgeschlagen: {0}",
-                ai_status_running: "Erzeuge Sätze … {0} von {1} Wörtern fertig (aktuell: {2})",
-                ai_status_done: "Fertig: Sätze für {0} Wörter erzeugt",
-                ai_status_limit: "Tageslimit erreicht – {0} Wörter fertig, morgen geht es weiter",
-                ai_status_error: "Die Erzeugung wurde nach mehreren Fehlern gestoppt ({0} Wörter fertig)",
+                ai_status_pending: "Noch {0} Wörter ohne Satz – der Server erzeugt die Sätze im Hintergrund (Tageslimit beachten). Neue Sätze erscheinen automatisch nach dem nächsten Abgleich.",
+                ai_status_pending_off: "{0} aktive Wörter kommen noch in keinem Satz vor. Mit eingeschalteter Automatik erzeugt der Server dafür Sätze.",
+                ai_status_all_done: "Alle aktiven Wörter kommen in Sätzen vor.",
                 menu_ai_prefs: "✨ KI-Beispielsätze",
                 wordsent_open: "🔍 Sätze zu einem Wort anzeigen",
                 wordsent_title: "Sätze zu einem Wort",
@@ -6024,7 +6027,7 @@
                 admin_ai_models_loaded: "{0} models loaded from provider",
                 admin_ai_models_need_key: "Suggestions only without a stored key – save the key first",
                 ai_title: "✨ AI example sentences",
-                ai_intro: "These settings apply to all words. When enabled, the AI creates example sentences for every active word in the background and saves them.",
+                ai_intro: "These settings apply to all words. When enabled, the server creates example sentences in the background for every active word that does not appear in any sentence yet, and saves them.",
                 ai_auto_label: "Create sentences automatically",
                 ai_level: "Levels (multiple allowed)",
                 ai_need_level: "Please choose at least one level",
@@ -6039,10 +6042,9 @@
                 ai_count_range: "Count between 1 and {0}",
                 ai_prefs_saved: "AI settings saved",
                 ai_save_error: "Saving failed: {0}",
-                ai_status_running: "Creating sentences … {0} of {1} words done (now: {2})",
-                ai_status_done: "Done: sentences created for {0} words",
-                ai_status_limit: "Daily limit reached – {0} words done, it continues tomorrow",
-                ai_status_error: "Creation stopped after several errors ({0} words done)",
+                ai_status_pending: "{0} words still without a sentence – the server creates them in the background (mind the daily limit). New sentences appear after the next sync.",
+                ai_status_pending_off: "{0} active words do not appear in any sentence yet. With automatic mode on, the server creates sentences for them.",
+                ai_status_all_done: "All active words appear in sentences.",
                 menu_ai_prefs: "✨ AI example sentences",
                 wordsent_open: "🔍 Show sentences for a word",
                 wordsent_title: "Sentences for a word",
@@ -7119,7 +7121,6 @@
 
                 saveAllDataLocally();
                 processSyncOutbox();
-                if (typeof scheduleAiAuto === 'function') scheduleAiAuto();
             } catch (err) {
                 if (!isSilent) {
                     console.warn('Sync pull failed', err);
@@ -9872,7 +9873,7 @@
         // Version Update Modal Logic
         const versionModal = document.getElementById('versionUpdateModal');
         const closeVersionBtn = document.getElementById('closeVersionModalBtn');
-        const vKey = 'hasSeenVersion_2_2_5';
+        const vKey = 'hasSeenVersion_2_2_6';
         closeVersionBtn.addEventListener('click', () => {
             localStorage.setItem(vKey, 'true');
             versionModal.classList.add('hidden');
@@ -11506,7 +11507,6 @@
                     renderVocabList();
                     clearFields();
                     showToast(getI18n('toast_vocab_added', deWord, sparkleSVG), "success");
-                    scheduleAiAuto();
                 }
             } catch (err) {
                 console.warn("Saving to server failed, queuing for sync", err);
@@ -11585,17 +11585,21 @@
         let aiOptionsLang = null;
         const aiSelectedLevels = new Set();
         const aiSelectedCategories = new Set();
-        const aiAttempted = new Set(); // Wörter, die in dieser Sitzung schon versucht wurden (kein doppeltes Erzeugen nach einem Sync)
-        let aiRunning = false;
-        let aiStatus = null; // { key, args } – bleibt beim Wechsel der App-Sprache übersetzbar
 
         const AI_CHIP_BASE = 'px-3 py-1.5 rounded-full text-xs font-semibold border transition-all';
         const AI_CHIP_ON = 'bg-purple-600 text-white border-purple-600';
         const AI_CHIP_OFF = 'bg-white text-slate-600 border-slate-200 hover:border-purple-300';
 
-        function setAiStatus(key, ...args) {
-            aiStatus = key ? { key, args } : null;
-            aiAutoStatusEl.textContent = key ? getI18n(key, ...args) : '';
+        // Zeigt, wie viele Wörter noch in keinem Satz vorkommen; die Sätze erzeugt der Server selbst im Hintergrund
+        async function renderAiStatus() {
+            aiAutoStatusEl.textContent = '';
+            try {
+                const { pending } = await apiFetch(`/ai/auto-status?language=${CURRENT_LANG}`);
+                if (!aiSentenceModal.classList.contains('flex')) return;
+                aiAutoStatusEl.textContent = !aiAutoEnabled.checked || !(aiOptions && aiOptions.prefs.enabled)
+                    ? getI18n('ai_status_pending_off', pending)
+                    : getI18n(pending > 0 ? 'ai_status_pending' : 'ai_status_all_done', pending);
+            } catch (err) { /* Status ist nur eine Anzeige */ }
         }
 
         function renderAiRemaining() {
@@ -11646,88 +11650,6 @@
             return aiOptions && aiOptions.enabled ? aiOptions : null;
         }
 
-        // Wörter ohne KI-Sätze: aktive Vokabeln der aktuellen Sprache, zu denen noch kein Satz mit forWord existiert
-        function aiWordsWithoutSentences(lang) {
-            const have = new Set(fullDictionary
-                .filter(w => w.typ === 'Satz' && w.forWord && (w.language || 'it') === lang)
-                .map(w => w.forWord.toLowerCase()));
-            return fullDictionary.filter(w =>
-                w.typ !== 'Satz' && w.isActive !== false && (w.language || 'it') === lang &&
-                !String(w.id).startsWith('temp_') && !aiAttempted.has(w.id) &&
-                w.it && w.it.length <= 100 && !have.has(w.it.toLowerCase()));
-        }
-
-        // Erzeugt nacheinander für jedes Wort ohne Sätze neue Sätze nach den gespeicherten Einstellungen
-        async function runAiAuto() {
-            if (aiRunning || !API_TOKEN) return;
-            if (!aiOptions || aiOptionsLang !== CURRENT_LANG) await loadAiOptions();
-            const prefs = aiOptions && aiOptions.enabled ? aiOptions.prefs : null;
-            if (!prefs || !prefs.enabled || prefs.categories.length === 0) return;
-
-            const lang = CURRENT_LANG;
-            const userId = CURRENT_USER_ID;
-            const stillValid = () => API_TOKEN && CURRENT_LANG === lang && CURRENT_USER_ID === userId && aiOptions && aiOptions.prefs.enabled;
-            const pending = aiWordsWithoutSentences(lang);
-            if (pending.length === 0) return;
-
-            aiRunning = true;
-            let done = 0, failures = 0, stop = null;
-            try {
-                for (const word of pending) {
-                    if (!stillValid()) break;
-                    if (aiOptions.remaining !== null && aiOptions.remaining < prefs.count) { stop = 'ai_status_limit'; break; }
-                    if (fullDictionary.find(w => w.id === word.id)?.isActive === false) continue;
-                    aiAttempted.add(word.id);
-                    setAiStatus('ai_status_running', done, pending.length, word.it);
-                    try {
-                        const result = await apiFetch('/ai/sentences', {
-                            method: 'POST',
-                            timeoutMs: 150000,
-                            body: JSON.stringify({
-                                word: word.it,
-                                translation: word.de || null,
-                                language: lang,
-                                levels: prefs.levels,
-                                categories: prefs.categories,
-                                count: prefs.count
-                            })
-                        });
-                        aiOptions.remaining = result.remaining;
-                        const words = result.sentences.map(sen => ({ de: sen.german, it: sen.foreign, typ: 'Satz', emoji: '', grammatica: sen.category, level: sen.level, forWord: word.it, language: lang, isOwn: true }));
-                        const created = await apiFetch('/vocab/bulk', { method: 'POST', body: JSON.stringify({ words, language: lang }) });
-                        created.forEach(v => {
-                            fullDictionary.push(v);
-                            wordStats[v.id] = v.Stat || { presented: 0, correct: 0, incorrect: 0, streak: 0 };
-                        });
-                        done++;
-                        failures = 0;
-                        if (done % 5 === 0) { updateAdminGrammarCount(); }
-                    } catch (err) {
-                        console.warn('KI-Sätze für', word.it, 'fehlgeschlagen:', err.message);
-                        if (/Tageslimit|Sätze möglich|nur noch/.test(err.message)) { stop = 'ai_status_limit'; break; }
-                        if (++failures >= 3) { stop = 'ai_status_error'; break; }
-                    }
-                }
-            } finally {
-                aiRunning = false;
-                if (done > 0) {
-                    updateAdminGrammarCount();
-                    renderVocabList();
-                    saveAllDataLocally();
-                }
-                if (stop) setAiStatus(stop, done);
-                else if (done > 0) setAiStatus('ai_status_done', done);
-                else setAiStatus(null);
-                if (stop === 'ai_status_limit' && done > 0) showToast(getI18n('ai_status_limit', done), 'info');
-                renderAiRemaining();
-            }
-        }
-
-        // Wird nach dem Laden der Daten und nach neuen Vokabeln aufgerufen; macht nichts, wenn die Automatik aus ist
-        function scheduleAiAuto() {
-            runAiAuto().catch(err => console.warn('KI-Automatik abgebrochen', err));
-        }
-
         const closeAiSentenceModal = setupModal(aiSentenceModal, null, document.getElementById('closeAiSentenceModalBtn'));
 
         document.getElementById('openAiPrefsBtn').addEventListener('click', async () => {
@@ -11743,7 +11665,7 @@
             aiOptions.prefs.categories.filter(c => aiOptions.categories.includes(c)).forEach(c => aiSelectedCategories.add(c));
             renderAiChips();
             renderAiRemaining();
-            if (aiStatus) setAiStatus(aiStatus.key, ...aiStatus.args); else setAiStatus(null);
+            renderAiStatus();
             aiSentenceModal.classList.remove('hidden'); aiSentenceModal.classList.add('flex');
         });
 
@@ -11761,7 +11683,6 @@
                 });
                 showToast(getI18n('ai_prefs_saved'), 'success');
                 closeAiSentenceModal();
-                scheduleAiAuto();
             } catch (err) {
                 showToast(getI18n('ai_save_error', err.message), 'error');
             } finally {

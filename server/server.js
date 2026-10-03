@@ -27,7 +27,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Health Check
-app.get('/api/health', (req, res) => res.json({ status: 'ok', version: '2.2.5', timestamp: new Date() }));
+app.get('/api/health', (req, res) => res.json({ status: 'ok', version: '2.2.6', timestamp: new Date() }));
 
 // Mount routes
 app.use('/api/auth/oidc', require('./routes/oidc'));
@@ -58,6 +58,7 @@ sequelize.sync({ alter: true }).then(() => {
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
   });
+  require('./utils/ai/autoGenerate').start(); // KI-Beispielsätze im Hintergrund erzeugen (nur für Nutzer mit eingeschalteter Automatik)
 }).catch(err => {
   console.error('Database Sync Error:', err);
 });

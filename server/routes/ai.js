@@ -1,54 +1,12 @@
 const express = require('express');
-const { User, AiUsage } = require('../models');
+const { User } = require('../models');
 const { authenticateToken, asyncHandler } = require('../middleware/auth');
 const { loadConfig, generateSentences, PROVIDERS } = require('../utils/ai');
 const { LEVELS, NEW_CATEGORIES, getCategories, isSupportedLanguage } = require('../utils/ai/grammar');
+const { MAX_COUNT, parsePrefs, prefsForLanguage, remainingToday, addUsage } = require('../utils/ai/usage');
+const auto = require('../utils/ai/autoGenerate');
 
 const router = express.Router();
-
-const MAX_COUNT = 10;
-const today = () => new Date().toISOString().slice(0, 10);
-
-const DEFAULT_PREFS = { enabled: false, levels: ['A1'], categories: [], count: 3 };
-
-// Frühere Einstellungen kannten nur ein Niveau (level)
-function storedLevels(prefs) {
-    const raw = Array.isArray(prefs.levels) ? prefs.levels : (prefs.level ? [prefs.level] : []);
-    const valid = LEVELS.filter(l => raw.includes(l));
-    return valid.length ? valid : DEFAULT_PREFS.levels;
-}
-
-function parsePrefs(user) {
-    let stored = {};
-    try { stored = user.aiPrefs ? JSON.parse(user.aiPrefs) : {}; } catch (err) { stored = {}; }
-    return { ...DEFAULT_PREFS, ...stored };
-}
-
-// Einstellungen pro Sprache: Grammatikarten unterscheiden sich zwischen Italienisch und Englisch
-const prefsForLanguage = (prefs, language) => ({
-    enabled: prefs.enabled === true,
-    levels: storedLevels(prefs),
-    count: Number.isInteger(prefs.count) ? Math.min(MAX_COUNT, Math.max(1, prefs.count)) : DEFAULT_PREFS.count,
-    categories: Array.isArray(prefs.categoriesByLang && prefs.categoriesByLang[language]) ? prefs.categoriesByLang[language] : []
-});
-
-// Verbleibende Sätze heute; Admins haben kein Limit (null)
-async function remainingToday(user, dailyLimit) {
-    if (user.isAdmin) return null;
-    const usage = await AiUsage.findOne({ where: { UserId: user.id, day: today() } });
-    return Math.max(0, dailyLimit - (usage ? usage.count : 0));
-}
-
-async function addUsage(userId, sentences, usage) {
-    const [row] = await AiUsage.findOrCreate({ where: { UserId: userId, day: today() }, defaults: { count: 0 } });
-    await row.increment({
-        count: sentences,
-        calls: 1,
-        inputTokens: usage.input,
-        outputTokens: usage.output,
-        costUsd: usage.costUsd || 0
-    });
-}
 
 // Auswahl für den Dialog: ob die Funktion aktiv ist, Niveaus, Grammatikarten, Restkontingent
 router.get('/options', authenticateToken, asyncHandler(async (req, res) => {
@@ -93,7 +51,15 @@ router.put('/preferences', authenticateToken, asyncHandler(async (req, res) => {
         categoriesByLang: { ...(stored.categoriesByLang || {}), [language]: chosen }
     };
     await user.update({ aiPrefs: JSON.stringify(next) });
+    if (enabled) auto.trigger(); // Hintergrunddienst sofort starten, nicht erst beim nächsten Durchlauf
     res.json(prefsForLanguage(next, language));
+}));
+
+// Wie viele aktive Wörter noch in keinem Satz vorkommen (der Server erzeugt die Sätze selbst im Hintergrund)
+router.get('/auto-status', authenticateToken, asyncHandler(async (req, res) => {
+    const language = req.query.language;
+    if (!isSupportedLanguage(language)) return res.status(400).json({ error: 'Sprache nicht unterstützt' });
+    res.json({ pending: (await auto.pendingWords(req.user.id, language)).length });
 }));
 
 router.post('/sentences', authenticateToken, asyncHandler(async (req, res) => {
