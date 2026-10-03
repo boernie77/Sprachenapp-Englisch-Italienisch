@@ -4048,6 +4048,11 @@
                 </div>
                 <p id="aiRemaining" class="text-[11px] text-slate-400 mb-2"></p>
                 <p id="aiAutoStatus" class="text-xs font-semibold text-purple-700"></p>
+                <div id="aiBackfillBox" class="hidden mt-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
+                    <p id="aiBackfillText" class="text-xs text-slate-600 mb-2"></p>
+                    <button id="aiBackfillBtn" type="button"
+                        class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2.5 rounded-xl transition-all shadow-md text-sm" data-i18n="ai_backfill_btn">Fehlende Niveaus nachrüsten</button>
+                </div>
             </div>
             <div class="shrink-0 pt-4 border-t border-slate-100 mt-3">
                 <button id="aiSaveBtn" type="button"
@@ -4371,6 +4376,7 @@
                                 class="flex-1 min-w-0 bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400"></select>
                             <button type="button" id="adminAiLoadModelsBtn" class="px-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl border border-slate-200 text-xs font-semibold" data-i18n="admin_ai_load_models">Modelle laden</button>
                         </div>
+                        <p id="adminAiEstimate" class="text-[11px] text-slate-500 mt-1.5"></p>
                     </div>
 
                     <div>
@@ -5646,6 +5652,17 @@
                 ai_count_range: "Anzahl zwischen 1 und {0}",
                 ai_prefs_saved: "KI-Einstellungen gespeichert",
                 ai_save_error: "Speichern fehlgeschlagen: {0}",
+                ai_cost_suffix: " – geschätzt ca. {0}",
+                ai_backfill_btn: "Fehlende Niveaus nachrüsten",
+                ai_backfill_text: "Für {0} Wörter fehlen noch Sätze in {1} ({2} Sätze pro Wort).",
+                ai_backfill_confirm: "Für {0} Wörter, die schon KI-Sätze haben, werden Sätze in den fehlenden Niveaus ({1}) erzeugt, {2} Sätze pro Wort. Jetzt starten?",
+                ai_backfill_none: "Es fehlen keine Niveaus.",
+                ai_backfill_started: "Nachrüsten gestartet – der Server erzeugt die Sätze im Hintergrund",
+                admin_ai_estimate: "Geschätzt pro Wort ({1} Sätze): ca. {0}, pro Satz ca. {2} · Basis: {3}.",
+                admin_ai_estimate_open: "Offen für dein Konto: {0} Wörter ohne Satz (ca. {1}), {2} Wörter zum Nachrüsten (ca. {3}).",
+                admin_ai_estimate_unknown: "Für dieses Modell ist kein Preis hinterlegt – nur Token werden gezählt.",
+                admin_ai_basis_measured: "bisherige Aufrufe",
+                admin_ai_basis_estimated: "Schätzung",
                 ai_status_pending: "Noch {0} Wörter ohne Satz – der Server erzeugt die Sätze im Hintergrund (Tageslimit beachten). Neue Sätze erscheinen automatisch nach dem nächsten Abgleich.",
                 ai_status_pending_off: "{0} aktive Wörter kommen noch in keinem Satz vor. Mit eingeschalteter Automatik erzeugt der Server dafür Sätze.",
                 ai_status_all_done: "Alle aktiven Wörter kommen in Sätzen vor.",
@@ -6108,6 +6125,17 @@
                 ai_count_range: "Count between 1 and {0}",
                 ai_prefs_saved: "AI settings saved",
                 ai_save_error: "Saving failed: {0}",
+                ai_cost_suffix: " – estimated approx. {0}",
+                ai_backfill_btn: "Add missing levels",
+                ai_backfill_text: "{0} words still lack sentences in {1} ({2} sentences per word).",
+                ai_backfill_confirm: "For {0} words that already have AI sentences, sentences in the missing levels ({1}) will be created, {2} sentences per word. Start now?",
+                ai_backfill_none: "No levels are missing.",
+                ai_backfill_started: "Started – the server creates the sentences in the background",
+                admin_ai_estimate: "Estimated per word ({1} sentences): approx. {0}, per sentence approx. {2} · basis: {3}.",
+                admin_ai_estimate_open: "Open for your account: {0} words without a sentence (approx. {1}), {2} words to top up (approx. {3}).",
+                admin_ai_estimate_unknown: "No price is stored for this model – only tokens are counted.",
+                admin_ai_basis_measured: "previous calls",
+                admin_ai_basis_estimated: "estimate",
                 ai_status_pending: "{0} words still without a sentence – the server creates them in the background (mind the daily limit). New sentences appear after the next sync.",
                 ai_status_pending_off: "{0} active words do not appear in any sentence yet. With automatic mode on, the server creates sentences for them.",
                 ai_status_all_done: "All active words appear in sentences.",
@@ -11691,14 +11719,26 @@
         const AI_CHIP_OFF = 'bg-white text-slate-600 border-slate-200 hover:border-purple-300';
 
         // Zeigt, wie viele Wörter noch in keinem Satz vorkommen; die Sätze erzeugt der Server selbst im Hintergrund
+        function formatEuro(eur) {
+            return eur.toLocaleString(APP_UI_LANG === 'en' ? 'en-US' : 'de-DE', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 4 });
+        }
+
         async function renderAiStatus() {
             aiAutoStatusEl.textContent = '';
+            document.getElementById('aiBackfillBox').classList.add('hidden');
             try {
-                const { pending } = await apiFetch(`/ai/auto-status?language=${CURRENT_LANG}`);
+                const status = await apiFetch(`/ai/auto-status?language=${CURRENT_LANG}`);
                 if (!aiSentenceModal.classList.contains('flex')) return;
-                aiAutoStatusEl.textContent = !aiAutoEnabled.checked || !(aiOptions && aiOptions.prefs.enabled)
-                    ? getI18n('ai_status_pending_off', pending)
-                    : getI18n(pending > 0 ? 'ai_status_pending' : 'ai_status_all_done', pending);
+                const euro = (value) => (status.estimate ? getI18n('ai_cost_suffix', formatEuro(value)) : '');
+                aiAutoStatusEl.textContent = (!aiAutoEnabled.checked || !(aiOptions && aiOptions.prefs.enabled)
+                    ? getI18n('ai_status_pending_off', status.pending)
+                    : getI18n(status.pending > 0 ? 'ai_status_pending' : 'ai_status_all_done', status.pending))
+                    + (status.pending > 0 ? euro(status.estimate && status.estimate.pendingEur) : '');
+                if (status.backfillWords > 0) {
+                    document.getElementById('aiBackfillText').textContent = getI18n('ai_backfill_text', status.backfillWords, status.levels.join(', '), status.count)
+                        + euro(status.estimate && status.estimate.backfillEur);
+                    document.getElementById('aiBackfillBox').classList.remove('hidden');
+                }
             } catch (err) { /* Status ist nur eine Anzeige */ }
         }
 
@@ -11769,24 +11809,55 @@
             aiSentenceModal.classList.remove('hidden'); aiSentenceModal.classList.add('flex');
         });
 
-        aiSaveBtn.addEventListener('click', async () => {
+        // Prüft die Eingaben und speichert die Einstellungen; liefert false bei ungültigen Werten oder Fehlern
+        async function saveAiPrefs() {
             const count = parseInt(aiCountInput.value, 10);
-            if (aiSelectedLevels.size === 0) return showToast(getI18n('ai_need_level'), 'warning');
-            if (aiAutoEnabled.checked && aiSelectedCategories.size === 0) return showToast(getI18n('ai_need_grammar'), 'warning');
-            if (!Number.isInteger(count) || count < 1 || count > aiOptions.maxCount) return showToast(getI18n('ai_count_range', aiOptions.maxCount), 'warning');
-
-            aiSaveBtn.disabled = true;
+            if (aiSelectedLevels.size === 0) { showToast(getI18n('ai_need_level'), 'warning'); return false; }
+            if (aiAutoEnabled.checked && aiSelectedCategories.size === 0) { showToast(getI18n('ai_need_grammar'), 'warning'); return false; }
+            if (!Number.isInteger(count) || count < 1 || count > aiOptions.maxCount) { showToast(getI18n('ai_count_range', aiOptions.maxCount), 'warning'); return false; }
             try {
                 aiOptions.prefs = await apiFetch('/ai/preferences', {
                     method: 'PUT',
                     body: JSON.stringify({ language: CURRENT_LANG, enabled: aiAutoEnabled.checked, levels: [...aiSelectedLevels], categories: [...aiSelectedCategories], count })
                 });
-                showToast(getI18n('ai_prefs_saved'), 'success');
+                return true;
+            } catch (err) {
+                showToast(getI18n('ai_save_error', err.message), 'error');
+                return false;
+            }
+        }
+
+        aiSaveBtn.addEventListener('click', async () => {
+            aiSaveBtn.disabled = true;
+            try {
+                if (await saveAiPrefs()) {
+                    showToast(getI18n('ai_prefs_saved'), 'success');
+                    closeAiSentenceModal();
+                }
+            } finally {
+                aiSaveBtn.disabled = false;
+            }
+        });
+
+        // Fehlende Niveaus nachrüsten: erst speichern, dann Zahlen (und für Admins Kosten) bestätigen lassen
+        document.getElementById('aiBackfillBtn').addEventListener('click', async () => {
+            const button = document.getElementById('aiBackfillBtn');
+            button.disabled = true;
+            try {
+                if (!(await saveAiPrefs())) return;
+                if (aiSelectedCategories.size === 0) return showToast(getI18n('ai_need_grammar'), 'warning');
+                const status = await apiFetch(`/ai/auto-status?language=${CURRENT_LANG}`);
+                if (status.backfillWords === 0) { await renderAiStatus(); return showToast(getI18n('ai_backfill_none'), 'info'); }
+                const cost = status.estimate ? getI18n('ai_cost_suffix', formatEuro(status.estimate.backfillEur)) : '';
+                const message = getI18n('ai_backfill_confirm', status.backfillWords, status.levels.join(', '), status.count) + cost;
+                if (!(await showConfirm(message, getI18n('ai_backfill_btn')))) return;
+                await apiFetch('/ai/backfill', { method: 'POST', body: JSON.stringify({ language: CURRENT_LANG }) });
+                showToast(getI18n('ai_backfill_started'), 'success');
                 closeAiSentenceModal();
             } catch (err) {
                 showToast(getI18n('ai_save_error', err.message), 'error');
             } finally {
-                aiSaveBtn.disabled = false;
+                button.disabled = false;
             }
         });
 
@@ -11933,6 +12004,7 @@
                 adminAiConfig = await apiFetch('/admin/ai-settings');
                 renderAdminAi();
                 loadAdminAiUsage();
+                loadAdminAiEstimate();
             } catch (err) {
                 showToast(getI18n('admin_ai_load_error', err.message), 'error');
             }
@@ -11951,6 +12023,7 @@
             if (key) body.apiKey = key;
             adminAiConfig = await apiFetch('/admin/ai-settings', { method: 'PUT', body: JSON.stringify(body) });
             renderAdminAi();
+            loadAdminAiEstimate();
         }
 
         // Verbrauch und Kosten (Admin-Tab KI)
@@ -11998,6 +12071,19 @@
             }
         }
         document.getElementById('adminAiUsageRefreshBtn').addEventListener('click', loadAdminAiUsage);
+
+        // Kostenvorschau für das im Dropdown gewählte Modell (auch vor dem Speichern)
+        async function loadAdminAiEstimate() {
+            const el = document.getElementById('adminAiEstimate');
+            if (!adminAiModelInput.value) { el.textContent = ''; return; }
+            try {
+                const e = await apiFetch(`/admin/ai-estimate?language=${CURRENT_LANG}&provider=${encodeURIComponent(adminAiProviderSel.value)}&model=${encodeURIComponent(adminAiModelInput.value)}`);
+                if (!e.priceKnown) { el.textContent = getI18n('admin_ai_estimate_unknown'); return; }
+                el.textContent = getI18n('admin_ai_estimate', formatEuro(e.perWordEur), e.count, formatEuro(e.perSentenceEur), getI18n(e.basis === 'measured' ? 'admin_ai_basis_measured' : 'admin_ai_basis_estimated'))
+                    + ' ' + getI18n('admin_ai_estimate_open', e.pendingWords, formatEuro(e.pendingEur), e.backfillWords, formatEuro(e.backfillEur));
+            } catch (err) { el.textContent = ''; }
+        }
+        adminAiModelInput.addEventListener('change', loadAdminAiEstimate);
 
         adminAiProviderSel.addEventListener('change', renderAdminAiProvider);
 
