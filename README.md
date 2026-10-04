@@ -62,6 +62,11 @@ npx cap open android    # Android Studio öffnen
 
 ## Entwicklung
 
+Die Oberfläche braucht **keine** Verbindung zu Drittservern: Stylesheet, Schrift, Emoji-Grafiken und Bibliotheken liegen in
+`server/public`. Nach Änderungen an Tailwind-Klassen in `index.html` oder `grammar-help.js`: `npm install && npm run build:css`.
+Optional nutzt die App den kostenlosen Übersetzungsdienst MyMemory (für unbekannte Wörter) und – wenn der Betreiber sie
+einrichtet – einen KI-Anbieter (Claude oder OpenAI).
+
 ```bash
 cd server && npm install && npm start     # Backend + Web-Oberfläche aus server/public
 npx cap sync                              # Web-Code in die iOS-/Android-Projekte übernehmen

@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const { User, InviteCode } = require('../models');
 const { authenticateToken, asyncHandler, signToken } = require('../middleware/auth');
 const transporter = require('../utils/mailer');
+const { deleteUserCompletely } = require('../utils/userData');
 
 const router = express.Router();
 
@@ -113,8 +114,33 @@ router.get('/me', authenticateToken, asyncHandler(async (req, res) => {
         name: user.name,
         isAdmin: user.isAdmin,
         dailyActivity: user.dailyActivity || {},
-        lastResetAt: user.lastResetAt
+        lastResetAt: user.lastResetAt,
+        sso: !!user.oidcSubject // Anmeldung über Single Sign-on: kein eigenes Passwort
     });
+}));
+
+// Eigenes Konto samt allen Daten löschen (Pflicht für Apps mit Registrierung).
+// Bestätigung: Passwort; bei Single-Sign-on-Konten die E-Mail-Adresse. Falsche Eingaben antworten mit 400 (nicht 401/403,
+// denn das Frontend meldet bei diesen Codes automatisch ab).
+router.delete('/me', authenticateToken, asyncHandler(async (req, res) => {
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.sendStatus(404);
+
+    if (user.isAdmin) {
+        const admins = await User.count({ where: { isAdmin: true } });
+        if (admins <= 1) return res.status(409).json({ error: 'Du bist der einzige Admin. Ernenne zuerst einen weiteren Admin, bevor du dein Konto löschst.' });
+    }
+
+    if (user.oidcSubject) {
+        const typed = String((req.body && req.body.confirmEmail) || '').trim().toLowerCase();
+        if (!typed || typed !== String(user.email).toLowerCase()) return res.status(400).json({ error: 'Die E-Mail-Adresse stimmt nicht.' });
+    } else {
+        const password = String((req.body && req.body.password) || '');
+        if (!password || !(await bcrypt.compare(password, user.password))) return res.status(400).json({ error: 'Das Passwort stimmt nicht.' });
+    }
+
+    await deleteUserCompletely(user.id);
+    res.json({ deleted: true });
 }));
 
 router.post('/reset-password', async (req, res) => {

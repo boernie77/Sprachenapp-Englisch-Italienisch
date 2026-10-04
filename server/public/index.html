@@ -27,17 +27,11 @@
     <link rel="manifest" href="/manifest.json">
     <title>Italienisch Lernen - Drag & Drop & Quiz</title>
 
-    <!-- Tailwind CSS für modernes, responsives Design -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- DragDropTouch Polyfill für mobile Geräte -->
-    <script src="https://bernardo-castilho.github.io/DragDropTouch/DragDropTouch.js"></script>
-
-    <!-- SheetJS zum Einlesen von Excel-Dateien -->
-    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <!-- Alles lokal eingebunden (kein Abruf von Drittservern): Stylesheet, Schrift, Drag&Drop-Hilfe für Touch, Excel-Bibliothek.
+         tailwind.css wird mit "npm run build:css" aus den Klassen in index.html und grammar-help.js erzeugt. -->
+    <link rel="stylesheet" href="fonts.css">
+    <script src="vendor/DragDropTouch.js"></script>
+    <script src="vendor/xlsx.full.min.js"></script>
     <script src="app-config.js"></script>
     <script src="app-config.local.js" onerror="this.remove()"></script>
     <script src="grammar-help.js"></script>
@@ -1719,6 +1713,8 @@
             #conjugationModal .conj-highlight p { color: #a5b4fc !important; }
         }
     </style>
+    <!-- Tailwind-Stylesheet bewusst nach den eigenen Styles (gleiche Rangfolge wie früher beim Laden per Skript) -->
+    <link rel="stylesheet" href="tailwind.css">
 </head>
 
 <body class="min-h-screen flex flex-col items-center py-2 md:py-4 px-2 md:px-4 relative overflow-y-auto">
@@ -1841,18 +1837,47 @@
                 <div class="pt-4 border-t border-slate-100">
                     <h3 class="font-bold text-slate-800 mb-2 text-xs" data-i18n="imp_licenses">Lizenzhinweise</h3>
                     <p class="mb-2 text-[10px]" data-i18n="imp_license_desc1">Diese App steht unter der Apache License 2.0 und nutzt Open-Source-Software unter MIT- und Apache-2.0-Lizenz.</p>
+                    <p class="mb-2 text-[10px]">
+                        <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Apache License 2.0</a> ·
+                        <a href="https://github.com/boernie77/Sprachenapp-Englisch-Italienisch" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Quellcode</a>
+                    </p>
+                    <ul class="mb-3 text-[10px] space-y-1 list-disc pl-4">
+                        <li><a href="https://tailwindcss.com" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Tailwind CSS</a> – MIT</li>
+                        <li><a href="https://sheetjs.com" target="_blank" rel="noopener" class="text-blue-600 hover:underline">SheetJS Community Edition</a> – Apache-2.0</li>
+                        <li><a href="https://github.com/Bernardo-Castilho/dragdroptouch" target="_blank" rel="noopener" class="text-blue-600 hover:underline">DragDropTouch</a> – MIT</li>
+                        <li><a href="https://capacitorjs.com" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Capacitor</a> – MIT</li>
+                        <li><a href="https://rsms.me/inter/" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Inter</a> (Schrift) – SIL Open Font License 1.1</li>
+                        <li data-i18n="imp_license_server">Server: Express, Sequelize, PostgreSQL-Treiber u. a. – MIT, ISC, BSD, Apache-2.0 (Liste im Quellcode: THIRD_PARTY_LICENSES.md)</li>
+                    </ul>
                     <p class="mb-4 text-[10px]" data-i18n="imp_license_desc2">
                         <strong>Emoji graphics from OpenMoji</strong> – the open-source emoji and icon project.
                         Lizenz: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"
                             class="text-blue-600 hover:underline">CC BY-SA 4.0</a>
                     </p>
-                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.22</p>
+                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.23</p>
                     <p class="text-[10px] text-slate-400" data-i18n="imp_rights">© 2026 Christian Bernauer – Apache License 2.0</p>
                 </div>
             </div>
             <!-- App-Style Bottom Section -->
             <div class="mt-8 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.22</p>
+                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.23</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Konto löschen -->
+    <div id="deleteAccountModal"
+        class="hidden fixed inset-0 bg-slate-900 bg-opacity-90 backdrop-blur-md z-[60000] items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl">
+            <h2 class="text-xl font-bold text-red-600 mb-3" data-i18n="delete_title">Konto endgültig löschen?</h2>
+            <p class="text-sm text-slate-600 mb-4" data-i18n="delete_text">Dein Konto, alle deine Vokabeln und Sätze und dein Lernfortschritt werden unwiderruflich gelöscht. Das lässt sich nicht rückgängig machen.</p>
+            <label id="deleteAccountLabel" class="block text-xs font-semibold text-slate-700 mb-1.5" for="deleteAccountInput"></label>
+            <input id="deleteAccountInput" type="password" autocomplete="current-password"
+                class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium outline-none focus:border-red-400 mb-3" style="color:#0f172a !important;background:#ffffff !important">
+            <p id="deleteAccountError" class="hidden text-xs text-red-500 font-semibold mb-3"></p>
+            <div class="flex gap-2">
+                <button id="deleteAccountCancelBtn" type="button" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl text-sm" data-i18n="delete_cancel">Abbrechen</button>
+                <button id="deleteAccountConfirmBtn" type="button" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl text-sm disabled:opacity-40" data-i18n="delete_confirm_btn">Endgültig löschen</button>
             </div>
         </div>
     </div>
@@ -2097,23 +2122,23 @@
             <div class="w-16 h-16 shrink-0 bg-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
                 <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3">Version 2.2.22 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
+            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3">Version 2.2.23 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
             <div class="text-left space-y-3 mb-6 overflow-y-auto min-h-0 flex-1 pr-1">
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Die App steht jetzt unter der <b>Apache License 2.0</b> (Open Source)</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: Die App startet <b>auch ohne Internet vollständig</b> – Schrift, Layout und Emoji liegen jetzt lokal in der App</p>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: <b>Server-Adresse</b> in der App eintragbar (auch für Heimnetz-Server)</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: <b>Konto löschen</b> im Menü (löscht auch alle Daten)</p>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Erklärung im Grammatik-Modus nennt <b>alle Zeitformen</b> des Satzes</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: Lizenzseite aktualisiert – die App steht unter der <b>Apache License 2.0</b></p>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Alle Änderungen funktionieren <b>offline</b>, der Verbindungsstatus steht im Menü</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Fix: Admin-Bereich „Listen“</p>
                 </div>
                 <p class="text-slate-500 text-[10px] italic text-center mt-4 px-4 leading-normal">
                     Viel Spaß beim Lernen! Melde Fehler bitte direkt an uns.
@@ -2235,6 +2260,8 @@
                     </div>
                 </div>
 
+                <button id="deleteAccountBtn"
+                    class="block w-full text-left px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 border-b border-slate-100"><span data-i18n="menu_delete_account">Konto löschen</span></button>
                 <button id="changeServerBtn"
                     class="hidden w-full text-left px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100"><span data-i18n="menu_change_server">Server ändern</span> <span id="changeServerHost" class="block text-[10px] text-slate-400 font-normal truncate"></span></button>
                 <button id="logoutBtn"
@@ -2252,7 +2279,7 @@
                 </div>
                 <div class="px-4 py-1.5 text-[10px] text-slate-400 bg-slate-50/50 flex items-center justify-between border-t border-slate-100/50">
                     <span>App-Version:</span>
-                    <span class="font-mono font-medium text-slate-500">2.2.22</span>
+                    <span class="font-mono font-medium text-slate-500">2.2.23</span>
                 </div>
                 <input type="file" id="excelUploadEl" accept=".xlsx, .xls" class="hidden">
             </div>
@@ -6263,6 +6290,14 @@
                 setup_invalid: "Das ist keine Lernapp-Server-Adresse.",
                 menu_change_server: "Server ändern",
                 confirm_change_server: "Du wirst abgemeldet und kannst einen anderen Server eintragen. Wartende Änderungen bleiben für diesen Nutzer gespeichert. Fortfahren?",
+                menu_delete_account: "Konto löschen",
+                delete_title: "Konto endgültig löschen?",
+                delete_text: "Dein Konto, alle deine Vokabeln und Sätze und dein Lernfortschritt werden unwiderruflich gelöscht. Das lässt sich nicht rückgängig machen.",
+                delete_password: "Passwort zur Bestätigung",
+                delete_email: "E-Mail-Adresse zur Bestätigung",
+                delete_cancel: "Abbrechen",
+                delete_confirm_btn: "Endgültig löschen",
+                delete_done: "Dein Konto wurde gelöscht.",
                 last_sync: "Letzter Sync:",
                 sync_state_offline: "Offline (kein Internet)",
                 sync_state_server: "Server nicht erreichbar",
@@ -6643,6 +6678,7 @@
                 imp_license_desc2: "<strong>Emoji-Grafiken von OpenMoji</strong> – dem Open-Source-Emoji- und Icon-Projekt. Lizenz: <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\" target=\"_blank\" class=\"text-blue-600 hover:underline\">CC BY-SA 4.0</a>",
                 imp_rights: "© 2026 Christian Bernauer – Apache License 2.0",
                 imp_privacy: "Datenschutzerklärung",
+                imp_license_server: "Server: Express, Sequelize, PostgreSQL-Treiber u. a. – MIT, ISC, BSD, Apache-2.0 (Liste im Quellcode: THIRD_PARTY_LICENSES.md)",
                 imp_not_set: "Der Betreiber dieses Servers hat noch kein Impressum hinterlegt.",
 
                 // Quick Guide
@@ -6877,6 +6913,14 @@
                 setup_invalid: "This is not a Lernapp server address.",
                 menu_change_server: "Change server",
                 confirm_change_server: "You will be signed out and can enter a different server. Pending changes stay saved for this user. Continue?",
+                menu_delete_account: "Delete account",
+                delete_title: "Delete account permanently?",
+                delete_text: "Your account, all your words and sentences and your learning progress will be deleted permanently. This cannot be undone.",
+                delete_password: "Password to confirm",
+                delete_email: "Email address to confirm",
+                delete_cancel: "Cancel",
+                delete_confirm_btn: "Delete permanently",
+                delete_done: "Your account has been deleted.",
                 last_sync: "Last Sync:",
                 sync_state_offline: "Offline (no internet)",
                 sync_state_server: "Server not reachable",
@@ -7135,6 +7179,7 @@
                 imp_license_desc2: "<strong>Emoji graphics from OpenMoji</strong> – the open-source emoji and icon project. License: <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\" target=\"_blank\" class=\"text-blue-600 hover:underline\">CC BY-SA 4.0</a>",
                 imp_rights: "© 2026 Christian Bernauer – Apache License 2.0",
                 imp_privacy: "Privacy policy",
+                imp_license_server: "Server: Express, Sequelize, PostgreSQL driver and others – MIT, ISC, BSD, Apache-2.0 (list in the source code: THIRD_PARTY_LICENSES.md)",
                 imp_not_set: "The operator of this server has not provided legal notice yet.",
 
                 // Quick Guide
@@ -8041,6 +8086,7 @@
                     const profile = await apiFetch('/auth/me');
                     serverActivity = profile.dailyActivity || {};
                     serverLastReset = profile.lastResetAt;
+                    window.CURRENT_USER_SSO = profile.sso === true; // Single-Sign-on-Konto: Löschen wird mit der E-Mail bestätigt
                     if (profile.id) {
                         CURRENT_USER_ID = profile.id;
                         localStorage.setItem('ita-user-id', String(profile.id));
@@ -8666,6 +8712,51 @@
                     location.reload();
                 });
             }
+        })();
+
+        // --- Konto löschen (Pflicht für Apps mit Registrierung) ---
+        (function setupDeleteAccount() {
+            const modal = document.getElementById('deleteAccountModal');
+            const input = document.getElementById('deleteAccountInput');
+            const label = document.getElementById('deleteAccountLabel');
+            const errorEl = document.getElementById('deleteAccountError');
+            const confirmBtn = document.getElementById('deleteAccountConfirmBtn');
+            const close = () => { modal.classList.add('hidden'); modal.classList.remove('flex'); input.value = ''; errorEl.classList.add('hidden'); };
+
+            document.getElementById('deleteAccountBtn').addEventListener('click', () => {
+                closeAllModals();
+                dropdownMenu.classList.add('hidden');
+                const sso = window.CURRENT_USER_SSO === true;
+                label.textContent = getI18n(sso ? 'delete_email' : 'delete_password');
+                input.type = sso ? 'email' : 'password';
+                input.autocomplete = sso ? 'email' : 'current-password';
+                input.value = '';
+                errorEl.classList.add('hidden');
+                modal.classList.remove('hidden'); modal.classList.add('flex');
+                input.focus();
+            });
+            document.getElementById('deleteAccountCancelBtn').addEventListener('click', close);
+
+            confirmBtn.addEventListener('click', async () => {
+                if (!input.value.trim()) return;
+                if (!(await requireServer())) return;
+                confirmBtn.disabled = true;
+                try {
+                    const body = window.CURRENT_USER_SSO === true ? { confirmEmail: input.value } : { password: input.value };
+                    await apiFetch('/auth/me', { method: 'DELETE', body: JSON.stringify(body) });
+                    // Wartende Änderungen gehören zum gelöschten Konto: verwerfen, dann abmelden und lokale Daten entfernen
+                    syncOutbox = [];
+                    if (CURRENT_USER_ID) localStorage.removeItem(pendingOutboxKey(CURRENT_USER_ID));
+                    close();
+                    logout();
+                    showToast(getI18n('delete_done'), 'success');
+                } catch (err) {
+                    errorEl.textContent = err.message;
+                    errorEl.classList.remove('hidden');
+                } finally {
+                    confirmBtn.disabled = false;
+                }
+            });
         })();
 
         // --- Auth Logic ---
@@ -9606,7 +9697,7 @@
             const isMobile = window.innerWidth <= MOBILE_THRESHOLD;
 
             // Restore styling: background, border, shadow, and layout
-            el.className = 'bg-white p-2 md:p-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between cursor-move cursor-pointer transition-all no-select max-w-full';
+            el.className = 'bg-white p-2 md:p-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between cursor-move transition-all no-select max-w-full';
             el.draggable = !isMobile;
             el.dataset.id = pair.id;
 
@@ -11193,7 +11284,7 @@
         // Version Update Modal Logic
         const versionModal = document.getElementById('versionUpdateModal');
         const closeVersionBtn = document.getElementById('closeVersionModalBtn');
-        const vKey = 'hasSeenVersion_2_2_22';
+        const vKey = 'hasSeenVersion_2_2_23';
         closeVersionBtn.addEventListener('click', () => {
             localStorage.setItem(vKey, 'true');
             versionModal.classList.add('hidden');
@@ -12382,7 +12473,7 @@
             // Codepoints sammeln; Variation Selector (FE0F) entfernen
             const cps = [...emoji].map(c => c.codePointAt(0)).filter(cp => cp !== 0xFE0F);
             const hex = cps.map(cp => cp.toString(16).toUpperCase().padStart(4, '0')).join('-');
-            return `https://openmoji.org/data/color/svg/${hex}.svg`;
+            return `openmoji/${hex}.svg`; // lokal mitgeliefert (OpenMoji, CC BY-SA 4.0); fehlt eine Datei, zeigt emojiImg() das Unicode-Zeichen
         }
         function emojiImg(emoji, size = '5rem') {
             if (!emoji) return '';
@@ -13759,8 +13850,8 @@
             } else if (tabName === 'lists') {
                 if (excelTab) excelTab.classList.remove('hidden');
                 if (excelBtn) excelBtn.classList.add('active');
-                loadAdminBaseTable();
-                loadAdminGrammarTable();
+                if (typeof updateAdminBaseVocabCount === 'function') updateAdminBaseVocabCount();
+                if (typeof updateAdminGrammarCount === 'function') updateAdminGrammarCount();
             } else if (tabName === 'invites') {
                 if (inviteTab) inviteTab.classList.remove('hidden');
                 if (inviteBtn) inviteBtn.classList.add('active');

@@ -1,15 +1,21 @@
 {
   "name": "italien-app-mobile",
-  "version": "2.2.22",
+  "version": "2.2.23",
   "description": "Mobile App Wrapper for Lernapp Italienisch",
   "dependencies": {
     "@capacitor/android": "^8.2.0",
     "@capacitor/cli": "^8.2.0",
     "@capacitor/core": "^8.2.0",
     "@capacitor/ios": "^8.2.0",
-    "@capacitor/keyboard": "^8.0.1",
-    "jsdom": "^29.0.0",
-    "puppeteer": "^24.39.1"
+    "@capacitor/keyboard": "^8.0.1"
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "tailwindcss": "3.4",
+    "puppeteer": "^24.39.1",
+    "jsdom": "^29.0.0"
+  },
+  "scripts": {
+    "build:css": "tailwindcss -c tailwind.config.js -i tailwind/input.css -o server/public/tailwind.css --minify"
+  }
 }

@@ -9,7 +9,7 @@ Dieses Projekt verwendet Drittsoftware und Material unter deren eigenen Lizenzen
   - DragDropTouch (MIT)
   - Capacitor (MIT) und Capacitor-Plugins
   - Express, Sequelize, PostgreSQL-Treiber und weitere npm-Pakete (überwiegend MIT/Apache-2.0, siehe package-lock.json)
-  - Schrift „Inter“ (SIL Open Font License 1.1)
+  - DragDropTouch und die Schrift „Inter“ liegen lokal im Projekt (Inter: SIL Open Font License 1.1)
   - Emoji-Grafiken von OpenMoji (CC BY-SA 4.0): https://openmoji.org
 
-Die mitgelieferten Vokabel- und Satzlisten (Excel-Dateien) sind Inhalte und nicht Teil der Software-Lizenz.
+Die mitgelieferten Vokabel- und Satzlisten (Excel-Dateien) stehen unter derselben Lizenz (Apache-2.0).

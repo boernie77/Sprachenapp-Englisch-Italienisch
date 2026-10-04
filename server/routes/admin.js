@@ -5,6 +5,7 @@ const { User, Vocabulary, Stats, InviteCode, BaseVocabulary, GrammarSentence, se
 const ai = require('../utils/ai');
 const { authenticateToken, requireAdmin, asyncHandler } = require('../middleware/auth');
 const transporter = require('../utils/mailer');
+const { deleteUserCompletely } = require('../utils/userData');
 
 const router = express.Router();
 
@@ -141,7 +142,7 @@ router.put('/users/:id/toggle-admin', authenticateToken, requireAdmin, async (re
 router.delete('/users/:id', authenticateToken, requireAdmin, async (req, res) => {
   try {
     if (req.user.id == req.params.id) return res.status(400).json({ error: 'Cannot delete yourself' });
-    await User.destroy({ where: { id: req.params.id } });
+    await deleteUserCompletely(req.params.id); // inkl. aller Daten des Nutzers
     res.json({ message: 'User deleted' });
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
