@@ -62,11 +62,19 @@ const MESSAGES_EN = {
     'Anbieter nicht erreichbar': 'Provider unreachable',
     'Antwort der KI war zu lang, bitte weniger Sätze anfordern': 'The AI response was too long, please request fewer sentences',
     'Antwort der KI war kein gültiges JSON': 'The AI response was not valid JSON',
+    'Kein Text angegeben': 'No text given',
+    'Text zu lang': 'Text too long',
+    'Die Cloudstimme ist nicht eingerichtet': 'The cloud voice is not set up',
+    'Tageslimit für Cloudstimme erreicht': 'Daily limit for the cloud voice reached',
+    'Zu viele Anfragen, bitte kurz warten': 'Too many requests, please wait a moment',
+    'Leere Antwort des Anbieters': 'Empty response from the provider',
+    'Tageslimit muss zwischen 0 und 5000 liegen': 'The daily limit must be between 0 and 5000',
     'Interner Serverfehler': 'Internal server error',
     'OIDC nicht konfiguriert (OIDC_ISSUER_URL/CLIENT_ID/CLIENT_SECRET fehlt)': 'OIDC not configured (OIDC_ISSUER_URL/CLIENT_ID/CLIENT_SECRET missing)'
 };
 
 const PATTERNS_EN = [
+    [/^Verbindung zu (.+) funktioniert \((\d+) Byte Audio\)\.$/, (m, p, n) => `Connection to ${p} works (${n} bytes of audio).`],
     [/^Anzahl muss zwischen (\d+) und (\d+) liegen$/, (m, a, b) => `The number must be between ${a} and ${b}`],
     [/^Heute ist nur noch 1 Satz möglich$/, () => 'Only 1 more sentence is possible today'],
     [/^Heute sind nur noch (\d+) Sätze möglich$/, (m, n) => `Only ${n} more sentences are possible today`],

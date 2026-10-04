@@ -13,6 +13,7 @@ const baseVocabRoutes = require('./routes/baseVocab');
 const verbFormRoutes = require('./routes/verbForms');
 const legalRoutes = require('./routes/legal');
 const aiRoutes = require('./routes/ai');
+const ttsRoutes = require('./routes/tts');
 
 const KNOWN_WEAK_SECRETS = ['super-secret-key', 'secret', 'changeme', ''];
 const jwtSecret = process.env.JWT_SECRET;
@@ -43,6 +44,7 @@ app.use('/api/base-vocab', baseVocabRoutes);
 app.use('/api/verb-forms', verbFormRoutes);
 app.use('/api/legal', legalRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/tts', ttsRoutes);
 
 // Serve frontend
 app.get('*', (req, res) => {

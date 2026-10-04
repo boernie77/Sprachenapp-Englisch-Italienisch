@@ -146,6 +146,7 @@ const AiUsage = sequelize.define('AiUsage', {
   day: { type: DataTypes.DATEONLY, allowNull: false },
   count: { type: DataTypes.INTEGER, defaultValue: 0 },
   calls: { type: DataTypes.INTEGER, defaultValue: 0 },
+  ttsCalls: { type: DataTypes.INTEGER, defaultValue: 0 }, // neue (nicht zwischengespeicherte) Cloudstimmen-Aufrufe für das Tageslimit
   lookups: { type: DataTypes.INTEGER, defaultValue: 0 }, // KI-Wortinfo-Abfragen (Wortart/Geschlecht) für das Tageslimit
   inputTokens: { type: DataTypes.BIGINT, defaultValue: 0 },
   outputTokens: { type: DataTypes.BIGINT, defaultValue: 0 },

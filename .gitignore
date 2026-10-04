@@ -12,6 +12,8 @@ yarn-error.log
 postgres_data/
 postgres_data_test/
 pgdata/
+tts-cache/
+server/tts-cache/
 
 # OS
 .DS_Store
