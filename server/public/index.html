@@ -5163,6 +5163,16 @@
                         <div id="adminAiUsageUsers" class="text-xs text-slate-600 space-y-1"></div>
                         <p class="text-[10px] text-slate-400 mt-2" data-i18n="admin_ai_usage_hint">Kosten nach Anthropic-Listenpreis des jeweiligen Modells; bei Modellen ohne bekannten Preis (z.B. OpenAI) werden nur Token gezählt. Gezählt wird ab diesem Update.</p>
                     </div>
+                    <div class="pt-3 mt-2 border-t border-slate-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-sm font-bold text-slate-700">🔎 Konjugationsprüfung (KI)</h3>
+                            <button type="button" id="adminVerbCheckRefreshBtn" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg border border-slate-200 text-xs font-semibold">Aktualisieren</button>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mb-2">Die KI prüft jedes Verb (Basis-Vokabeln und Nutzerlisten) einmal und speichert die richtigen Formen für alle. Neue Verben kommen automatisch dazu; bei mehr als 50 offenen Verben wartet die Prüfung auf deine Freigabe.</p>
+                        <div id="adminVerbCheckStatus" class="space-y-2 text-xs"></div>
+                        <h4 class="text-xs font-bold text-slate-600 mt-3 mb-1">Abweichungen von der Regelrechnung</h4>
+                        <div id="adminVerbCheckDiffs" class="text-xs text-slate-600 space-y-2 max-h-72 overflow-y-auto"></div>
+                    </div>
                     <p class="text-[11px] text-slate-400" data-i18n="admin_ai_jwt_hint">Hinweis: Wird JWT_SECRET auf dem Server geändert, muss der Schlüssel neu eingetragen werden.</p>
                 </div>
             </div>
@@ -5573,6 +5583,18 @@
                 } else {
                     praesens = "-"; imperfetto = "-"; passato = "-"; gerundio = "-"; imperativo = "-";
                 }
+            }
+
+            // Von der KI geprüfte Formen (Server) haben Vorrang vor der Regelrechnung
+            const verifiedIt = typeof GrammarHelp !== 'undefined' && GrammarHelp.getVerified ? GrammarHelp.getVerified('it', v) : null;
+            if (verifiedIt) {
+                const six = (a) => Array.isArray(a) && a.length === 6;
+                if (six(verifiedIt.presente)) praesens = verifiedIt.presente.join(', ');
+                if (six(verifiedIt.imperfetto)) imperfetto = verifiedIt.imperfetto.join(', ');
+                if (verifiedIt.aux && verifiedIt.participio) passato = `${verifiedIt.aux} ${verifiedIt.participio}`;
+                if (verifiedIt.gerundio) gerundio = verifiedIt.gerundio;
+                const imp = verifiedIt.imperativo;
+                if (imp && imp.tu && imp.Lei && imp.noi && imp.voi) imperativo = `tu: ${imp.tu}, Lei: ${imp.Lei}, noi: ${imp.noi}, voi: ${imp.voi}`;
             }
 
             if (isReflexive) {
@@ -6327,6 +6349,7 @@
                 excel_current_list: "Aktuelle Liste:",
                 admin_users_tab: "Benutzer",
                 admin_lists_tab: "Listen",
+                conj_verified: "✓ von der KI geprüft",
                 conj_hint: "Automatisch erzeugt – bei seltenen unregelmäßigen Verben bitte im Wörterbuch nachprüfen.",
                 conj_modal: "Modalverb: unveränderlich, danach Infinitiv ohne „to“",
                 conj_aux: "Hilfsverb",
@@ -6806,6 +6829,7 @@
                 excel_current_list: "Current List:",
                 admin_users_tab: "Users",
                 admin_lists_tab: "Lists",
+                conj_verified: "✓ checked by AI",
                 conj_hint: "Generated automatically – please double-check rare irregular verbs in a dictionary.",
                 conj_modal: "Modal verb: never changes, followed by the infinitive without “to”",
                 conj_aux: "Auxiliary",
@@ -7693,6 +7717,42 @@
             }
         }
 
+        // --- Von der KI geprüfte Verbformen: lokal zwischengespeichert, Änderungen kommen mit dem Abgleich ---
+        const verifiedVerbForms = {
+            it: safeJSONParse(localStorage.getItem('ita-verified-verbs-it'), {}),
+            en: safeJSONParse(localStorage.getItem('ita-verified-verbs-en'), {})
+        };
+        function applyVerifiedVerbForms() {
+            if (!window.GrammarHelp || !GrammarHelp.setVerifiedForms) return;
+            GrammarHelp.setVerifiedForms('it', verifiedVerbForms.it);
+            GrammarHelp.setVerifiedForms('en', verifiedVerbForms.en);
+        }
+        applyVerifiedVerbForms();
+
+        async function loadVerifiedVerbForms() {
+            let changed = false;
+            for (const lang of ['it', 'en']) {
+                try {
+                    const since = localStorage.getItem(`ita-verified-since-${lang}`);
+                    const res = await apiFetch(`/verb-forms?language=${lang}${since ? '&since=' + encodeURIComponent(since) : ''}`);
+                    (res.verbs || []).forEach(v => {
+                        if (v.status === 'verified' && v.forms) { verifiedVerbForms[lang][v.infinitive] = v.forms; changed = true; }
+                        else if (verifiedVerbForms[lang][v.infinitive]) { delete verifiedVerbForms[lang][v.infinitive]; changed = true; }
+                    });
+                    localStorage.setItem(`ita-verified-verbs-${lang}`, JSON.stringify(verifiedVerbForms[lang]));
+                    localStorage.setItem(`ita-verified-since-${lang}`, res.now);
+                } catch (err) { /* offline: der Zwischenspeicher genügt */ }
+            }
+            if (changed) {
+                applyVerifiedVerbForms();
+                // Formen der Verben in der Vokabelliste mit den geprüften Werten neu berechnen
+                fullDictionary.forEach(w => {
+                    if (w.typ && w.typ.toLowerCase().includes('verb') && w.it && (w.language || 'it') === 'it') Object.assign(w, generateVerbForms(w.it));
+                });
+                saveAllDataLocally();
+            }
+        }
+
         async function fetchGlobalBaseSentences() {
             try {
                 const result = await apiFetch(`/grammar-sentences?language=${CURRENT_LANG}`);
@@ -7942,6 +8002,7 @@
                 }
 
                 await fetchGlobalBaseSentences();
+                await loadVerifiedVerbForms();
                 await updateAdminGrammarCount();
                 if (typeof sentenceListModal !== 'undefined' && !sentenceListModal.classList.contains('hidden')) renderSentenceList();
                 if (!isSilent) {
@@ -10366,6 +10427,7 @@
             document.getElementById('conjTitle').textContent = `📖 ${CURRENT_LANG === 'en' ? 'to ' : ''}${conj.infinitive}${dictEntry ? ' – ' + dictEntry.de : ''}`;
             const sub = [];
             if (conj.modal) sub.push(getI18n('conj_modal'));
+            if (conj.verified) sub.push(getI18n('conj_verified'));
             if (conj.aux) sub.push(`${getI18n('conj_aux')}: ${conj.aux}`);
             if (conj.participio) sub.push(`${getI18n('conj_participle')}: ${conj.participio}`);
             if (conj.pastSimple) sub.push(`Simple Past: ${conj.pastSimple}`);
@@ -12899,6 +12961,7 @@
                 renderAdminAi();
                 loadAdminAiUsage();
                 loadAdminAiEstimate();
+                loadAdminVerbCheck();
             } catch (err) {
                 showToast(getI18n('admin_ai_load_error', err.message), 'error');
             }
@@ -12966,6 +13029,123 @@
             }
         }
         document.getElementById('adminAiUsageRefreshBtn').addEventListener('click', loadAdminAiUsage);
+
+        // --- Konjugationsprüfung (KI): Stand, Freigabe, Abweichungen von der Regelrechnung ---
+        const VERB_LANG_NAMES = { it: 'Italienisch', en: 'Englisch' };
+
+        function diffVerbForms(lang, infinitive, ver) {
+            const rules = GrammarHelp.conjugate(infinitive, lang, { ignoreVerified: true });
+            if (!rules) return [];
+            const out = [];
+            const cmp = (label, a, b) => { if (a && b && a.join(', ') !== b.join(', ')) out.push({ label, rules: a.join(', '), ai: b.join(', ') }); };
+            const forms = (id) => (rules.tenses.find(t => t.id === id) || {}).forms;
+            if (lang === 'it') {
+                cmp('Presente', forms('presente'), ver.presente);
+                cmp('Imperfetto', forms('imperfetto'), ver.imperfetto);
+                cmp('Futuro', forms('futuro'), ver.futuro);
+                cmp('Condizionale', forms('condizionale'), ver.condizionale);
+                cmp('Congiuntivo', (forms('congiuntivo') || []).map(f => f.replace(/^che /, '')), ver.congiuntivo);
+                const imp = forms('imperativo');
+                if (imp && ver.imperativo) cmp('Imperativo', imp.slice(1, 5).map(f => String(f).split(' / ')[0]), [ver.imperativo.tu, ver.imperativo.Lei, ver.imperativo.noi, ver.imperativo.voi].map(f => String(f).split(' / ')[0]));
+                cmp('Partizip', [rules.participio], [ver.participio]);
+                cmp('Hilfsverb', [rules.aux], [ver.aux]);
+                cmp('Gerundio', [rules.gerundio], [ver.gerundio]);
+            } else {
+                cmp('3. Person', [String((forms('present') || [])[2] || '').replace(/^he\/she\/it /, '')], [ver.thirdPerson]);
+                cmp('Simple Past', [rules.pastSimple], [ver.past]);
+                cmp('Partizip', [rules.participio], [ver.participio]);
+                cmp('-ing', [rules.gerundio], [ver.gerundio]);
+            }
+            return out;
+        }
+
+        async function loadAdminVerbDiffs() {
+            const box = document.getElementById('adminVerbCheckDiffs');
+            box.innerHTML = '';
+            let shown = 0;
+            for (const lang of ['it', 'en']) {
+                let rows = [];
+                try { rows = await apiFetch(`/admin/verb-check/rows?language=${lang}`); } catch (err) { continue; }
+                for (const row of rows) {
+                    const diffs = diffVerbForms(lang, row.infinitive, row.forms);
+                    if (diffs.length === 0 || shown >= 100) continue;
+                    shown++;
+                    const card = document.createElement('div');
+                    card.className = 'p-2 bg-slate-50 rounded-lg border border-slate-100';
+                    const head = document.createElement('div');
+                    head.className = 'flex items-center justify-between gap-2 mb-1';
+                    const title = document.createElement('span');
+                    title.className = 'font-bold text-slate-800';
+                    title.textContent = `${VERB_LANG_NAMES[lang]}: ${row.infinitive}`;
+                    const reject = document.createElement('button');
+                    reject.type = 'button';
+                    reject.className = 'px-2 py-0.5 bg-red-50 hover:bg-red-100 text-red-600 rounded border border-red-100 text-[10px] font-semibold';
+                    reject.textContent = 'verwerfen';
+                    reject.addEventListener('click', async () => {
+                        try {
+                            await apiFetch('/admin/verb-check/reject', { method: 'POST', body: JSON.stringify({ language: lang, infinitive: row.infinitive }) });
+                            delete verifiedVerbForms[lang][row.infinitive];
+                            applyVerifiedVerbForms();
+                            card.remove();
+                        } catch (err) { showToast(err.message, 'error'); }
+                    });
+                    head.append(title, reject);
+                    card.appendChild(head);
+                    diffs.forEach(d => {
+                        const line = document.createElement('p');
+                        line.className = 'leading-snug';
+                        const label = document.createElement('b');
+                        label.textContent = d.label + ': ';
+                        const was = document.createElement('span');
+                        was.className = 'text-red-500 line-through';
+                        was.textContent = d.rules;
+                        const arrow = document.createTextNode(' → ');
+                        const now = document.createElement('span');
+                        now.className = 'text-emerald-600 font-semibold';
+                        now.textContent = d.ai;
+                        line.append(label, was, arrow, now);
+                        card.appendChild(line);
+                    });
+                    box.appendChild(card);
+                }
+            }
+            if (shown === 0) box.textContent = 'Keine Abweichungen (oder noch nichts geprüft).';
+        }
+
+        async function loadAdminVerbCheck() {
+            const box = document.getElementById('adminVerbCheckStatus');
+            try {
+                const status = await apiFetch('/admin/verb-check');
+                box.innerHTML = '';
+                Object.entries(status).forEach(([lang, st]) => {
+                    const row = document.createElement('div');
+                    row.className = 'flex items-center justify-between gap-2 p-2 bg-slate-50 rounded-lg border border-slate-100';
+                    const text = document.createElement('span');
+                    const cost = st.estimateEur === null || st.pending === 0 ? '' : ` (ca. ${formatEuro(st.estimateEur)})`;
+                    text.textContent = `${VERB_LANG_NAMES[lang]}: ${st.verified} geprüft, ${st.pending} offen${cost}` + (st.invalid ? `, ${st.invalid} ungültig` : '') + (st.rejected ? `, ${st.rejected} verworfen` : '');
+                    row.appendChild(text);
+                    if (st.pending > 0) {
+                        const run = document.createElement('button');
+                        run.type = 'button';
+                        run.className = 'shrink-0 px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-semibold';
+                        run.textContent = st.needsConfirm ? 'Freigeben und prüfen' : 'Jetzt prüfen';
+                        run.addEventListener('click', async () => {
+                            if (!(await showConfirm(`${st.pending} ${VERB_LANG_NAMES[lang]}e Verben von der KI prüfen lassen${cost}?`, 'Verbprüfung starten'))) return;
+                            try {
+                                await apiFetch('/admin/verb-check/run', { method: 'POST', body: JSON.stringify({ language: lang }) });
+                                showToast('Verbprüfung gestartet – der Server arbeitet im Hintergrund. Später „Aktualisieren“ drücken.', 'success');
+                            } catch (err) { showToast(err.message, 'error'); }
+                        });
+                        row.appendChild(run);
+                    }
+                    box.appendChild(row);
+                });
+                loadAdminVerbDiffs();
+            } catch (err) {
+                box.textContent = getI18n('admin_ai_load_error', err.message);
+            }
+        }
+        document.getElementById('adminVerbCheckRefreshBtn').addEventListener('click', loadAdminVerbCheck);
 
         // Kostenvorschau für das im Dropdown gewählte Modell (auch vor dem Speichern)
         async function loadAdminAiEstimate() {

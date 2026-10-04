@@ -332,6 +332,51 @@ router.get('/ai-estimate', authenticateToken, requireAdmin, asyncHandler(async (
     });
 }));
 
+// --- Verbprüfung (KI) ---
+router.get('/verb-check', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
+    const { VerbForm } = require('../models');
+    const check = require('../utils/ai/verbCheck');
+    const config = await ai.loadConfig();
+    const model = config.models[config.provider];
+    const result = {};
+    for (const language of check.LANGUAGES) {
+        const [pending, rows] = await Promise.all([check.pendingVerbs(language), VerbForm.findAll({ where: { language }, attributes: ['status'], raw: true })]);
+        const perVerb = check.estimateUsdPerVerb(model, language);
+        result[language] = {
+            verified: rows.filter(r => r.status === 'verified').length,
+            invalid: rows.filter(r => r.status === 'invalid').length,
+            rejected: rows.filter(r => r.status === 'rejected').length,
+            pending: pending.length,
+            needsConfirm: pending.length > check.BULK_THRESHOLD,
+            estimateEur: perVerb === null ? null : perVerb * pending.length * config.usdToEur
+        };
+    }
+    res.json(result);
+}));
+
+router.post('/verb-check/run', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
+    const language = req.body.language;
+    if (!['it', 'en'].includes(language)) return res.status(400).json({ error: 'Sprache nicht unterstützt' });
+    require('../utils/ai/verbCheck').confirmLanguage(language);
+    res.json({ started: true });
+}));
+
+// Geprüfte Verben mit Formen (das Frontend vergleicht sie mit den Regeln und zeigt die Abweichungen)
+router.get('/verb-check/rows', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
+    const { VerbForm } = require('../models');
+    const language = ['it', 'en'].includes(req.query.language) ? req.query.language : 'it';
+    const rows = await VerbForm.findAll({ where: { language, status: 'verified' }, attributes: ['infinitive', 'forms'], order: [['infinitive', 'ASC']], raw: true });
+    res.json(rows.map(r => ({ infinitive: r.infinitive, forms: JSON.parse(r.forms) })));
+}));
+
+router.post('/verb-check/reject', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
+    const { VerbForm } = require('../models');
+    const { language, infinitive } = req.body;
+    if (!['it', 'en'].includes(language) || typeof infinitive !== 'string') return res.status(400).json({ error: 'Ungültige Angabe' });
+    const [count] = await VerbForm.update({ status: 'rejected' }, { where: { language, infinitive, status: 'verified' } });
+    res.json({ rejected: count });
+}));
+
 // Prüft Schlüssel + Modell des gewählten Anbieters mit einem kostenlosen Modell-Abruf
 router.post('/ai-settings/test', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
     const config = await ai.loadConfig();

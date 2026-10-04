@@ -266,7 +266,11 @@
         return { inf, reflexive };
     }
 
-    function conjugateItalian(word) {
+    // Von der KI geprüfte Formen (vom Server geladen); ersetzen die Regelrechnung, solange vorhanden
+    const verified = { it: {}, en: {} };
+    const isForm6 = (a) => Array.isArray(a) && a.length === 6 && a.every(x => typeof x === 'string' && x);
+
+    function conjugateItalian(word, options) {
         const parsed = parseItalianInfinitive(word);
         if (!parsed) return null;
         const { inf, reflexive } = parsed;
@@ -309,8 +313,8 @@
         else if (ending === 'are') {
             futStem = /[cg]i$/.test(stem) ? stem.slice(0, -1) + 'er' : (/[cg]$/.test(stem) ? stem + 'her' : stem + 'er');
         } else futStem = stem + (ending === 'ire' ? 'ir' : 'er');
-        const fut = ['ò', 'ai', 'à', 'emo', 'ete', 'anno'].map(e => futStem + e);
-        const cond = ['ei', 'esti', 'ebbe', 'emmo', 'este', 'ebbero'].map(e => futStem + e);
+        let fut = ['ò', 'ai', 'à', 'emo', 'ete', 'anno'].map(e => futStem + e);
+        let cond = ['ei', 'esti', 'ebbe', 'emmo', 'este', 'ebbero'].map(e => futStem + e);
 
         // --- Congiuntivo presente ---
         let cong;
@@ -335,7 +339,7 @@
         let impTu;
         if (d.imp !== undefined) impTu = d.imp === null ? null : px + d.imp;
         else impTu = ending === 'are' ? stem + 'a' : pres[1];
-        const imperativo = d.imp === null && !d.impLei ? null : {
+        let imperativo = d.imp === null && !d.impLei ? null : {
             tu: impTu,
             Lei: d.impLei ? px + d.impLei : cong[0],
             noi: pres[3],
@@ -343,9 +347,23 @@
         };
 
         // --- Gerundio / Partizip / Hilfsverb ---
-        const gerundio = d.ger ? px + d.ger : stem + (ending === 'are' ? 'ando' : 'endo');
-        const part = d.part ? px + d.part : (irregularParticiple(inf) || stem + { are: 'ato', ere: 'uto', ire: 'ito' }[ending]);
-        const aux = reflexive || d.aux === 'essere' || IT_ESSERE.has(inf) || (irr && IT_ESSERE.has(irr.base)) ? 'essere' : 'avere';
+        let gerundio = d.ger ? px + d.ger : stem + (ending === 'are' ? 'ando' : 'endo');
+        let part = d.part ? px + d.part : (irregularParticiple(inf) || stem + { are: 'ato', ere: 'uto', ire: 'ito' }[ending]);
+        let aux = reflexive || d.aux === 'essere' || IT_ESSERE.has(inf) || (irr && IT_ESSERE.has(irr.base)) ? 'essere' : 'avere';
+
+        // Geprüfte Formen der KI haben Vorrang vor den Regeln (reflexive Verben bekommen die Pronomen wie gewohnt dazu)
+        const ver = options && options.ignoreVerified ? null : verified.it[inf];
+        if (ver) {
+            if (isForm6(ver.presente)) pres = ver.presente;
+            if (isForm6(ver.imperfetto)) impf = ver.imperfetto;
+            if (isForm6(ver.futuro)) fut = ver.futuro;
+            if (isForm6(ver.condizionale)) cond = ver.condizionale;
+            if (isForm6(ver.congiuntivo)) cong = ver.congiuntivo;
+            if (ver.imperativo && ver.imperativo.tu && ver.imperativo.Lei && ver.imperativo.noi && ver.imperativo.voi) imperativo = { tu: ver.imperativo.tu, Lei: ver.imperativo.Lei, noi: ver.imperativo.noi, voi: ver.imperativo.voi };
+            if (ver.gerundio) gerundio = ver.gerundio;
+            if (ver.participio) part = ver.participio;
+            if (ver.aux === 'avere' || ver.aux === 'essere') aux = reflexive ? 'essere' : ver.aux;
+        }
         const partForms = aux === 'essere'
             ? [part.slice(0, -1) + 'o/a', part.slice(0, -1) + 'i/e']
             : [part, part];
@@ -365,6 +383,7 @@
             infinitive: display,
             persons: IT_PERSONS,
             irregular: !!irr || !!irregularParticiple(inf),
+            verified: !!ver,
             aux,
             gerundio: reflexive ? gerundio + 'si' : gerundio,
             participio: part,
@@ -451,17 +470,18 @@
         return v + 'ed';
     }
 
-    function conjugateEnglish(word) {
+    function conjugateEnglish(word, options) {
         let v = String(word || '').toLowerCase().trim().replace(/^to\s+/, '');
         if (!/^[a-z]+(-[a-z]+)?$/.test(v)) return null;
         if (EN_MODALS.has(v)) {
             return { lang: 'en', infinitive: v, modal: true, persons: EN_PERSONS, tenses: [] };
         }
         const irr = EN_IRREGULAR[v];
-        const past = irr ? irr[0] : enPastRegular(v);
-        const part = irr ? irr[1] : enPastRegular(v);
-        const ing = enIng(v);
-        const third = enThirdPerson(v);
+        const ver = options && options.ignoreVerified || v === 'be' ? null : verified.en[v]; // "be" bleibt bei der Sonderbehandlung
+        const past = ver && ver.past ? ver.past : (irr ? irr[0] : enPastRegular(v));
+        const part = ver && ver.participio ? ver.participio : (irr ? irr[1] : enPastRegular(v));
+        const ing = ver && ver.gerundio ? ver.gerundio : enIng(v);
+        const third = ver && ver.thirdPerson ? ver.thirdPerson : enThirdPerson(v);
 
         const present = v === 'be' ? ['am', 'are', 'is', 'are', 'are', 'are'] : [v, v, third, v, v, v];
         const pastForms = v === 'be' ? ['was', 'were', 'was', 'were', 'were', 'were'] : Array(6).fill(past);
@@ -474,6 +494,7 @@
             infinitive: v,
             persons: EN_PERSONS,
             irregular: !!irr,
+            verified: !!ver,
             participio: part,
             gerundio: ing,
             pastSimple: past,
@@ -489,11 +510,14 @@
         };
     }
 
-    function conjugate(word, lang) {
-        return lang === 'en' ? conjugateEnglish(word) : conjugateItalian(word);
+    function conjugate(word, lang, options) {
+        return lang === 'en' ? conjugateEnglish(word, options) : conjugateItalian(word, options);
     }
 
     const api = { EXPLANATIONS, getExplanations, preferredTense, splitCategories, conjugate, conjugateItalian, conjugateEnglish };
+    // Geprüfte Formen setzen/abfragen: map = { infinitive: forms }
+    api.setVerifiedForms = (lang, map) => { verified[lang === 'en' ? 'en' : 'it'] = map || {}; };
+    api.getVerified = (lang, infinitive) => (verified[lang === 'en' ? 'en' : 'it'] || {})[String(infinitive || '').toLowerCase().trim()] || null;
     api.isIscVerb = (infinitive) => IT_ISC.has(String(infinitive || '').toLowerCase().trim());
     if (typeof module !== 'undefined' && module.exports) module.exports = api;
     else root.GrammarHelp = api;

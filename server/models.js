@@ -118,6 +118,17 @@ const SentenceChoice = sequelize.define('SentenceChoice', {
   indexes: [{ unique: true, fields: ['UserId', 'GrammarSentenceId'] }]
 });
 
+// Von der KI geprüfte Verbformen (global, einmal pro Verb). Status: verified, invalid (kein echtes Verb) oder rejected (vom Admin verworfen)
+const VerbForm = sequelize.define('VerbForm', {
+  language: { type: DataTypes.STRING, allowNull: false },
+  infinitive: { type: DataTypes.STRING, allowNull: false },
+  forms: { type: DataTypes.TEXT, allowNull: true }, // JSON
+  status: { type: DataTypes.STRING, allowNull: false, defaultValue: 'verified' },
+  model: { type: DataTypes.STRING, allowNull: true }
+}, {
+  indexes: [{ unique: true, fields: ['language', 'infinitive'] }]
+});
+
 const InviteCode = sequelize.define('InviteCode', {
   code: { type: DataTypes.STRING, allowNull: false, unique: true },
   email: { type: DataTypes.STRING, allowNull: true },
@@ -160,4 +171,4 @@ SentenceChoice.belongsTo(User);
 SentenceChoice.belongsTo(GrammarSentence);
 AiUsage.belongsTo(User);
 
-module.exports = { sequelize, User, Vocabulary, Stats, BaseVocabulary, GrammarSentence, InviteCode, Setting, AiUsage, SentenceChoice };
+module.exports = { sequelize, User, Vocabulary, Stats, BaseVocabulary, GrammarSentence, InviteCode, Setting, AiUsage, SentenceChoice, VerbForm };

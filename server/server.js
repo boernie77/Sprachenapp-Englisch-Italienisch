@@ -10,6 +10,7 @@ const contactRoutes = require('./routes/contact');
 const adminRoutes = require('./routes/admin');
 const grammarRoutes = require('./routes/grammar');
 const baseVocabRoutes = require('./routes/baseVocab');
+const verbFormRoutes = require('./routes/verbForms');
 const aiRoutes = require('./routes/ai');
 
 const KNOWN_WEAK_SECRETS = ['super-secret-key', 'secret', 'changeme', ''];
@@ -37,6 +38,7 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/grammar-sentences', grammarRoutes);
 app.use('/api/base-vocab', baseVocabRoutes);
+app.use('/api/verb-forms', verbFormRoutes);
 app.use('/api/ai', aiRoutes);
 
 // Serve frontend
@@ -58,6 +60,7 @@ sequelize.sync({ alter: true }).then(() => {
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
   });
+  require('./utils/ai/verbCheck').start(); // Verbformen von der KI prüfen lassen (einmal pro Verb)
   require('./utils/ai/autoGenerate').start(); // KI-Beispielsätze im Hintergrund erzeugen (nur für Nutzer mit eingeschalteter Automatik)
 }).catch(err => {
   console.error('Database Sync Error:', err);
