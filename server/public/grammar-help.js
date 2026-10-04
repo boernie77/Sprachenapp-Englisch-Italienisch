@@ -228,7 +228,11 @@
         'approfondire', 'condire', 'demolire', 'esaurire', 'fallire', 'impazzire', 'influire', 'istruire', 'percepire',
         'proibire', 'rapire', 'riunire', 'scolpire', 'smarrire', 'svanire', 'digerire', 'aderire', 'intuire', 'diminuire',
         'arricchire', 'impallidire', 'gradire', 'costruire', 'ingrandire', 'stupire', 'zittire', 'sbalordire', 'tossire',
-        'starnutire', 'concepire', 'differire', 'eseguire', 'patire', 'reagire', 'sgranchire', 'colorire', 'ammonire']);
+        'starnutire', 'concepire', 'differire', 'eseguire', 'patire', 'reagire', 'sgranchire', 'colorire', 'ammonire',
+        'abbellire', 'aggredire', 'alleggerire', 'ammorbidire', 'appassire', 'arrostire', 'atterrire', 'avvilire', 'bandire',
+        'custodire', 'deperire', 'esibire', 'fiorire', 'impartire', 'incuriosire', 'indebolire', 'inghiottire', 'inibire',
+        'intimidire', 'istituire', 'mollire', 'nutrire', 'partorire', 'prestabilire', 'rifinire', 'ripulire', 'risarcire',
+        'sfinire', 'spartire', 'subire', 'tramortire', 'trasalire', 'usufruire', 'abbrustolire', 'assorbire', 'accudire']);
 
     function findIrregular(inf) {
         if (IT_IRREGULAR[inf]) return { prefix: '', base: inf, data: IT_IRREGULAR[inf] };
@@ -490,6 +494,7 @@
     }
 
     const api = { EXPLANATIONS, getExplanations, preferredTense, splitCategories, conjugate, conjugateItalian, conjugateEnglish };
+    api.isIscVerb = (infinitive) => IT_ISC.has(String(infinitive || '').toLowerCase().trim());
     if (typeof module !== 'undefined' && module.exports) module.exports = api;
     else root.GrammarHelp = api;
 })(typeof window !== 'undefined' ? window : globalThis);

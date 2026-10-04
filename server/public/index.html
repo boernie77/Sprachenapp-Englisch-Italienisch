@@ -1828,13 +1828,13 @@
                         Lizenz: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"
                             class="text-blue-600 hover:underline">CC BY-SA 4.0</a>
                     </p>
-                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.13</p>
+                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.14</p>
                     <p class="text-[10px] text-slate-400" data-i18n="imp_rights">© 2026 Christian Bernauer. Alle Rechte vorbehalten.</p>
                 </div>
             </div>
             <!-- App-Style Bottom Section -->
             <div class="mt-8 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.13</p>
+                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.14</p>
             </div>
         </div>
     </div>
@@ -2079,27 +2079,23 @@
             <div class="w-16 h-16 shrink-0 bg-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
                 <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3">Version 2.2.13 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
+            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3">Version 2.2.14 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
             <div class="text-left space-y-3 mb-6 overflow-y-auto min-h-0 flex-1 pr-1">
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: <b>KI-Beispielsätze</b> – im Menü Niveau, Grammatik und Sätze pro Wort einstellen; der Server erzeugt sie für deine Wörter</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: Beim Hinzufügen einer Vokabel werden <b>Wortart und Geschlecht</b> automatisch ergänzt</p>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: Sätze folgen deinen <b>aktiven Wörtern</b> – oder du wählst sie in „Alle Sätze“ selbst aus</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Fix: Konjugation von Verben auf -ire mit <b>-isc-</b> (z. B. pulire → pulisco)</p>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: Im Grammatik-Modus <b>Sätze zu einem Wort suchen</b>; die Vokabelliste zeigt, wie viele Vokabeln aktiv sind</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: KI-Beispielsätze im Menü einstellen; die Wortsuche im Grammatik-Modus zeigt auch weitere Sätze</p>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: Konjugationstabellen und Grammatik-Erklärungen im Grammatik-Modus</p>
-                </div>
-                <div class="flex items-start gap-3">
-                    <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Admin: Token und Kosten, Kostenvorschau, Nachrüsten fehlender Niveaus, Export mit Niveau und Wort</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Admin: Tab-Leiste verschiebbar, Wortinfo-Limit und Kosten im Tab „KI“</p>
                 </div>
                 <p class="text-slate-500 text-[10px] italic text-center mt-4 px-4 leading-normal">
                     Viel Spaß beim Lernen! Melde Fehler bitte direkt an uns.
@@ -2232,7 +2228,7 @@
                 </div>
                 <div class="px-4 py-1.5 text-[10px] text-slate-400 bg-slate-50/50 flex items-center justify-between border-t border-slate-100/50">
                     <span>App-Version:</span>
-                    <span class="font-mono font-medium text-slate-500">2.2.13</span>
+                    <span class="font-mono font-medium text-slate-500">2.2.14</span>
                 </div>
                 <input type="file" id="excelUploadEl" accept=".xlsx, .xls" class="hidden">
             </div>
@@ -4827,11 +4823,13 @@
                     const root = v.slice(0, -3);
                     let p2 = root.endsWith("i") ? root : root + "i";
                     let p4 = root.endsWith("i") ? root.slice(0, -1) + "iamo" : root + "iamo";
-                    praesens = `${root}o, ${p2}, ${root}e, ${p4}, ${root}ite, ${root}ono`;
+                    // Verben auf -ire mit -isc- (finire → finisco, pulire → pulisco): Liste aus grammar-help.js
+                    const isc = typeof GrammarHelp !== 'undefined' && GrammarHelp.isIscVerb && GrammarHelp.isIscVerb(v);
+                    praesens = isc ? `${root}isco, ${root}isci, ${root}isce, ${p4}, ${root}ite, ${root}iscono` : `${root}o, ${p2}, ${root}e, ${p4}, ${root}ite, ${root}ono`;
                     imperfetto = `${root}ivo, ${root}ivi, ${root}iva, ${root}ivamo, ${root}ivate, ${root}ivano`;
                     passato = `${aux} ${root}ito`;
                     gerundio = `${root}endo`;
-                    imperativo = `tu: ${p2}, Lei: ${root}a, noi: ${p4}, voi: ${root}ite`;
+                    imperativo = isc ? `tu: ${root}isci, Lei: ${root}isca, noi: ${p4}, voi: ${root}ite` : `tu: ${p2}, Lei: ${root}a, noi: ${p4}, voi: ${root}ite`;
                 } else {
                     praesens = "-"; imperfetto = "-"; passato = "-"; gerundio = "-"; imperativo = "-";
                 }
@@ -9980,7 +9978,7 @@
         // Version Update Modal Logic
         const versionModal = document.getElementById('versionUpdateModal');
         const closeVersionBtn = document.getElementById('closeVersionModalBtn');
-        const vKey = 'hasSeenVersion_2_2_13';
+        const vKey = 'hasSeenVersion_2_2_14';
         closeVersionBtn.addEventListener('click', () => {
             localStorage.setItem(vKey, 'true');
             versionModal.classList.add('hidden');
