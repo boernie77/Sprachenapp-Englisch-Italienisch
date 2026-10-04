@@ -1705,12 +1705,24 @@
         /* Akzentleiste (nur Spanisch) */
         #accentBar { position: fixed; z-index: 60000; display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; padding: 4px; border-radius: 12px; background: #ffffff; border: 1px solid #cbd5e1; box-shadow: 0 6px 18px rgba(15, 23, 42, 0.18); }
         #accentBar.hidden { display: none; }
-        #accentBar button { min-width: 34px; height: 34px; padding: 0 8px; border-radius: 8px; border: 1px solid #e2e8f0; background: #f8fafc; color: #1e293b; font-weight: 700; font-size: 1rem; line-height: 1; touch-action: manipulation; }
+        #accentBar button { min-width: 33px; height: 34px; padding: 0 6px; border-radius: 8px; border: 1px solid #e2e8f0; background: #f8fafc; color: #1e293b; font-weight: 700; font-size: 1rem; line-height: 1; touch-action: manipulation; }
         #accentBar button.on { background: #2563eb; color: #ffffff; border-color: #2563eb; }
+        @media (max-width: 420px) { #accentBar { gap: 3px; padding: 4px 3px; } #accentBar button { min-width: 29px; padding: 0 3px; } }
         @media (max-width: 1024px) {
             #accentBar { background: #0f172a; border-color: rgba(148, 163, 184, 0.4); }
             #accentBar button { background: rgba(255, 255, 255, 0.1); color: #e2e8f0; border-color: rgba(148, 163, 184, 0.3); }
             #accentBar button.on { background: #2563eb; color: #ffffff; border-color: #2563eb; }
+        }
+        /* Spanischer Info-Bereich im (mobilen) Dark Mode: Farben, die die allgemeinen Regeln nicht abdecken */
+        @media (max-width: 1024px) {
+            #infoContentEs .bg-slate-50, #infoContentEs .bg-white, #infoContentEs .bg-blue-50\/50, #infoContentEs .bg-indigo-50\/50, #infoContentEs .bg-orange-50\/50 { background-color: rgba(255, 255, 255, 0.06) !important; }
+            #infoContentEs .bg-amber-50\/30 { background-color: rgba(251, 191, 36, 0.10) !important; border-color: rgba(251, 191, 36, 0.3) !important; }
+            #infoContentEs .text-indigo-600, #infoContentEs .text-indigo-700 { color: #a5b4fc !important; }
+            #infoContentEs .text-teal-600 { color: #5eead4 !important; }
+            #infoContentEs .text-emerald-600 { color: #6ee7b7 !important; }
+            #infoContentEs .text-amber-600, #infoContentEs .text-amber-700 { color: #fcd34d !important; }
+            #infoContentEs .text-slate-500 { color: #cbd5e1 !important; }
+            #infoContentEs .border-slate-100, #infoContentEs .border-slate-200, #infoContentEs .border-blue-100, #infoContentEs .border-indigo-100, #infoContentEs .border-orange-100 { border-color: rgba(255, 255, 255, 0.12) !important; }
         }
         /* Grammatik-Hilfe und Konjugationstabelle im (mobilen) Dark Mode */
         @media (max-width: 1024px) {
@@ -1864,13 +1876,13 @@
                         Lizenz: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"
                             class="text-blue-600 hover:underline">CC BY-SA 4.0</a>
                     </p>
-                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.24</p>
+                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.25</p>
                     <p class="text-[10px] text-slate-400" data-i18n="imp_rights">© 2026 Christian Bernauer – Apache License 2.0</p>
                 </div>
             </div>
             <!-- App-Style Bottom Section -->
             <div class="mt-8 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.24</p>
+                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.25</p>
             </div>
         </div>
     </div>
@@ -2137,24 +2149,17 @@
             <div class="w-16 h-16 shrink-0 bg-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
                 <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3">Version 2.2.24 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
+            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3">Version 2.2.25 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
             <div class="text-left space-y-3 mb-6 overflow-y-auto min-h-0 flex-1 pr-1">
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: Die App startet <b>auch ohne Internet vollständig</b> – Schrift, Layout und Emoji liegen jetzt lokal in der App</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: <b>Spanisch</b> (Spanien) – wähle die spanische Flagge oben links. Mit Vokabeln, Grammatik, Konjugationstabellen, Info-Bereich und einer Akzentleiste (á é í ó ú ñ ¿ ¡) beim Schreiben</p>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: <b>Konto löschen</b> im Menü (löscht auch alle Daten)</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Spanisch ist akzenttolerant: fehlt ein Akzent im Schreibmodus, gilt die Antwort mit Hinweis als richtig</p>
                 </div>
-                <div class="flex items-start gap-3">
-                    <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: Lizenzseite aktualisiert – die App steht unter der <b>Apache License 2.0</b></p>
-                </div>
-                <div class="flex items-start gap-3">
-                    <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Fix: Admin-Bereich „Listen“</p>
-                </div>
+                
                 <p class="text-slate-500 text-[10px] italic text-center mt-4 px-4 leading-normal">
                     Viel Spaß beim Lernen! Melde Fehler bitte direkt an uns.
                 </p>
@@ -2294,7 +2299,7 @@
                 </div>
                 <div class="px-4 py-1.5 text-[10px] text-slate-400 bg-slate-50/50 flex items-center justify-between border-t border-slate-100/50">
                     <span>App-Version:</span>
-                    <span class="font-mono font-medium text-slate-500">2.2.24</span>
+                    <span class="font-mono font-medium text-slate-500">2.2.25</span>
                 </div>
                 <input type="file" id="excelUploadEl" accept=".xlsx, .xls" class="hidden">
             </div>
@@ -8490,7 +8495,7 @@
         function positionAccentBar() {
             if (!accentBarEl || !accentBarTarget || accentBarEl.classList.contains('hidden')) return;
             const r = accentBarTarget.getBoundingClientRect();
-            const width = Math.min(window.innerWidth - 16, 360);
+            const width = Math.min(window.innerWidth - 16, 410);
             accentBarEl.style.width = width + 'px';
             accentBarEl.style.left = Math.max(8, Math.min(window.innerWidth - width - 8, r.left + r.width / 2 - width / 2)) + 'px';
             accentBarEl.style.top = Math.min(window.innerHeight - 48, r.bottom + 6) + 'px';
@@ -8550,9 +8555,11 @@
             // Refresh administration/modal stats if needed
             if (typeof updateAdminBaseVocabCount === 'function') updateAdminBaseVocabCount();
 
-            if (currentMode === 'dragdrop' || currentMode === 'quiz' || currentMode === 'write') {
-                startNewRound();
-            }
+            // Neue Runde mit den Wörtern der gewählten Sprache (startNewRound gab es nicht: Fehler nach dem Sprachwechsel)
+            if (currentMode === 'dragdrop') startDragDropRound();
+            else if (currentMode === 'quiz') startQuizRound();
+            else if (currentMode === 'write') startWriteRound();
+            else if (currentMode === 'grammar') startGrammarRound();
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -12361,7 +12368,7 @@
         // Version Update Modal Logic
         const versionModal = document.getElementById('versionUpdateModal');
         const closeVersionBtn = document.getElementById('closeVersionModalBtn');
-        const vKey = 'hasSeenVersion_2_2_24';
+        const vKey = 'hasSeenVersion_2_2_25';
         closeVersionBtn.addEventListener('click', () => {
             localStorage.setItem(vKey, 'true');
             versionModal.classList.add('hidden');

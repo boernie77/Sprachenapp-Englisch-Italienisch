@@ -1,7 +1,7 @@
 {
-  "name": "Italienisch Lernen",
-  "short_name": "Ital-App",
-  "description": "Lerne Italienisch mit Drag & Drop und Quiz",
+  "name": "Vokabeln – Sprachen lernen",
+  "short_name": "Vokabeln",
+  "description": "Lerne Italienisch, Englisch und Spanisch mit Drag & Drop, Quiz, Schreiben und Grammatik",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",
