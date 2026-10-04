@@ -267,3 +267,16 @@ test('Antworten vergleichen (Akzent-Toleranz nur bei Spanisch)', () => {
     assert.equal(G.compareAnswers('ano', 'año', 'es', false), 'wrong');
     assert.equal(G.compareAnswers('perche', 'perché', 'it', false), 'wrong');
 });
+
+test('Spanisch: geprüfte Formen für oír/reír (Server speichert mit Akzent) greifen auch ohne Akzent', () => {
+    const six = x => [x + '1', x + '2', x + '3', x + '4', x + '5', x + '6'];
+    const forms = { presente: six('p'), indefinido: six('i'), imperfecto: six('m'), futuro: six('f'), condicional: six('c'), subjuntivo: six('s'),
+        imperativo: { tu: 'a', usted: 'b', nosotros: 'c', vosotros: 'd', ustedes: 'e' }, participio: 'oido2', gerundio: 'oyendo2' };
+    G.setVerifiedForms('es', { 'oír': forms });
+    assert.equal(G.conjugate('oír', 'es').verified, true);
+    assert.equal(G.conjugate('oir', 'es').verified, true);
+    assert.ok(G.getVerified('es', 'oír'));
+    assert.ok(G.getVerified('es', 'oir'));
+    G.setVerifiedForms('es', {});
+    assert.equal(G.conjugate('oír', 'es').verified, false);
+});

@@ -7,7 +7,8 @@ Dieses Konzept beschreibt die Einführung einer Sprachumschaltung für die Benut
 ### Sprach-Zustand (App UI Language)
 *   Einführung einer neuen Variable `APP_UI_LANG` (Standardsprache: `de`).
 *   Speicherung der Auswahl im `localStorage` (z.B. `ita-ui-lang`), damit die Wahl bei Neustart oder Refresh erhalten bleibt.
-*   Trennung von `CURRENT_LANG` (Lerninhalt: IT/EN) und `APP_UI_LANG` (App-Texte: DE/EN).
+*   Trennung von `CURRENT_LANG` (Lerninhalt: IT/EN/ES) und `APP_UI_LANG` (App-Texte: DE/EN).
+*   Lernsprachen stehen zentral in `LANG_CONFIG` (Frontend, `index.html`) und `server/utils/languages.js`; Schlüssel je Lernsprache heißen `…_it`, `…_en`, `…_es` (z. B. `header_learn_es`, `drag_es_drop`).
 
 ### Zentrales Translation-Dictionary
 Alle Texte werden in einem JavaScript-Objekt strukturiert abgelegt:
@@ -71,4 +72,4 @@ Aufgrund der Größe der App (10k+ Zeilen) erfolgt die Umsetzung in Phasen:
 ---
 
 > [!NOTE]
-> Da wir bereits viele SVG-Icons nutzen, könnten wir die Flaggen 🇩🇪 und 🇬🇧 als visuelle Unterstützung nutzen, um den Wechsel intuitiv zu gestalten.
+> Flaggen werden als SVG gezeichnet (nicht als Emoji): Deutschland, Italien, Großbritannien und Spanien, damit sie auf allen Geräten gleich aussehen.

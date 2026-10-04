@@ -13,7 +13,7 @@ Dieses Dokument dient dazu, wichtige Projektdaten und spezifische Benutzeranford
     - Der Button **„Beispielsatz anzeigen“** (`#cardsShowExampleBtn`) innerhalb der Flashcard-Box muss **SICHTBAR** bleiben.
     - Beispielsatz-Popups in Karteikarten sind **nur manuell** (darf den Flow nicht blockieren).
 - **Header**: Keine Versionsanzeige mehr (wird nur im Hamburgermenü angezeigt).
-- **Immersion-Regel**: Verbzeiten (z. B. *Presente*, *Passato Prossimo*) in der Zusatzinfo bleiben **immer in der Lernsprache** (Italienisch), unabhängig von der App-Sprache.
+- **Immersion-Regel**: Verbzeiten (z. B. *Presente*, *Passato Prossimo*, bei Spanisch *Pretérito perfecto*) in der Zusatzinfo bleiben **immer in der Lernsprache** (Italienisch, Spanisch), unabhängig von der App-Sprache.
 - **Beispielsätze (allgemein)**:
     - Popups erscheinen automatisch nach Erfolg in: Drag & Drop, Quiz, Schreiben.
     - Toggles/Buttons im Header werden **blau**, wenn aktiv.
@@ -38,3 +38,9 @@ Dieses Dokument dient dazu, wichtige Projektdaten und spezifische Benutzeranford
 - **Design-Regel**: Der Dunkelmodus muss in den Apps und der schmalen Browseransicht (max-width: 1024px) immer konsequent eingehalten werden.
 - **Icon-Regel**: Nur Icons verwenden (z. B. Standard-Emojis), die auf Mobilgeräten (iOS/Android) plattformübergreifend zuverlässig funktionieren.
 - Neue Builds als `.aab` im Hauptverzeichnis ablegen (z.B. `app-release-v2.0.5-v15-FINAL.aab`).
+
+## Spanisch (seit 2.2.25)
+- **Dialekt:** Spanien (es-ES, Anrede *vosotros*). Lateinamerika steht nur als Hinweis im Info-Bereich.
+- **Akzente:** Schreibmodus ist akzenttolerant (fehlender Akzent = richtig, Hinweis „Achte auf den Akzent.“); `ñ` und `ü` sind eigene Buchstaben. Grammatiklücken sind streng: nur ein fehlender Akzent meldet „Fast – nur der Akzent fehlt.“ Spanische Eingabefelder bekommen `lang="es"`, `autocapitalize`/`autocorrect`/`spellcheck` aus und eine Akzentleiste (á é í ó ú ü ñ ¿ ¡, nur bei Lernsprache es).
+- **Icon-Regel:** Flaggen als SVG (nie als Flaggen-Emoji, die unter Windows nicht erscheinen).
+- **Neue Sprache hinzufügen:** `server/utils/languages.js`, `LANG_CONFIG`/`SUPPORTED_LANGS` und die `*_xx`-Schlüssel in `index.html`, `ARTICLES` in `utils/ai/autoGenerate.js`, Kategorien in `utils/ai/grammar.js`.

@@ -1,9 +1,10 @@
-# Lernapp – Vokabeltrainer Italienisch & Englisch
+# Lernapp – Vokabeltrainer Italienisch, Englisch & Spanisch
 
 Vokabel- und Grammatiktrainer mit Quiz, Karteikarten, Drag & Drop und freiem Schreiben.
 Eigene Vokabellisten lassen sich anlegen oder als Excel-Datei importieren; der Lernfortschritt
 steuert gezielte Wiederholungen.
 
+- **Lernsprachen:** Italienisch, Englisch und Spanisch (Spanien); Oberfläche auf Deutsch oder Englisch
 - **Web & Desktop** im Browser, dazu Apps für **iOS und Android** (Capacitor)
 - **Self-hosted:** Node.js/Express-Backend mit PostgreSQL, als Docker-Stack
 - Projektseite und Demo: <https://byboernie.de/lernapp.html>

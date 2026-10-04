@@ -948,7 +948,7 @@
         };
 
         // Geprüfte Formen der KI haben Vorrang vor den Regeln
-        const ver = options && options.ignoreVerified ? null : verified.es[infN];
+        const ver = options && options.ignoreVerified ? null : (verified.es[infN] || verified.es[infN.replace(/ir$/, 'ír')]); // Server speichert oír/reír mit Akzent
         if (ver) {
             if (isForm6(ver.presente)) pres = ver.presente;
             if (isForm6(ver.indefinido)) ind = ver.indefinido;
@@ -1230,7 +1230,11 @@
     // Geprüfte Formen setzen/abfragen: map = { infinitive: forms }
     const verifiedLang = (lang) => (lang === 'en' || lang === 'es' ? lang : 'it');
     api.setVerifiedForms = (lang, map) => { verified[verifiedLang(lang)] = map || {}; };
-    api.getVerified = (lang, infinitive) => (verified[verifiedLang(lang)] || {})[String(infinitive || '').toLowerCase().trim()] || null;
+    api.getVerified = (lang, infinitive) => {
+        const table = verified[verifiedLang(lang)] || {};
+        const key = String(infinitive || '').toLowerCase().trim();
+        return table[key] || (lang === 'es' ? table[key.replace(/ir$/, 'ír')] : null) || null;
+    };
     // Alle einwortigen Verbformen eines spanischen Verbs (für die Rückwärtssuche Form -> Grundform im Grammatikmodus)
     api.spanishForms = (infinitive) => {
         const bare = String(infinitive || '').toLowerCase().trim().replace(/(ar|er|ir|ír)se$/, m => m.slice(0, -2));
