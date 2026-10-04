@@ -1,5 +1,5 @@
 // Grammatik-Hilfe für den Grammatik-Modus: Erklärungen je Kategorie und Konjugationstabellen
-// (Italienisch und Englisch). Läuft im Browser (window.GrammarHelp) und in Node (für Tests).
+// (Italienisch, Englisch und Spanisch). Läuft im Browser (window.GrammarHelp) und in Node (für Tests).
 (function (root) {
     'use strict';
 
@@ -124,6 +124,80 @@
                 rule: 'If I were you … / I suggest that he see a doctor.',
                 example: 'I wish I were on holiday. – Ich wünschte, ich wäre im Urlaub.'
             }
+        },
+        es: {
+            'Presente': {
+                title: 'Presente (Gegenwart)',
+                text: 'Für Handlungen, die jetzt oder regelmäßig passieren, und für feste Pläne in naher Zukunft. Viele häufige Verben haben einen Stammwechsel (pensar → pienso, poder → puedo, pedir → pido), der bei nosotros und vosotros ausbleibt.',
+                rule: '-ar: -o, -as, -a, -amos, -áis, -an – -er: -o, -es, -e, -emos, -éis, -en – -ir: -o, -es, -e, -imos, -ís, -en',
+                example: 'Todas las mañanas bebo un café. – Jeden Morgen trinke ich einen Kaffee.'
+            },
+            'Pretérito Perfecto': {
+                title: 'Pretérito perfecto (Perfekt)',
+                text: 'Für Handlungen, die in einem Zeitraum liegen, der bis jetzt reicht (hoy, esta semana, este año, ya, todavía no), und für Erfahrungen. In Spanien wird es sehr häufig benutzt. Das Partizip bleibt nach „haber“ immer gleich (-ado, -ido).',
+                rule: 'haber (he, has, ha, hemos, habéis, han) + Partizip (hablado, comido, vivido) – unregelmäßig: hecho, dicho, visto, puesto, escrito, abierto',
+                example: 'Hoy he comido paella. – Heute habe ich Paella gegessen.'
+            },
+            'Pretérito Indefinido': {
+                title: 'Pretérito indefinido (abgeschlossene Vergangenheit)',
+                text: 'Für abgeschlossene Handlungen in einem Zeitraum, der vorbei ist (ayer, el año pasado, en 2010, hace dos días). Viele häufige Verben sind unregelmäßig (ser/ir → fui, tener → tuve, hacer → hice).',
+                rule: '-ar: -é, -aste, -ó, -amos, -asteis, -aron – -er/-ir: -í, -iste, -ió, -imos, -isteis, -ieron',
+                example: 'Ayer visité a mis abuelos. – Gestern habe ich meine Großeltern besucht.'
+            },
+            'Pretérito Imperfecto': {
+                title: 'Pretérito imperfecto (Vergangenheit, Hintergrund)',
+                text: 'Für Gewohnheiten, Beschreibungen und Zustände in der Vergangenheit sowie für Handlungen, die gerade im Gange waren. Nur drei Verben sind unregelmäßig: ser (era), ir (iba), ver (veía).',
+                rule: '-ar: -aba, -abas, -aba, -ábamos, -abais, -aban – -er/-ir: -ía, -ías, -ía, -íamos, -íais, -ían',
+                example: 'De niño jugaba siempre en el jardín. – Als Kind spielte ich immer im Garten.'
+            },
+            'Gerundio': {
+                title: 'Gerundio (Verlaufsform)',
+                text: 'Mit „estar“ beschreibt es, was gerade passiert („ich bin gerade dabei …“). Allein steht es für gleichzeitige Handlungen („indem, während“). Pronomen hängen hinten an (estoy lavándome / me estoy lavando).',
+                rule: 'estar + Stamm + -ando (-ar) / -iendo (-er, -ir) – leer → leyendo, dormir → durmiendo, decir → diciendo',
+                example: 'Estoy leyendo un libro. – Ich lese gerade ein Buch.'
+            },
+            'Imperativo': {
+                title: 'Imperativo (Befehlsform)',
+                text: 'Für Aufforderungen, Bitten und Ratschläge. Bejaht hat „tú“ die Form der 3. Person Singular, „vosotros“ endet auf -d. Verneint (und bei usted/ustedes/nosotros) benutzt man den Subjuntivo. Pronomen hängen bei bejahten Befehlen hinten an (dime, siéntate).',
+                rule: 'tú: habla / come / escribe – usted: hable / coma – vosotros: hablad / comed – verneint: no hables / no comas',
+                example: 'Cierra la ventana, por favor. No hables tan alto. – Schließ bitte das Fenster. Sprich nicht so laut.'
+            },
+            'Subjuntivo': {
+                title: 'Subjuntivo (Möglichkeitsform)',
+                text: 'Steht in Nebensätzen nach Wunsch, Zweifel, Gefühl, Befehl oder Notwendigkeit (quiero que, espero que, es posible que, dudo que, para que, cuando + Zukunft). Der Stamm kommt von der yo-Form des Presente.',
+                rule: '-ar: -e, -es, -e, -emos, -éis, -en – -er/-ir: -a, -as, -a, -amos, -áis, -an (tengo → tenga)',
+                example: 'Quiero que vengas a mi fiesta. – Ich möchte, dass du auf meine Party kommst.'
+            },
+            'Futuro': {
+                title: 'Futuro simple (Zukunft)',
+                text: 'Für Handlungen in der Zukunft, aber auch für Vermutungen in der Gegenwart („estará cansado“ – er ist wohl müde). Im Alltag steht oft „ir a + Infinitiv“ (voy a viajar).',
+                rule: 'Infinitiv + -é, -ás, -á, -emos, -éis, -án – Stammwechsel bei tener (tendré), hacer (haré), poder (podré), decir (diré)',
+                example: 'El año que viene viajaré a España. – Nächstes Jahr werde ich nach Spanien reisen.'
+            },
+            'Condicional': {
+                title: 'Condicional simple (Wunsch, höfliche Bitte)',
+                text: 'Für höfliche Bitten, Wünsche, Ratschläge und mögliche (nicht sichere) Handlungen. Der Stamm ist wie beim Futur, dazu kommen die Endungen von haber im Imperfecto.',
+                rule: 'Infinitiv + -ía, -ías, -ía, -íamos, -íais, -ían',
+                example: '¿Podrías ayudarme? Me gustaría un café. – Könntest du mir helfen? Ich hätte gern einen Kaffee.'
+            },
+            'Gemischt': {
+                title: 'Indefinido und Imperfecto gemischt',
+                text: 'Das Imperfecto beschreibt den Hintergrund oder eine laufende Handlung, das Indefinido die neue, abgeschlossene Handlung, die dazwischenkommt.',
+                rule: 'Hintergrund: Imperfecto – Ereignis: Indefinido',
+                example: 'Mientras leía, sonó el teléfono. – Während ich las, klingelte das Telefon.'
+            },
+            'Ser y Estar': {
+                title: 'Ser und estar',
+                text: '„Ser“ für Identität, Herkunft, Beruf, Eigenschaften und Zeit; „estar“ für Ort, Zustände, Befinden und die Verlaufsform (estar + Gerundio).',
+                rule: 'ser: soy, eres, es, somos, sois, son – estar: estoy, estás, está, estamos, estáis, están',
+                example: 'Soy alemán, pero estoy en Madrid. – Ich bin Deutscher, aber ich bin in Madrid.'
+            },
+            'Por y Para': {
+                title: 'Por und para',
+                text: '„Para“ nennt Ziel, Zweck, Empfänger und Frist; „por“ nennt Grund, Ursache, Weg, Dauer und Tausch.',
+                rule: 'para + Ziel/Zweck/Frist – por + Grund/Weg/Dauer/Preis',
+                example: 'Este regalo es para ti. Gracias por tu ayuda. – Dieses Geschenk ist für dich. Danke für deine Hilfe.'
+            }
         }
     };
 
@@ -132,8 +206,28 @@
         it: { 'Presente': 'presente', 'Passato Prossimo': 'passato', 'Imperfetto': 'imperfetto', 'Gerundio': 'gerundio',
             'Gemischt': 'passato', 'Imperativo': 'imperativo', 'Congiuntivo': 'congiuntivo', 'Futuro Semplice': 'futuro', 'Condizionale': 'condizionale' },
         en: { 'Simple Present': 'present', 'Present Continuous': 'continuous', 'Simple Past': 'past', 'Present Perfect': 'perfect',
-            'Imperativ': 'present', 'Conditional': 'conditional', 'Future': 'future', 'Subjunctive': 'past' }
+            'Imperativ': 'present', 'Conditional': 'conditional', 'Future': 'future', 'Subjunctive': 'past' },
+        es: { 'Presente': 'presente', 'Pretérito Perfecto': 'perfecto', 'Pretérito Indefinido': 'indefinido', 'Pretérito Imperfecto': 'imperfecto',
+            'Gerundio': 'gerundio', 'Imperativo': 'imperativo', 'Subjuntivo': 'subjuntivo', 'Futuro': 'futuro', 'Condicional': 'condicional', 'Gemischt': 'indefinido' }
     };
+
+    // Kategorienamen aus Excel-Listen können abweichen (z. B. „Perfecto“, „Indefinido“, „Pretérito perfecto compuesto“): auf unsere Namen abbilden
+    const ES_CATEGORY_ALIASES = {
+        'presente': 'Presente', 'presente de indicativo': 'Presente',
+        'perfecto': 'Pretérito Perfecto', 'preterito perfecto': 'Pretérito Perfecto', 'preterito perfecto compuesto': 'Pretérito Perfecto', 'pretérito perfecto': 'Pretérito Perfecto',
+        'indefinido': 'Pretérito Indefinido', 'preterito indefinido': 'Pretérito Indefinido', 'preterito perfecto simple': 'Pretérito Indefinido', 'pasado simple': 'Pretérito Indefinido',
+        'imperfecto': 'Pretérito Imperfecto', 'preterito imperfecto': 'Pretérito Imperfecto',
+        'gerundio': 'Gerundio', 'imperativo': 'Imperativo', 'subjuntivo': 'Subjuntivo', 'subjuntivo presente': 'Subjuntivo',
+        'futuro': 'Futuro', 'futuro simple': 'Futuro', 'condicional': 'Condicional', 'condicional simple': 'Condicional',
+        'gemischt': 'Gemischt', 'ser y estar': 'Ser y Estar', 'por y para': 'Por y Para'
+    };
+    const stripAccents = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    function canonicalCategory(category, lang) {
+        const c = String(category || '').trim();
+        if (lang !== 'es') return c;
+        const key = c.toLowerCase();
+        return ES_CATEGORY_ALIASES[key] || ES_CATEGORY_ALIASES[stripAccents(key)] || c;
+    }
 
     function splitCategories(category) {
         return String(category || '').split('+').map(c => c.trim()).filter(Boolean);
@@ -141,12 +235,12 @@
 
     function getExplanations(category, lang) {
         const table = EXPLANATIONS[lang] || {};
-        return splitCategories(category).map(c => table[c]).filter(Boolean);
+        return splitCategories(category).map(c => table[canonicalCategory(c, lang)]).filter(Boolean);
     }
 
     function preferredTense(category, lang) {
         const map = CATEGORY_TENSE[lang] || {};
-        for (const c of splitCategories(category)) if (map[c]) return map[c];
+        for (const c of splitCategories(category)) { const name = canonicalCategory(c, lang); if (map[name]) return map[name]; }
         return null;
     }
 
@@ -273,7 +367,7 @@
     }
 
     // Von der KI geprüfte Formen (vom Server geladen); ersetzen die Regelrechnung, solange vorhanden
-    const verified = { it: {}, en: {} };
+    const verified = { it: {}, en: {}, es: {} };
     const isForm6 = (a) => Array.isArray(a) && a.length === 6 && a.every(x => typeof x === 'string' && x);
 
     function conjugateItalian(word, options) {
@@ -517,6 +611,528 @@
     }
 
     // ---------------------------------------------------------------------------------------
+    // Spanisch (Spanien, Anrede „vosotros“)
+    // ---------------------------------------------------------------------------------------
+    const ES_PERSONS = ['yo', 'tú', 'él/ella/usted', 'nosotros', 'vosotros', 'ellos/ustedes'];
+    const ES_REFL = ['me', 'te', 'se', 'nos', 'os', 'se'];
+    const HABER_PRES = ['he', 'has', 'ha', 'hemos', 'habéis', 'han'];
+    const ESTAR_PRES = ['estoy', 'estás', 'está', 'estamos', 'estáis', 'están'];
+
+    // Stammwechsel: ie (e>ie), ue (o>ue), jue (u>ue), ie-i / ue-u (-ir: im Indefinido, Gerundio und bei nosotros/vosotros im Subjuntivo i bzw. u),
+    // i (e>i), adq (i>ie)
+    const ES_STEM_TYPES = {
+        ie: 'pensar empezar comenzar cerrar despertar sentar recomendar negar nevar acertar apretar atravesar calentar confesar regar temblar tropezar merendar gobernar manifestar fregar plegar segar cegar quebrar helar arrendar enterrar encerrar sembrar remendar sosegar descender ascender atender desatender entender perder querer defender encender tender extender pretender contender verter discernir cernir',
+        ue: 'contar encontrar recordar costar mostrar demostrar probar soñar volar almorzar acostar colgar rogar sonar aprobar comprobar forzar esforzar poblar renovar tostar volcar apostar consolar rodar soltar trocar mover volver poder doler soler llover morder torcer resolver devolver envolver revolver absolver disolver conmover promover remover desenvolver',
+        jue: 'jugar',
+        'ie-i': 'sentir mentir preferir divertir sugerir convertir herir hervir advertir referir consentir invertir requerir arrepentir diferir transferir inferir conferir digerir ingerir pervertir presentir resentir desmentir disentir subvertir controvertir proferir',
+        'ue-u': 'dormir morir adormir',
+        i: 'pedir servir repetir seguir vestir elegir medir competir corregir despedir impedir rendir gemir derretir teñir reñir concebir ceñir colegir embestir expedir regir proseguir conseguir perseguir desvestir revestir investir reelegir estreñir desteñir constreñir henchir',
+        adq: 'adquirir inquirir'
+    };
+    const ES_STEM = {};
+    Object.keys(ES_STEM_TYPES).forEach(type => ES_STEM_TYPES[type].split(' ').forEach(v => { ES_STEM[v] = type; }));
+    // Vorsilben, mit denen die häufigsten Verben des Stammwechsels vorkommen (rehacer, mantener, …)
+    const ES_PREFIXES = new Set(['a', 'ab', 'abs', 'ante', 'com', 'con', 'contra', 'de', 'des', 'dis', 'en', 'entre', 'ex', 'im', 'in', 'inter', 'man', 'ob', 'per', 'pos', 'pre', 'pro', 're', 'sobre', 'sos', 'su', 'sub', 'subs', 'sus', 'trans', 'tras', 'super', 'equi', 'yuxta', 'o', 'descom', 'predis', 'indis', 'presu', 'rea']);
+    const ES_STEM_PREFIXABLE = ['tender', 'sentir', 'mentir', 'pedir', 'seguir', 'servir', 'vestir', 'mover', 'volver', 'contar', 'mostrar', 'probar', 'pensar', 'cerrar', 'sonar', 'costar'];
+
+    const ES_IAR_ACCENT = new Set('enviar guiar variar esquiar confiar fiar criar ampliar vaciar enfriar resfriar liar desafiar fotografiar contrariar espiar expiar rociar ansiar chirriar aliar desvariar telegrafiar cariar agriar arriar averiar extraviar inventariar porfiar amnistiar autografiar biografiar historiar radiografiar'.split(' '));
+    const ES_UAR_ACCENT = new Set('actuar continuar graduar evaluar efectuar situar valuar insinuar acentuar habituar puntuar perpetuar extenuar atenuar devaluar fluctuar exceptuar conceptuar individuar redituar tatuar'.split(' '));
+    // cocer/mecer: nur z (cuezo, mezo), nicht zc
+    const ES_Z_ONLY = new Set(['cocer', 'recocer', 'escocer', 'mecer', 'remecer']);
+
+    const sp6 = s => s.split(' ');
+
+    // Unregelmäßige Verben. Felder: pres (6 Formen), yo (nur 1. Person; Subjuntivo geht von diesem Stamm aus), stemchg, ind (6) oder
+    // indStem (+ indJ: Endung -eron), impf (6), fut (Stamm), subj (6), impTu, impNos, ger, part, noImp
+    const ES_IRREGULAR = {
+        ser: { pres: sp6('soy eres es somos sois son'), ind: sp6('fui fuiste fue fuimos fuisteis fueron'), impf: sp6('era eras era éramos erais eran'), fut: 'ser', subj: sp6('sea seas sea seamos seáis sean'), impTu: 'sé', ger: 'siendo', part: 'sido' },
+        estar: { pres: sp6('estoy estás está estamos estáis están'), indStem: 'estuv', subj: sp6('esté estés esté estemos estéis estén'), impTu: 'está' },
+        ir: { pres: sp6('voy vas va vamos vais van'), ind: sp6('fui fuiste fue fuimos fuisteis fueron'), impf: sp6('iba ibas iba íbamos ibais iban'), fut: 'ir', subj: sp6('vaya vayas vaya vayamos vayáis vayan'), impTu: 've', impNos: 'vamos', ger: 'yendo', part: 'ido' },
+        haber: { pres: sp6('he has ha hemos habéis han'), indStem: 'hub', fut: 'habr', subj: sp6('haya hayas haya hayamos hayáis hayan'), noImp: true },
+        dar: { pres: sp6('doy das da damos dais dan'), ind: sp6('di diste dio dimos disteis dieron'), subj: sp6('dé des dé demos deis den'), impTu: 'da' },
+        ver: { pres: sp6('veo ves ve vemos veis ven'), ind: sp6('vi viste vio vimos visteis vieron'), impf: sp6('veía veías veía veíamos veíais veían'), subj: sp6('vea veas vea veamos veáis vean'), impTu: 've', ger: 'viendo', part: 'visto' },
+        prever: { pres: sp6('preveo prevés prevé prevemos prevéis prevén'), ind: sp6('preví previste previó previmos previsteis previeron'), impf: sp6('preveía preveías preveía preveíamos preveíais preveían'), subj: sp6('prevea preveas prevea preveamos preveáis prevean'), impTu: 'prevé', ger: 'previendo', part: 'previsto' },
+        saber: { pres: sp6('sé sabes sabe sabemos sabéis saben'), indStem: 'sup', fut: 'sabr', subj: sp6('sepa sepas sepa sepamos sepáis sepan') },
+        caber: { yo: 'quepo', indStem: 'cup', fut: 'cabr' },
+        poder: { stemchg: 'ue', indStem: 'pud', fut: 'podr', ger: 'pudiendo' },
+        querer: { stemchg: 'ie', indStem: 'quis', fut: 'querr' },
+        hacer: { yo: 'hago', ind: sp6('hice hiciste hizo hicimos hicisteis hicieron'), fut: 'har', impTu: 'haz', part: 'hecho' },
+        decir: { pres: sp6('digo dices dice decimos decís dicen'), ind: sp6('dije dijiste dijo dijimos dijisteis dijeron'), fut: 'dir', subj: sp6('diga digas diga digamos digáis digan'), impTu: 'di', ger: 'diciendo', part: 'dicho' },
+        poner: { yo: 'pongo', indStem: 'pus', fut: 'pondr', impTu: 'pon', impTuPx: 'pón', part: 'puesto' },
+        tener: { yo: 'tengo', stemchg: 'ie', indStem: 'tuv', fut: 'tendr', impTu: 'ten', impTuPx: 'tén' },
+        venir: { yo: 'vengo', stemchg: 'ie', ind: sp6('vine viniste vino vinimos vinisteis vinieron'), fut: 'vendr', impTu: 'ven', impTuPx: 'vén', ger: 'viniendo' },
+        salir: { yo: 'salgo', fut: 'saldr', impTu: 'sal' },
+        valer: { yo: 'valgo', fut: 'valdr' },
+        traer: { yo: 'traigo', ind: sp6('traje trajiste trajo trajimos trajisteis trajeron') },
+        caer: { yo: 'caigo' },
+        oir: { yo: 'oigo', pres: sp6('oigo oyes oye oímos oís oyen') },
+        reir: { pres: sp6('río ríes ríe reímos reís ríen'), ind: sp6('reí reíste rio reímos reísteis rieron'), ind3Px: 'rió', subj: sp6('ría rías ría riamos riáis rían'), ger: 'riendo', part: 'reído' },
+        andar: { indStem: 'anduv' },
+        errar: { pres: sp6('yerro yerras yerra erramos erráis yerran'), subj: sp6('yerre yerres yerre erremos erréis yerren') },
+        oler: { pres: sp6('huelo hueles huele olemos oléis huelen'), subj: sp6('huela huelas huela olamos oláis huelan') }
+    };
+    // Verben, die ihre Formen von einem Grundverb mit Vorsilbe ableiten (mantener, componer, atraer, deshacer, sonreír …)
+    const ES_PREFIXABLE = ['tener', 'venir', 'poner', 'hacer', 'decir', 'traer', 'caer', 'valer', 'salir', 'reir', 'oir'];
+    const esPrefixed = (rec, px) => {
+        const out = {};
+        Object.keys(rec).forEach(k => {
+            const v = rec[k];
+            if (k === 'stemchg' || k === 'noImp') out[k] = v;
+            else if (Array.isArray(v)) out[k] = v.map(x => px + x);
+            else if (typeof v === 'string') out[k] = px + v;
+            else out[k] = v;
+        });
+        return out;
+    };
+    // bendecir/maldecir: wie decir, aber regelmäßiges Futur, Partizip und Imperativ
+    ES_IRREGULAR.bendecir = { ...esPrefixed(ES_IRREGULAR.decir, 'ben'), fut: 'bendecir', part: 'bendecido', impTu: 'bendice' };
+    ES_IRREGULAR.maldecir = { ...esPrefixed(ES_IRREGULAR.decir, 'mal'), fut: 'maldecir', part: 'maldecido', impTu: 'maldice' };
+    ES_IRREGULAR.freir = { ...esPrefixed(ES_IRREGULAR.reir, 'f'), part: 'frito' };
+    // satisfacer: wie hacer mit f statt h
+    ES_IRREGULAR.satisfacer = (() => {
+        const rec = {};
+        Object.keys(ES_IRREGULAR.hacer).forEach(k => {
+            const v = ES_IRREGULAR.hacer[k];
+            const f = s => 'satisf' + s.slice(1);
+            rec[k] = Array.isArray(v) ? v.map(f) : (typeof v === 'string' && k !== 'stemchg' ? f(v) : v);
+        });
+        rec.impTu = 'satisface';
+        return rec;
+    })();
+    ES_IRREGULAR.desandar = esPrefixed(ES_IRREGULAR.andar, 'des');
+    ES_IRREGULAR.desoir = esPrefixed(ES_IRREGULAR.oir, 'des');
+
+    // Unregelmäßige Partizipien nach Endung: [Endung, Ersatz]
+    const ES_PART_SUFFIX = [['scribir', 'scrito'], ['cubrir', 'cubierto'], ['abrir', 'abierto'], ['volver', 'vuelto'], ['solver', 'suelto'],
+        ['romper', 'roto'], ['morir', 'muerto'], ['imprimir', 'impreso'], ['proveer', 'provisto']];
+
+    // Welche Vorsilben bei welchem Grundverb vorkommen (verhindert falsche Treffer wie „mandar“ bei andar)
+    const ES_COMPOUND_OK = (base, px) => {
+        if (base === 'oir') return ['des', 'entre'].includes(px);
+        if (base === 'reir') return px === 'son';
+        if (base === 'caer') return ['de', 're', 'des', 'sobre'].includes(px);
+        if (base === 'valer') return ['equi', 'pre', 'sobre'].includes(px);
+        if (base === 'salir') return px === 'sobre';
+        return ES_PREFIXES.has(px);
+    };
+
+    function findSpanishIrregular(infN) {
+        if (ES_IRREGULAR[infN]) return { prefix: '', data: ES_IRREGULAR[infN] };
+        if (infN.endsWith('ducir') && infN.length > 5) return { prefix: '', data: { indStem: infN.slice(0, -3) + 'j', indJ: true } }; // conducir, traducir …
+        for (const base of ES_PREFIXABLE) {
+            if (infN.length > base.length && infN.endsWith(base)) {
+                const px = infN.slice(0, -base.length);
+                if (px.length <= 8 && ES_COMPOUND_OK(base, px)) {
+                    const rec = esPrefixed(ES_IRREGULAR[base], px);
+                    if (ES_IRREGULAR[base].impTuPx) rec.impTu = px + ES_IRREGULAR[base].impTuPx;
+                    if (base === 'decir') delete rec.impTu; // predice, contradice (nur decir selbst hat di)
+                    if (ES_IRREGULAR[base].ind3Px) rec.ind3Px = px + ES_IRREGULAR[base].ind3Px;
+                    return { prefix: px, data: rec };
+                }
+            }
+        }
+        return null;
+    }
+
+    function esStemType(infN) {
+        if (ES_STEM[infN]) return ES_STEM[infN];
+        for (const base of ES_STEM_PREFIXABLE) {
+            if (infN.length > base.length && infN.endsWith(base) && ES_PREFIXES.has(infN.slice(0, -base.length)) && ES_STEM[base]) return ES_STEM[base];
+        }
+        return null;
+    }
+
+    function esChangeStem(stem, type) {
+        const rep = (ch, to) => { const i = stem.lastIndexOf(ch); return i < 0 ? stem : stem.slice(0, i) + to + stem.slice(i + 1); };
+        switch (type) {
+            case 'ie': case 'ie-i': return rep('e', 'ie');
+            case 'ue': case 'ue-u': return rep('o', 'ue');
+            case 'jue': return rep('u', 'ue');
+            case 'i': return rep('e', 'i');
+            case 'adq': return rep('i', 'ie');
+            default: return stem;
+        }
+    }
+    // Schwache Variante bei -ir-Verben (Indefinido 3. Person, Gerundio, Subjuntivo nosotros/vosotros)
+    function esWeakStem(stem, type) {
+        const rep = (ch, to) => { const i = stem.lastIndexOf(ch); return i < 0 ? stem : stem.slice(0, i) + to + stem.slice(i + 1); };
+        if (type === 'ie-i' || type === 'i') return rep('e', 'i');
+        if (type === 'ue-u') return rep('o', 'u');
+        return stem;
+    }
+
+    // Rechtschreibregeln beim Anfügen der Endung (sacar → saqué, pagar → pagué, empezar → empecé, vencer → venzo,
+    // conocer → conozca, escoger → escojo, seguir → sigo, averiguar → averigüé)
+    function esFix(infN, stem, ending) {
+        if (infN.endsWith('ar') && /^[eé]/.test(ending)) {
+            if (/car$/.test(infN) && stem.endsWith('c')) return stem.slice(0, -1) + 'qu' + ending;
+            if (/gar$/.test(infN) && stem.endsWith('g')) return stem + 'u' + ending;
+            if (/zar$/.test(infN) && stem.endsWith('z')) return stem.slice(0, -1) + 'c' + ending;
+            if (/guar$/.test(infN) && stem.endsWith('gu')) return stem.slice(0, -2) + 'gü' + ending;
+        }
+        if (!infN.endsWith('ar') && /^[oaá]/.test(ending)) {
+            if (/c[ei]r$/.test(infN) && stem.endsWith('c')) {
+                const prev = stem.length > 1 ? stem[stem.length - 2] : '';
+                const vowelBefore = /[aeiouáéíóú]/.test(prev);
+                if (vowelBefore && !ES_Z_ONLY.has(infN)) return stem.slice(0, -1) + 'zc' + ending;
+                return stem.slice(0, -1) + 'z' + ending;
+            }
+            if (/g[ei]r$/.test(infN) && stem.endsWith('g')) return stem.slice(0, -1) + 'j' + ending;
+            if (/guir$/.test(infN) && stem.endsWith('gu')) return stem.slice(0, -1) + ending;
+            if (/quir$/.test(infN) && stem.endsWith('qu')) return stem.slice(0, -2) + 'c' + ending;
+        }
+        return stem + ending;
+    }
+
+    const ES_ACUTE = { a: 'á', e: 'é', i: 'í', o: 'ó', u: 'ú' };
+
+    // Silbenkerne (für Betonung und Akzent beim Anhängen von Pronomen): Diphthonge (schwach+stark, schwach+schwach) zählen als einer
+    function esNuclei(word) {
+        const w = word.replace(/qu(?=[eéií])/g, 'q_').replace(/gu(?=[eéií])/g, 'g_');
+        const out = [];
+        let i = 0;
+        const isVowel = ch => /[aeiouáéíóúü]/.test(ch || '');
+        const isWeak = ch => /[iuü]/.test(ch || '');
+        while (i < w.length) {
+            if (!isVowel(w[i])) { i++; continue; }
+            let j = i + 1;
+            while (j < w.length && isVowel(w[j]) && (isWeak(w[j]) || isWeak(w[j - 1])) && !/[íú]/.test(w[j]) && !/[íú]/.test(w[j - 1])) j++;
+            out.push({ start: i, end: j });
+            i = j;
+        }
+        return out;
+    }
+    function esStressIndex(word, nuclei) {
+        const marked = nuclei.findIndex(n => /[áéíóú]/.test(word.slice(n.start, n.end)));
+        if (marked >= 0) return marked;
+        if (nuclei.length <= 1) return nuclei.length - 1;
+        return /[aeiouns]$/.test(word) ? nuclei.length - 2 : nuclei.length - 1;
+    }
+    // Hängt ein Pronomen an (lava + te = lávate, lavando + se = lavándose, pon + te = ponte)
+    function esEnclitic(form, suffix) {
+        const nuclei = esNuclei(form);
+        const stress = esStressIndex(form, nuclei);
+        const word = form + suffix;
+        if (/[áéíóú]/.test(form)) return word; // Betonung ist schon markiert
+        const nn = esNuclei(word);
+        if (stress < 0 || stress >= nn.length) return word;
+        const natural = nn.length <= 1 ? 0 : (/[aeiouns]$/.test(word) ? nn.length - 2 : nn.length - 1);
+        if (stress === natural) return word;
+        const n = nn[stress];
+        const seg = word.slice(n.start, n.end);
+        let k = seg.search(/[aeo]/);
+        if (k < 0) k = seg.length === 2 ? 1 : 0; // iu / ui: der zweite Vokal
+        const pos = n.start + k;
+        const ch = word[pos];
+        return word.slice(0, pos) + (ES_ACUTE[ch] || ch) + word.slice(pos + 1);
+    }
+
+    // Normalisiert Eingaben wie „lavarse“, „Comer“ oder „oír“
+    function parseSpanishInfinitive(word) {
+        let inf = String(word || '').toLowerCase().trim();
+        let reflexive = false;
+        if (/(ar|er|ir|ír)se$/.test(inf)) { reflexive = true; inf = inf.slice(0, -2); }
+        if (!/^[a-záéíóúüñ]+$/.test(inf)) return null;
+        const infN = inf.replace(/ír$/, 'ir');
+        if (!/(ar|er|ir)$/.test(infN) || infN.length < (infN === 'ir' ? 2 : 3)) return null;
+        return { inf: infN, reflexive };
+    }
+
+    const isForm5 = (o, keys) => !!o && keys.every(k => typeof o[k] === 'string' && o[k]);
+
+    function conjugateSpanish(word, options) {
+        const parsed = parseSpanishInfinitive(word);
+        if (!parsed) return null;
+        const { inf: infN, reflexive } = parsed;
+        const end = infN.slice(-2);
+        const stem = infN.slice(0, -2);
+        const ar = end === 'ar', er = end === 'er';
+        const irr = findSpanishIrregular(infN);
+        const d = irr ? irr.data : {};
+        const pre = arr => arr; // Datensätze von Verben mit Vorsilbe sind schon vollständig (esPrefixed)
+        const type = d.stemchg || esStemType(infN);
+        const weakType = end === 'ir' && (type === 'ie-i' || type === 'ue-u' || type === 'i');
+        const isUir = /[^gq]uir$/.test(infN);
+        const strongStem = !ar && /[aeo]$/.test(stem);
+        const accentIar = (ar && ES_IAR_ACCENT.has(infN) && stem.endsWith('i')) || (ar && ES_UAR_ACCENT.has(infN) && stem.endsWith('u'));
+        const fix = (s, e) => esFix(infN, s, e);
+        const acc = s => s.slice(0, -1) + (ES_ACUTE[s.slice(-1)] || s.slice(-1));
+        const strongPerson = i => i === 0 || i === 1 || i === 2 || i === 5;
+
+        // --- Presente ---
+        const presEnd = ar ? ['o', 'as', 'a', 'amos', 'áis', 'an'] : er ? ['o', 'es', 'e', 'emos', 'éis', 'en'] : ['o', 'es', 'e', 'imos', 'ís', 'en'];
+        const presStem = i => {
+            if (!strongPerson(i)) return stem;
+            let s = type ? esChangeStem(stem, type) : stem;
+            if (isUir) s = stem + 'y';
+            if (accentIar) s = acc(stem);
+            return s;
+        };
+        let pres;
+        if (d.pres) pres = pre(d.pres);
+        else {
+            pres = presEnd.map((e, i) => fix(presStem(i), e));
+            if (d.yo) pres[0] = d.yo;
+        }
+
+        // --- Indefinido ---
+        let ind;
+        if (d.ind) {
+            ind = pre(d.ind);
+            if (irr && irr.prefix && d.ind3Px) ind[2] = d.ind3Px;
+        } else if (d.indStem) {
+            const e = d.indJ ? ['e', 'iste', 'o', 'imos', 'isteis', 'eron'] : ['e', 'iste', 'o', 'imos', 'isteis', 'ieron'];
+            ind = e.map(x => d.indStem + x);
+        } else {
+            let e = ar ? ['é', 'aste', 'ó', 'amos', 'asteis', 'aron'] : ['í', 'iste', 'ió', 'imos', 'isteis', 'ieron'];
+            if (!ar) {
+                if (isUir || strongStem) {
+                    e = e.slice(); e[2] = 'yó'; e[5] = 'yeron';
+                    if (strongStem) { e[1] = 'íste'; e[3] = 'ímos'; e[4] = 'ísteis'; }
+                } else if (/(ñ|ll)$/.test(weakType ? esWeakStem(stem, type) : stem)) {
+                    e = e.slice(); e[2] = 'ó'; e[5] = 'eron';
+                }
+            }
+            ind = e.map((x, i) => fix((i === 2 || i === 5) && weakType ? esWeakStem(stem, type) : stem, x));
+        }
+
+        // --- Imperfecto ---
+        let impf;
+        if (d.impf) impf = pre(d.impf);
+        else impf = (ar ? ['aba', 'abas', 'aba', 'ábamos', 'abais', 'aban'] : ['ía', 'ías', 'ía', 'íamos', 'íais', 'ían']).map(e => stem + e);
+
+        // --- Futuro / Condicional ---
+        const futStem = d.fut ? d.fut : infN;
+        let fut = ['é', 'ás', 'á', 'emos', 'éis', 'án'].map(e => futStem + e);
+        let cond = ['ía', 'ías', 'ía', 'íamos', 'íais', 'ían'].map(e => futStem + e);
+
+        // --- Subjuntivo presente ---
+        const subjEnd = ar ? ['e', 'es', 'e', 'emos', 'éis', 'en'] : ['a', 'as', 'a', 'amos', 'áis', 'an'];
+        let subj;
+        if (d.subj) subj = pre(d.subj);
+        else {
+            const yoStem = d.yo && /o$/.test(d.yo) ? d.yo.slice(0, -1) : null;
+            subj = subjEnd.map((e, i) => {
+                if (yoStem) return yoStem + e;
+                let s = stem;
+                if (isUir) s = stem + 'y';
+                else if (strongPerson(i)) { if (type) s = esChangeStem(stem, type); if (accentIar) s = acc(stem); }
+                else if (weakType) s = esWeakStem(stem, type);
+                return fix(s, e);
+            });
+        }
+
+        // --- Gerundio / Partizip ---
+        const gerStem = weakType ? esWeakStem(stem, type) : stem;
+        let gerundio;
+        if (d.ger) gerundio = d.ger;
+        else if (ar) gerundio = stem + 'ando';
+        else if (isUir || strongStem) gerundio = stem + 'yendo';
+        else if (/(ñ|ll)$/.test(gerStem)) gerundio = gerStem + 'endo';
+        else gerundio = gerStem + 'iendo';
+        let part = null;
+        if (d.part) part = d.part;
+        else {
+            for (const [suf, rep] of ES_PART_SUFFIX) if (infN.endsWith(suf) && !ES_IRREGULAR[infN]) { part = infN.slice(0, -suf.length) + rep; break; }
+            if (!part) part = ar ? stem + 'ado' : stem + (strongStem ? 'ído' : 'ido');
+        }
+
+        // --- Imperativo ---
+        const infDisplay = /(oir|reir)$/.test(infN) ? infN.slice(0, -2) + 'ír' : infN;
+        let imperativo = d.noImp ? null : {
+            tu: d.impTu !== undefined ? d.impTu : pres[2],
+            usted: subj[2],
+            nosotros: d.impNos ? d.impNos : subj[3],
+            vosotros: infDisplay.slice(0, -1) + 'd',
+            ustedes: subj[5]
+        };
+
+        // Geprüfte Formen der KI haben Vorrang vor den Regeln
+        const ver = options && options.ignoreVerified ? null : verified.es[infN];
+        if (ver) {
+            if (isForm6(ver.presente)) pres = ver.presente;
+            if (isForm6(ver.indefinido)) ind = ver.indefinido;
+            if (isForm6(ver.imperfecto)) impf = ver.imperfecto;
+            if (isForm6(ver.futuro)) fut = ver.futuro;
+            if (isForm6(ver.condicional)) cond = ver.condicional;
+            if (isForm6(ver.subjuntivo)) subj = ver.subjuntivo;
+            if (isForm5(ver.imperativo, ['tu', 'usted', 'nosotros', 'vosotros', 'ustedes'])) imperativo = { ...ver.imperativo };
+            if (ver.gerundio) gerundio = ver.gerundio;
+            if (ver.participio) part = ver.participio;
+        }
+        const perfecto = HABER_PRES.map(h => `${h} ${part}`);
+
+        // Reflexive Verben: Pronomen vor die konjugierten Formen, beim Imperativ und Gerundio angehängt
+        const refl = arr => reflexive ? arr.map((f, i) => `${ES_REFL[i]} ${f}`) : arr;
+        let impAff = imperativo, impNeg = null;
+        if (imperativo) {
+            const vosBase = imperativo.vosotros;
+            impNeg = { tu: `no ${subj[1]}`, usted: `no ${subj[2]}`, nosotros: `no ${subj[3]}`, vosotros: `no ${subj[4]}`, ustedes: `no ${subj[5]}` };
+            if (reflexive) {
+                impNeg = { tu: `no te ${subj[1]}`, usted: `no se ${subj[2]}`, nosotros: `no nos ${subj[3]}`, vosotros: `no os ${subj[4]}`, ustedes: `no se ${subj[5]}` };
+                const nos = imperativo.nosotros;
+                const vos = infN === 'ir' ? 'idos' : (/id$/.test(vosBase) ? vosBase.slice(0, -2) + 'íos' : vosBase.slice(0, -1) + 'os');
+                impAff = {
+                    tu: esEnclitic(imperativo.tu, 'te'),
+                    usted: esEnclitic(imperativo.usted, 'se'),
+                    nosotros: esEnclitic(nos.replace(/s$/, ''), 'nos'),
+                    vosotros: vos,
+                    ustedes: esEnclitic(imperativo.ustedes, 'se')
+                };
+            }
+        }
+
+        const display = reflexive ? infDisplay + 'se' : infDisplay;
+        const regularYo = (ar || er || end === 'ir') && pres[0] === stem + 'o';
+        return {
+            lang: 'es',
+            infinitive: display,
+            persons: ES_PERSONS,
+            irregular: !!irr || !!type || isUir || strongStem || accentIar || !regularYo || part !== (ar ? stem + 'ado' : stem + 'ido'),
+            verified: !!ver,
+            gerundio: reflexive ? esEnclitic(gerundio, 'se') : gerundio,
+            participio: part,
+            tenses: [
+                { id: 'presente', name: 'Presente', forms: refl(pres) },
+                { id: 'perfecto', name: 'Pretérito perfecto', forms: refl(perfecto) },
+                { id: 'indefinido', name: 'Pretérito indefinido', forms: refl(ind) },
+                { id: 'imperfecto', name: 'Pretérito imperfecto', forms: refl(impf) },
+                { id: 'futuro', name: 'Futuro simple', forms: refl(fut) },
+                { id: 'condicional', name: 'Condicional simple', forms: refl(cond) },
+                { id: 'subjuntivo', name: 'Subjuntivo presente', forms: refl(subj).map(f => `que ${f}`) },
+                { id: 'gerundio', name: 'Gerundio (estar + …)', forms: ESTAR_PRES.map((s, i) => `${reflexive ? ES_REFL[i] + ' ' : ''}${s} ${gerundio}`) },
+                impAff ? { id: 'imperativo', name: 'Imperativo', forms: [null, impAff.tu, impAff.usted, impAff.nosotros, impAff.vosotros, impAff.ustedes], personsOverride: ['', 'tú', 'usted', 'nosotros', 'vosotros', 'ustedes'] } : null,
+                impNeg ? { id: 'imperativoNeg', name: 'Imperativo negativo', forms: [null, impNeg.tu, impNeg.usted, impNeg.nosotros, impNeg.vosotros, impNeg.ustedes], personsOverride: ['', 'tú', 'usted', 'nosotros', 'vosotros', 'ustedes'] } : null
+            ].filter(Boolean)
+        };
+    }
+
+    // ---------------------------------------------------------------------------------------
+    // Spanisch: Satzanalyse, Artikel, Geschlecht, Antwortvergleich
+    // ---------------------------------------------------------------------------------------
+    const esIndexCache = { key: '', index: null };
+    const ES_HABER_FORMS = new Set(HABER_PRES);
+    const ES_ESTAR_FORMS = new Set([...ESTAR_PRES, 'estaba', 'estabas', 'estábamos', 'estabais', 'estaban', 'estuve', 'estuvo', 'estaré', 'estará', 'estaría']);
+
+    function buildSpanishIndex(infinitives) {
+        const forms = new Map();
+        const add = (form, inf, tense) => {
+            const f = String(form || '').toLowerCase();
+            if (!f || /\s/.test(f)) return;
+            if (!forms.has(f)) forms.set(f, []);
+            forms.get(f).push({ inf, tense });
+        };
+        const all = new Set([...Object.keys(ES_IRREGULAR).filter(k => !['prever', 'desandar', 'desoir', 'bendecir', 'maldecir', 'freir', 'satisfacer'].includes(k)), ...infinitives.map(i => String(i || '').toLowerCase().trim())]);
+        all.forEach(raw => {
+            const parsed = parseSpanishInfinitive(raw);
+            if (!parsed) return;
+            const conj = conjugateSpanish(parsed.inf, { ignoreVerified: true });
+            if (!conj) return;
+            conj.tenses.forEach(t => {
+                if (['presente', 'indefinido', 'imperfecto', 'futuro', 'condicional', 'subjuntivo'].includes(t.id)) {
+                    t.forms.forEach(f => add(String(f || '').replace(/^que /, ''), parsed.inf, t.id));
+                }
+            });
+            const part = String(conj.participio || '').toLowerCase();
+            if (part) { add(part, parsed.inf, 'participio'); if (/o$/.test(part)) ['a', 'os', 'as'].forEach(e => add(part.slice(0, -1) + e, parsed.inf, 'participio')); }
+            if (conj.gerundio) add(conj.gerundio.replace(/se$/, ''), parsed.inf, 'gerundio');
+        });
+        return forms;
+    }
+
+    function analyzeSpanish(sentence, infinitives) {
+        const key = infinitives.length + ':' + infinitives.join('|');
+        if (esIndexCache.key !== key) { esIndexCache.index = buildSpanishIndex(infinitives); esIndexCache.key = key; }
+        const index = esIndexCache.index;
+        const tokens = String(sentence || '').toLowerCase().split(/[^\p{L}]+/u).filter(Boolean);
+        const categories = new Set();
+        const verbs = new Set();
+        let hasPresente = false;
+        tokens.forEach((token, i) => {
+            (index.get(token) || []).forEach(({ inf, tense }) => {
+                if (tense === 'futuro') { categories.add('Futuro'); verbs.add(inf); }
+                else if (tense === 'condicional') { categories.add('Condicional'); verbs.add(inf); }
+                else if (tense === 'imperfecto') { categories.add('Pretérito Imperfecto'); verbs.add(inf); }
+                else if (tense === 'indefinido') { categories.add('Pretérito Indefinido'); verbs.add(inf); }
+                else if (tense === 'subjuntivo') { verbs.add(inf); hasPresente = true; } // gleich lautend mit Presente/Imperativo: nicht als eigene Art melden
+                else if (tense === 'presente') { hasPresente = true; verbs.add(inf); }
+                else if (tense === 'participio' && ES_HABER_FORMS.has(tokens[i - 1])) { categories.add('Pretérito Perfecto'); verbs.add(inf); }
+                else if (tense === 'gerundio') { categories.add('Gerundio'); verbs.add(inf); }
+            });
+        });
+        // Verben, die nicht in den eigenen Vokabeln stehen: nur an eindeutigen Endungen erkennen
+        tokens.forEach((token, i) => {
+            if (index.has(token)) return;
+            if (token.length > 5 && /(aré|eré|iré|arás|erás|irás|ará|erá|irá|aremos|eremos|iremos|aréis|eréis|iréis|arán|erán|irán)$/.test(token)) categories.add('Futuro');
+            else if (token.length > 6 && /(aría|ería|iría|arías|erías|irías|aríamos|eríamos|iríamos|aríais|eríais|iríais|arían|erían|irían)$/.test(token)) categories.add('Condicional');
+            else if (token.length > 5 && /(ábamos|abais|aban|abas|aba)$/.test(token)) categories.add('Pretérito Imperfecto');
+            else if (token.length > 5 && /(ando|iendo|yendo)$/.test(token) && ES_ESTAR_FORMS.has(tokens[i - 1])) categories.add('Gerundio');
+            else if (token.length > 4 && /(ado|ido|to|cho|ídos|ado|ada|idas)$/.test(token) && ES_HABER_FORMS.has(tokens[i - 1])) categories.add('Pretérito Perfecto');
+        });
+        return { categories: [...categories], hasPresente, verbs: [...verbs] };
+    }
+
+    // Feminine Wörter, die im Singular „el/un“ bekommen (betontes a- oder ha- am Anfang): el agua, un águila, aber las aguas
+    const ES_EL_FEM = new Set(['agua', 'águila', 'alma', 'arma', 'aula', 'área', 'hacha', 'hada', 'hambre', 'ala', 'ancla', 'asma', 'alba', 'ave', 'ansia', 'arpa', 'habla', 'haba', 'aya', 'alga', 'ama', 'asa', 'ascua', 'álgebra', 'alza', 'ánima', 'áncora', 'ágora', 'acta', 'arca', 'aria', 'asta', 'aura', 'ara', 'hampa', 'harpa']);
+
+    // Bestimmter oder unbestimmter Artikel zu einem spanischen Substantiv. gender: 'm' | 'f'; options: { plural, indefinite }
+    function esArticle(word, gender, options) {
+        const o = options || {};
+        const g = gender === 'f' ? 'f' : 'm';
+        if (o.plural) return o.indefinite ? (g === 'f' ? 'unas' : 'unos') : (g === 'f' ? 'las' : 'los');
+        const w = String(word || '').toLowerCase().trim().replace(/^(el|la|un|una)\s+/, '');
+        if (g === 'f' && ES_EL_FEM.has(w)) return o.indefinite ? 'un' : 'el';
+        return o.indefinite ? (g === 'f' ? 'una' : 'un') : (g === 'f' ? 'la' : 'el');
+    }
+
+    const ES_M_EXCEPTIONS = new Set(['día', 'mapa', 'planeta', 'sofá', 'idioma', 'problema', 'tema', 'sistema', 'programa', 'clima', 'diploma', 'poema', 'telegrama', 'esquema', 'síntoma', 'fantasma', 'dilema', 'drama', 'pijama', 'lema', 'trauma', 'teorema', 'cometa', 'tranvía', 'camión', 'avión', 'corazón', 'jamón', 'limón', 'balcón', 'salón', 'pie', 'lápiz', 'pez', 'país', 'mes', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'color', 'amor', 'calor', 'dolor', 'valor', 'sabor', 'olor', 'error', 'motor', 'doctor', 'profesor', 'ordenador', 'camarero', 'mar', 'árbol', 'papel', 'hotel', 'ratón', 'reloj', 'jardín', 'tren', 'cuaderno']);
+    const ES_F_EXCEPTIONS = new Set(['mano', 'foto', 'moto', 'radio', 'flor', 'labor', 'razón', 'sazón', 'canción', 'lección', 'noche', 'calle', 'leche', 'nube', 'llave', 'gente', 'muerte', 'suerte', 'carne', 'clase', 'parte', 'fuente', 'torre', 'tarde', 'sal', 'miel', 'piel', 'señal', 'sed', 'cárcel', 'red', 'pared', 'ciudad', 'luz', 'paz', 'voz', 'vez', 'cruz', 'nuez', 'tez', 'nariz', 'raíz', 'mujer', 'imagen', 'hambre', 'sangre', 'fiebre', 'tos', 'crisis', 'tesis', 'base', 'nave', 'madre', 'costumbre', 'agua']);
+
+    // Rät das Geschlecht eines spanischen Substantivs (ohne Artikel) aus Ausnahmen und Endungen.
+    // Ergebnis { gender: 'm' | 'f' | null, plural: boolean }; null = unsicher (dann KI oder manuelle Wahl)
+    function esGuessGender(word) {
+        let w = String(word || '').toLowerCase().trim().replace(/^(el|la|los|las|un|una|unos|unas)\s+/, '');
+        if (!w || /\s/.test(w)) return { gender: null, plural: false };
+        const direct = (x) => {
+            if (ES_M_EXCEPTIONS.has(x)) return 'm';
+            if (ES_F_EXCEPTIONS.has(x)) return 'f';
+            if (/(ción|sión|xión|dad|tad|tud|umbre|itis|ie)$/.test(x)) return 'f';
+            if (/(aje|or|án|ambre)$/.test(x)) return 'm';
+            if (/ista$/.test(x)) return null; // el/la dentista, turista
+            if (/o$/.test(x)) return 'm';
+            if (/a$/.test(x)) return 'f';
+            if (/ón$/.test(x)) return 'm';
+            return null;
+        };
+        const g = direct(w);
+        if (g) return { gender: g, plural: false };
+        // Mehrzahl: -os / -as / -es mit passender Einzahl
+        if (/os$/.test(w)) { const s = w.slice(0, -1); const sg = direct(s); return { gender: sg || 'm', plural: true }; }
+        if (/as$/.test(w)) { const sg = direct(w.slice(0, -1)); return { gender: sg || 'f', plural: true }; }
+        if (/es$/.test(w)) { const sg = direct(w.slice(0, -2)) || direct(w.slice(0, -1)); return { gender: sg, plural: !!sg }; }
+        return { gender: null, plural: false };
+    }
+
+    // Antworten vergleichen (Schreibmodus, Grammatiklücken). Groß-/Kleinschreibung, Satzzeichen (auch ¿ ¡) und
+    // Mehrfach-Leerzeichen sind egal. Beim Spanischen zählen die Akzente (á é í ó ú) nicht, „ñ“ und „ü“ bleiben eigene Buchstaben.
+    const ES_ACCENT_MAP = { 'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u' };
+    function normalizeAnswer(text, lang, options) {
+        let s = String(text == null ? '' : text).normalize('NFC').toLowerCase().replace(/[’‘`´]/g, "'");
+        s = s.replace(/[¿¡?!.,;:"“”«»()\[\]…]/g, ' ').replace(/\s+/g, ' ').trim();
+        if (lang === 'es' && !(options && options.keepAccents)) s = s.replace(/[áéíóú]/g, c => ES_ACCENT_MAP[c]);
+        return s;
+    }
+    // 'exact' (inkl. Akzenttoleranz im Schreibmodus), 'accent' (nur Akzent fehlt oder ist falsch), 'wrong'.
+    // strict = true: Akzente müssen stimmen (Grammatiklücken) – ein reiner Akzentfehler wird als 'accent' gemeldet, nicht als richtig.
+    function compareAnswers(input, expected, lang, strict) {
+        const a = normalizeAnswer(input, lang, { keepAccents: true });
+        const b = normalizeAnswer(expected, lang, { keepAccents: true });
+        if (a === b) return 'exact';
+        if (lang === 'es' && normalizeAnswer(input, 'es') === normalizeAnswer(expected, 'es')) return strict ? 'accent' : 'accent-ok';
+        return 'wrong';
+    }
+
+    // ---------------------------------------------------------------------------------------
     // Satzanalyse: welche Zeitformen kommen im Satz tatsächlich vor? (z. B. Futur „sarà“ in einem Presente-Satz)
     // ---------------------------------------------------------------------------------------
     const itIndexCache = { key: '', index: null };
@@ -591,18 +1207,34 @@
         return { categories, hasPresente: false, verbs: [] };
     }
 
+    // Sprachen ohne eigenen Zweig liefern bewusst nichts (kein stiller Rückfall auf Italienisch)
     function analyzeSentence(sentence, lang, infinitives) {
-        return lang === 'en' ? analyzeEnglish(sentence) : analyzeItalian(sentence, infinitives || []);
+        switch (lang) {
+            case 'en': return analyzeEnglish(sentence);
+            case 'es': return analyzeSpanish(sentence, infinitives || []);
+            case 'it': return analyzeItalian(sentence, infinitives || []);
+            default: return { categories: [], hasPresente: false, verbs: [] };
+        }
     }
 
     function conjugate(word, lang, options) {
-        return lang === 'en' ? conjugateEnglish(word, options) : conjugateItalian(word, options);
+        switch (lang) {
+            case 'en': return conjugateEnglish(word, options);
+            case 'es': return conjugateSpanish(word, options);
+            case 'it': return conjugateItalian(word, options);
+            default: return null;
+        }
     }
 
-    const api = { EXPLANATIONS, getExplanations, preferredTense, splitCategories, conjugate, conjugateItalian, conjugateEnglish };
+    const api = { EXPLANATIONS, getExplanations, preferredTense, splitCategories, canonicalCategory, conjugate, conjugateItalian, conjugateEnglish, conjugateSpanish };
     // Geprüfte Formen setzen/abfragen: map = { infinitive: forms }
-    api.setVerifiedForms = (lang, map) => { verified[lang === 'en' ? 'en' : 'it'] = map || {}; };
-    api.getVerified = (lang, infinitive) => (verified[lang === 'en' ? 'en' : 'it'] || {})[String(infinitive || '').toLowerCase().trim()] || null;
+    const verifiedLang = (lang) => (lang === 'en' || lang === 'es' ? lang : 'it');
+    api.setVerifiedForms = (lang, map) => { verified[verifiedLang(lang)] = map || {}; };
+    api.getVerified = (lang, infinitive) => (verified[verifiedLang(lang)] || {})[String(infinitive || '').toLowerCase().trim()] || null;
+    api.esArticle = esArticle;
+    api.esGuessGender = esGuessGender;
+    api.normalizeAnswer = normalizeAnswer;
+    api.compareAnswers = compareAnswers;
     api.analyzeSentence = analyzeSentence;
     api.isIscVerb = (infinitive) => IT_ISC.has(String(infinitive || '').toLowerCase().trim());
     if (typeof module !== 'undefined' && module.exports) module.exports = api;
