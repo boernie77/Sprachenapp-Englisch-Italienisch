@@ -191,7 +191,9 @@ router.post('/base-vocab/bulk', authenticateToken, requireAdmin, asyncHandler(as
         if (mode !== 'append') {
             await BaseVocabulary.destroy({ where: { language }, transaction });
         }
-        const data = words.map(w => ({ ...w, language }));
+        if (!Array.isArray(words)) { await transaction.rollback(); return res.status(400).json({ error: 'words required' }); }
+        // Nur bekannte Spalten übernehmen (z. B. "Niveau" aus der Excel-Datei hat in BaseVocabulary noch kein Feld und wird ignoriert)
+        const data = words.map(w => ({ de: w.de, it: w.it, typ: w.typ, emoji: w.emoji, grammatica: w.grammatica, language }));
         const created = await BaseVocabulary.bulkCreate(data, { transaction });
         await transaction.commit();
         res.json(created);

@@ -8532,34 +8532,131 @@
         window.addEventListener('resize', positionAccentBar);
         window.addEventListener('scroll', positionAccentBar, true);
 
+        // Custom-Dropdown (Select + Liste + Beschriftung) auf "Alle" zurücksetzen
+        function resetCustomSelectToAll(selId, listId, labelId) {
+            const sel = document.getElementById(selId);
+            if (sel) sel.value = 'Alle';
+            const list = document.getElementById(listId);
+            const label = document.getElementById(labelId);
+            if (!list) return;
+            list.querySelectorAll('.cs-opt').forEach(o => o.classList.remove('selected'));
+            const allOpt = list.querySelector('.cs-opt[data-value="Alle"]');
+            if (allOpt) {
+                allOpt.classList.add('selected');
+                if (label) label.textContent = allOpt.textContent.trim();
+            }
+        }
+
+        // Sprachwechsel: alles zurücksetzen, was an die bisherige Lernsprache gebunden ist
+        // (Daten, aktuelle Runde/Satz, Auswahl-/Filterzustände, Timer, sprachgebundene Popups)
+        function resetLanguageBoundState() {
+            window._langEpoch = (window._langEpoch || 0) + 1;
+            // Daten (werden gleich aus dem Zwischenspeicher der neuen Sprache geladen)
+            fullDictionary = [];
+            allBaseSentences = [];
+            grammarSentences = [];
+            wordStats = {};
+            dailyActivity = {};
+            grammarActivityCount = 0;
+            lastStreakPopupDate = '';
+            verbReverseMap = {};
+            // Runden- und Satzzustand aller Modi
+            currentGrammarSentence = null; grammarAnswers = []; grammarVerbEls = [];
+            currentPairs = []; currentRoundMistakes = new Set(); selectedSourceCard = null; score = 0;
+            if (scoreEl) scoreEl.textContent = '0';
+            currentQuizTarget = null; currentWriteTarget = null;
+            currentFlashcardTarget = null; cardsHistory = []; isFlashcardReversed = false;
+            // Timer
+            if (feedbackTimer) { clearTimeout(feedbackTimer); feedbackTimer = null; }
+            clearTimeout(sentenceSearchTimeout); clearTimeout(wordSentencesTimeout); clearTimeout(wordInfoTimer);
+            if (dragDropFeedback) dragDropFeedback.style.opacity = '0';
+            // Auswahl-/Filterzustände (Kategorien, Niveaus und Wortarten gehören zur alten Sprache)
+            resetCustomSelectToAll('typeFilter', 'typeFilterList', 'typeFilterLabel');
+            resetCustomSelectToAll('grammarFocusFilter', 'grammarFocusFilterList', 'grammarFocusFilterLabel');
+            resetCustomSelectToAll('grammarLevelFilter', 'grammarLevelFilterList', 'grammarLevelFilterLabel');
+            resetCustomSelectToAll('vocabListCatFilter', 'vocabListCatFilterList', 'vocabListCatFilterLabel');
+            resetCustomSelectToAll('sentenceListCatFilter', 'sentenceListCatFilterList', 'sentenceListCatFilterLabel');
+            ['vocabListSearch', 'sentenceListSearch', 'vocabInput', 'vocabTranslation'].forEach(id => { const e = document.getElementById(id); if (e) e.value = ''; });
+            window.sentenceListShowAll = false;
+            if (typeof hideAccentBar === 'function') hideAccentBar();
+            // Eingaben und Rückmeldungen
+            if (typeof writeInput !== 'undefined' && writeInput) writeInput.value = '';
+            if (grammarHelpBox) { grammarHelpBox.classList.add('hidden'); grammarHelpBox.innerHTML = ''; }
+            if (typeof grammarFeedback !== 'undefined') { grammarFeedback.classList.add('hidden'); grammarFeedback.textContent = ''; }
+            if (typeof successText !== 'undefined') successText.classList.add('hidden');
+            const verbSearchInput = document.getElementById('verbSearchInput'); if (verbSearchInput) verbSearchInput.value = '';
+            ['verbSearchResults', 'verbFoundDetails'].forEach(id => { const e = document.getElementById(id); if (e) { e.classList.add('hidden'); e.innerHTML = ''; } });
+            // Popups, die Inhalt der alten Sprache zeigen oder bearbeiten
+            ['conjugationModal', 'exampleSentenceModal', 'streakModal', 'editVocabModal', 'editSentenceModal', 'vocabModal', 'sentenceModal',
+             'wordSentencesModal', 'aiSentenceModal', 'mobileFilterModal'].forEach(id => {
+                const m = document.getElementById(id);
+                if (m) { m.classList.add('hidden'); m.classList.remove('flex'); }
+            });
+            currentEditWordId = null; currentEditSentenceId = null;
+            if (typeof isPaused !== 'undefined') isPaused = false;
+            vocabInputLang = CURRENT_LANG; vocabOutputLang = 'de';
+        }
+
+        // Daten der (neuen) Lernsprache aus dem lokalen Zwischenspeicher laden
+        function loadLanguageCache() {
+            const cachedVocab = localStorage.getItem(`ita-full-dictionary-${CURRENT_LANG}`);
+            fullDictionary = cachedVocab ? safeJSONParse(cachedVocab, []) : [];
+            wordStats = safeJSONParse(localStorage.getItem(`ita-word-stats-${CURRENT_LANG}`), {}) || {};
+            dailyActivity = safeJSONParse(localStorage.getItem(`ita-daily-activity-${CURRENT_LANG}`), {}) || {};
+            grammarActivityCount = parseInt(localStorage.getItem(`ita-grammar-stats-${CURRENT_LANG}`) || '0') || 0;
+            lastStreakPopupDate = localStorage.getItem(`ita-last-streak-popup-date-${CURRENT_LANG}`) || '';
+            loadCachedBaseSentences();
+            if (allBaseSentences && allBaseSentences.length && allBaseSentences.some(s => (s.language || 'it') !== CURRENT_LANG)) allBaseSentences = [];
+            fullDictionary = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG);
+            buildVerbReverseMap();
+            updateAdminGrammarCount(); // setzt grammarSentences (Basis- und eigene Sätze der Sprache) und die Focus-Liste neu
+        }
+
+        // Ansicht der aktuellen Lernsprache vollständig neu aufbauen (Modus, Beschriftungen, offene Listen)
+        function rebuildViewForLanguage() {
+            renderAllLabels();
+            refreshInputLanguageSettings();
+            updateGrammarFocusOptions();
+            switchMode(currentMode === 'add-vocab' ? 'dragdrop' : currentMode);
+            const open = m => typeof m !== 'undefined' && m && !m.classList.contains('hidden');
+            if (open(typeof vocabListModal !== 'undefined' ? vocabListModal : null)) renderVocabList();
+            if (open(typeof sentenceListModal !== 'undefined' ? sentenceListModal : null)) renderSentenceList();
+            if (open(typeof statsModal !== 'undefined' ? statsModal : null)) renderStats();
+        }
+
+        let _langSwitchGen = 0;
         async function switchLanguage(lang) {
             if (CURRENT_LANG === lang || !SUPPORTED_LANGS.includes(lang)) return;
+            const gen = ++_langSwitchGen;
+            try { saveAllDataLocally(); } catch (e) { /* Speicher voll: weiter */ }   // Stand der bisherigen Sprache sichern, bevor er ersetzt wird
             CURRENT_LANG = lang;
             localStorage.setItem('ita-lang', lang);
-            renderAllLabels();
+            resetLanguageBoundState();
+            loadLanguageCache();      // sofort die Daten der neuen Sprache zeigen (nie Reste der alten)
+            rebuildViewForLanguage();
 
             showToast(translations[lang].welcome, 'info');
 
-            // Wait for any running sync to finish (max 3s), then load silently
+            // Laufenden Abgleich abwarten (er bricht bei Sprachwechsel selbst ab), dann still neu laden
             if (window._isSyncing) {
                 await new Promise(resolve => {
                     const check = setInterval(() => {
                         if (!window._isSyncing) { clearInterval(check); resolve(); }
                     }, 100);
-                    setTimeout(() => { clearInterval(check); resolve(); }, 3000);
+                    setTimeout(() => { clearInterval(check); resolve(); }, 25000);
                 });
             }
+            if (gen !== _langSwitchGen) return; // zwischenzeitlich erneut gewechselt
+            const dataSig = () => `${fullDictionary.length}|${allBaseSentences.length}|${grammarSentences.length}|${fullDictionary.filter(w => w.isActive !== false).length}`;
+            const sigBefore = dataSig();
             await loadDataFromServer(true);
-            await updateAdminGrammarCount(); // Now load for both IT and EN
-            
-            // Refresh administration/modal stats if needed
+            if (gen !== _langSwitchGen) return;
+            await updateAdminGrammarCount();
             if (typeof updateAdminBaseVocabCount === 'function') updateAdminBaseVocabCount();
 
-            // Neue Runde mit den Wörtern der gewählten Sprache (startNewRound gab es nicht: Fehler nach dem Sprachwechsel)
-            if (currentMode === 'dragdrop') startDragDropRound();
-            else if (currentMode === 'quiz') startQuizRound();
-            else if (currentMode === 'write') startWriteRound();
-            else if (currentMode === 'grammar') startGrammarRound();
+            // Mit den frisch geladenen Daten der gewählten Sprache neu aufbauen (nur wenn sich etwas geändert hat,
+            // damit eine schon begonnene Runde nicht ohne Grund springt)
+            if (dataSig() !== sigBefore || (currentMode === 'grammar' && !currentGrammarSentence)) rebuildViewForLanguage();
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -8949,15 +9046,19 @@
         }
 
         async function fetchGlobalBaseSentences() {
+            const langAtStart = CURRENT_LANG;
             try {
-                const result = await apiFetch(`/grammar-sentences?language=${CURRENT_LANG}`);
+                const result = await apiFetch(`/grammar-sentences?language=${langAtStart}`);
+                if (CURRENT_LANG !== langAtStart) return; // Sprache wurde währenddessen gewechselt: Antwort verwerfen
                 if (result) allBaseSentences = result;
                 sentenceMode = (await apiFetch('/grammar-sentences/settings')).mode;
+                if (CURRENT_LANG !== langAtStart) return;
                 applyPendingSentenceOverlay();
                 cacheBaseSentences();
                 updateSentenceModeUi();
             } catch (e) {
                 console.warn("Failed to fetch global base sentences", e);
+                if (CURRENT_LANG !== langAtStart) return;
                 // Ohne Server: gespeicherte Sätze nutzen (nur wenn noch nichts geladen ist), wartende Änderungen darüberlegen
                 if (!allBaseSentences || allBaseSentences.length === 0 || allBaseSentences[0].language !== CURRENT_LANG) loadCachedBaseSentences();
                 applyPendingSentenceOverlay();
@@ -8968,6 +9069,7 @@
         function triggerExampleSentencePopup(wordObj, force = false) {
             if (!force && !showExampleSentences) return;
             if (!wordObj) return;
+            if (wordObj.language && wordObj.language !== CURRENT_LANG) return; // Wort der vorherigen Sprache (verzögerter Aufruf nach dem Sprachwechsel)
 
             const infinitive = (wordObj.it || "").toLowerCase().trim();
             if (!infinitive) return;
@@ -9085,12 +9187,14 @@
 
             if (window._isSyncing) return;
             window._isSyncing = true;
+            const langAtStart = CURRENT_LANG; // Antworten einer vorherigen Sprache nie in die aktuelle Ansicht übernehmen
 
             try {
                 // Erst eigene, noch wartende Änderungen senden, damit der Abruf sie nicht überholt
                 if (navigator.onLine && syncOutbox.length > 0) await processSyncOutbox();
                 if (isCapacitor) console.log("Fetching vocab...");
                 const vocab = await apiFetch('/vocab');
+                if (CURRENT_LANG !== langAtStart) return;
                 if (isCapacitor) console.log(`Vocab fetched: ${vocab.length} items`);
 
                 let serverActivity = {};
@@ -9114,6 +9218,7 @@
                     if (!isSilent) console.warn("Profile sync failed", pe); 
                 }
 
+                if (CURRENT_LANG !== langAtStart) return;
                 // Check for remote reset
                     if (serverLastReset) {
                         const localLastReset = localStorage.getItem('ita-local-last-reset');
@@ -9212,8 +9317,10 @@
                     }).catch(e => console.warn("Proactive activity sync failed", e));
                 }
 
+                if (CURRENT_LANG !== langAtStart) return;
                 await fetchGlobalBaseSentences();
                 await loadVerifiedVerbForms();
+                if (CURRENT_LANG !== langAtStart) return;
                 await updateAdminGrammarCount();
                 if (typeof sentenceListModal !== 'undefined' && !sentenceListModal.classList.contains('hidden')) renderSentenceList();
                 if (!isSilent) {
@@ -10354,6 +10461,9 @@
             
             let availableWords = getAvailableWords();
             if (availableWords.length === 0) {
+                currentWriteTarget = null;
+                const wc = document.getElementById('writeControls'); if (wc) wc.innerHTML = '';
+                writeInput.disabled = true;
                 writeQuestionDisplay.innerHTML = `<div class="pt-6 pb-2 px-2 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words text-slate-400">Keine passenden Einträge für diesen Filter gefunden.</div></div>`;
                 writeSubtext.textContent = "";
                 return;
@@ -10646,6 +10756,7 @@
                 // If we have words but less than ROUND_SIZE, just use what we have
                 // No fallback to 'Alle' anymore to respect user filter choice
             } else if (availableWords.length === 0) {
+                currentPairs = [];
                 draggablesContainer.innerHTML = `<div class="col-span-full text-center text-slate-400 italic py-8">${getI18n('no_vocab_filter')}</div>`;
                 return;
             }
@@ -11003,7 +11114,9 @@
             score++; scoreEl.textContent = score;
             const matchedCount = dropzonesContainer.querySelectorAll('.matched').length;
             if (matchedCount >= currentPairs.length && currentPairs.length > 0) {
+                const langEpochAtMatch = window._langEpoch || 0;
                 setTimeout(() => {
+                    if ((window._langEpoch || 0) !== langEpochAtMatch) return; // Sprache zwischenzeitlich gewechselt
                     const successLabel = successText.querySelector('[data-i18n="success_correct"]');
                     if (successLabel) {
                         successLabel.textContent = langConf().successLabel;
@@ -11076,6 +11189,8 @@
                 // But for quiz, we need 4 to have enough decoys. 
                 // However, user wants to see THEIR words.
                 if (availableWords.length === 0) {
+                    currentQuizTarget = null;
+                    const qc = document.getElementById('quizControls'); if (qc) qc.innerHTML = '';
                     quizQuestionDisplay.innerHTML = `<div class="pt-6 pb-2 px-2 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words text-slate-400">${getI18n('no_vocab_filter')}</div></div>`;
                     quizSubtext.textContent = "";
                     return;
@@ -11290,8 +11405,8 @@
         async function updateAdminGrammarCount() {
             try {
                 // Sentences are both global base sentences and user-managed personal ones.
-                const personalSentences = fullDictionary ? fullDictionary.filter(w => w.typ === 'Satz' && w.isActive !== false).map(v => ({
-                    id: v.id, de: v.de, it: v.it, category: v.grammatica || 'Eigene Sätze', level: v.level || 'Eigene', language: v.language || 'it'
+                const personalSentences = fullDictionary ? fullDictionary.filter(w => w.typ === 'Satz' && w.isActive !== false && (w.language || 'it') === CURRENT_LANG).map(v => ({
+                    id: v.id, de: v.de, it: v.it, category: v.grammatica || 'Eigene Sätze', level: v.level || 'Eigene', language: v.language || CURRENT_LANG
                 })) : [];
                 
                 // Merge with global base sentences (already filtered by language during fetch, but double check)
@@ -11308,7 +11423,7 @@
                 // If we are currently in grammar mode, refresh the round to show data if it was missing
                 if (currentMode === 'grammar' && grammarSentences.length > 0) {
                     const displayContent = grammarQuestionDisplay ? grammarQuestionDisplay.textContent : "";
-                    if (displayContent.includes("Keine Grammatik-Sätze geladen") || displayContent.includes(getI18n('grammar_no_sentences'))) {
+                    if (!currentGrammarSentence || displayContent.includes("Keine Grammatik-Sätze geladen") || displayContent.includes(getI18n('grammar_no_sentences'))) {
                         startGrammarRound();
                     }
                 }
@@ -11586,10 +11701,23 @@
             return word;
         }
 
+        // Leerzustand im Grammatik-Modus: kein alter Satz, keine Lücken, kein Feedback, keine Grammatik-Hilfe
+        function showGrammarEmptyState(title, hint) {
+            currentGrammarSentence = null;
+            grammarAnswers = [];
+            grammarVerbEls = [];
+            if (grammarHelpBox) { grammarHelpBox.classList.add('hidden'); grammarHelpBox.innerHTML = ''; }
+            grammarQuestionDisplay.textContent = title;
+            grammarTranslationDisplay.textContent = hint;
+            grammarFeedback.classList.add('hidden');
+            grammarFeedback.textContent = '';
+            grammarSubmitBtn.classList.add('hidden');
+            grammarNextBtn.classList.add('hidden');
+        }
+
         function startGrammarRound() {
             if (grammarSentences.length === 0) {
-                grammarQuestionDisplay.textContent = getI18n('grammar_no_sentences');
-                grammarTranslationDisplay.textContent = getI18n('grammar_upload_hint');
+                showGrammarEmptyState(getI18n('grammar_no_sentences'), getI18n('grammar_upload_hint'));
                 return;
             }
 
@@ -11609,8 +11737,7 @@
             }
 
             if (filteredSentences.length === 0) {
-                grammarQuestionDisplay.textContent = `Keine Sätze für "${currentFocus}" gefunden.`;
-                grammarTranslationDisplay.textContent = "Wähle einen anderen Focus.";
+                showGrammarEmptyState(`Keine Sätze für "${currentFocus}" gefunden.`, "Wähle einen anderen Focus.");
                 return;
             }
 
@@ -15527,6 +15654,45 @@
             return successCount;
         }
 
+        // Basisliste (Excel) lesen: Spalten werden an der Kopfzeile erkannt (Fremdsprache | Deutsch | Wortart | Emoji | Grammatik | Niveau);
+        // ohne erkennbare Kopfzeile gilt die feste Reihenfolge. "Niveau" (A1–B2) hat in der Datenbank noch kein Feld und wird ignoriert.
+        function parseBaseVocabRows(json, lang) {
+            const norm = v => String(v == null ? '' : v).trim().toLowerCase();
+            const header = (json[0] || []).map(norm);
+            const find = (...names) => header.findIndex(h => names.includes(h));
+            const foreignNames = ['italienisch', 'englisch', 'spanisch', 'italiano', 'english', 'español', 'espanol', 'it', 'en', 'es', norm((LANG_CONFIG[lang] || LANG_CONFIG.it).name)];
+            const idx = {
+                foreign: find(...foreignNames),
+                de: find('deutsch', 'de'),
+                typ: find('wortart', 'typ', 'art'),
+                emoji: find('emoji'),
+                gram: find('grammatik', 'grammatica'),
+                level: find('niveau', 'level', 'stufe')
+            };
+            const known = Object.values(idx).filter(i => i >= 0).length;
+            const byHeader = idx.foreign >= 0 && idx.de >= 0 && known >= 2;
+            const col = byHeader ? idx : { foreign: 0, de: 1, typ: 2, emoji: 3, gram: 4, level: -1 };
+            const cell = (row, i) => (i >= 0 && row[i] != null) ? String(row[i]).trim() : '';
+            const rows = json.slice(1);
+            const words = rows.filter(row => row && cell(row, col.foreign) && cell(row, col.de)).map(row => {
+                let word1 = cell(row, col.foreign);
+                const word2 = cell(row, col.de);
+                const typRaw = cell(row, col.typ) || 'Sonstiges';
+                const emoji = cell(row, col.emoji);
+                const isNoun = typRaw.toLowerCase().includes('substantiv') || typRaw.toLowerCase().includes('nomen');
+                let grammatica = null;
+                if (lang === 'it' && isNoun) grammatica = autoDetectGrammatica(word1);
+                // Spanisch: Artikel im Wort ("el libro") abtrennen; Geschlecht aus Spalte Grammatik, Artikel oder Endung
+                if (lang === 'es' && isNoun) {
+                    const n = normalizeSpanishNoun(word1, cell(row, col.gram));
+                    word1 = n.word;
+                    grammatica = n.grammatica || null;
+                }
+                return { it: word1, de: word2, typ: typRaw, emoji: emoji || null, grammatica, language: lang };
+            });
+            return { words, hasLevelColumn: col.level >= 0 };
+        }
+
         window.uploadBaseVocab = async function(lang) {
             const inputId = `adminBaseVocabUpload${lang.charAt(0).toUpperCase() + lang.slice(1)}`;
             const input = document.getElementById(inputId);
@@ -15546,24 +15712,7 @@
 
                     if (!json || json.length < 2) return showToast("Datei ist leer oder hat kein Header-Format.", "warning");
 
-                    const wordsToUpload = json.slice(1).filter(row => row[0] && row[1]).map(row => {
-                        let word1 = String(row[0] || "").trim();
-                        const word2 = String(row[1] || "").trim();
-                        const typRaw = String(row[2] || "Sonstiges").trim();
-                        const emoji = String(row[3] || "").trim();
-
-                        let grammatica = null;
-                        if (lang === 'it' && (typRaw.toLowerCase().includes('substantiv') || typRaw.toLowerCase().includes('nomen'))) {
-                            grammatica = autoDetectGrammatica(word1);
-                        }
-                        // Spanisch: Artikel im Wort ("el libro") abtrennen; Geschlecht aus Spalte 5 (Grammatik), Artikel oder Endung
-                        if (lang === 'es' && (typRaw.toLowerCase().includes('substantiv') || typRaw.toLowerCase().includes('nomen'))) {
-                            const n = normalizeSpanishNoun(word1, String(row[4] || '').trim());
-                            word1 = n.word;
-                            grammatica = n.grammatica || null;
-                        }
-                        return { it: word1, de: word2, typ: typRaw, emoji: emoji || null, grammatica, language: lang };
-                    });
+                    const { words: wordsToUpload, hasLevelColumn } = parseBaseVocabRows(json, lang);
 
                     if (wordsToUpload.length === 0) return showToast("Keine gültigen Zeilen (Spalte 1 & 2 nötig) gefunden.", "warning");
 
@@ -15572,7 +15721,7 @@
                         showToast(`Import von ${wordsToUpload.length} Einträgen gestartet...`, "info");
                         const count = await uploadInChunks('/admin/base-vocab/bulk', 'words', wordsToUpload, lang, 'BaseVocab');
                         
-                        showToast(`${count} ${lang.toUpperCase()}-Basis-Vokabeln erfolgreich importiert.`, "success");
+                        showToast(`${count} ${lang.toUpperCase()}-Basis-Vokabeln erfolgreich importiert.` + (hasLevelColumn ? ' Die Spalte „Niveau“ wird (noch) nicht gespeichert.' : ''), "success");
                         updateAdminBaseVocabCount();
                         input.value = '';
                     }
@@ -15596,8 +15745,8 @@
                 if (!baseVocab || baseVocab.length === 0) return showToast(`Die ${lang.toUpperCase()}-Basisliste ist leer.`, "info");
 
                 const wsData = [
-                    [(LANG_CONFIG[lang] || LANG_CONFIG.it).name, "Deutsch", "Wortart", "Emoji", "Grammatik"],
-                    ...baseVocab.map(v => [v.it, v.de, v.typ, v.emoji || "", v.grammatica || ""])
+                    [(LANG_CONFIG[lang] || LANG_CONFIG.it).name, "Deutsch", "Wortart", "Emoji", "Grammatik", "Niveau"],
+                    ...baseVocab.map(v => [v.it, v.de, v.typ, v.emoji || "", v.grammatica || "", v.level || ""])
                 ];
                 const ws = XLSX.utils.aoa_to_sheet(wsData);
                 const wb = XLSX.utils.book_new();
@@ -16158,6 +16307,9 @@
 
             if (words.length === 0) {
                 if (cardsQuestionDisplay) cardsQuestionDisplay.innerHTML = getI18n('no_vocab_short');
+                if (cardsSubtext) cardsSubtext.textContent = '';
+                const cStar = document.getElementById('cardsStarIcon');
+                if (cStar) { cStar.removeAttribute('data-mark-id'); cStar.classList.remove('marked'); }
                 currentFlashcardTarget = null;
                 return;
             }
