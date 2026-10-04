@@ -1,12 +1,56 @@
-<!-- Vorlage: nach datenschutz.html kopieren und durch eine passende Datenschutzerklärung ersetzen
-     (z. B. mit einem Generator wie eRecht24). Nur datenschutz.html wird angezeigt (und ist von Git ausgeschlossen).
-     Hinweise: Diese App verarbeitet E-Mail-Adresse, Passwort (als Hash), Lernfortschritt und Vokabeln. Bei aktivierter KI-Funktion
-     werden einzelne Wörter an den gewählten KI-Anbieter gesendet; unbekannte Wörter können über den Dienst MyMemory übersetzt werden. -->
+<!-- Datenschutzerklärung der Lernapp. Stand: [Datum]. MUSTER: Bitte prüfen und an euren Betrieb anpassen (Hosting, Mail-Dienst, KI-Anbieter, Single Sign-on, Aufsichtsbehörde). Keine Rechtsberatung. Nicht genutzte Abschnitte löschen. -->
 <div>
-    <h3 class="font-bold text-slate-800 mb-1">Verantwortlicher</h3>
-    <p>[Name und Anschrift]</p>
+    <h3 class="font-bold text-slate-800 mb-1">1. Verantwortlicher</h3>
+    <p>[Name]<br>[Straße und Hausnummer]<br>[PLZ Ort]<br>E-Mail: [E-Mail-Adresse]</p>
 </div>
 <div>
-    <h3 class="font-bold text-slate-800 mb-1">Welche Daten werden verarbeitet?</h3>
-    <p>[…]</p>
+    <h3 class="font-bold text-slate-800 mb-1">2. Grundsatz</h3>
+    <p>Die Lernapp ist ein Vokabel- und Grammatiktrainer. Sie enthält keine Werbung, keine Analyse- oder Tracking-Dienste und lädt beim Start keine Inhalte von Drittservern (Schriften, Skripte und Grafiken liegen auf dem eigenen Server bzw. in der App).</p>
+</div>
+<div>
+    <h3 class="font-bold text-slate-800 mb-1">3. Hosting</h3>
+    <p>Die App läuft auf einem Server von [Hosting-Anbieter, Standort]. Mit dem Anbieter besteht ein Vertrag zur Auftragsverarbeitung nach Art. 28 DSGVO. Die Daten werden auf diesem Server gespeichert; der Webserver führt für die App keine Zugriffsprotokolle.</p>
+</div>
+<div>
+    <h3 class="font-bold text-slate-800 mb-1">4. Welche Daten verarbeitet werden</h3>
+    <ul class="list-disc pl-4 space-y-1">
+        <li><b>Konto:</b> E-Mail-Adresse, optional Name, Passwort (nur als verschlüsselter Hash, nie im Klartext), verwendeter Einladungscode, Zeitpunkt und Anzahl der Anmeldungen.</li>
+        <li><b>Lerninhalte:</b> deine Vokabeln und Sätze, welche davon aktiv sind, Favoriten, deine Auswahl bei globalen Sätzen und deine Einstellungen (z. B. Sprache, Niveau, Grammatikarten).</li>
+        <li><b>Lernfortschritt:</b> Statistik je Vokabel (angezeigt, richtig, falsch, Serie, nächste Wiederholung) und Tagesaktivität.</li>
+        <li><b>Technisch notwendig:</b> beim Aufruf der App wird deine IP-Adresse kurz vom Server verarbeitet, um die Seite auszuliefern. Der Server schreibt Betriebs- und Fehlermeldungen (z. B. Anmeldung von Administratoren, Fehler), die nach kurzer Zeit automatisch überschrieben werden.</li>
+    </ul>
+    <p class="mt-2">Zweck ist die Bereitstellung der App und deines Lernstands. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Nutzung der App), für den sicheren Betrieb Art. 6 Abs. 1 lit. f DSGVO. Die Daten werden gespeichert, bis du dein Konto löschst. Der Administrator kann eine Nutzerliste mit E-Mail-Adresse, Name, letzter Anmeldung und Lernaktivität einsehen und Konten sperren oder löschen.</p>
+</div>
+<div>
+    <h3 class="font-bold text-slate-800 mb-1">5. Speicherung auf deinem Gerät</h3>
+    <p>Die App speichert auf deinem Gerät (Browser-Speicher bzw. App-Speicher) deine Anmeldung, einen Zwischenspeicher deiner Vokabeln und Sätze, deine Einstellungen und noch nicht gesendete Änderungen, damit sie auch ohne Verbindung zum Server funktioniert. Das ist technisch erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG); es werden keine Cookies zu Werbe- oder Analysezwecken gesetzt. Beim Abmelden bzw. Löschen des Kontos werden diese Daten auf dem Gerät entfernt.</p>
+</div>
+<div>
+    <h3 class="font-bold text-slate-800 mb-1">6. E-Mail-Versand</h3>
+    <p>Für das Zurücksetzen des Passworts und das Kontaktformular versendet der Server E-Mails über ein Postfach bei [E-Mail-Anbieter]. Beim Kontaktformular werden deine Nachricht, ein optionaler Anhang sowie dein Name und deine E-Mail-Adresse an mich gesendet und nach der Bearbeitung gelöscht (Art. 6 Abs. 1 lit. b und f DSGVO).</p>
+</div>
+<div>
+    <h3 class="font-bold text-slate-800 mb-1">7. Übersetzung unbekannter Wörter (MyMemory)</h3>
+    <p>Gibst du beim Hinzufügen einer Vokabel ein Wort ein, das die App nicht kennt, schickt dein Gerät dieses Wort zur Übersetzung direkt an den Dienst MyMemory (Translated S.r.l., Italien, api.mymemory.translated.net). Dabei erhält der Dienst auch deine IP-Adresse. Gesendet wird nur das Wort, keine Kontodaten. Du kannst das vermeiden, indem du die Übersetzung selbst einträgst. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO.</p>
+</div>
+<div>
+    <h3 class="font-bold text-slate-800 mb-1">8. KI-Funktionen (nur wenn aktiviert)</h3>
+    <p>Wenn der Betreiber die KI-Funktionen eingeschaltet hat, sendet der <b>Server</b> einzelne Wörter, deren Übersetzung, die Sprache sowie gewählte Niveaus und Grammatikarten an den KI-Anbieter ([KI-Anbieter, z. B. Anthropic oder OpenAI – oder Abschnitt löschen]), um Wortart und Geschlecht, Beispielsätze und Verbformen zu erzeugen oder zu prüfen. Es werden <b>keine</b> E-Mail-Adressen, Namen oder Kontodaten übermittelt. Erzeugte Beispielsätze und geprüfte Verbformen stehen allen Nutzern zur Verfügung und enthalten keine personenbezogenen Daten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b und f DSGVO. [Bei Anbietern außerhalb der EU: Rechtsgrundlage der Übermittlung nennen]</p>
+</div>
+<div>
+    <h3 class="font-bold text-slate-800 mb-1">9. Anmeldung über Single Sign-on (optional)</h3>
+    <p>Wird die Anmeldung über einen Identitätsdienst angeboten ([Identitätsdienst – oder Abschnitt löschen]), übermittelt dieser beim Login Name und E-Mail-Adresse an die App. Dieses Konto hat kein eigenes Passwort in der App.</p>
+</div>
+<div>
+    <h3 class="font-bold text-slate-800 mb-1">10. Weitergabe</h3>
+    <p>Eine Weitergabe an Dritte findet nur an die oben genannten Dienstleister statt, soweit du die jeweilige Funktion nutzt. Es gibt keinen Verkauf von Daten und keine Profilbildung.</p>
+</div>
+<div>
+    <h3 class="font-bold text-slate-800 mb-1">11. Deine Rechte</h3>
+    <p>Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. Dein Konto und alle zugehörigen Daten kannst du jederzeit selbst in der App löschen (Menü „Konto löschen“); deine Listen kannst du als Excel-Datei exportieren. Sicherungskopien der Datenbank enthalten gelöschte Daten noch bis zu ihrer turnusmäßigen Löschung. Bei Fragen schreibe an [E-Mail-Adresse].</p>
+    <p class="mt-2">Du kannst dich außerdem bei einer Aufsichtsbehörde beschweren, z. B. beim [zuständigen Landesdatenschutzbeauftragten, Adresse]</p>
+</div>
+<div>
+    <h3 class="font-bold text-slate-800 mb-1">12. Sicherheit und Änderungen</h3>
+    <p>Die Verbindung zur App ist per TLS verschlüsselt. Diese Erklärung kann angepasst werden, wenn sich die App oder die Rechtslage ändert. Stand: [Datum].</p>
 </div>
