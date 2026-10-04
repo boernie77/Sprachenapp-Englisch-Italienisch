@@ -38,6 +38,8 @@
 
     <!-- SheetJS zum Einlesen von Excel-Dateien -->
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <script src="app-config.js"></script>
+    <script src="app-config.local.js" onerror="this.remove()"></script>
     <script src="grammar-help.js"></script>
 
     <style>
@@ -1724,6 +1726,24 @@
     <!-- Toast Container -->
     <div id="toastContainer"></div>
 
+    <!-- Ersteinrichtung der App: Server-Adresse eintragen -->
+    <div id="serverSetupOverlay"
+        class="hidden fixed inset-0 bg-slate-900 bg-opacity-95 backdrop-blur-md z-[55000] items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl">
+            <h2 class="text-2xl font-bold text-slate-800 mb-2" data-i18n="setup_title">Mit deinem Server verbinden</h2>
+            <p class="text-sm text-slate-500 mb-4" data-i18n="setup_desc">Gib die Adresse deines Lernapp-Servers ein, z. B. https://lernapp.example.com oder im Heimnetz http://192.168.1.20:3001.</p>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="serverSetupInput" data-i18n="setup_label">Server-Adresse</label>
+            <input id="serverSetupInput" type="url" inputmode="url" autocapitalize="off" autocorrect="off" autocomplete="off" placeholder="https://"
+                class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium outline-none focus:border-blue-400 mb-3" style="color:#0f172a !important;background:#ffffff !important">
+            <p id="serverSetupResult" class="text-xs mb-3 min-h-[1rem]"></p>
+            <div class="flex gap-2">
+                <button id="serverSetupTestBtn" type="button" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl text-sm transition-all" data-i18n="setup_test">Verbindung testen</button>
+                <button id="serverSetupSaveBtn" type="button" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm transition-all disabled:opacity-40" disabled data-i18n="setup_save">Weiter</button>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-4" data-i18n="setup_hint">Tipp: Läuft der Server nur im Heimnetz, funktioniert die App dort online. Unterwegs lernst du offline weiter, deine Änderungen werden später abgeglichen.</p>
+        </div>
+    </div>
+
     <!-- Login/Register Overlay -->
     <div id="authOverlay"
         class="fixed inset-0 bg-slate-900 bg-opacity-90 backdrop-blur-md z-[50000] flex items-center justify-center p-4">
@@ -1837,13 +1857,13 @@
                         Lizenz: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"
                             class="text-blue-600 hover:underline">CC BY-SA 4.0</a>
                     </p>
-                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.20</p>
+                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.21</p>
                     <p class="text-[10px] text-slate-400" data-i18n="imp_rights">© 2026 Christian Bernauer. Alle Rechte vorbehalten.</p>
                 </div>
             </div>
             <!-- App-Style Bottom Section -->
             <div class="mt-8 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.20</p>
+                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.21</p>
             </div>
         </div>
     </div>
@@ -2088,19 +2108,19 @@
             <div class="w-16 h-16 shrink-0 bg-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
                 <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3">Version 2.2.20 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
+            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3">Version 2.2.21 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
             <div class="text-left space-y-3 mb-6 overflow-y-auto min-h-0 flex-1 pr-1">
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: <b>Alle Änderungen funktionieren offline</b> (Bearbeiten, Löschen, Aktivieren, Sätze …) und werden später automatisch mit dem Server abgeglichen</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: Die <b>Erklärung im Grammatik-Modus</b> nennt alle Zeitformen des Satzes (z. B. auch das Futur „sarà“) und bietet die Verben als Konjugationstabelle an</p>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: Im Menü steht, ob du <b>offline</b> bist, der <b>Server nicht erreichbar</b> ist oder du <b>verbunden</b> bist – und wie viele Änderungen warten</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu (App): <b>Server-Adresse</b> beim ersten Start eintragbar, im Menü änderbar – auch für Heimnetz-Server</p>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Fix: „Alle abwählen“ ging offline wieder verloren</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Alle Änderungen funktionieren <b>offline</b> und werden später abgeglichen; der Verbindungsstatus steht im Menü</p>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
@@ -2226,6 +2246,8 @@
                     </div>
                 </div>
 
+                <button id="changeServerBtn"
+                    class="hidden w-full text-left px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100"><span data-i18n="menu_change_server">Server ändern</span> <span id="changeServerHost" class="block text-[10px] text-slate-400 font-normal truncate"></span></button>
                 <button id="logoutBtn"
                     class="block w-full text-left px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 cursor-pointer border-b border-slate-100"><span data-i18n="menu_logout">Abmelden</span></button>
 
@@ -2241,7 +2263,7 @@
                 </div>
                 <div class="px-4 py-1.5 text-[10px] text-slate-400 bg-slate-50/50 flex items-center justify-between border-t border-slate-100/50">
                     <span>App-Version:</span>
-                    <span class="font-mono font-medium text-slate-500">2.2.20</span>
+                    <span class="font-mono font-medium text-slate-500">2.2.21</span>
                 </div>
                 <input type="file" id="excelUploadEl" accept=".xlsx, .xls" class="hidden">
             </div>
@@ -5736,17 +5758,28 @@
         const listSVG = `<svg class="w-5 h-5 text-blue-500 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>`;
 
         // --- 2. Backend API Integration ---
-        const isProdDomain = window.location.protocol.startsWith('http') && !window.location.hostname.includes('localhost') && !window.location.hostname.match(/^\d+\.\d+\.\d+\.\d+$/);
-        
-        const API_BASE_URL = (isCapacitor || isProdDomain)
-            ? 'https://vokabeln.bernauer24.com'
+        // Server-Adresse: Die Web-Version läuft auf ihrem eigenen Server (gleicher Ursprung, relative Adressen).
+        // Die App merkt sich die Adresse, die beim ersten Start eingetragen wurde; ohne Eintrag gilt die Voreinstellung aus app-config.js.
+        const SERVER_URL_KEY = 'lernapp-server-url';
+        function normalizeServerUrl(raw) {
+            let u = String(raw || '').trim();
+            if (!u) return '';
+            if (!/^https?:\/\//i.test(u)) {
+                const local = /^(localhost|\d{1,3}(\.\d{1,3}){3}|[\w-]+\.local)(:\d+)?(\/|$)/i.test(u);
+                u = (local ? 'http://' : 'https://') + u;
+            }
+            return u.replace(/\/+$/, '');
+        }
+        const APP_CONFIG = window.APP_CONFIG || {};
+        let API_BASE_URL = isCapacitor
+            ? (normalizeServerUrl(localStorage.getItem(SERVER_URL_KEY)) || normalizeServerUrl(APP_CONFIG.defaultServerUrl))
             : '';
-        
+        const needsServerSetup = isCapacitor && !API_BASE_URL;
+
         console.log("App Info:", {
             protocol: window.location.protocol,
             hostname: window.location.hostname,
             isCapacitor,
-            isProdDomain,
             API_BASE_URL: API_BASE_URL || "(relative)"
         });
         // SSO callback: backend redirected with #sso=<base64url JSON>
@@ -6230,6 +6263,17 @@
                 info_extra_placeholder: "Hier erscheinen Zusatzinformationen oder Bilder.",
                 info_type_verb: "Verbformen",
                 info_type_noun: "Bild",
+                setup_title: "Mit deinem Server verbinden",
+                setup_desc: "Gib die Adresse deines Lernapp-Servers ein, z. B. https://lernapp.example.com oder im Heimnetz http://192.168.1.20:3001.",
+                setup_label: "Server-Adresse",
+                setup_test: "Verbindung testen",
+                setup_save: "Weiter",
+                setup_hint: "Tipp: Läuft der Server nur im Heimnetz, funktioniert die App dort online. Unterwegs lernst du offline weiter, deine Änderungen werden später abgeglichen.",
+                setup_ok: "✓ Verbunden (Server-Version {0})",
+                setup_fail: "Server nicht erreichbar – bitte Adresse und Netz prüfen.",
+                setup_invalid: "Das ist keine Lernapp-Server-Adresse.",
+                menu_change_server: "Server ändern",
+                confirm_change_server: "Du wirst abgemeldet und kannst einen anderen Server eintragen. Wartende Änderungen bleiben für diesen Nutzer gespeichert. Fortfahren?",
                 last_sync: "Letzter Sync:",
                 sync_state_offline: "Offline (kein Internet)",
                 sync_state_server: "Server nicht erreichbar",
@@ -6831,6 +6875,17 @@
                 info_extra_placeholder: "Additional information or pictures will appear here.",
                 info_type_verb: "Verb Forms",
                 info_type_noun: "Picture",
+                setup_title: "Connect to your server",
+                setup_desc: "Enter the address of your Lernapp server, e.g. https://lernapp.example.com or on your home network http://192.168.1.20:3001.",
+                setup_label: "Server address",
+                setup_test: "Test connection",
+                setup_save: "Continue",
+                setup_hint: "Tip: If the server only runs on your home network, the app is online there. When you are away you keep learning offline and your changes sync later.",
+                setup_ok: "✓ Connected (server version {0})",
+                setup_fail: "Server not reachable – please check the address and your network.",
+                setup_invalid: "This is not a Lernapp server address.",
+                menu_change_server: "Change server",
+                confirm_change_server: "You will be signed out and can enter a different server. Pending changes stay saved for this user. Continue?",
                 last_sync: "Last Sync:",
                 sync_state_offline: "Offline (no internet)",
                 sync_state_server: "Server not reachable",
@@ -8552,6 +8607,73 @@
                 }
             });
         }
+
+        // --- Ersteinrichtung / Server wechseln (nur in der App) ---
+        (function setupServerChoice() {
+            const overlay = document.getElementById('serverSetupOverlay');
+            const input = document.getElementById('serverSetupInput');
+            const result = document.getElementById('serverSetupResult');
+            const testBtn = document.getElementById('serverSetupTestBtn');
+            const saveBtn = document.getElementById('serverSetupSaveBtn');
+            const changeBtn = document.getElementById('changeServerBtn');
+            let testedUrl = '';
+
+            const show = () => {
+                input.value = localStorage.getItem('lernapp-last-server-url') || API_BASE_URL || '';
+                overlay.classList.remove('hidden'); overlay.classList.add('flex');
+            };
+
+            async function testConnection() {
+                const url = normalizeServerUrl(input.value);
+                result.className = 'text-xs mb-3 min-h-[1rem] text-slate-500';
+                result.textContent = '…';
+                saveBtn.disabled = true; testedUrl = '';
+                if (!url) { result.textContent = ''; return false; }
+                try {
+                    const controller = new AbortController();
+                    const timer = setTimeout(() => controller.abort(), 8000);
+                    const res = await fetch(`${url}/api/health`, { signal: controller.signal });
+                    clearTimeout(timer);
+                    const data = await res.json().catch(() => null);
+                    if (!res.ok || !data || data.status !== 'ok') throw Object.assign(new Error('invalid'), { invalid: true });
+                    input.value = url;
+                    testedUrl = url;
+                    saveBtn.disabled = false;
+                    result.className = 'text-xs mb-3 min-h-[1rem] text-green-600 font-semibold';
+                    result.textContent = getI18n('setup_ok', data.version || '?');
+                    return true;
+                } catch (err) {
+                    result.className = 'text-xs mb-3 min-h-[1rem] text-red-500 font-semibold';
+                    result.textContent = getI18n(err.invalid ? 'setup_invalid' : 'setup_fail');
+                    return false;
+                }
+            }
+
+            testBtn.addEventListener('click', testConnection);
+            input.addEventListener('input', () => { saveBtn.disabled = true; testedUrl = ''; result.textContent = ''; });
+            input.addEventListener('keydown', (e) => { if (e.key === 'Enter') testConnection(); });
+            saveBtn.addEventListener('click', () => {
+                if (!testedUrl) return;
+                localStorage.setItem(SERVER_URL_KEY, testedUrl);
+                localStorage.setItem('lernapp-last-server-url', testedUrl);
+                location.reload();
+            });
+
+            if (needsServerSetup) show();
+
+            if (isCapacitor && changeBtn) {
+                changeBtn.classList.remove('hidden');
+                changeBtn.classList.add('block');
+                document.getElementById('changeServerHost').textContent = (API_BASE_URL || '').replace(/^https?:\/\//, '');
+                changeBtn.addEventListener('click', async () => {
+                    if (!(await showConfirm(getI18n('confirm_change_server'), getI18n('menu_change_server')))) return;
+                    localStorage.setItem('lernapp-last-server-url', API_BASE_URL);
+                    logout();
+                    localStorage.removeItem(SERVER_URL_KEY);
+                    location.reload();
+                });
+            }
+        })();
 
         // --- Auth Logic ---
         const authOverlay = document.getElementById('authOverlay');
@@ -10743,7 +10865,16 @@
         function showGrammarHelp() {
             if (!grammarHelpBox || !window.GrammarHelp || !currentGrammarSentence) return;
             grammarHelpBox.innerHTML = '';
-            const explanations = window.GrammarHelp.getExplanations(currentGrammarSentence.category, CURRENT_LANG);
+            // Erklärt werden die Kategorie des Satzes und alle weiteren Zeitformen, die im Satz tatsächlich vorkommen
+            // (z. B. Futur „sarà“ in einem Presente-Satz)
+            const knownInfinitives = fullDictionary
+                .filter(w => w.typ && /verb/i.test(w.typ) && w.it && (w.language || 'it') === CURRENT_LANG)
+                .map(w => w.it);
+            const analysis = window.GrammarHelp.analyzeSentence(currentGrammarSentence.it, CURRENT_LANG, knownInfinitives);
+            const baseCategories = window.GrammarHelp.splitCategories(currentGrammarSentence.category);
+            const allCategories = [...baseCategories, ...analysis.categories.filter(c => !baseCategories.includes(c))];
+            if (baseCategories.length === 0 && analysis.hasPresente) allCategories.push('Presente');
+            const explanations = window.GrammarHelp.getExplanations(allCategories.join('+'), CURRENT_LANG);
             explanations.forEach(ex => {
                 const block = document.createElement('div');
                 const title = document.createElement('p');
@@ -10771,6 +10902,17 @@
                 el.title = getI18n('conj_open');
                 el.onclick = () => openConjugation(inf);
                 if (seen.has(inf)) return;
+                seen.add(inf);
+                const chip = document.createElement('button');
+                chip.type = 'button';
+                chip.className = 'px-3 py-1 rounded-full bg-white border border-indigo-200 text-indigo-700 text-xs font-semibold hover:bg-indigo-100';
+                chip.textContent = `📖 ${CURRENT_LANG === 'en' ? 'to ' : ''}${inf}`;
+                chip.addEventListener('click', () => openConjugation(inf));
+                chips.appendChild(chip);
+            });
+            // Verben, die nur über die Satzanalyse gefunden wurden (z. B. „sarà“ → essere), ebenfalls als Knopf
+            (analysis.verbs || []).forEach(inf => {
+                if (seen.has(inf) || !window.GrammarHelp.conjugate(inf, CURRENT_LANG)) return;
                 seen.add(inf);
                 const chip = document.createElement('button');
                 chip.type = 'button';
@@ -11064,7 +11206,7 @@
         // Version Update Modal Logic
         const versionModal = document.getElementById('versionUpdateModal');
         const closeVersionBtn = document.getElementById('closeVersionModalBtn');
-        const vKey = 'hasSeenVersion_2_2_20';
+        const vKey = 'hasSeenVersion_2_2_21';
         closeVersionBtn.addEventListener('click', () => {
             localStorage.setItem(vKey, 'true');
             versionModal.classList.add('hidden');

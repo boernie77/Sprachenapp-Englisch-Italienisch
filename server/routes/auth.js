@@ -17,7 +17,8 @@ router.post('/register', async (req, res) => {
 
     // Check invite code
     const normalizedCode = (inviteCode || '').trim().toUpperCase();
-    const staticBypassCodes = ['CODE-ENTFERNT-1', 'CODE-ENTFERNT-2'];
+    // Feste Einladungscodes nur, wenn der Betreiber sie in STATIC_INVITE_CODES (kommagetrennt) einträgt; sonst gibt es keine
+    const staticBypassCodes = (process.env.STATIC_INVITE_CODES || '').split(',').map(c => c.trim().toUpperCase()).filter(Boolean);
     if (!isAdmin && !staticBypassCodes.includes(normalizedCode)) {
       if (!inviteCode) return res.status(400).json({ error: 'Einladungscode erforderlich' });
       const codeObj = await InviteCode.findOne({ where: { code: normalizedCode, isUsed: false } });

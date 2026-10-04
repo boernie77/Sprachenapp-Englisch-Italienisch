@@ -19,9 +19,15 @@ router.post('/', authenticateToken, upload.single('attachment'), asyncHandler(as
         return res.status(400).json({ error: 'Nachricht darf nicht leer sein' });
     }
 
+    // Empfänger des Kontaktformulars: Adresse des Betreibers aus CONTACT_EMAIL
+    if (!process.env.CONTACT_EMAIL) {
+        if (file) fs.unlink(file.path, () => {});
+        return res.status(503).json({ error: 'Das Kontaktformular ist auf diesem Server nicht eingerichtet' });
+    }
+
     const mailOptions = {
         from: process.env.SMTP_USER || 'noreply@lernapp.local',
-        to: 'christian@bernauer24.com',
+        to: process.env.CONTACT_EMAIL,
         subject: `LernApp Kontakt: ${user.name || 'User'} (${user.email})`,
         text: `Nachricht von ${user.name || 'Unbekannt'} (${user.email}):\n\n${message}`
     };

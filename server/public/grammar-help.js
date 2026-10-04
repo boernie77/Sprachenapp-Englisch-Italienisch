@@ -56,6 +56,12 @@
                 rule: '-are: parli, parli, parli, parliamo, parliate, parlino – -ere/-ire: prenda … prendano',
                 example: 'Penso che Marco abbia ragione. – Ich glaube, dass Marco recht hat.'
             },
+            'Condizionale': {
+                title: 'Condizionale (Wunsch, höfliche Bitte)',
+                text: 'Für höfliche Bitten, Wünsche, Ratschläge und mögliche (nicht sichere) Handlungen. Der Stamm ist wie beim Futur, dazu kommen die Endungen des Condizionale.',
+                rule: 'Futurstamm + -ei, -esti, -ebbe, -emmo, -este, -ebbero',
+                example: 'Vorrei un caffè. / Potresti aiutarmi? – Ich hätte gern einen Kaffee. / Könntest du mir helfen?'
+            },
             'Futuro Semplice': {
                 title: 'Futuro semplice (Zukunft)',
                 text: 'Für Handlungen in der Zukunft, aber auch für Vermutungen in der Gegenwart („sarà stanco“ – er wird wohl müde sein).',
@@ -124,7 +130,7 @@
     // Welche Zeitform der Tabelle zur Kategorie passt (wird im Dialog zuerst gezeigt)
     const CATEGORY_TENSE = {
         it: { 'Presente': 'presente', 'Passato Prossimo': 'passato', 'Imperfetto': 'imperfetto', 'Gerundio': 'gerundio',
-            'Gemischt': 'passato', 'Imperativo': 'imperativo', 'Congiuntivo': 'congiuntivo', 'Futuro Semplice': 'futuro' },
+            'Gemischt': 'passato', 'Imperativo': 'imperativo', 'Congiuntivo': 'congiuntivo', 'Futuro Semplice': 'futuro', 'Condizionale': 'condizionale' },
         en: { 'Simple Present': 'present', 'Present Continuous': 'continuous', 'Simple Past': 'past', 'Present Perfect': 'perfect',
             'Imperativ': 'present', 'Conditional': 'conditional', 'Future': 'future', 'Subjunctive': 'past' }
     };
@@ -510,6 +516,85 @@
         };
     }
 
+    // ---------------------------------------------------------------------------------------
+    // Satzanalyse: welche Zeitformen kommen im Satz tatsächlich vor? (z. B. Futur „sarà“ in einem Presente-Satz)
+    // ---------------------------------------------------------------------------------------
+    const itIndexCache = { key: '', index: null };
+    const IT_AUX_FORMS = new Set([...AVERE_PRES, ...ESSERE_PRES]);
+    const IT_STARE_FORMS = new Set(['sto', 'stai', 'sta', 'stiamo', 'state', 'stanno']);
+
+    // Index: Wortform -> [{ inf, tense }] für alle bekannten Verben (eigene Vokabeln + unregelmäßige)
+    function buildItalianIndex(infinitives) {
+        const forms = new Map();
+        const add = (form, inf, tense) => {
+            const f = String(form || '').toLowerCase();
+            if (!f || /\s/.test(f)) return;
+            if (!forms.has(f)) forms.set(f, []);
+            forms.get(f).push({ inf, tense });
+        };
+        const all = new Set([...Object.keys(IT_IRREGULAR), ...infinitives.map(i => String(i || '').toLowerCase().trim())]);
+        all.forEach(raw => {
+            const parsed = parseItalianInfinitive(raw);
+            if (!parsed) return;
+            const conj = conjugateItalian(parsed.inf, { ignoreVerified: true });
+            if (!conj) return;
+            conj.tenses.forEach(t => {
+                if (['presente', 'imperfetto', 'futuro', 'condizionale'].includes(t.id)) t.forms.forEach(f => add(f, parsed.inf, t.id));
+            });
+            const part = String(conj.participio || '').toLowerCase();
+            if (part) {
+                add(part, parsed.inf, 'participio');
+                if (/o$/.test(part)) ['a', 'i', 'e'].forEach(e => add(part.slice(0, -1) + e, parsed.inf, 'participio'));
+            }
+            if (conj.gerundio) add(conj.gerundio.replace(/si$/, ''), parsed.inf, 'gerundio');
+        });
+        return forms;
+    }
+
+    function analyzeItalian(sentence, infinitives) {
+        const key = infinitives.length + ':' + infinitives.join('|');
+        if (itIndexCache.key !== key) { itIndexCache.index = buildItalianIndex(infinitives); itIndexCache.key = key; }
+        const index = itIndexCache.index;
+        const tokens = String(sentence || '').toLowerCase().replace(/’/g, "'").split(/[^a-zàèéìòù']+/).filter(Boolean);
+        const categories = new Set();
+        const verbs = new Set();
+        let hasPresente = false;
+        tokens.forEach((token, i) => {
+            (index.get(token) || []).forEach(({ inf, tense }) => {
+                if (tense === 'futuro') { categories.add('Futuro Semplice'); verbs.add(inf); }
+                else if (tense === 'condizionale') { categories.add('Condizionale'); verbs.add(inf); }
+                else if (tense === 'imperfetto') { categories.add('Imperfetto'); verbs.add(inf); }
+                else if (tense === 'presente') { hasPresente = true; verbs.add(inf); }
+                else if (tense === 'participio' && IT_AUX_FORMS.has(tokens[i - 1])) { categories.add('Passato Prossimo'); verbs.add(inf); }
+                else if (tense === 'gerundio') { categories.add('Gerundio'); verbs.add(inf); }
+            });
+        });
+        // Verben, die nicht in den eigenen Vokabeln stehen: nur an eindeutigen Endungen erkennen
+        tokens.forEach((token, i) => {
+            if (index.has(token)) return;
+            if (token.length > 5 && /(erò|irò|erà|irà|eremo|erete|eranno|iremo|irete|iranno)$/.test(token)) categories.add('Futuro Semplice');
+            else if (token.length > 6 && /(erei|iresti|eresti|irei|erebbe|irebbe|eremmo|iremmo|ereste|ireste|erebbero|irebbero)$/.test(token)) categories.add('Condizionale');
+            else if (token.length > 5 && /(ando|endo)$/.test(token) && IT_STARE_FORMS.has(tokens[i - 1])) categories.add('Gerundio');
+        });
+        return { categories: [...categories], hasPresente, verbs: [...verbs] };
+    }
+
+    // Englisch: erkennbar an Hilfsverben und Endungen
+    function analyzeEnglish(sentence) {
+        const text = String(sentence || '').toLowerCase().replace(/’/g, "'");
+        const categories = [];
+        if (/\b(will|won't|shall)\b|'ll\b|\bgoing to\b/.test(text)) categories.push('Future');
+        if (/\b(would|wouldn't)\b|'d\b/.test(text)) categories.push('Conditional');
+        if (/\b(am|is|are|isn't|aren't)\s+(\w+ing)\b|\b(i'm|you're|he's|she's|it's|we're|they're)\s+\w+ing\b/.test(text)) categories.push('Present Continuous');
+        if (/\b(have|has|haven't|hasn't)\s+(\w+ed|been|done|gone|seen|made|had|got|known|taken|given|written|come|become|begun|run|eaten|found|left|lost|met|said|told|thought|bought|brought)\b|\b(i've|you've|we've|they've|he's|she's)\s+(\w+ed|been|done|gone|seen|made|had)\b/.test(text)) categories.push('Present Perfect');
+        if (/\b(can|could|must|should|may|might)\b/.test(text)) categories.push('Modalverb');
+        return { categories, hasPresente: false, verbs: [] };
+    }
+
+    function analyzeSentence(sentence, lang, infinitives) {
+        return lang === 'en' ? analyzeEnglish(sentence) : analyzeItalian(sentence, infinitives || []);
+    }
+
     function conjugate(word, lang, options) {
         return lang === 'en' ? conjugateEnglish(word, options) : conjugateItalian(word, options);
     }
@@ -518,6 +603,7 @@
     // Geprüfte Formen setzen/abfragen: map = { infinitive: forms }
     api.setVerifiedForms = (lang, map) => { verified[lang === 'en' ? 'en' : 'it'] = map || {}; };
     api.getVerified = (lang, infinitive) => (verified[lang === 'en' ? 'en' : 'it'] || {})[String(infinitive || '').toLowerCase().trim()] || null;
+    api.analyzeSentence = analyzeSentence;
     api.isIscVerb = (infinitive) => IT_ISC.has(String(infinitive || '').toLowerCase().trim());
     if (typeof module !== 'undefined' && module.exports) module.exports = api;
     else root.GrammarHelp = api;

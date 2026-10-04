@@ -6,5 +6,8 @@
     "Keyboard": {
       "resize": "body"
     }
+  },
+  "android": {
+    "allowMixedContent": true
   }
 }

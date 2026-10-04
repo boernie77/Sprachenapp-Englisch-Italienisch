@@ -46,6 +46,9 @@ jobs:
           echo "JWT_SECRET=${{ secrets.JWT_SECRET_TEST }}" >> .env
           echo "SMTP_PASS=${{ secrets.SMTP_PASS }}" >> .env
           echo "SMTP_USER=${{ secrets.SMTP_USER }}" >> .env
+          echo "SMTP_HOST=mail.gmx.net" >> .env
+          echo "STATIC_INVITE_CODES=${{ secrets.STATIC_INVITE_CODES }}" >> .env
+          echo "CONTACT_EMAIL=${{ secrets.CONTACT_EMAIL }}" >> .env
           
           # AGGRESSIVER CLEANUP: Stoppe alles, was Port 9009 belegt (auch fremde Projekte)
           CONF_CONTAINER=$(docker ps --filter "publish=$APP_PORT" -q)

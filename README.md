@@ -31,11 +31,34 @@ Die Datenbank ist nur lokal auf dem Server erreichbar (`127.0.0.1`), die Daten l
 | `DB_NAME`, `DB_PORT` | Name und lokaler Port der Datenbank |
 | `APP_PORT` | Port der Web-App |
 | `APP_URL` | Öffentliche Adresse der App (für Links in E-Mails) |
-| `SMTP_USER`, `SMTP_PASS` | Postfach für Registrierungs- und Passwort-Mails (optional) |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS` | Postfach für Passwort-Mails und das Kontaktformular (optional) |
+| `STATIC_INVITE_CODES` | Optional: feste Einladungscodes, kommagetrennt. Leer = Registrierung nur mit Codes aus dem Admin-Bereich. Der erste registrierte Nutzer wird automatisch Admin. |
+| `CONTACT_EMAIL` | Empfänger des Kontaktformulars. Leer = Kontaktformular deaktiviert. |
 | `OIDC_ISSUER_URL`, `OIDC_CLIENT_ID`, `OIDC_CLIENT_SECRET` | Optionaler Login per Single Sign-on (z. B. Authentik) |
 
 **Niemals** eine ausgefüllte `.env`, Keystores (`*.jks`) oder App-Pakete (`*.aab`) einchecken –
 sie sind in `.gitignore` ausgeschlossen.
+
+## Apps für iOS und Android
+
+Die Apps sind eine Hülle um dieselbe Web-Oberfläche und brauchen **deinen eigenen Server**.
+
+- **Erster Start:** Die App fragt nach der Server-Adresse (z. B. `https://lernapp.example.com` oder im Heimnetz
+  `http://192.168.1.20:9011`) und prüft die Verbindung. Später lässt sie sich im Menü unter „Server ändern“ wechseln.
+- **Adresse vorbelegen (eigene Builds):** Lege `server/public/app-config.local.js` an (steht in `.gitignore`):
+  `window.APP_CONFIG = { defaultServerUrl: 'https://lernapp.example.com' };`
+- **Heimnetz:** Adressen im lokalen Netz dürfen ohne HTTPS verwendet werden (iOS: „Lokales Netzwerk“-Abfrage,
+  Android: unverschlüsselter Verkehr erlaubt). Ist der Server nicht erreichbar, lernt die App offline weiter;
+  alle Änderungen werden gespeichert und beim nächsten Kontakt mit dem Server abgeglichen. Anmeldung, Excel-Import
+  und KI-Funktionen brauchen die Verbindung zum Server.
+- **Eigene Kennung:** Vor dem Veröffentlichen die App-Kennung (`appId` in `capacitor.config.json`, Bundle-ID in Xcode,
+  `applicationId` in `android/app/build.gradle`) und die Signatur durch deine eigenen ersetzen.
+
+```bash
+npx cap sync            # Web-Code in die iOS-/Android-Projekte übernehmen
+npx cap open ios        # Xcode öffnen (Archivieren/Hochladen dort)
+npx cap open android    # Android Studio öffnen
+```
 
 ## Entwicklung
 
