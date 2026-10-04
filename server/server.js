@@ -29,7 +29,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Health Check
-app.get('/api/health', (req, res) => res.json({ status: 'ok', version: '2.2.23', timestamp: new Date() }));
+app.get('/api/health', (req, res) => res.json({ status: 'ok', version: '2.2.24', timestamp: new Date() }));
 
 // Mount routes
 app.use('/api/auth/oidc', require('./routes/oidc'));
@@ -45,6 +45,8 @@ app.use('/api/ai', aiRoutes);
 
 // Serve frontend
 app.get('*', (req, res) => {
+  // Nicht vorhandene Dateien (z. B. ein fehlendes Emoji-Bild) melden 404 statt der ganzen App-Seite
+  if (path.extname(req.path)) return res.sendStatus(404);
   res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
