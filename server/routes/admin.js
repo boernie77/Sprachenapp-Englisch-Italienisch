@@ -6,6 +6,7 @@ const ai = require('../utils/ai');
 const { authenticateToken, requireAdmin, asyncHandler } = require('../middleware/auth');
 const transporter = require('../utils/mailer');
 const { deleteUserCompletely } = require('../utils/userData');
+const { isSupported, normalizeLanguage } = require('../utils/languages');
 
 const router = express.Router();
 
@@ -36,8 +37,8 @@ router.post('/invite-codes/send', authenticateToken, requireAdmin, asyncHandler(
     const mailOptions = {
         from: process.env.SMTP_USER || 'noreply@lernapp.local',
         to: email,
-        subject: 'Deine Einladung zur LernApp Italienisch',
-        text: `Ciao!\n\nDu wurdest eingeladen, die LernApp Italienisch zu nutzen.\n\nDein persönlicher Einladungscode lautet: ${code}\n\nRegistriere dich hier: ${req.headers.origin || 'https://lernapp.local'}\n\nViel Spaß beim Lernen!`
+        subject: 'Deine Einladung zur Vokabeln-App',
+        text: `Hallo!\n\nDu wurdest eingeladen, die Vokabeln-App (Sprachen lernen) zu nutzen.\n\nDein persönlicher Einladungscode lautet: ${code}\n\nRegistriere dich hier: ${req.headers.origin || 'https://lernapp.local'}\n\nViel Spaß beim Lernen!`
     };
 
     await transporter.sendMail(mailOptions);
@@ -76,7 +77,8 @@ router.get('/users', authenticateToken, requireAdmin, async (req, res) => {
 
       const stats = {
           it: { total: 0, learned: 0 },
-          en: { total: 0, learned: 0 }
+          en: { total: 0, learned: 0 },
+          es: { total: 0, learned: 0 }
       };
 
       vocabWithStats.forEach(v => {
@@ -182,7 +184,7 @@ router.put('/users/:id/name', authenticateToken, requireAdmin, asyncHandler(asyn
 
 router.post('/base-vocab/bulk', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
     const { words, language, mode } = req.body;
-    if (!language) return res.status(400).json({ error: 'Language required' });
+    if (!language || !isSupported(language)) return res.status(400).json({ error: 'Language required' });
     
     const transaction = await sequelize.transaction();
     try {
@@ -201,7 +203,7 @@ router.post('/base-vocab/bulk', authenticateToken, requireAdmin, asyncHandler(as
 
 router.post('/grammar-sentences/bulk', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
     const { sentences, language, mode } = req.body;
-    if (!language) return res.status(400).json({ error: 'Language required' });
+    if (!language || !isSupported(language)) return res.status(400).json({ error: 'Language required' });
 
     const transaction = await sequelize.transaction();
     try {
@@ -313,7 +315,7 @@ router.get('/ai-estimate', authenticateToken, requireAdmin, asyncHandler(async (
     const { estimateCall } = require('../utils/ai/estimate');
     const { parsePrefs, prefsForLanguage } = require('../utils/ai/usage');
     const auto = require('../utils/ai/autoGenerate');
-    const language = ['it', 'en'].includes(req.query.language) ? req.query.language : 'it';
+    const language = normalizeLanguage(req.query.language);
     const config = await ai.loadConfig();
     const model = String(req.query.model || config.models[config.provider]).slice(0, 100);
     const currentModel = config.models[req.query.provider || config.provider];
@@ -357,7 +359,7 @@ router.get('/verb-check', authenticateToken, requireAdmin, asyncHandler(async (r
 
 router.post('/verb-check/run', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
     const language = req.body.language;
-    if (!['it', 'en'].includes(language)) return res.status(400).json({ error: 'Sprache nicht unterstützt' });
+    if (!isSupported(language)) return res.status(400).json({ error: 'Sprache nicht unterstützt' });
     require('../utils/ai/verbCheck').confirmLanguage(language);
     res.json({ started: true });
 }));
@@ -365,7 +367,7 @@ router.post('/verb-check/run', authenticateToken, requireAdmin, asyncHandler(asy
 // Geprüfte Verben mit Formen (das Frontend vergleicht sie mit den Regeln und zeigt die Abweichungen)
 router.get('/verb-check/rows', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
     const { VerbForm } = require('../models');
-    const language = ['it', 'en'].includes(req.query.language) ? req.query.language : 'it';
+    const language = normalizeLanguage(req.query.language);
     const rows = await VerbForm.findAll({ where: { language, status: 'verified' }, attributes: ['infinitive', 'forms'], order: [['infinitive', 'ASC']], raw: true });
     res.json(rows.map(r => ({ infinitive: r.infinitive, forms: JSON.parse(r.forms) })));
 }));
@@ -373,7 +375,7 @@ router.get('/verb-check/rows', authenticateToken, requireAdmin, asyncHandler(asy
 router.post('/verb-check/reject', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
     const { VerbForm } = require('../models');
     const { language, infinitive } = req.body;
-    if (!['it', 'en'].includes(language) || typeof infinitive !== 'string') return res.status(400).json({ error: 'Ungültige Angabe' });
+    if (!isSupported(language) || typeof infinitive !== 'string') return res.status(400).json({ error: 'Ungültige Angabe' });
     const [count] = await VerbForm.update({ status: 'rejected' }, { where: { language, infinitive, status: 'verified' } });
     res.json({ rejected: count });
 }));

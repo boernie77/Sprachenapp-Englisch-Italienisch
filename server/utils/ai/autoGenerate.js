@@ -7,12 +7,16 @@ const { loadConfig, generateSentences } = require('./index');
 const { getCategories } = require('./grammar');
 const { parsePrefs, prefsForLanguage, remainingToday, addUsage } = require('./usage');
 
-const LANGUAGES = ['it', 'en'];
+const { LANGUAGES } = require('../languages');
 const TICK_MS = 60 * 1000;
 const MAX_FAILURES = 3;
 const MAX_KI_FACTOR = 2; // höchstens so viele KI-Sätze pro Wort (und Niveau): Faktor mal eingestellte Anzahl
 const BULK_THRESHOLD = 50; // ab so vielen offenen Wörtern startet die Automatik erst nach Freigabe durch den Nutzer
-const ARTICLES = { it: ['il', 'lo', 'la', 'l', 'i', 'gli', 'le', 'un', 'uno', 'una'], en: ['to', 'the', 'a', 'an'] };
+const ARTICLES = {
+    it: ['il', 'lo', 'la', 'l', 'i', 'gli', 'le', 'un', 'uno', 'una'],
+    en: ['to', 'the', 'a', 'an'],
+    es: ['el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas']
+};
 
 let running = false;
 const bulkConfirmed = new Set(); // `${userId}:${language}` – freigegebene große Mengen; endet, wenn keine Wörter mehr offen sind
@@ -37,13 +41,14 @@ function buildIndex(sentenceTexts) {
 
 function stemOf(token, language, typ) {
     if (language === 'it' && /verb/i.test(typ || '') && /(are|ere|ire)$/.test(token) && token.length > 4) return token.slice(0, -3);
+    if (language === 'es' && /verb/i.test(typ || '') && /(ar|er|ir)$/.test(token) && token.length > 4) return token.slice(0, -2);
     if (token.length >= 5) return token.slice(0, -1); // Mehrzahl und Endungen grob abfangen
     return token;
 }
 
 function isCovered(word, language, index) {
     let tokens = tokenize(word.it);
-    if (tokens.length > 1 && ARTICLES[language].includes(tokens[0])) tokens = tokens.slice(1);
+    if (tokens.length > 1 && (ARTICLES[language] || []).includes(tokens[0])) tokens = tokens.slice(1);
     if (tokens.length === 0) return true; // nichts Sinnvolles zu suchen
     return tokens.every(token => {
         if (index.forms.has(token)) return true;
@@ -56,7 +61,7 @@ function isCovered(word, language, index) {
 // Fremdwort ohne Artikel, klein geschrieben (gleicher Schlüssel für "la casa" und "casa")
 function wordKey(text, language) {
     const tokens = tokenize(text);
-    if (tokens.length > 1 && ARTICLES[language].includes(tokens[0])) tokens.shift();
+    if (tokens.length > 1 && (ARTICLES[language] || []).includes(tokens[0])) tokens.shift();
     return tokens.join(' ');
 }
 

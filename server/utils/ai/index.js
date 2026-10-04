@@ -3,7 +3,8 @@
 const { Setting } = require('../../models');
 const { encrypt, decrypt } = require('../secretBox');
 const { PROVIDERS, AiError } = require('./providers');
-const { HINTS } = require('./grammar');
+const { hintFor } = require('./grammar');
+const { LANGUAGE_NAMES } = require('../languages');
 const { costUsd } = require('./pricing');
 
 const SETTINGS_KEY = 'ai.config';
@@ -65,8 +66,6 @@ function getProvider(id) {
     return provider;
 }
 
-const LANGUAGE_NAMES = { it: 'Italienisch', en: 'Englisch' };
-
 function sentenceSchema(categories, levels) {
     return {
         type: 'object',
@@ -99,6 +98,7 @@ Jeder Satz muss:
 - die angegebene Grammatikart eindeutig und korrekt verwenden.
 - zum Sprachniveau passen (A1 sehr einfach und kurz, B2 auch Nebensätze).
 - höchstens 15 Wörter haben.
+- bei Spanisch: Spanisch aus Spanien (kastilisch, Anrede vosotros/vosotras), mit korrekten Akzenten und mit ¿…? und ¡…! bei Fragen und Ausrufen.
 - eine natürliche, inhaltlich genaue deutsche Übersetzung mit korrekter Groß- und Kleinschreibung haben.
 
 Verteile die Sätze gleichmäßig auf die angegebenen Grammatikarten und wiederhole keine Satzmuster.`;
@@ -122,7 +122,7 @@ function buildPlan(categories, levels, count) {
 
 function buildPrompt({ word, translation, language, plan }) {
     const categories = [...new Set(plan.map(p => p.category))];
-    const categoryLines = categories.map(c => `- ${c}${HINTS[c] ? ` (${HINTS[c]})` : ''}`).join('\n');
+    const categoryLines = categories.map(c => `- ${c}${hintFor(language, c) ? ` (${hintFor(language, c)})` : ''}`).join('\n');
     const planLines = plan.map((p, i) => `${i + 1}. Grammatikart: ${p.category}, Niveau: ${p.level}`).join('\n');
     return `Sprache: ${LANGUAGE_NAMES[language]}
 Wort: ${word}${translation ? `\nDeutsche Bedeutung: ${translation}` : ''}
@@ -167,7 +167,7 @@ async function generateSentences({ word, translation, language, levels, categori
     return { sentences, usage: { input: usage.input, output: usage.output, costUsd: costUsd(model, usage.input, usage.output) } };
 }
 
-const LOOKUP_SYSTEM = 'Du bestimmst für eine Vokabel-App die Wortart und bei italienischen Substantiven das grammatische Geschlecht samt Zahl. Antworte ausschließlich nach dem Schema.';
+const LOOKUP_SYSTEM = 'Du bestimmst für eine Vokabel-App die Wortart und bei italienischen und spanischen Substantiven das grammatische Geschlecht samt Zahl. Antworte ausschließlich nach dem Schema.';
 
 const lookupSchema = {
     type: 'object',
@@ -179,7 +179,7 @@ const lookupSchema = {
     additionalProperties: false
 };
 
-// Wortart (und bei italienischen Substantiven Geschlecht) eines einzelnen Worts
+// Wortart (und bei italienischen und spanischen Substantiven Geschlecht) eines einzelnen Worts
 async function lookupWord({ word, translation, language }) {
     const config = await loadConfig();
     if (!config.enabled) throw new AiError('Die KI-Funktion ist nicht aktiviert', 409);
@@ -189,11 +189,11 @@ async function lookupWord({ word, translation, language }) {
     const model = config.models[config.provider];
     const { data, usage } = await provider.generateJson({
         apiKey, model, system: LOOKUP_SYSTEM,
-        prompt: `Sprache: ${LANGUAGE_NAMES[language]}\nWort: ${word}${translation ? `\nDeutsche Bedeutung: ${translation}` : ''}\n\nBestimme die Wortart (Substantiv, Verb, Adjektiv oder Sonstiges). "gender" ist bei italienischen Substantiven m-sg (männlich Einzahl), f-sg, m-pl oder f-pl, sonst none.`,
+        prompt: `Sprache: ${LANGUAGE_NAMES[language]}\nWort: ${word}${translation ? `\nDeutsche Bedeutung: ${translation}` : ''}\n\nBestimme die Wortart (Substantiv, Verb, Adjektiv oder Sonstiges). "gender" ist bei italienischen und spanischen Substantiven m-sg (männlich Einzahl), f-sg, m-pl oder f-pl, sonst none.`,
         schema: lookupSchema
     });
     const typ = ['Substantiv', 'Verb', 'Adjektiv', 'Sonstiges'].includes(data && data.typ) ? data.typ : 'Sonstiges';
-    const gender = language === 'it' && typ === 'Substantiv' && ['m-sg', 'f-sg', 'm-pl', 'f-pl'].includes(data.gender) ? data.gender : '';
+    const gender = (language === 'it' || language === 'es') && typ === 'Substantiv' && ['m-sg', 'f-sg', 'm-pl', 'f-pl'].includes(data.gender) ? data.gender : '';
     return { info: { typ, grammatica: gender }, usage: { input: usage.input, output: usage.output, costUsd: costUsd(model, usage.input, usage.output) } };
 }
 

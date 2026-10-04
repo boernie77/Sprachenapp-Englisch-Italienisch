@@ -3,12 +3,14 @@ const { Op } = require('sequelize');
 const { VerbForm } = require('../models');
 const { authenticateToken, asyncHandler } = require('../middleware/auth');
 
+const { normalizeLanguage } = require('../utils/languages');
+
 const router = express.Router();
 
 // Geprüfte Verbformen für die App. Mit ?since=<ISO-Zeit> nur Änderungen seitdem (inkl. verworfener/ungültiger Verben,
 // damit die App lokale Einträge entfernen kann).
 router.get('/', authenticateToken, asyncHandler(async (req, res) => {
-    const language = ['it', 'en'].includes(req.query.language) ? req.query.language : 'it';
+    const language = normalizeLanguage(req.query.language);
     const now = new Date().toISOString(); // vor der Abfrage: spätere Änderungen kommen beim nächsten Mal
     const where = { language };
     const since = req.query.since ? new Date(req.query.since) : null;
