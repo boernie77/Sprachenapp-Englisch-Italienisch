@@ -1837,13 +1837,13 @@
                         Lizenz: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"
                             class="text-blue-600 hover:underline">CC BY-SA 4.0</a>
                     </p>
-                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.19</p>
+                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.20</p>
                     <p class="text-[10px] text-slate-400" data-i18n="imp_rights">© 2026 Christian Bernauer. Alle Rechte vorbehalten.</p>
                 </div>
             </div>
             <!-- App-Style Bottom Section -->
             <div class="mt-8 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.19</p>
+                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.20</p>
             </div>
         </div>
     </div>
@@ -2088,23 +2088,23 @@
             <div class="w-16 h-16 shrink-0 bg-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
                 <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3">Version 2.2.19 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
+            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3">Version 2.2.20 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
             <div class="text-left space-y-3 mb-6 overflow-y-auto min-h-0 flex-1 pr-1">
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu am Handy: eine <b>schmale Filterzeile</b> (Focus und Niveau bzw. Lernrichtung und Kategorie) – Tippen öffnet die Auswahl</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: <b>Alle Änderungen funktionieren offline</b> (Bearbeiten, Löschen, Aktivieren, Sätze …) und werden später automatisch mit dem Server abgeglichen</p>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu am Handy: <b>Lupe</b> im Grammatik-Modus für die Satz-Suche zu einem Wort</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: Im Menü steht, ob du <b>offline</b> bist, der <b>Server nicht erreichbar</b> ist oder du <b>verbunden</b> bist – und wie viele Änderungen warten</p>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Admin: Abweichungen der KI-Verbprüfung als <b>Excel-Liste</b></p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Fix: „Alle abwählen“ ging offline wieder verloren</p>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Ein vorhandenes Wort lässt sich beim Hinzufügen direkt <b>aktivieren</b></p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu am Handy: schmale Filterzeile und Lupe für die Satz-Suche</p>
                 </div>
                 <p class="text-slate-500 text-[10px] italic text-center mt-4 px-4 leading-normal">
                     Viel Spaß beim Lernen! Melde Fehler bitte direkt an uns.
@@ -2235,9 +2235,13 @@
                     <span data-i18n="last_sync">Letzter Sync:</span>
                     <span id="lastSyncTime" class="font-mono">Nie</span>
                 </div>
+                <div id="syncStateRow" class="px-4 py-1.5 text-[10px] bg-slate-50 flex items-center justify-between gap-2 border-t border-slate-100/50">
+                    <span class="flex items-center gap-1.5 font-semibold text-slate-500"><span id="syncStateDot" class="inline-block w-2 h-2 rounded-full bg-slate-300"></span><span id="syncStateText"></span></span>
+                    <span id="syncPendingText" class="font-mono text-slate-400"></span>
+                </div>
                 <div class="px-4 py-1.5 text-[10px] text-slate-400 bg-slate-50/50 flex items-center justify-between border-t border-slate-100/50">
                     <span>App-Version:</span>
-                    <span class="font-mono font-medium text-slate-500">2.2.19</span>
+                    <span class="font-mono font-medium text-slate-500">2.2.20</span>
                 </div>
                 <input type="file" id="excelUploadEl" accept=".xlsx, .xls" class="hidden">
             </div>
@@ -6075,9 +6079,12 @@
 
         let fullDictionary = [];
         let allBaseSentences = [];
+        // Verbindungszustand: 'offline' (kein Internet), 'server' (Internet, aber Server nicht erreichbar), 'connected'
+        let connectionState = navigator.onLine ? 'connected' : 'offline';
         // Globale Sätze: 'auto' = KI-Sätze sind aktiv, wenn ihr Wort in der Vokabelliste aktiv ist (Excel-Sätze immer);
         // 'manual' = eigene Auswahl (manualActive vom Server). Abgewählte Sätze zählen nicht für Übung und Beispiel-Popups.
         let sentenceMode = 'auto';
+        setTimeout(() => { if (typeof loadCachedBaseSentences === 'function' && (!allBaseSentences || allBaseSentences.length === 0)) loadCachedBaseSentences(); }, 0);
         const ARTICLE_WORDS = { it: ['il', 'lo', 'la', 'l', 'i', 'gli', 'le', 'un', 'uno', 'una'], en: ['to', 'the', 'a', 'an'] };
         // Fremdwort ohne Artikel, klein geschrieben – gleicher Schlüssel für "la casa" und "casa"
         function wordKey(text) {
@@ -6100,28 +6107,29 @@
             const keys = sentenceMode === 'auto' ? activeWordKeys() : null;
             return (allBaseSentences || []).filter(s => isBaseSentenceActive(s, keys));
         };
-        // Wählt globale Sätze für diesen Nutzer an/ab (ids) oder alle der aktuellen Sprache (ids = null); nur im manuellen Modus
-        async function setBaseSentencesActive(ids, isActive) {
-            await apiFetch('/grammar-sentences/active', {
-                method: 'PUT',
-                body: JSON.stringify(ids ? { ids, isActive } : { all: true, language: CURRENT_LANG, isActive })
-            });
+        // Wählt globale Sätze für diesen Nutzer an/ab (ids) oder alle der aktuellen Sprache (ids = null); nur im manuellen Modus.
+        // Gilt sofort lokal und wird über die Warteschlange an den Server gesendet (auch später, wenn er nicht erreichbar ist).
+        function setBaseSentencesActive(ids, isActive) {
             const only = ids ? new Set(ids) : null;
             (allBaseSentences || []).forEach(s => {
                 if (only ? only.has(s.id) : (s.language || 'it') === CURRENT_LANG) s.manualActive = isActive;
             });
+            cacheBaseSentences();
+            queueMutation('sentenceActive', ids ? { ids, isActive } : { all: true, language: CURRENT_LANG, isActive });
         }
-        // Modus wechseln; beim ersten Wechsel auf manuell wird der bisherige Automatik-Zustand der KI-Sätze übernommen
-        async function setSentenceMode(mode) {
-            const body = { mode, language: CURRENT_LANG };
+        // Modus wechseln; beim Wechsel auf manuell bleibt der bisherige Automatik-Zustand der KI-Sätze erhalten
+        function setSentenceMode(mode) {
+            const payload = { mode, language: CURRENT_LANG };
             if (mode === 'manual') {
                 const keys = activeWordKeys();
-                body.activeIds = (allBaseSentences || []).filter(s => s.forWord && (s.language || 'it') === CURRENT_LANG && keys.has(wordKey(s.forWord))).map(s => s.id);
+                const kiSentences = (allBaseSentences || []).filter(s => s.forWord && (s.language || 'it') === CURRENT_LANG);
+                kiSentences.forEach(s => { s.manualActive = keys.has(wordKey(s.forWord)); });
+                payload.activeIds = kiSentences.filter(s => s.manualActive).map(s => s.id);
             }
-            await apiFetch('/grammar-sentences/settings', { method: 'PUT', body: JSON.stringify(body) });
             sentenceMode = mode;
-            if (mode === 'manual') await fetchGlobalBaseSentences(); // manuelle Auswahl neu vom Server holen
+            cacheBaseSentences();
             updateSentenceModeUi();
+            queueMutation('sentenceMode', payload);
         }
         function updateSentenceModeUi() {
             const box = document.getElementById('sentenceModeAuto');
@@ -6223,6 +6231,11 @@
                 info_type_verb: "Verbformen",
                 info_type_noun: "Bild",
                 last_sync: "Letzter Sync:",
+                sync_state_offline: "Offline (kein Internet)",
+                sync_state_server: "Server nicht erreichbar",
+                sync_state_connected: "Mit Server verbunden",
+                sync_pending: "{0} Änderung(en) warten",
+                need_server: "Dafür brauchst du eine Verbindung zum Server.",
                 no_vocab_filter: "Keine passenden Vokabeln für diesen Filter gefunden.",
                 info_placeholder_verb: "Hier erscheinen die Zusatzinformationen der richtig zugeordneten Verben.",
                 info_placeholder_noun: "Klicke oder ziehe ein Wort in der linken Spalte, um das Bild zu sehen.",
@@ -6819,6 +6832,11 @@
                 info_type_verb: "Verb Forms",
                 info_type_noun: "Picture",
                 last_sync: "Last Sync:",
+                sync_state_offline: "Offline (no internet)",
+                sync_state_server: "Server not reachable",
+                sync_state_connected: "Connected to server",
+                sync_pending: "{0} change(s) waiting",
+                need_server: "This needs a connection to the server.",
                 no_vocab_filter: "No matching vocabulary found for this filter.",
                 info_placeholder_verb: "Extra information for correctly matched verbs will appear here.",
                 info_placeholder_noun: "Click or drag a word in the left column to see the picture.",
@@ -7704,13 +7722,21 @@
             }
         }
 
+        // Fehler ohne Antwort des Servers (kein Netz, Server weg, Zeitüberschreitung); wird für die Warteschlange gebraucht
+        function networkError(message) {
+            const err = new Error(message);
+            err.isNetwork = true;
+            setConnectionState(navigator.onLine ? 'server' : 'offline');
+            return err;
+        }
+
         async function apiFetch(endpoint, options = {}) {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), options.timeoutMs || 20000); // Standard 20 s, KI-Aufrufe länger
 
             if (!navigator.onLine && options.method && options.method !== 'GET') {
                 clearTimeout(timeoutId);
-                throw new Error('Offline: Action queued');
+                throw networkError('Offline: Action queued');
             }
 
             const isFormData = options.body instanceof FormData;
@@ -7736,23 +7762,30 @@
                     signal: controller.signal
                 });
                 clearTimeout(timeoutId);
+                setConnectionState('connected'); // der Server hat geantwortet (auch mit einem Fehlercode)
 
                 if (res.status === 401 || res.status === 403) {
                     logout();
-                    throw new Error('Unauthorized');
+                    const authErr = new Error('Unauthorized');
+                    authErr.status = res.status;
+                    throw authErr;
                 }
                 if (!res.ok) {
                     const errData = await res.json().catch(() => ({}));
-                    throw new Error(errData.error || `HTTP error! status: ${res.status}`);
+                    const httpErr = new Error(errData.error || `HTTP error! status: ${res.status}`);
+                    httpErr.status = res.status;
+                    throw httpErr;
                 }
                 return res.json();
             } catch (err) {
                 clearTimeout(timeoutId);
+                if (err.status || err.isNetwork) throw err;
                 if (err.name === 'AbortError') {
-                    throw new Error('Timeout: Der Server antwortet nicht (schlechte Verbindung?)');
+                    throw networkError('Timeout: Der Server antwortet nicht (schlechte Verbindung?)');
                 }
-                if (!navigator.onLine || err.message === 'Failed to fetch') {
-                    throw new Error('Network unavailable');
+                // Safari/iOS meldet "Load failed", Chrome "Failed to fetch": beides ein TypeError ohne Antwort
+                if (err instanceof TypeError || !navigator.onLine || err.message === 'Failed to fetch') {
+                    throw networkError(getI18n(navigator.onLine ? 'sync_state_server' : 'sync_state_offline'));
                 }
                 throw err;
             }
@@ -7794,14 +7827,35 @@
             }
         }
 
+        // Globale Sätze und Satz-Modus lokal zwischenspeichern, damit die App auch ohne Server damit arbeitet
+        function cacheBaseSentences() {
+            try {
+                const compact = (allBaseSentences || []).map(g => ({ id: g.id, it: g.it, de: g.de, category: g.category, level: g.level, forWord: g.forWord, language: g.language, manualActive: g.manualActive }));
+                localStorage.setItem(`ita-base-sentences-${CURRENT_LANG}`, JSON.stringify(compact));
+                localStorage.setItem('ita-sentence-mode', sentenceMode);
+            } catch (e) { /* Speicher voll: dann eben ohne Zwischenspeicher */ }
+        }
+        function loadCachedBaseSentences() {
+            const cached = safeJSONParse(localStorage.getItem(`ita-base-sentences-${CURRENT_LANG}`), null);
+            if (cached) allBaseSentences = cached;
+            const mode = localStorage.getItem('ita-sentence-mode');
+            if (mode === 'auto' || mode === 'manual') sentenceMode = mode;
+        }
+
         async function fetchGlobalBaseSentences() {
             try {
                 const result = await apiFetch(`/grammar-sentences?language=${CURRENT_LANG}`);
                 if (result) allBaseSentences = result;
                 sentenceMode = (await apiFetch('/grammar-sentences/settings')).mode;
+                applyPendingSentenceOverlay();
+                cacheBaseSentences();
                 updateSentenceModeUi();
             } catch (e) {
                 console.warn("Failed to fetch global base sentences", e);
+                // Ohne Server: gespeicherte Sätze nutzen (nur wenn noch nichts geladen ist), wartende Änderungen darüberlegen
+                if (!allBaseSentences || allBaseSentences.length === 0 || allBaseSentences[0].language !== CURRENT_LANG) loadCachedBaseSentences();
+                applyPendingSentenceOverlay();
+                updateSentenceModeUi();
             }
         }
 
@@ -7926,6 +7980,8 @@
             window._isSyncing = true;
 
             try {
+                // Erst eigene, noch wartende Änderungen senden, damit der Abruf sie nicht überholt
+                if (navigator.onLine && syncOutbox.length > 0) await processSyncOutbox();
                 if (isCapacitor) console.log("Fetching vocab...");
                 const vocab = await apiFetch('/vocab');
                 if (isCapacitor) console.log(`Vocab fetched: ${vocab.length} items`);
@@ -8006,6 +8062,12 @@
                         };
                     }
                 });
+                // Noch nicht gesendete Änderungen (Bearbeiten, Löschen, Aktivieren, neue Wörter …) bleiben sichtbar
+                if (syncOutbox.some(t => t.type === 'statsReset')) {
+                    wordStats = {};
+                    fullDictionary.forEach(w => initWordStat(w.id));
+                }
+                applyPendingVocabOverlay();
                 buildVerbReverseMap();
 
                 const localActivity = safeJSONParse(localStorage.getItem(`ita-daily-activity-${CURRENT_LANG}`), {});
@@ -8139,9 +8201,39 @@
             saveStatToServer(wordId);
         }
 
+        function updateSyncStatusUi() {
+            const dot = document.getElementById('syncStateDot');
+            const text = document.getElementById('syncStateText');
+            const pending = document.getElementById('syncPendingText');
+            if (!dot || !text) return;
+            const styles = { offline: ['bg-red-400', 'sync_state_offline'], server: ['bg-amber-400', 'sync_state_server'], connected: ['bg-green-500', 'sync_state_connected'] };
+            const [color, key] = styles[connectionState] || styles.offline;
+            dot.className = `inline-block w-2 h-2 rounded-full ${color}`;
+            text.textContent = getI18n(key);
+            const count = typeof syncOutbox !== 'undefined' ? syncOutbox.length : 0;
+            pending.textContent = count > 0 ? getI18n('sync_pending', count) : '';
+        }
+
+        function setConnectionState(state) {
+            if (connectionState === state) return;
+            connectionState = state;
+            updateSyncStatusUi();
+        }
+
         // --- Offline Sync Outbox ---
         let syncOutbox = safeJSONParse(localStorage.getItem('ita-sync-outbox'), []);
         let lastLoggedOutUserId = null;
+
+        function persistOutbox() {
+            if (API_TOKEN) localStorage.setItem('ita-sync-outbox', JSON.stringify(syncOutbox));
+            updateSyncStatusUi();
+        }
+
+        // Vorläufige Nummern für offline angelegte Wörter/Sätze: erst nach dem Senden gibt es die echte Nummer
+        const tempIdMap = safeJSONParse(localStorage.getItem('ita-temp-id-map'), {});
+        const isTempId = (id) => typeof id === 'string' && id.startsWith('temp_');
+        const newTempId = () => `temp_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+        const realId = (id) => (isTempId(id) ? (tempIdMap[id] || null) : id);
 
         function addToSyncOutbox(type, payload) {
             if (!API_TOKEN) {
@@ -8161,7 +8253,7 @@
                         existing.payload[date] = Math.max(existing.payload[date] || 0, count);
                     }
                     existing.timestamp = Date.now();
-                    localStorage.setItem('ita-sync-outbox', JSON.stringify(syncOutbox));
+                    persistOutbox();
                     return;
                 }
             } else if (type === 'stats') {
@@ -8175,22 +8267,56 @@
                     existing.payload.data.lastReviewedDate = Math.max(existing.payload.data.lastReviewedDate || 0, payload.data.lastReviewedDate || 0);
                     existing.payload.data.nextReviewDate = Math.max(existing.payload.data.nextReviewDate || 0, payload.data.nextReviewDate || 0);
                     existing.payload.isActive = payload.isActive; // isActive should just be updated
+                    existing.payload.isMarked = payload.isMarked;
                     existing.timestamp = Date.now();
-                    localStorage.setItem('ita-sync-outbox', JSON.stringify(syncOutbox));
+                    persistOutbox();
                     return;
                 }
             }
             syncOutbox.push({ type, payload, timestamp: Date.now() });
-            localStorage.setItem('ita-sync-outbox', JSON.stringify(syncOutbox));
+            persistOutbox();
+        }
+
+        // Jede Änderung, die der Server erfahren muss: lokal gilt sie sofort, hier wird sie in die Warteschlange gelegt,
+        // zusammengefasst (z. B. mehrfaches Bearbeiten desselben Worts) und dann – wenn möglich – gleich gesendet.
+        function queueMutation(type, payload) {
+            const removeTasks = (predicate) => { syncOutbox = syncOutbox.filter(t => !predicate(t)); };
+            const queuedAdd = (id) => syncOutbox.find(t => t.type === 'addVocab' && t.payload.tempId === id);
+
+            if (type === 'editVocab') {
+                const add = isTempId(payload.id) ? queuedAdd(payload.id) : null;
+                if (add) { Object.assign(add.payload, payload.fields); persistOutbox(); return; } // noch nicht gesendet: ins Anlegen einarbeiten
+                const existing = syncOutbox.find(t => t.type === 'editVocab' && t.payload.id === payload.id);
+                if (existing) { Object.assign(existing.payload.fields, payload.fields); existing.timestamp = Date.now(); persistOutbox(); processSyncOutbox(); return; }
+            } else if (type === 'deleteVocab') {
+                const add = isTempId(payload.id) ? queuedAdd(payload.id) : null;
+                removeTasks(t => (t.type === 'editVocab' && t.payload.id === payload.id) || (t.type === 'stats' && t.payload.wordId === payload.id));
+                if (add) { removeTasks(t => t === add); persistOutbox(); return; } // wurde nie gesendet: nichts zu löschen
+            } else if (type === 'bulkActive') {
+                removeTasks(t => t.type === 'bulkActive' && t.payload.language === payload.language && t.payload.typ === payload.typ);
+                // Noch nicht gesendete neue Einträge der gleichen Gruppe bekommen den Wert gleich mit
+                syncOutbox.forEach(t => {
+                    if (t.type === 'addVocab' && (t.payload.language || 'it') === payload.language && ((payload.typ === 'Satz') === (t.payload.typ === 'Satz'))) t.payload.isActive = payload.isActive;
+                });
+            } else if (type === 'statsReset') {
+                removeTasks(t => t.type === 'stats' || t.type === 'statsReset' || t.type === 'daily-activity');
+            } else if (type === 'sentenceMode') {
+                removeTasks(t => t.type === 'sentenceMode');
+            }
+            syncOutbox.push({ type, payload, timestamp: Date.now() });
+            persistOutbox();
+            processSyncOutbox();
         }
 
         // Offline gemerkte Statistik senden – mit dem lokalen Stand zusammengeführt (höherer Wert gewinnt)
         async function sendQueuedStat(payload) {
+            const id = realId(payload.wordId);
+            if (!id) { const gone = new Error('Wort nicht mehr vorhanden'); gone.status = 404; throw gone; }
             const q = payload.data || {};
-            const cur = wordStats[payload.wordId] || {};
+            const cur = wordStats[payload.wordId] || wordStats[id] || {};
             const max = (k) => Math.max(q[k] || 0, cur[k] || 0);
             const toIso = (k) => max(k) ? new Date(max(k)).toISOString() : undefined;
-            await apiFetch(`/vocab/${payload.wordId}/stats`, {
+            await apiFetch(`/vocab/${id}/stats`, {
                 method: 'PUT',
                 body: JSON.stringify({
                     presented: max('presented'),
@@ -8205,33 +8331,125 @@
             });
         }
 
-        async function processSyncOutbox() {
-            if (!navigator.onLine || !API_TOKEN || syncOutbox.length === 0) return;
+        // Funktionen, die den Server brauchen (Import, Listen leeren, KI, Admin): vorher prüfen und klar melden
+        async function requireServer() {
+            if (connectionState === 'connected' || await checkConnection()) return true;
+            showToast(getI18n('need_server'), 'warning');
+            return false;
+        }
 
-            for (const task of [...syncOutbox]) {
-                // Abgemeldet (z. B. Token abgelaufen): logout() hat den Rest bereits für diesen Nutzer gesichert
-                if (!API_TOKEN) return;
-                try {
-                    if (task.type === 'stats') {
-                        await sendQueuedStat(task.payload);
-                    } else if (task.type === 'addVocab') {
-                        await apiFetch('/vocab', {
-                            method: 'POST',
-                            body: JSON.stringify(task.payload)
-                        });
-                    } else if (task.type === 'daily-activity') {
-                        await apiFetch('/auth/daily-activity', {
-                            method: 'PUT',
-                            body: JSON.stringify(task.payload)
-                        });
+        // Eine Aufgabe an den Server schicken
+        async function sendQueuedTask(task) {
+            const p = task.payload;
+            const needReal = (id) => {
+                const real = realId(id);
+                if (!real) { const gone = new Error('Wort nicht mehr vorhanden'); gone.status = 404; throw gone; }
+                return real;
+            };
+            switch (task.type) {
+                case 'stats': return sendQueuedStat(p);
+                case 'daily-activity': return apiFetch('/auth/daily-activity', { method: 'PUT', body: JSON.stringify(p) });
+                case 'addVocab': {
+                    const { tempId, ...body } = p;
+                    const result = await apiFetch('/vocab', { method: 'POST', body: JSON.stringify(body) });
+                    if (tempId && result && result.id) {
+                        tempIdMap[tempId] = result.id;
+                        localStorage.setItem('ita-temp-id-map', JSON.stringify(tempIdMap));
+                        // Lokalen Eintrag und Statistik auf die echte Nummer umstellen
+                        const item = fullDictionary.find(w => w.id === tempId);
+                        if (item) { item.id = result.id; delete item.isOffline; }
+                        if (wordStats[tempId]) { wordStats[result.id] = wordStats[tempId]; delete wordStats[tempId]; }
+                        saveAllDataLocally();
+                    }
+                    return result;
+                }
+                case 'editVocab': return apiFetch(`/vocab/${needReal(p.id)}`, { method: 'PUT', body: JSON.stringify(p.fields) });
+                case 'deleteVocab': return apiFetch(`/vocab/${needReal(p.id)}`, { method: 'DELETE' });
+                case 'bulkActive': return apiFetch('/vocab/bulk-active', { method: 'PUT', body: JSON.stringify(p) });
+                case 'statsReset': {
+                    const result = await apiFetch('/vocab/stats/reset', { method: 'PUT' });
+                    localStorage.setItem('ita-local-last-reset', Date.now().toString());
+                    return result;
+                }
+                case 'sentenceActive': return apiFetch('/grammar-sentences/active', { method: 'PUT', body: JSON.stringify(p) });
+                case 'sentenceMode': return apiFetch('/grammar-sentences/settings', { method: 'PUT', body: JSON.stringify(p) });
+                default: {
+                    const unknown = new Error(`Unbekannte Aufgabe: ${task.type}`);
+                    unknown.status = 400;
+                    throw unknown;
+                }
+            }
+        }
+
+        let outboxRunning = false;
+        async function processSyncOutbox() {
+            if (outboxRunning || !API_TOKEN || syncOutbox.length === 0) return;
+            if (!navigator.onLine) { setConnectionState('offline'); return; }
+            outboxRunning = true;
+            try {
+                for (const task of [...syncOutbox]) {
+                    // Abgemeldet (z. B. Token abgelaufen): logout() hat den Rest bereits für diesen Nutzer gesichert
+                    if (!API_TOKEN) return;
+                    try {
+                        await sendQueuedTask(task);
+                    } catch (err) {
+                        // Kein Netz, Server weg oder Serverfehler: Reihenfolge wahren, später erneut versuchen
+                        if (err.isNetwork || err.status >= 500 || err.status === 401 || err.status === 403) return;
+                        // Der Server lehnt die Aufgabe endgültig ab (z. B. Eintrag existiert nicht mehr): verwerfen
+                        console.warn('[sync] Aufgabe verworfen:', task.type, err.message);
                     }
                     // Erst nach Erfolg austragen – so sieht logout() jederzeit nur noch Unerledigtes
                     syncOutbox = syncOutbox.filter(t => t !== task);
-                } catch (err) {
-                    // bleibt in der Warteschlange
+                    persistOutbox();
                 }
+            } finally {
+                outboxRunning = false;
+                persistOutbox();
             }
-            if (API_TOKEN) localStorage.setItem('ita-sync-outbox', JSON.stringify(syncOutbox));
+        }
+
+        // Noch nicht gesendete Änderungen über frisch vom Server geholte Daten legen, damit der Abgleich sie nicht überschreibt
+        function applyPendingVocabOverlay() {
+            const byId = () => new Map(fullDictionary.map(w => [w.id, w]));
+            let index = byId();
+            syncOutbox.forEach(task => {
+                const p = task.payload;
+                if (task.type === 'addVocab') {
+                    if (p.tempId && !index.has(p.tempId)) {
+                        const { tempId, ...rest } = p;
+                        fullDictionary.push({ ...rest, id: tempId, isOffline: true });
+                        if (!wordStats[tempId]) wordStats[tempId] = { presented: 0, correct: 0, incorrect: 0, streak: 0 };
+                        index = byId();
+                    }
+                } else if (task.type === 'editVocab') {
+                    const item = index.get(p.id) || index.get(realId(p.id));
+                    if (item) Object.assign(item, p.fields);
+                } else if (task.type === 'deleteVocab') {
+                    const target = index.get(p.id) || index.get(realId(p.id));
+                    if (target) { fullDictionary = fullDictionary.filter(w => w !== target); delete wordStats[target.id]; index = byId(); }
+                } else if (task.type === 'bulkActive') {
+                    fullDictionary.forEach(w => {
+                        if ((w.language || 'it') === p.language && ((p.typ === 'Satz') === (w.typ === 'Satz'))) w.isActive = p.isActive;
+                    });
+                } else if (task.type === 'stats') {
+                    const item = index.get(p.wordId) || index.get(realId(p.wordId));
+                    if (item) { item.isActive = p.isActive !== false; item.isMarked = p.isMarked === true; }
+                }
+            });
+        }
+
+        function applyPendingSentenceOverlay() {
+            syncOutbox.forEach(task => {
+                const p = task.payload;
+                if (task.type === 'sentenceActive') {
+                    const only = p.ids ? new Set(p.ids) : null;
+                    (allBaseSentences || []).forEach(sen => {
+                        if (only ? only.has(sen.id) : (sen.language || 'it') === p.language) sen.manualActive = p.isActive;
+                    });
+                } else if (task.type === 'sentenceMode') {
+                    sentenceMode = p.mode;
+                }
+            });
         }
 
         // Offline-Änderungen überstehen eine Abmeldung: pro Nutzer außerhalb der ita-*-Keys geparkt
@@ -8272,8 +8490,10 @@
                 const id = setTimeout(() => controller.abort(), 5000);
                 const res = await fetch(`${API_BASE_URL}/api/health`, { signal: controller.signal });
                 clearTimeout(id);
+                setConnectionState(res.ok ? 'connected' : 'server');
                 return res.ok;
             } catch (e) {
+                setConnectionState(navigator.onLine ? 'server' : 'offline');
                 return false;
             }
         }
@@ -8292,6 +8512,14 @@
         }
 
         window.addEventListener('online', handleSyncReconnection);
+        window.addEventListener('offline', () => setConnectionState('offline'));
+        // Ist der Server nicht erreichbar, regelmäßig nachsehen und dann gleich abgleichen
+        setInterval(async () => {
+            if (API_TOKEN && connectionState !== 'connected' && navigator.onLine) {
+                if (await checkConnection()) handleSyncReconnection();
+            }
+        }, 20000);
+        updateSyncStatusUi();
 
         // Trigger sync when app comes back to foreground
         document.addEventListener('visibilitychange', () => {
@@ -10836,7 +11064,7 @@
         // Version Update Modal Logic
         const versionModal = document.getElementById('versionUpdateModal');
         const closeVersionBtn = document.getElementById('closeVersionModalBtn');
-        const vKey = 'hasSeenVersion_2_2_19';
+        const vKey = 'hasSeenVersion_2_2_20';
         closeVersionBtn.addEventListener('click', () => {
             localStorage.setItem(vKey, 'true');
             versionModal.classList.add('hidden');
@@ -11075,7 +11303,7 @@
         document.getElementById('resetStatsBtn').addEventListener('click', async () => {
             if (await showConfirm(getI18n('confirm_reset_stats'), getI18n('title_reset_stats'))) {
                 try {
-                    await apiFetch('/vocab/stats/reset', { method: 'PUT' });
+                    queueMutation('statsReset', {});
                     wordStats = {}; dailyActivity = {}; grammarActivityCount = 0;
                     localStorage.setItem('ita-local-last-reset', Date.now().toString());
                     saveAllDataLocally();
@@ -11185,7 +11413,7 @@
             fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ !== 'Satz').forEach(w => w.isActive = true);
             saveAllDataLocally();
             renderVocabList();
-            apiFetch('/vocab/bulk-active', { method: 'PUT', body: JSON.stringify({ isActive: true, language: CURRENT_LANG, typ: 'vocab' }) }).catch(() => {});
+            queueMutation('bulkActive', { isActive: true, language: CURRENT_LANG, typ: 'vocab' });
             updateAdminGrammarCount(); // KI-Sätze folgen den aktiven Wörtern
         });
 
@@ -11193,7 +11421,7 @@
             fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && w.typ !== 'Satz').forEach(w => w.isActive = false);
             saveAllDataLocally();
             renderVocabList();
-            apiFetch('/vocab/bulk-active', { method: 'PUT', body: JSON.stringify({ isActive: false, language: CURRENT_LANG, typ: 'vocab' }) }).catch(() => {});
+            queueMutation('bulkActive', { isActive: false, language: CURRENT_LANG, typ: 'vocab' });
             updateAdminGrammarCount(); // KI-Sätze folgen den aktiven Wörtern
         });
 
@@ -11202,7 +11430,7 @@
             saveAllDataLocally();
             (async () => { if (sentenceMode === 'auto') await setSentenceMode('manual'); await setBaseSentencesActive(null, true); renderSentenceList(); updateAdminGrammarCount(); })().catch(() => {});
             renderSentenceList();
-            apiFetch('/vocab/bulk-active', { method: 'PUT', body: JSON.stringify({ isActive: true, language: CURRENT_LANG, typ: 'Satz' }) }).catch(() => {});
+            queueMutation('bulkActive', { isActive: true, language: CURRENT_LANG, typ: 'Satz' });
         });
 
         document.getElementById('deselectAllSentencesBtn').addEventListener('click', () => {
@@ -11210,7 +11438,7 @@
             saveAllDataLocally();
             (async () => { if (sentenceMode === 'auto') await setSentenceMode('manual'); await setBaseSentencesActive(null, false); renderSentenceList(); updateAdminGrammarCount(); })().catch(() => {});
             renderSentenceList();
-            apiFetch('/vocab/bulk-active', { method: 'PUT', body: JSON.stringify({ isActive: false, language: CURRENT_LANG, typ: 'Satz' }) }).catch(() => {});
+            queueMutation('bulkActive', { isActive: false, language: CURRENT_LANG, typ: 'Satz' });
         });
 
         document.getElementById('sentenceModeAuto').addEventListener('change', async (e) => {
@@ -11347,7 +11575,7 @@
                     e.stopPropagation();
                     if (await showConfirm(getI18n('confirm_delete_entry'), getI18n('title_delete_entry'))) {
                         try {
-                            await apiFetch(`/vocab/${word.id}`, { method: 'DELETE' });
+                            queueMutation('deleteVocab', { id: word.id });
                             fullDictionary = fullDictionary.filter(w => w.id !== word.id);
                             delete wordStats[word.id];
                             saveAllDataLocally();
@@ -11508,7 +11736,7 @@
                     e.stopPropagation();
                     if (await showConfirm(getI18n('confirm_delete_sentence'), getI18n('title_delete_entry'))) {
                         try {
-                            await apiFetch(`/vocab/${word.id}`, { method: 'DELETE' });
+                            queueMutation('deleteVocab', { id: word.id });
                             fullDictionary = fullDictionary.filter(w => w.id !== word.id);
                             delete wordStats[word.id];
                             saveAllDataLocally();
@@ -11566,11 +11794,9 @@
             try {
                 saveEditVocabBtn.disabled = true;
                 const payload = { de, it, typ, emoji, grammatica: typ === 'Satz' ? 'Eigene Sätze' : '' };
-                const result = await apiFetch(`/vocab/${currentEditWordId}`, {
-                    method: 'PUT',
-                    body: JSON.stringify(payload)
-                });
-                
+                // Lokal gilt die Änderung sofort, der Server erfährt sie über die Warteschlange (auch später)
+                queueMutation('editVocab', { id: currentEditWordId, fields: payload });
+
                 // Update local dictionary
                 const index = fullDictionary.findIndex(w => w.id === currentEditWordId);
                 if (index > -1) {
@@ -11634,10 +11860,7 @@
                 try {
                     saveEditSentenceBtn.disabled = true;
                     const payload = { de, it, typ: 'Satz', grammatica: 'Eigene Sätze' };
-                    await apiFetch(`/vocab/${currentEditSentenceId}`, {
-                        method: 'PUT',
-                        body: JSON.stringify(payload)
-                    });
+                    queueMutation('editVocab', { id: currentEditSentenceId, fields: payload });
 
                     // Update local dictionary
                     const index = fullDictionary.findIndex(w => w.id === currentEditSentenceId);
@@ -11710,6 +11933,7 @@
         exportSentencesArea.addEventListener('click', () => exportToExcelLogic(true));
 
         clearVocabArea.addEventListener('click', async () => {
+            if (!(await requireServer())) return;
             if (await showConfirm(getI18n('confirm_clear_custom_vocab'), getI18n('title_clear_vocab'))) {
                 try {
                     await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Vocab&isOwn=true`, { method: 'DELETE' });
@@ -11726,6 +11950,7 @@
         });
 
         clearSentencesArea.addEventListener('click', async () => {
+            if (!(await requireServer())) return;
             if (await showConfirm(getI18n('confirm_clear_custom_sentences'), getI18n('title_clear_sentences'))) {
                 try {
                     showToast(getI18n('toast_clearing_started'), "info");
@@ -11818,6 +12043,7 @@
         });
 
         deleteBaseVocabArea.addEventListener('click', async () => {
+            if (!(await requireServer())) return;
             if (await showConfirm(getI18n('confirm_delete_base_vocab'), getI18n('title_delete_base_vocab'))) {
                 try {
                     await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Vocab&isOwn=false`, { method: 'DELETE' });
@@ -11877,6 +12103,7 @@
         });
 
         deleteBaseSentencesArea.addEventListener('click', async () => {
+            if (!(await requireServer())) return;
             if (await showConfirm(getI18n('confirm_delete_base_sentences'), getI18n('title_delete_base_sentences'))) {
                 try {
                     await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=Satz&isOwn=false`, { method: 'DELETE' });
@@ -11893,6 +12120,7 @@
 
         excelUploadEl.addEventListener('change', async e => {
             const file = e.target.files[0]; if (!file) return;
+            if (!(await requireServer())) { excelUploadEl.value = null; return; }
             const reader = new FileReader();
             reader.onload = async event => {
                 try {
@@ -12612,10 +12840,10 @@
                 }
             } catch (err) {
                 console.warn("Saving to server failed, queuing for sync", err);
-                const tempId = 'temp_' + Date.now();
+                const tempId = newTempId();
                 fullDictionary.push({ ...payload, id: tempId, isOffline: true });
                 wordStats[tempId] = { presented: 0, correct: 0, incorrect: 0, streak: 0 };
-                addToSyncOutbox('addVocab', payload);
+                addToSyncOutbox('addVocab', { ...payload, tempId });
                 renderVocabList();
                 clearFields();
                 showToast(getI18n('toast_vocab_sync_offline', deWord), "info");
@@ -12666,8 +12894,19 @@
                     showToast(getI18n('toast_sentence_added'), "success");
                 }
             } catch (err) {
-                console.warn("Saving to server failed.", err);
-                showToast(getI18n('toast_save_error_generic'), "error");
+                console.warn("Saving to server failed, queuing for sync", err);
+                if (err.isNetwork) {
+                    const tempId = newTempId();
+                    fullDictionary.push({ ...payload, id: tempId, isOffline: true });
+                    wordStats[tempId] = { presented: 0, correct: 0, incorrect: 0, streak: 0 };
+                    addToSyncOutbox('addVocab', { ...payload, tempId });
+                    renderVocabList();
+                    updateAdminGrammarCount();
+                    clearFields();
+                    showToast(getI18n('toast_sentence_added'), "success");
+                } else {
+                    showToast(getI18n('toast_save_error_generic'), "error");
+                }
             } finally {
                 saveSentenceBtn.disabled = false;
                 saveAllDataLocally();
@@ -12774,6 +13013,7 @@
         document.getElementById('openAiPrefsBtn').addEventListener('click', async () => {
             closeAllModals();
             dropdownMenu.classList.add('hidden');
+            if (!(await requireServer())) return;
             if (!await loadAiOptions()) return showToast(getI18n('ai_not_available'), 'warning');
             aiAutoEnabled.checked = aiOptions.prefs.enabled;
             aiSelectedLevels.clear();
