@@ -1,6 +1,6 @@
 {
   "name": "italien-app-mobile",
-  "version": "2.2.21",
+  "version": "2.2.22",
   "description": "Mobile App Wrapper for Lernapp Italienisch",
   "dependencies": {
     "@capacitor/android": "^8.2.0",
@@ -10,5 +10,6 @@
     "@capacitor/keyboard": "^8.0.1",
     "jsdom": "^29.0.0",
     "puppeteer": "^24.39.1"
-  }
+  },
+  "license": "Apache-2.0"
 }

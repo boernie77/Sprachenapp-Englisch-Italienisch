@@ -1,0 +1,15 @@
+Lernapp – Vokabeltrainer
+Copyright 2026 Christian Bernauer
+
+Lizenziert unter der Apache License, Version 2.0 (siehe LICENSE).
+
+Dieses Projekt verwendet Drittsoftware und Material unter deren eigenen Lizenzen:
+  - Tailwind CSS (MIT)
+  - SheetJS Community Edition (Apache-2.0)
+  - DragDropTouch (MIT)
+  - Capacitor (MIT) und Capacitor-Plugins
+  - Express, Sequelize, PostgreSQL-Treiber und weitere npm-Pakete (überwiegend MIT/Apache-2.0, siehe package-lock.json)
+  - Schrift „Inter“ (SIL Open Font License 1.1)
+  - Emoji-Grafiken von OpenMoji (CC BY-SA 4.0): https://openmoji.org
+
+Die mitgelieferten Vokabel- und Satzlisten (Excel-Dateien) sind Inhalte und nicht Teil der Software-Lizenz.

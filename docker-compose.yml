@@ -20,12 +20,14 @@ services:
       # --- Betreiber-Einstellungen, optional ---
       - STATIC_INVITE_CODES=${STATIC_INVITE_CODES:-}
       - CONTACT_EMAIL=${CONTACT_EMAIL:-}
+      - LEGAL_DIR=/legal
       - OIDC_ISSUER_URL=${OIDC_ISSUER_URL:-}
       - OIDC_CLIENT_ID=${OIDC_CLIENT_ID:-}
       - OIDC_CLIENT_SECRET=${OIDC_CLIENT_SECRET:-}
     depends_on:
       - db
-#    volumes:
+    volumes:
+      - ./legal:/legal:ro   # Impressum/Datenschutz des Betreibers (siehe legal/README.md)
 #      - ./server/public:/app/public
 
   db:

@@ -69,5 +69,14 @@ npx cap sync                              # Web-Code in die iOS-/Android-Projekt
 
 ## Lizenz
 
-Siehe [LICENSE](LICENSE): Quellcode zum Lernen und für die private Nutzung; keine kommerzielle
-Weitergabe oder Veränderung ohne schriftliche Zustimmung.
+Apache License 2.0 – siehe [LICENSE](LICENSE) und [NOTICE](NOTICE). Du darfst die Software frei nutzen, verändern und
+weitergeben (auch kommerziell), solange Lizenztext und Urheberhinweis erhalten bleiben. Die Lizenzen der verwendeten
+Bausteine stehen in der NOTICE-Datei.
+
+## Impressum und Datenschutz (für Betreiber)
+
+Das Repository enthält **keine** persönlichen Angaben. Wer einen öffentlich erreichbaren Server betreibt, muss
+Impressum und Datenschutzerklärung selbst bereitstellen: Kopiere `legal/impressum.example.html` nach
+`legal/impressum.html` und `legal/datenschutz.example.html` nach `legal/datenschutz.html`, fülle sie aus und starte
+neu. Die App zeigt die Texte im Menü „Impressum & Lizenzen“ an. Nur für den privaten Betrieb im Heimnetz sind die
+Dateien nicht nötig. (Das ist keine Rechtsberatung – bitte prüfe die Anforderungen für deinen Fall.)

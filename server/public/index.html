@@ -1831,39 +1831,28 @@
             <h2 class="text-2xl font-bold text-slate-800 mb-6" data-i18n="imp_title">Impressum</h2>
 
             <div class="space-y-6 text-sm text-slate-600 overflow-y-auto max-h-[70vh] pr-2">
-                <div>
-                    <h3 class="font-bold text-slate-800 mb-1" data-i18n="imp_info">Angaben gemäß § 5 TMG</h3>
-                    <p>Christian Bernauer</p>
-                    <p>Dianastr. 2b</p>
-                    <p>90547 Stein</p>
-                </div>
-
-                <div>
-                    <h3 class="font-bold text-slate-800 mb-1" data-i18n="imp_contact">Kontakt</h3>
-                    <p>E-Mail: christian@bernauer24.com</p>
-                </div>
-
-                <div>
-                    <h3 class="font-bold text-slate-800 mb-1" data-i18n="imp_responsible">Verantwortlich für den Inhalt</h3>
-                    <p>Christian Bernauer</p>
-                </div>
+                <!-- Angaben des Betreibers dieses Servers (Dateien legal/impressum.html und legal/datenschutz.html) -->
+                <div id="impressumOperator" class="space-y-6"></div>
+                <details id="privacyDetails" class="hidden">
+                    <summary class="font-bold text-slate-800 cursor-pointer" data-i18n="imp_privacy">Datenschutzerklärung</summary>
+                    <div id="privacyContent" class="mt-3 space-y-4"></div>
+                </details>
 
                 <div class="pt-4 border-t border-slate-100">
                     <h3 class="font-bold text-slate-800 mb-2 text-xs" data-i18n="imp_licenses">Lizenzhinweise</h3>
-                    <p class="mb-2 text-[10px]" data-i18n="imp_license_desc1">Diese App nutzt Open-Source-Software unter der MIT- und Apache
-                        2.0-Lizenz.</p>
+                    <p class="mb-2 text-[10px]" data-i18n="imp_license_desc1">Diese App steht unter der Apache License 2.0 und nutzt Open-Source-Software unter MIT- und Apache-2.0-Lizenz.</p>
                     <p class="mb-4 text-[10px]" data-i18n="imp_license_desc2">
                         <strong>Emoji graphics from OpenMoji</strong> – the open-source emoji and icon project.
                         Lizenz: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"
                             class="text-blue-600 hover:underline">CC BY-SA 4.0</a>
                     </p>
-                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.21</p>
-                    <p class="text-[10px] text-slate-400" data-i18n="imp_rights">© 2026 Christian Bernauer. Alle Rechte vorbehalten.</p>
+                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.22</p>
+                    <p class="text-[10px] text-slate-400" data-i18n="imp_rights">© 2026 Christian Bernauer – Apache License 2.0</p>
                 </div>
             </div>
             <!-- App-Style Bottom Section -->
             <div class="mt-8 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.21</p>
+                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.22</p>
             </div>
         </div>
     </div>
@@ -2108,23 +2097,23 @@
             <div class="w-16 h-16 shrink-0 bg-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
                 <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3">Version 2.2.21 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
+            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3">Version 2.2.22 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
             <div class="text-left space-y-3 mb-6 overflow-y-auto min-h-0 flex-1 pr-1">
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: Die <b>Erklärung im Grammatik-Modus</b> nennt alle Zeitformen des Satzes (z. B. auch das Futur „sarà“) und bietet die Verben als Konjugationstabelle an</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Die App steht jetzt unter der <b>Apache License 2.0</b> (Open Source)</p>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu (App): <b>Server-Adresse</b> beim ersten Start eintragbar, im Menü änderbar – auch für Heimnetz-Server</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: <b>Server-Adresse</b> in der App eintragbar (auch für Heimnetz-Server)</p>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Alle Änderungen funktionieren <b>offline</b> und werden später abgeglichen; der Verbindungsstatus steht im Menü</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Erklärung im Grammatik-Modus nennt <b>alle Zeitformen</b> des Satzes</p>
                 </div>
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu am Handy: schmale Filterzeile und Lupe für die Satz-Suche</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Alle Änderungen funktionieren <b>offline</b>, der Verbindungsstatus steht im Menü</p>
                 </div>
                 <p class="text-slate-500 text-[10px] italic text-center mt-4 px-4 leading-normal">
                     Viel Spaß beim Lernen! Melde Fehler bitte direkt an uns.
@@ -2263,7 +2252,7 @@
                 </div>
                 <div class="px-4 py-1.5 text-[10px] text-slate-400 bg-slate-50/50 flex items-center justify-between border-t border-slate-100/50">
                     <span>App-Version:</span>
-                    <span class="font-mono font-medium text-slate-500">2.2.21</span>
+                    <span class="font-mono font-medium text-slate-500">2.2.22</span>
                 </div>
                 <input type="file" id="excelUploadEl" accept=".xlsx, .xls" class="hidden">
             </div>
@@ -6650,9 +6639,11 @@
                 imp_contact: "Kontakt",
                 imp_responsible: "Verantwortlich für den Inhalt",
                 imp_licenses: "Lizenzhinweise",
-                imp_license_desc1: "Diese App verwendet Open-Source-Software unter den Lizenzen MIT und Apache 2.0.",
+                imp_license_desc1: "Diese App steht unter der Apache License 2.0 und verwendet Open-Source-Software unter den Lizenzen MIT und Apache 2.0.",
                 imp_license_desc2: "<strong>Emoji-Grafiken von OpenMoji</strong> – dem Open-Source-Emoji- und Icon-Projekt. Lizenz: <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\" target=\"_blank\" class=\"text-blue-600 hover:underline\">CC BY-SA 4.0</a>",
-                imp_rights: "Alle Rechte vorbehalten.",
+                imp_rights: "© 2026 Christian Bernauer – Apache License 2.0",
+                imp_privacy: "Datenschutzerklärung",
+                imp_not_set: "Der Betreiber dieses Servers hat noch kein Impressum hinterlegt.",
 
                 // Quick Guide
                 guide_title: "Kurzanleitung",
@@ -7140,9 +7131,11 @@
                 imp_contact: "Contact",
                 imp_responsible: "Responsible for content",
                 imp_licenses: "License Information",
-                imp_license_desc1: "This app uses open-source software under the MIT and Apache 2.0 licenses.",
+                imp_license_desc1: "This app is licensed under the Apache License 2.0 and uses open-source software under the MIT and Apache 2.0 licenses.",
                 imp_license_desc2: "<strong>Emoji graphics from OpenMoji</strong> – the open-source emoji and icon project. License: <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\" target=\"_blank\" class=\"text-blue-600 hover:underline\">CC BY-SA 4.0</a>",
-                imp_rights: "All rights reserved.",
+                imp_rights: "© 2026 Christian Bernauer – Apache License 2.0",
+                imp_privacy: "Privacy policy",
+                imp_not_set: "The operator of this server has not provided legal notice yet.",
 
                 // Quick Guide
                 guide_title: "Quick Guide",
@@ -8734,12 +8727,6 @@
                 window.history.replaceState({}, document.title, "/");
             }
         });
-
-        // Pre-fill invite code for Mobile Apps
-        if (isCapacitor) {
-            const inviteInp = document.getElementById('authInviteCode');
-            if (inviteInp) inviteInp.value = 'CODE-ENTFERNT-2';
-        }
 
         authToggleBtn.addEventListener('click', () => {
             isLoginMode = !isLoginMode;
@@ -11206,7 +11193,7 @@
         // Version Update Modal Logic
         const versionModal = document.getElementById('versionUpdateModal');
         const closeVersionBtn = document.getElementById('closeVersionModalBtn');
-        const vKey = 'hasSeenVersion_2_2_21';
+        const vKey = 'hasSeenVersion_2_2_22';
         closeVersionBtn.addEventListener('click', () => {
             localStorage.setItem(vKey, 'true');
             versionModal.classList.add('hidden');
@@ -11517,19 +11504,54 @@
 
         // Excel Modal Setup
         const impressumModal = document.getElementById('impressumModal');
+        // Impressum und Datenschutz des Betreibers vom Server holen (Dateien legal/*.html), zuletzt Gesehenes bleibt offline erhalten
+        function cleanLegalHtml(html) {
+            const doc = new DOMParser().parseFromString(String(html || ''), 'text/html');
+            doc.querySelectorAll('script, style, iframe, object, embed, link, meta, form').forEach(el => el.remove());
+            doc.body.querySelectorAll('*').forEach(el => {
+                [...el.attributes].forEach(attr => {
+                    if (/^on/i.test(attr.name) || (/^(href|src)$/i.test(attr.name) && /^\s*javascript:/i.test(attr.value))) el.removeAttribute(attr.name);
+                });
+            });
+            return doc.body.innerHTML;
+        }
+
+        async function renderLegalTexts() {
+            let legal = safeJSONParse(localStorage.getItem('lernapp-legal'), null);
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/legal`);
+                if (res.ok) {
+                    legal = await res.json();
+                    localStorage.setItem('lernapp-legal', JSON.stringify(legal));
+                }
+            } catch (err) { /* offline: gespeicherte Fassung zeigen */ }
+            const operator = document.getElementById('impressumOperator');
+            const privacyBox = document.getElementById('privacyDetails');
+            operator.innerHTML = legal && legal.impressum ? cleanLegalHtml(legal.impressum) : `<p class="text-slate-400 italic">${getI18n('imp_not_set')}</p>`;
+            if (legal && legal.privacy) {
+                document.getElementById('privacyContent').innerHTML = cleanLegalHtml(legal.privacy);
+                privacyBox.classList.remove('hidden');
+            } else {
+                privacyBox.classList.add('hidden');
+            }
+        }
+
         setupModal(
             impressumModal,
             document.getElementById('openImpressumAuthBtn'),
-            document.getElementById('closeImpressumModalBtn')
+            document.getElementById('closeImpressumModalBtn'),
+            renderLegalTexts
         );
         document.getElementById('openImpressumStatsBtn').addEventListener('click', () => {
             impressumModal.classList.remove('hidden');
             impressumModal.classList.add('flex');
+            renderLegalTexts();
         });
         document.getElementById('openImpressumMenuBtn').addEventListener('click', () => {
             impressumModal.classList.remove('hidden');
             impressumModal.classList.add('flex');
             dropdownMenu.classList.add('hidden'); // Also close the menu
+            renderLegalTexts();
         });
 
         const closeVocabListModal = setupModal(

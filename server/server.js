@@ -11,6 +11,7 @@ const adminRoutes = require('./routes/admin');
 const grammarRoutes = require('./routes/grammar');
 const baseVocabRoutes = require('./routes/baseVocab');
 const verbFormRoutes = require('./routes/verbForms');
+const legalRoutes = require('./routes/legal');
 const aiRoutes = require('./routes/ai');
 
 const KNOWN_WEAK_SECRETS = ['super-secret-key', 'secret', 'changeme', ''];
@@ -28,7 +29,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Health Check
-app.get('/api/health', (req, res) => res.json({ status: 'ok', version: '2.2.21', timestamp: new Date() }));
+app.get('/api/health', (req, res) => res.json({ status: 'ok', version: '2.2.22', timestamp: new Date() }));
 
 // Mount routes
 app.use('/api/auth/oidc', require('./routes/oidc'));
@@ -39,6 +40,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/grammar-sentences', grammarRoutes);
 app.use('/api/base-vocab', baseVocabRoutes);
 app.use('/api/verb-forms', verbFormRoutes);
+app.use('/api/legal', legalRoutes);
 app.use('/api/ai', aiRoutes);
 
 // Serve frontend

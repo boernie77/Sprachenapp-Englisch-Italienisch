@@ -38,3 +38,7 @@ server/database.sqlite
 
 # Lokale Voreinstellung der Server-Adresse für eigene App-Builds
 server/public/app-config.local.js
+
+# Betreiber-spezifische rechtliche Texte (Vorlagen: legal/*.example.html)
+legal/impressum.html
+legal/datenschutz.html
