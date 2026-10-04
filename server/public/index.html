@@ -1905,13 +1905,13 @@
                         Lizenz: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"
                             class="text-blue-600 hover:underline">CC BY-SA 4.0</a>
                     </p>
-                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.25</p>
+                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.26</p>
                     <p class="text-[10px] text-slate-400" data-i18n="imp_rights">© 2026 Christian Bernauer – Apache License 2.0</p>
                 </div>
             </div>
             <!-- App-Style Bottom Section -->
             <div class="mt-8 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.25</p>
+                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.26</p>
             </div>
         </div>
     </div>
@@ -2163,7 +2163,7 @@
                     class="text-orange-600 font-bold">0</span> Tagen!</p>
             <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 mb-8">
                 <p class="text-sm text-slate-500 italic">Bleibe dran und lerne jeden Tag ein bisschen, um deine Serie zu
-                    halten. Bravissimo!</p>
+                    halten. <span id="streakBravoText">Bravissimo!</span></p>
             </div>
             <button id="closeStreakModalBtn"
                 class="w-full py-4 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-2xl shadow-lg transition-all active:scale-95 text-xl flex items-center justify-center gap-2">
@@ -2178,15 +2178,11 @@
             <div class="w-16 h-16 shrink-0 bg-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
                 <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3">Version 2.2.25 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
+            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3">Version 2.2.26 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
             <div class="text-left space-y-3 mb-6 overflow-y-auto min-h-0 flex-1 pr-1">
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Neu: <b>Spanisch</b> (Spanien) – wähle die spanische Flagge oben links. Mit Vokabeln, Grammatik, Konjugationstabellen, Info-Bereich und einer Akzentleiste (á é í ó ú ñ ¿ ¡) beim Schreiben</p>
-                </div>
-                <div class="flex items-start gap-3">
-                    <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Spanisch ist akzenttolerant: fehlt ein Akzent im Schreibmodus, gilt die Antwort mit Hinweis als richtig</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm">Korrigiert: In Spanisch und Englisch erscheinen Richtungsauswahl, Beschriftungen und Platzhalter jetzt in der gewählten Sprache (nicht mehr „Italienisch“)</p>
                 </div>
                 
                 <p class="text-slate-500 text-[10px] italic text-center mt-4 px-4 leading-normal">
@@ -2331,7 +2327,7 @@
                 </div>
                 <div class="px-4 py-1.5 text-[10px] text-slate-400 bg-slate-50/50 flex items-center justify-between border-t border-slate-100/50">
                     <span>App-Version:</span>
-                    <span class="font-mono font-medium text-slate-500">2.2.25</span>
+                    <span class="font-mono font-medium text-slate-500">2.2.26</span>
                 </div>
                 </div>
                 <input type="file" id="excelUploadEl" accept=".xlsx, .xls" class="hidden">
@@ -2401,8 +2397,8 @@
                         <label
                             class="block text-xs md:text-sm font-semibold text-slate-700 mb-1.5 mobile-white" data-i18n="filter_direction">Lernrichtung</label>
                         <select id="directionFilter" autocomplete="off" style="display:none">
-                            <option value="de-it">de-it</option>
-                            <option value="it-de">it-de</option>
+                            <option value="de-it">Deutsch &rarr; Fremdsprache</option>
+                            <option value="it-de">Fremdsprache &rarr; Deutsch</option>
                         </select>
                         <div style="position:relative">
                             <button type="button" class="cs-btn" id="directionFilterBtn">
@@ -5345,8 +5341,8 @@
             <div class="flex flex-col md:flex-row gap-2 mb-3">
                 <div class="flex-1" style="position:relative">
                     <select id="vocabListSortDir" autocomplete="off" style="display:none">
-                        <option value="de">Deutsch Italienisch</option>
-                        <option value="it">Italienisch Deutsch</option>
+                        <option value="de" id="vocabListSortDeSelOpt">Deutsch &rarr; Fremdsprache</option>
+                        <option value="it" id="vocabListSortItSelOpt">Fremdsprache &rarr; Deutsch</option>
                     </select>
                     <button type="button" class="cs-btn w-full px-2" id="vocabListSortDirBtn">
                         <span id="vocabListSortDirLabel" class="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap">Deutsch ...</span>
@@ -5356,8 +5352,8 @@
                         </svg>
                     </button>
                     <div class="cs-list" id="vocabListSortDirList">
-                        <div class="cs-opt selected" data-value="de">Deutsch Italienisch</div>
-                        <div class="cs-opt" data-value="it">Italienisch Deutsch</div>
+                        <div class="cs-opt selected" data-value="de" id="vocabListSortDeOpt">Deutsch &rarr; Fremdsprache</div>
+                        <div class="cs-opt" data-value="it" id="vocabListSortItOpt">Fremdsprache &rarr; Deutsch</div>
                     </div>
                 </div>
                 <!-- Category filter custom dropdown -->
@@ -5448,8 +5444,8 @@
             <div class="flex flex-col md:flex-row gap-2 mb-3">
                 <div class="flex-1" style="position:relative">
                     <select id="sentenceListSortDir" autocomplete="off" style="display:none">
-                        <option value="de">Deutsch Italienisch</option>
-                        <option value="it">Italienisch Deutsch</option>
+                        <option value="de" id="sentenceListSortDeSelOpt">Deutsch &rarr; Fremdsprache</option>
+                        <option value="it" id="sentenceListSortItSelOpt">Fremdsprache &rarr; Deutsch</option>
                     </select>
                     <button type="button" class="cs-btn w-full px-2" id="sentenceListSortDirBtn">
                         <span id="sentenceListSortDirLabel" class="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap">Deutsch ...</span>
@@ -5459,8 +5455,8 @@
                         </svg>
                     </button>
                     <div class="cs-list" id="sentenceListSortDirList">
-                        <div class="cs-opt selected" data-value="de" id="sentenceListSortDeOpt">Deutsch Italienisch</div>
-                        <div class="cs-opt" data-value="it" id="sentenceListSortItOpt">Italienisch Deutsch</div>
+                        <div class="cs-opt selected" data-value="de" id="sentenceListSortDeOpt">Deutsch &rarr; Fremdsprache</div>
+                        <div class="cs-opt" data-value="it" id="sentenceListSortItOpt">Fremdsprache &rarr; Deutsch</div>
                     </div>
                 </div>
                 <!-- Category filter custom dropdown -->
@@ -7038,7 +7034,7 @@
         // Alles, was je Lernsprache anders ist, an einer Stelle (neue Sprache = hier ein Eintrag, plus Server utils/languages.js)
         const LANG_CONFIG = {
             it: { name: 'Italienisch', nameEn: 'Italian', flag: itFlagSVG, locale: 'it', myMemory: 'it', placeholder: 'z.B. mangiare', sentencePlaceholder: 'z.B. Bevo volentieri il caffè.', infoId: 'infoContentIt', infoTitle: 'Grammatica Italiana', successLabel: 'Bravissimo!', articles: ['il', 'lo', 'la', 'l', 'i', 'gli', 'le', 'un', 'uno', 'una'] },
-            en: { name: 'Englisch', nameEn: 'English', flag: gbFlagSVG, locale: 'en', myMemory: 'en', placeholder: 'e.g. eat', sentencePlaceholder: 'z.B. Bevo volentieri il caffè.', infoId: 'infoContentEn', infoTitle: 'English Grammar Index', successLabel: 'Well done!', articles: ['to', 'the', 'a', 'an'] },
+            en: { name: 'Englisch', nameEn: 'English', flag: gbFlagSVG, locale: 'en', myMemory: 'en', placeholder: 'e.g. eat', sentencePlaceholder: 'z.B. I like drinking coffee.', infoId: 'infoContentEn', infoTitle: 'English Grammar Index', successLabel: 'Well done!', articles: ['to', 'the', 'a', 'an'] },
             es: { name: 'Spanisch', nameEn: 'Spanish', flag: esFlagSVG, locale: 'es', myMemory: 'es', placeholder: 'z.B. hablar', sentencePlaceholder: 'z.B. Bebo café con gusto.', infoId: 'infoContentEs', infoTitle: 'Gramática Española', successLabel: '¡Muy bien!', articles: ['el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas'] }
         };
         const langConf = () => LANG_CONFIG[CURRENT_LANG] || LANG_CONFIG.it;
@@ -7149,7 +7145,7 @@
                 toast_register_success: "Registrierung erfolgreich. Bitte anmelden.",
                 toast_enter_name: "Bitte gib deinen Namen ein.",
                 toast_enter_message: "Bitte gib eine Nachricht ein.",
-                toast_message_sent: "Deine Nachricht wurde gesendet! Ciao!",
+                toast_message_sent: "Deine Nachricht wurde gesendet!",
                 toast_stats_reset_success: "Statistiken wurden auf dem Server und lokal zurückgesetzt.",
                 toast_stats_reset_error: "Fehler beim Zurücksetzen der Statistik auf dem Server.",
                 toast_custom_vocab_deleted: "Alle eigenen Vokabeln wurden gelöscht.",
@@ -7270,7 +7266,6 @@
                 placeholder_auto_manual_input: "Automatisch oder manuell eingeben",
                 label_word: "Wort",
                 label_german_translation: "Deutsche Übersetzung",
-                placeholder_italian_word: "z.B. bere",
                 tag_offline: "✨ Offline",
                 toast_loading_started: "Ladevorgang gestartet...",
                 toast_clearing_started: "Löschvorgang gestartet...",
@@ -7685,7 +7680,7 @@
                 toast_register_success: "Registration successful. Please log in.",
                 toast_enter_name: "Please enter your name.",
                 toast_enter_message: "Please enter a message.",
-                toast_message_sent: "Your message was sent! Ciao!",
+                toast_message_sent: "Your message was sent!",
                 toast_stats_reset_success: "Statistics have been reset on the server and locally.",
                 toast_stats_reset_error: "Error resetting statistics on the server.",
                 toast_custom_vocab_deleted: "All custom vocabulary deleted.",
@@ -7754,7 +7749,6 @@
                 placeholder_auto_manual_input: "Automatic or manual input",
                 label_word: "Word",
                 label_german_translation: "German Translation",
-                placeholder_italian_word: "e.g. bere",
                 tag_offline: "✨ Offline",
                 tag_searching_online: "⏳ Searching online…",
                 tag_online: "🌐 Online",
@@ -8303,6 +8297,14 @@
 
             const sSortItOpt = document.getElementById('sentenceListSortItOpt');
             if (sSortItOpt) sSortItOpt.innerHTML = `${currentFlag} ${langName} ${arrowSVG} ${deFlagSVG} Deutsch`;
+
+            // Versteckte Selects (Richtung) tragen denselben Text in Klartext
+            const dirDe = `Deutsch → ${langName}`, dirTarget = `${langName} → Deutsch`;
+            [['vocabListSortDeSelOpt', dirDe], ['vocabListSortItSelOpt', dirTarget], ['sentenceListSortDeSelOpt', dirDe], ['sentenceListSortItSelOpt', dirTarget]].forEach(([id, txt]) => { const o = document.getElementById(id); if (o) o.textContent = txt; });
+            const dirSel = document.getElementById('directionFilter');
+            if (dirSel && dirSel.options.length >= 2) { dirSel.options[0].textContent = dirDe; dirSel.options[1].textContent = dirTarget; }
+            const streakBravo = document.getElementById('streakBravoText');
+            if (streakBravo) streakBravo.textContent = langConf().successLabel;
 
             const wTitle = document.getElementById('welcomeTitle');
             if (wTitle) wTitle.innerHTML = `${t.welcome} ${currentFlag}`;
@@ -10346,7 +10348,7 @@
                     body: formData
                 });
 
-                showToast("Deine Nachricht wurde gesendet! Ciao!", "success");
+                showToast("Deine Nachricht wurde gesendet!", "success");
                 contactMessageInput.value = '';
                 contactFileInput.value = '';
                 contactFileName.textContent = '📎 Datei auswählen';
@@ -12528,7 +12530,7 @@
         // Version Update Modal Logic
         const versionModal = document.getElementById('versionUpdateModal');
         const closeVersionBtn = document.getElementById('closeVersionModalBtn');
-        const vKey = 'hasSeenVersion_2_2_25';
+        const vKey = 'hasSeenVersion_2_2_26';
         closeVersionBtn.addEventListener('click', () => {
             localStorage.setItem(vKey, 'true');
             versionModal.classList.add('hidden');
@@ -13485,7 +13487,7 @@
                 let sourceLabel = "";
 
                 if (serverBase.length > 0) {
-                    const loadConfirmed = await showConfirm(getI18n('confirm_load_server_base_vocab', serverBase.length, CURRENT_LANG.toUpperCase()), getI18n('title_load_base_list'));
+                    const loadConfirmed = await showConfirm(getI18n('confirm_load_server_base_vocab', serverBase.length, APP_UI_LANG === 'en' ? langConf().nameEn : langConf().name), getI18n('title_load_base_list'));
                     if (!loadConfirmed) return;
 
                     wordsToUpload = serverBase.map(v => ({
@@ -13575,7 +13577,7 @@
 
                 if (serverBase.length === 0) return showToast(getI18n('toast_no_base_sentences'), "warning");
 
-                const loadConfirmed = await showConfirm(getI18n('confirm_load_server_base_sentences', serverBase.length, CURRENT_LANG.toUpperCase()), getI18n('title_load_base_sentences'));
+                const loadConfirmed = await showConfirm(getI18n('confirm_load_server_base_sentences', serverBase.length, APP_UI_LANG === 'en' ? langConf().nameEn : langConf().name), getI18n('title_load_base_sentences'));
                 if (!loadConfirmed) return;
 
                 const wordsToUpload = serverBase.map(v => ({
@@ -13932,15 +13934,15 @@
                 vocabLangDeBtn.classList.add('bg-white', 'shadow-sm', 'font-semibold', 'text-slate-800'); vocabLangDeBtn.classList.remove('text-slate-500', 'font-medium');
                 vocabLangItBtn.classList.remove('bg-white', 'shadow-sm', 'font-semibold', 'text-slate-800'); vocabLangItBtn.classList.add('text-slate-500', 'font-medium');
                 vocabInputLabel.textContent = getI18n('label_german_word');
-                vocabTranslationLabel.textContent = `${getI18n('label_' + langConf().nameEn.toLowerCase())} ${getI18n('label_translation')}`;
+                vocabTranslationLabel.textContent = getI18n('word_' + CURRENT_LANG + '_trans');
                 vocabInput.placeholder = getI18n('placeholder_german_word');
                 vocabTranslation.placeholder = getI18n('placeholder_auto_manual_input');
             } else {
                 vocabLangItBtn.classList.add('bg-white', 'shadow-sm', 'font-semibold', 'text-slate-800'); vocabLangItBtn.classList.remove('text-slate-500', 'font-medium');
                 vocabLangDeBtn.classList.remove('bg-white', 'shadow-sm', 'font-semibold', 'text-slate-800'); vocabLangDeBtn.classList.add('text-slate-500', 'font-medium');
-                vocabInputLabel.textContent = `${getI18n('label_' + langConf().nameEn.toLowerCase())} ${getI18n('label_word')}`;
+                vocabInputLabel.textContent = getI18n('word_' + CURRENT_LANG + '_input');
                 vocabTranslationLabel.textContent = getI18n('label_german_translation');
-                vocabInput.placeholder = CURRENT_LANG === 'es' ? langConf().placeholder : getI18n('placeholder_italian_word');
+                vocabInput.placeholder = langConf().placeholder;
                 vocabTranslation.placeholder = getI18n('placeholder_auto_manual_input');
             }
             vocabInput.value = ''; vocabTranslation.value = ''; vocabAutoTag.classList.add('hidden');

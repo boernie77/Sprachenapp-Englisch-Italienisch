@@ -1,6 +1,6 @@
 {
   "name": "italien-app-mobile",
-  "version": "2.2.25",
+  "version": "2.2.26",
   "description": "Vokabeln – Sprachen lernen (Italienisch, Englisch, Spanisch): Mobile App Wrapper",
   "dependencies": {
     "@capacitor/android": "^8.2.0",
