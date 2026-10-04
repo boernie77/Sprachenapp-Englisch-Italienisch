@@ -85,8 +85,10 @@ router.post('/forgot-password', async (req, res) => {
   const mailOptions = {
     from: process.env.SMTP_USER || 'noreply@lernapp.local',
     to: user.email,
-    subject: 'Passwort zurücksetzen - Vokabeln',
-    text: `Klicke auf den folgenden Link, um dein Passwort zurückzusetzen: \n\n${resetUrl}\n\nDer Link ist 1 Stunde lang gültig.`
+    subject: req.uiLang === 'en' ? 'Reset your password - Vocabulary' : 'Passwort zurücksetzen - Vokabeln',
+    text: req.uiLang === 'en'
+      ? `Click the following link to reset your password: \n\n${resetUrl}\n\nThe link is valid for 1 hour.`
+      : `Klicke auf den folgenden Link, um dein Passwort zurückzusetzen: \n\n${resetUrl}\n\nDer Link ist 1 Stunde lang gültig.`
   };
 
   try {

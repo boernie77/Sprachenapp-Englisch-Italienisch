@@ -1843,10 +1843,10 @@
 
                 <div class="flex items-center gap-3 my-3">
                     <div class="flex-1 h-px bg-slate-200"></div>
-                    <span class="text-xs text-slate-400">oder</span>
+                    <span class="text-xs text-slate-400" data-i18n="auth_or">oder</span>
                     <div class="flex-1 h-px bg-slate-200"></div>
                 </div>
-                <button id="ssoLoginBtn" type="button"
+                <button id="ssoLoginBtn" type="button" data-i18n="auth_sso"
                     class="w-full bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-semibold py-3 rounded-xl transition-all active:scale-95">
                     Mit Authentik anmelden
                 </button>
@@ -1890,14 +1890,14 @@
                     <p class="mb-2 text-[10px]" data-i18n="imp_license_desc1">Diese App steht unter der Apache License 2.0 und nutzt Open-Source-Software unter MIT- und Apache-2.0-Lizenz.</p>
                     <p class="mb-2 text-[10px]">
                         <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Apache License 2.0</a> ·
-                        <a href="https://github.com/boernie77/Sprachenapp-Englisch-Italienisch" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Quellcode</a>
+                        <a href="https://github.com/boernie77/Sprachenapp-Englisch-Italienisch" target="_blank" rel="noopener" class="text-blue-600 hover:underline" data-i18n="imp_source_code">Quellcode</a>
                     </p>
                     <ul class="mb-3 text-[10px] space-y-1 list-disc pl-4">
                         <li><a href="https://tailwindcss.com" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Tailwind CSS</a> – MIT</li>
                         <li><a href="https://sheetjs.com" target="_blank" rel="noopener" class="text-blue-600 hover:underline">SheetJS Community Edition</a> – Apache-2.0</li>
                         <li><a href="https://github.com/Bernardo-Castilho/dragdroptouch" target="_blank" rel="noopener" class="text-blue-600 hover:underline">DragDropTouch</a> – MIT</li>
                         <li><a href="https://capacitorjs.com" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Capacitor</a> – MIT</li>
-                        <li><a href="https://rsms.me/inter/" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Inter</a> (Schrift) – SIL Open Font License 1.1</li>
+                        <li><a href="https://rsms.me/inter/" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Inter</a> <span data-i18n="imp_font">(Schrift)</span> – SIL Open Font License 1.1</li>
                         <li data-i18n="imp_license_server">Server: Express, Sequelize, PostgreSQL-Treiber u. a. – MIT, ISC, BSD, Apache-2.0 (Liste im Quellcode: THIRD_PARTY_LICENSES.md)</li>
                     </ul>
                     <p class="mb-4 text-[10px]" data-i18n="imp_license_desc2">
@@ -1905,13 +1905,13 @@
                         Lizenz: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"
                             class="text-blue-600 hover:underline">CC BY-SA 4.0</a>
                     </p>
-                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.26</p>
+                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.27</p>
                     <p class="text-[10px] text-slate-400" data-i18n="imp_rights">© 2026 Christian Bernauer – Apache License 2.0</p>
                 </div>
             </div>
             <!-- App-Style Bottom Section -->
             <div class="mt-8 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.26</p>
+                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.27</p>
             </div>
         </div>
     </div>
@@ -1970,7 +1970,7 @@
                     <label class="block text-sm font-semibold text-slate-700 mb-1" data-i18n="reset_label">Neues Passwort</label>
                     <input type="password" id="resetPasswordInput"
                         class="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-blue-400 transition-all"
-                        placeholder="Min. 6 Zeichen">
+                        placeholder="Min. 6 Zeichen" data-i18n-placeholder="auth_pw_min_placeholder">
                 </div>
                 <button id="resetPasswordSubmitBtn" data-i18n="reset_submit"
                     class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl transition-all shadow-md active:scale-95">Passwort
@@ -2024,7 +2024,7 @@
                     <label class="block text-sm font-semibold text-slate-700 mb-1" data-i18n="onboarding_name_label">Dein Name</label>
                     <input type="text" id="onboardingNameInput"
                         class="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-blue-400 transition-all"
-                        placeholder="z.B. Mario">
+                        placeholder="z.B. Mario" data-i18n-placeholder="onboarding_name_placeholder">
                 </div>
 
 
@@ -2066,8 +2066,8 @@
                     </path>
                 </svg>
             </div>
-            <h3 id="confirmTitle" class="text-xl font-bold text-slate-800 mb-2 text-center">Bist du sicher?</h3>
-            <p id="confirmMessage" class="text-sm text-slate-600 mb-6 text-center leading-relaxed">Diese Aktion kann
+            <h3 id="confirmTitle" class="text-xl font-bold text-slate-800 mb-2 text-center" data-i18n="confirm_default_title">Bist du sicher?</h3>
+            <p id="confirmMessage" class="text-sm text-slate-600 mb-6 text-center leading-relaxed" data-i18n="confirm_default_message">Diese Aktion kann
                 nicht rückgängig gemacht werden.</p>
             <div class="flex gap-3">
                 <button id="confirmCancelBtn" data-i18n="btn_cancel"
@@ -2089,7 +2089,7 @@
             </div>
             <h3 id="promptTitle" class="text-xl font-bold text-slate-800 mb-2 text-center" data-i18n="prompt_email_title">E-Mail Adresse</h3>
             <p id="promptMessage" class="text-sm text-slate-600 mb-4 text-center leading-relaxed" data-i18n="prompt_email_desc">Wohin soll der Code gesendet werden?</p>
-            <input type="text" id="promptInput" class="w-full border border-slate-200 rounded-xl px-4 py-3 mb-6 outline-none focus:border-blue-400 transition-all text-sm" placeholder="name@beispiel.de">
+            <input type="text" id="promptInput" class="w-full border border-slate-200 rounded-xl px-4 py-3 mb-6 outline-none focus:border-blue-400 transition-all text-sm" placeholder="name@beispiel.de" data-i18n-placeholder="prompt_email_placeholder">
             <div class="flex gap-3">
                 <button id="promptCancelBtn" data-i18n="btn_cancel"
                     class="flex-1 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition-all">Abbrechen</button>
@@ -2119,7 +2119,7 @@
                 </svg>
             </div>
             <h3 class="text-xl font-bold text-slate-800 mb-2 italic" data-i18n="choice_mode_title">Import-Modus wählen</h3>
-            <p id="choiceMessage" class="text-slate-600 mb-8 text-sm leading-relaxed">Wie sollen die neuen Vokabeln
+            <p id="choiceMessage" class="text-slate-600 mb-8 text-sm leading-relaxed" data-i18n="choice_default_message">Wie sollen die neuen Vokabeln
                 verarbeitet werden?</p>
 
             <div class="flex flex-col gap-3">
@@ -2158,12 +2158,11 @@
                     <span id="streakCountBadge">0</span>
                 </div>
             </div>
-            <h3 class="text-2xl md:text-3xl font-extrabold text-slate-800 mb-2">Großartig!</h3>
-            <p class="text-slate-600 mb-8 text-lg font-medium">Deine Lern-Serie ist nun bei <span id="streakCountText"
-                    class="text-orange-600 font-bold">0</span> Tagen!</p>
+            <h3 class="text-2xl md:text-3xl font-extrabold text-slate-800 mb-2" data-i18n="streak_title">Großartig!</h3>
+            <p class="text-slate-600 mb-8 text-lg font-medium"><span data-i18n="streak_text_a">Deine Lern-Serie ist nun bei</span> <span id="streakCountText"
+                    class="text-orange-600 font-bold">0</span> <span data-i18n="streak_text_b">Tagen!</span></p>
             <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 mb-8">
-                <p class="text-sm text-slate-500 italic">Bleibe dran und lerne jeden Tag ein bisschen, um deine Serie zu
-                    halten. <span id="streakBravoText">Bravissimo!</span></p>
+                <p class="text-sm text-slate-500 italic"><span data-i18n="streak_keep_going">Bleibe dran und lerne jeden Tag ein bisschen, um deine Serie zu halten.</span> <span id="streakBravoText">Bravissimo!</span></p>
             </div>
             <button id="closeStreakModalBtn"
                 class="w-full py-4 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-2xl shadow-lg transition-all active:scale-95 text-xl flex items-center justify-center gap-2">
@@ -2178,18 +2177,18 @@
             <div class="w-16 h-16 shrink-0 bg-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
                 <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3">Version 2.2.26 ist da! <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
+            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3"><span data-i18n="version_modal_pre">Version</span> 2.2.27 <span data-i18n="version_modal_post">ist da!</span> <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
             <div class="text-left space-y-3 mb-6 overflow-y-auto min-h-0 flex-1 pr-1">
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm">Korrigiert: In Spanisch und Englisch erscheinen Richtungsauswahl, Beschriftungen und Platzhalter jetzt in der gewählten Sprache (nicht mehr „Italienisch“)</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm" data-i18n="version_news_1">Korrigiert: Die englische Oberfläche ist jetzt vollständig englisch (Serie-Fenster, Meldungen, Platzhalter, Admin-Bereich, Grammatik-Erklärungen)</p>
                 </div>
                 
-                <p class="text-slate-500 text-[10px] italic text-center mt-4 px-4 leading-normal">
+                <p class="text-slate-500 text-[10px] italic text-center mt-4 px-4 leading-normal" data-i18n="version_modal_footer">
                     Viel Spaß beim Lernen! Melde Fehler bitte direkt an uns.
                 </p>
             </div>
-            <button id="closeVersionModalBtn"
+            <button id="closeVersionModalBtn" data-i18n="version_modal_ok"
                 class="shrink-0 w-full py-4.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl shadow-lg shadow-blue-200 transition-all active:scale-95 text-lg">
                 Alles klar!
             </button>
@@ -2224,7 +2223,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                             d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                     </svg>
-                    Einstellungen
+                    <span data-i18n="mobile_filter_title">Einstellungen</span>
                 </h3>
             </div>
 
@@ -2232,7 +2231,7 @@
                 <!-- Die Filter werden hierhin verschoben -->
             </div>
 
-            <button id="closeFilterModalBtn"
+            <button id="closeFilterModalBtn" data-i18n="btn_done"
                 class="w-full mt-10 py-4.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl shadow-lg transition-all active:scale-95 text-lg">
                 Fertig
             </button>
@@ -2243,12 +2242,12 @@
     <div id="mainAppContent" class="hidden flex flex-col items-center w-full">
         <div class="top-nav-container absolute top-[calc(env(safe-area-inset-top,0px)+8px)] right-2 md:top-4 md:right-4 z-[1000] flex items-center gap-[2px]">
             <!-- Beispielsätze Mobile Button -->
-            <button id="toggleExampleSentencesBtnMobile" class="md:hidden p-2 bg-white text-slate-700 rounded-xl shadow-sm active:scale-95 flex items-center justify-center w-[38px] h-[38px] border border-slate-200" title="Beispielsätze">
+            <button id="toggleExampleSentencesBtnMobile" class="md:hidden p-2 bg-white text-slate-700 rounded-xl shadow-sm active:scale-95 flex items-center justify-center w-[38px] h-[38px] border border-slate-200" title="Beispielsätze" data-i18n-title="btn_example_sentences">
                 <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.674a1 1 0 01.707.293l1.414 1.414a1 1 0 01.293.707V20a1 1 0 01-1 1H8.324a1 1 0 01-1-1v-1a1 1 0 01.293-.707l1.414-1.414a1 1 0 01.707-.293V17zM12 3c-3.313 0-6 2.687-6 6 0 2.126 1.104 3.992 2.76 5.068A1 1 0 019 15h6a1 1 0 01.24-.668c1.656-1.076 2.76-2.942 2.76-5.068 0-3.313-2.687-6-6-6z"/>
                 </svg>
             </button>
-            <button id="infoIconBtn" class="mobile-filter-btn hidden p-2 bg-blue-600 text-white rounded-xl shadow-sm active:scale-95 flex items-center justify-center w-[38px] h-[38px] border border-blue-600" title="Zusatzinfos">
+            <button id="infoIconBtn" class="mobile-filter-btn hidden p-2 bg-blue-600 text-white rounded-xl shadow-sm active:scale-95 flex items-center justify-center w-[38px] h-[38px] border border-blue-600" title="Zusatzinfos" data-i18n-title="info_extra_title_btn">
                 <span class="font-bold">i</span>
             </button>
             <button id="openFilterModalBtn"
@@ -2317,17 +2316,17 @@
                 <div id="menuFooter" class="menu-footer shrink-0 border-t border-slate-200">
                 <div id="syncStatus"
                     class="px-4 py-2 text-[10px] text-slate-400 bg-slate-50 flex items-center justify-between cursor-pointer hover:bg-slate-100 transition-colors"
-                    title="Klicken zum manuellen Synchronisieren">
+                    title="Klicken zum manuellen Synchronisieren" data-i18n-title="sync_manual_title">
                     <span data-i18n="last_sync">Letzter Sync:</span>
-                    <span id="lastSyncTime" class="font-mono">Nie</span>
+                    <span id="lastSyncTime" class="font-mono" data-i18n="never">Nie</span>
                 </div>
                 <div id="syncStateRow" class="px-4 py-1.5 text-[10px] bg-slate-50 flex items-center justify-between gap-2 border-t border-slate-100/50">
                     <span class="flex items-center gap-1.5 font-semibold text-slate-500"><span id="syncStateDot" class="inline-block w-2 h-2 rounded-full bg-slate-300"></span><span id="syncStateText"></span></span>
                     <span id="syncPendingText" class="font-mono text-slate-400"></span>
                 </div>
                 <div class="px-4 py-1.5 text-[10px] text-slate-400 bg-slate-50/50 flex items-center justify-between border-t border-slate-100/50">
-                    <span>App-Version:</span>
-                    <span class="font-mono font-medium text-slate-500">2.2.26</span>
+                    <span data-i18n="app_version_label">App-Version:</span>
+                    <span class="font-mono font-medium text-slate-500">2.2.27</span>
                 </div>
                 </div>
                 <input type="file" id="excelUploadEl" accept=".xlsx, .xls" class="hidden">
@@ -2383,7 +2382,7 @@
                 </span>
                 <svg class="w-4 h-4 shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
             </button>
-            <button id="mobileWordSearchBtn" type="button" hidden title="Sätze zu einem Wort"
+            <button id="mobileWordSearchBtn" type="button" hidden title="Sätze zu einem Wort" data-i18n-title="wordsent_title"
                 class="shrink-0 w-10 bg-white rounded-xl border border-slate-200 shadow-sm items-center justify-center text-slate-600 active:scale-95 transition-all">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
             </button>
@@ -2446,7 +2445,7 @@
                                 <div class="cs-opt" data-value="Verb" data-i18n="type_verb">Verbformen</div>
                                 <div class="cs-opt" data-value="Adjektiv" data-i18n="type_adj">Adjektive</div>
                                 <div class="cs-opt" data-value="Sonstiges" data-i18n="type_other">Sonstiges</div>
-                                <div class="cs-opt" data-value="Favoriten" title="Nur markierte Favoriten üben" data-i18n="type_fav">Favoriten</div>
+                                <div class="cs-opt" data-value="Favoriten" title="Nur markierte Favoriten üben" data-i18n-title="type_fav_title" data-i18n="type_fav">Favoriten</div>
                                 <div class="cs-opt" data-value="Satz" data-i18n="type_sentence">Eigene Sätze</div>
                                 <div class="cs-opt" data-value="EigeneVokabeln" data-i18n="type_own_vocab">Eigene Vokabeln</div>
                             </div>
@@ -2506,7 +2505,7 @@
                             <div class="cs-opt" data-value="A2">A2</div>
                             <div class="cs-opt" data-value="B1">B1</div>
                             <div class="cs-opt" data-value="B2">B2</div>
-                            <div class="cs-opt" data-value="Eigene">Eigene</div>
+                            <div class="cs-opt" data-value="Eigene" data-i18n="level_own">Eigene</div>
                         </div>
                     </div>
                 </div>
@@ -2531,7 +2530,7 @@
                         <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                         </svg>
-                        <span>Infos</span>
+                        <span data-i18n="info_toggle_label">Infos</span>
                     </button>
                     <span id="successText"
                         class="hidden text-green-600 font-bold text-xs md:text-sm animate-pulse flex items-center gap-1.5">
@@ -2539,7 +2538,7 @@
                     </span>
                     <button id="nextBtn"
                         class="hidden bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-3 md:px-4 rounded-lg transition-colors shadow-md active:transform active:scale-95 text-xs md:text-sm flex items-center gap-1.5">
-                        Nächste Runde <span class="vocab-btn-arrow"></span>
+                        <span data-i18n="next_round">Nächste Runde</span> <span class="vocab-btn-arrow"></span>
                     </button>
                 </div>
             </div>
@@ -2615,18 +2614,18 @@
                     </label>
                 </div>
                 <div id="cardsQuestionDisplay" class="mb-2 transition-all w-full text-2xl md:text-5xl font-bold text-slate-800"></div>
-                <div id="cardsSubtext" class="text-slate-500 font-medium text-xs md:text-sm mt-4">Klicken zum Wenden</div>
+                <div id="cardsSubtext" class="text-slate-500 font-medium text-xs md:text-sm mt-4" data-i18n="cards_click_flip">Klicken zum Wenden</div>
             </div>
             <div id="cardsFeedback"
                 class="flex flex-col items-center gap-4 w-full mt-2 p-3 bg-white rounded-xl shadow-sm border border-slate-100 flex-shrink-0">
                 <div class="flex items-center gap-2 md:gap-4">
                     <button id="cardsPrevBtn"
                         class="bg-slate-500 hover:bg-slate-600 text-white font-bold py-2 px-4 md:px-6 rounded-lg transition-all shadow-md active:transform active:scale-95 text-xs md:text-base flex items-center gap-2 opacity-50 cursor-not-allowed" disabled>
-                        <span>←</span> Letzte Karte
+                        <span>←</span> <span data-i18n="cards_prev">Letzte Karte</span>
                     </button>
                     <button id="cardsNextBtn"
                         class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 md:px-6 rounded-lg transition-all shadow-md active:transform active:scale-95 text-xs md:text-base flex items-center gap-2">
-                        Nächste Karte <span>→</span>
+                        <span data-i18n="cards_next">Nächste Karte</span> <span>→</span>
                     </button>
                 </div>
                 <!-- Manual Example Sentence Button for Flashcards -->
@@ -2646,14 +2645,14 @@
                 class="bg-white p-4 md:p-8 rounded-3xl shadow-sm border border-slate-200 w-full text-center flex flex-col items-center justify-center flex-shrink-0 relative">
                 <div id="quizControls" class="absolute top-2 right-2 md:top-4 md:right-4 flex items-center gap-3"></div>
                 <div id="quizQuestionDisplay" class="mb-2 transition-all w-full overflow-hidden"></div>
-                <div id="quizSubtext" class="text-slate-500 font-medium text-xs md:text-sm mt-1">Lade...</div>
+                <div id="quizSubtext" class="text-slate-500 font-medium text-xs md:text-sm mt-1" data-i18n="loading_dots">Lade...</div>
             </div>
             <div id="quizOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full flex-shrink-0"></div>
             <div id="quizFeedback"
                 class="hidden flex-col items-center gap-2 w-full mt-2 p-3 bg-white rounded-xl shadow-sm border border-slate-100 flex-shrink-0">
                 <button id="quizNextBtn"
                     class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors shadow-md active:transform active:scale-95 text-sm md:text-base flex items-center gap-2 mx-auto">
-                    Neues Wort spielen <span class="vocab-btn-arrow"></span>
+                    <span data-i18n="quiz_new_word">Neues Wort spielen</span> <span class="vocab-btn-arrow"></span>
                 </button>
             </div>
         </main>
@@ -2667,7 +2666,7 @@
                 <!-- State 1: Question -->
                 <div id="writeQuestionArea" class="w-full">
                     <div id="writeQuestionDisplay" class="mb-2 transition-all w-full overflow-hidden"></div>
-                    <div id="writeSubtext" class="text-slate-500 font-medium text-xs md:text-sm mt-1">Lade...</div>
+                    <div id="writeSubtext" class="text-slate-500 font-medium text-xs md:text-sm mt-1" data-i18n="loading_dots">Lade...</div>
                 </div>
                 <!-- State 2: Feedback -->
                 <div id="writeFeedbackArea" class="hidden w-full flex-col items-center">
@@ -2675,16 +2674,16 @@
                     <div id="writeFeedbackDiff"
                         class="text-lg md:text-2xl font-mono text-center mb-4 tracking-wider w-full overflow-x-auto p-2 bg-slate-50 rounded shadow-inner">
                     </div>
-                    <div class="text-slate-500 text-center text-sm md:text-base">Lösung: <span id="writeFeedbackCorrect"
+                    <div class="text-slate-500 text-center text-sm md:text-base"><span data-i18n="solution_label">Lösung:</span> <span id="writeFeedbackCorrect"
                             class="font-bold text-slate-700"></span></div>
                 </div>
             </div>
             <div class="w-full relative mt-4">
-                <input type="text" id="writeInput" autocomplete="off" placeholder="Deine Antwort..."
+                <input type="text" id="writeInput" autocomplete="off" placeholder="Deine Antwort..." data-i18n-placeholder="write_placeholder"
                     class="w-full p-4 md:p-5 text-xl md:text-2xl pl-4 pr-16 md:pr-20 text-left border-2 border-slate-300 rounded-xl focus:outline-none focus:border-blue-500 shadow-sm bg-white text-slate-800 transition-colors">
-                <button id="writeSubmitBtn" title="Prüfen"
+                <button id="writeSubmitBtn" title="Prüfen" data-i18n-title="btn_check"
                     class="write-inline-btn border-none outline-none absolute right-2 top-2 bottom-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-sm transition-all active:transform active:scale-95 flex items-center justify-center px-4 md:px-5">
-                    <span class="btn-text hidden md:inline-block mr-2">Prüfen</span>
+                    <span class="btn-text hidden md:inline-block mr-2" data-i18n="btn_check">Prüfen</span>
                     <svg class="w-6 h-6 btn-icon-check" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                     <svg class="w-6 h-6 btn-icon-next hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </button>
@@ -2709,9 +2708,9 @@
                 <div id="grammarHelpBox" class="hidden w-full mt-4 p-4 rounded-xl bg-indigo-50 border border-indigo-100 text-left text-sm text-slate-700 space-y-3"></div>
 
                 <div class="mt-8 flex gap-3 w-full max-w-md">
-                    <button id="grammarSubmitBtn"
+                    <button id="grammarSubmitBtn" data-i18n="btn_check"
                         class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 md:py-4 rounded-xl shadow-md transition-all active:transform active:scale-95 text-lg">Prüfen</button>
-                    <button id="grammarNextBtn"
+                    <button id="grammarNextBtn" data-i18n="grammar_next_sentence"
                         class="hidden flex-1 bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 md:py-4 rounded-xl shadow-md transition-all active:transform active:scale-95 text-lg">Nächster
                         Satz</button>
                 </div>
@@ -2726,19 +2725,19 @@
                 <h2 class="text-3xl font-black mb-3 flex items-center justify-center gap-3">
                     <span id="grammarHeaderIcon"></span> <span id="infoTitleText">Grammatica Italiana</span>
                 </h2>
-                <p id="infoDescText" class="text-slate-600 text-lg font-medium">Index der wichtigsten Regeln und Konjugationstabellen.</p>
+                <p id="infoDescText" class="text-slate-600 text-lg font-medium" data-i18n="info_desc">Index der wichtigsten Regeln und Konjugationstabellen.</p>
             </div>
 
             <!-- Verb Search Section -->
             <div id="verbSearchSection" class="bg-blue-600 p-6 md:p-8 rounded-3xl w-full border border-blue-500 shadow-xl hidden">
                 <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    Verb-Suche
+                    <span data-i18n="verb_search_title">Verb-Suche</span>
                 </h3>
                 <div class="relative group">
                     <input type="text" id="verbSearchInput" 
                         class="w-full bg-white/10 border border-white/20 rounded-2xl px-6 py-4 text-white placeholder-white/50 focus:outline-none focus:bg-white/20 focus:border-white/40 transition-all text-lg shadow-inner"
-                        placeholder="Verb suchen (z.B. parlare, andare...)">
+                        placeholder="Verb suchen (z.B. parlare, andare...)" data-i18n-placeholder="verb_search_placeholder_it">
                     <div id="verbSearchResults" class="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden z-[100] max-h-60 overflow-y-auto">
                         <!-- Suggestions will appear here -->
                     </div>
@@ -5137,7 +5136,7 @@
                 </ul>
             </div>
             <div class="mt-4 pt-3 border-t border-slate-100 flex justify-center">
-                <button id="openImpressumStatsBtn"
+                <button id="openImpressumStatsBtn" data-i18n="menu_impressum"
                     class="text-[10px] text-slate-400 hover:text-slate-600 transition-colors uppercase tracking-widest font-bold">Impressum
                     & Lizenzen</button>
             </div>
@@ -5186,7 +5185,7 @@
                     <!-- Base Vokabeln -->
                     <div class="p-3 rounded-xl border border-indigo-200 bg-indigo-50 flex flex-col justify-between">
                         <div class="font-semibold text-indigo-900 text-xs mb-2" data-i18n="excel_base_vocab">Basis-Vokabeln</div>
-                        <div class="text-[10px] text-slate-500 mb-2 leading-tight" id="baseVocabUserCountDesc">Lade Informationen...</div>
+                        <div class="text-[10px] text-slate-500 mb-2 leading-tight" id="baseVocabUserCountDesc" data-i18n="loading_info">Lade Informationen...</div>
                         <div class="flex flex-col gap-2 relative mt-auto">
                             <button id="loadBaseVocabArea" data-i18n="excel_btn_read" class="w-full bg-white hover:bg-indigo-100 text-indigo-700 border border-indigo-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">📖 Einlesen</button>
                             <button id="deleteBaseVocabArea" data-i18n="excel_btn_delete" class="w-full bg-white hover:bg-red-50 text-red-600 border border-red-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">🗑️ Löschen</button>
@@ -5196,7 +5195,7 @@
                     <!-- Base Sätze -->
                     <div class="p-3 rounded-xl border border-indigo-200 bg-indigo-50 flex flex-col justify-between">
                         <div class="font-semibold text-indigo-900 text-xs mb-2" data-i18n="excel_base_sentences">Basis-Sätze</div>
-                        <div class="text-[10px] text-slate-500 mb-2 leading-tight" id="baseSentencesUserCountDesc">Lade Informationen...</div>
+                        <div class="text-[10px] text-slate-500 mb-2 leading-tight" id="baseSentencesUserCountDesc" data-i18n="loading_info">Lade Informationen...</div>
                         <div class="flex flex-col gap-2 relative mt-auto">
                             <button id="loadBaseSentencesArea" data-i18n="excel_btn_read" class="w-full bg-white hover:bg-indigo-100 text-indigo-700 border border-indigo-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">📖 Einlesen</button>
                             <button id="deleteBaseSentencesArea" data-i18n="excel_btn_delete" class="w-full bg-white hover:bg-red-50 text-red-600 border border-red-200 py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 shadow-sm">🗑️ Löschen</button>
@@ -5228,7 +5227,7 @@
         class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-[60] p-4">
         <div class="bg-white rounded-3xl p-6 md:p-8 max-w-lg w-full shadow-2xl">
             <div class="flex justify-between items-center mb-5">
-                <h2 class="text-xl font-bold text-slate-800 flex items-center">Eintrag bearbeiten</h2>
+                <h2 class="text-xl font-bold text-slate-800 flex items-center" data-i18n="edit_entry_title">Eintrag bearbeiten</h2>
                 <button id="closeEditVocabModalBtn"
                     class="text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
             </div>
@@ -5247,14 +5246,14 @@
             
             <div class="grid grid-cols-2 gap-3 mb-5">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">Wortart (Typ)</label>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5" data-i18n="edit_word_type">Wortart (Typ)</label>
                     <select id="editVocabTyp"
                         class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium outline-none focus:border-blue-400 transition-all text-slate-700 bg-white">
-                        <option value="Verb">Verb</option>
-                        <option value="Substantiv">Substantiv</option>
-                        <option value="Adjektiv">Adjektiv</option>
-                        <option value="Sonstiges">Sonstiges</option>
-                        <option value="Satz">Satz</option>
+                        <option value="Verb" data-i18n="vocab_type_verb">Verb</option>
+                        <option value="Substantiv" data-i18n="vocab_type_noun">Substantiv</option>
+                        <option value="Adjektiv" data-i18n="vocab_type_adj">Adjektiv</option>
+                        <option value="Sonstiges" data-i18n="vocab_type_other">Sonstiges</option>
+                        <option value="Satz" data-i18n="type_sentence_single">Satz</option>
                     </select>
                 </div>
                 <div>
@@ -5266,7 +5265,7 @@
 
             <button id="saveEditVocabBtn"
                 class="w-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
-                Änderungen speichern <span class="vocab-btn-arrow"></span>
+                <span data-i18n="edit_save_changes">Änderungen speichern</span> <span class="vocab-btn-arrow"></span>
             </button>
         </div>
     </div>
@@ -5276,7 +5275,7 @@
         class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-[60] p-4">
         <div class="bg-white rounded-3xl p-6 md:p-8 max-w-lg w-full shadow-2xl">
             <div class="flex justify-between items-center mb-5">
-                <h2 class="text-xl font-bold text-slate-800 flex items-center">Satz bearbeiten</h2>
+                <h2 class="text-xl font-bold text-slate-800 flex items-center" data-i18n="edit_sentence_title">Satz bearbeiten</h2>
                 <button id="closeEditSentenceModalBtn"
                     class="text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
             </div>
@@ -5295,7 +5294,7 @@
 
             <button id="saveEditSentenceBtn"
                 class="w-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
-                Änderungen speichern <span class="vocab-btn-arrow"></span>
+                <span data-i18n="edit_save_changes">Änderungen speichern</span> <span class="vocab-btn-arrow"></span>
             </button>
         </div>
     </div>
@@ -5369,21 +5368,21 @@
                         <option value="EigeneVokabeln">Eigene Vokabeln</option>
                     </select>
                     <button type="button" class="cs-btn w-full" id="vocabListCatFilterBtn">
-                        <span id="vocabListCatFilterLabel">Alle Kategorien</span>
+                        <span id="vocabListCatFilterLabel" data-i18n="sentence_cat_all">Alle Kategorien</span>
                         <svg class="cs-chevron" width="16" height="16" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     <div class="cs-list" id="vocabListCatFilterList">
-                        <div class="cs-opt selected" data-value="Alle">Alle Kategorien</div>
-                        <div class="cs-opt" data-value="Substantiv">Substantive</div>
-                        <div class="cs-opt" data-value="Verb">Verben</div>
-                        <div class="cs-opt" data-value="Adjektiv">Adjektive</div>
-                        <div class="cs-opt" data-value="Sonstiges">Sonstiges</div>
-                        <div class="cs-opt" data-value="Favoriten">Favoriten</div>
-                        <div class="cs-opt" data-value="Satz">Eigene Sätze</div>
-                        <div class="cs-opt" data-value="EigeneVokabeln">Eigene Vokabeln</div>
+                        <div class="cs-opt selected" data-value="Alle" data-i18n="sentence_cat_all">Alle Kategorien</div>
+                        <div class="cs-opt" data-value="Substantiv" data-i18n="type_noun">Substantive</div>
+                        <div class="cs-opt" data-value="Verb" data-i18n="type_verb_inf">Verben</div>
+                        <div class="cs-opt" data-value="Adjektiv" data-i18n="type_adj">Adjektive</div>
+                        <div class="cs-opt" data-value="Sonstiges" data-i18n="type_other">Sonstiges</div>
+                        <div class="cs-opt" data-value="Favoriten" data-i18n="type_fav">Favoriten</div>
+                        <div class="cs-opt" data-value="Satz" data-i18n="type_sentence">Eigene Sätze</div>
+                        <div class="cs-opt" data-value="EigeneVokabeln" data-i18n="type_own_vocab">Eigene Vokabeln</div>
                     </div>
                 </div>
             </div>
@@ -5525,11 +5524,11 @@
                     <span id="vocabTranslationLabel">Italienische Übersetzung</span>
                     <span id="vocabAutoTag"
                         class="hidden text-blue-500 text-[10px] bg-blue-50 border border-blue-100 px-1.5 py-0.5 rounded-full flex items-center">
-                        <span id="vocabAutoSparkle"></span> automatisch ergänzt
+                        <span id="vocabAutoSparkle"></span> <span data-i18n="vocab_auto_added">automatisch ergänzt</span>
                     </span>
                     <span id="vocabDuplicateHint"
                         class="hidden text-red-500 text-[10px] bg-red-50 border border-red-100 px-1.5 py-0.5 rounded-full flex items-center">
-                        <span id="vocabWarningIcon"></span> <span id="vocabDuplicateText">Vokabel bereits vorhanden</span>
+                        <span id="vocabWarningIcon"></span> <span id="vocabDuplicateText" data-i18n="vocab_duplicate">Vokabel bereits vorhanden</span>
                     </span>
                 </label>
                 <input id="vocabTranslation" type="text" placeholder="Automatisch oder manuell eingeben" data-i18n-placeholder="vocab_auto_manual"
@@ -5765,7 +5764,7 @@
                 <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-3 mb-4 shadow-sm">
                     <p class="text-[10px] text-blue-600 font-black uppercase tracking-widest mb-2" data-i18n="admin_recent_activity">Letzte Aktivitäten (Lernen)</p>
                     <div id="adminRecentActivityList" class="space-y-1.5 min-h-[60px]">
-                        <p class="text-[11px] text-slate-400 italic">Lade Aktivitäten...</p>
+                        <p class="text-[11px] text-slate-400 italic" data-i18n="admin_loading_activity">Lade Aktivitäten...</p>
                     </div>
                 </div>
 
@@ -5789,7 +5788,7 @@
                 </div>
 
                 <div class="admin-pane flex-1 min-w-0 overflow-y-auto pr-2 mb-2" id="adminUserList">
-                    <p class="text-slate-500 text-sm center">Lade Nutzer...</p>
+                    <p class="text-slate-500 text-sm center" data-i18n="admin_loading_users">Lade Nutzer...</p>
                 </div>
             </div>
 
@@ -5806,7 +5805,7 @@
                         <div class="p-3 bg-white rounded-xl border border-slate-200">
                             <div class="flex justify-between items-center mb-2">
                                 <span class="text-xs font-bold text-slate-600" data-i18n="admin_lang_it">Italienisch</span>
-                                <span id="adminBaseVocabCountIt" class="text-[10px] text-slate-400">- Vokabeln</span>
+                                <span id="adminBaseVocabCountIt" class="text-[10px] text-slate-400" data-i18n="admin_count_vocab_empty">- Vokabeln</span>
                             </div>
                             <div class="flex gap-2">
                                 <input type="file" id="adminBaseVocabUploadIt" class="hidden" accept=".xlsx" onchange="uploadBaseVocab('it')">
@@ -5816,12 +5815,12 @@
                                 </button>
                                 <button onclick="downloadBaseVocab('it')"
                                     class="w-10 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg flex items-center justify-center border border-slate-200"
-                                    title="Italienisch Liste exportieren">
+                                    data-list-title="export:it" title="Italienisch Liste exportieren">
                                     📤
                                 </button>
                                 <button onclick="deleteAdminBaseVocab('it')"
                                     class="w-10 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg flex items-center justify-center border border-red-100"
-                                    title="Italienisch Liste leeren">
+                                    data-list-title="clear:it" title="Italienisch Liste leeren">
                                     🗑️
                                 </button>
                             </div>
@@ -5831,7 +5830,7 @@
                         <div class="p-3 bg-white rounded-xl border border-slate-200">
                             <div class="flex justify-between items-center mb-2">
                                 <span class="text-xs font-bold text-slate-600" data-i18n="admin_lang_en">Englisch</span>
-                                <span id="adminBaseVocabCountEn" class="text-[10px] text-slate-400">- Vokabeln</span>
+                                <span id="adminBaseVocabCountEn" class="text-[10px] text-slate-400" data-i18n="admin_count_vocab_empty">- Vokabeln</span>
                             </div>
                             <div class="flex gap-2">
                                 <input type="file" id="adminBaseVocabUploadEn" class="hidden" accept=".xlsx" onchange="uploadBaseVocab('en')">
@@ -5841,12 +5840,12 @@
                                 </button>
                                 <button onclick="downloadBaseVocab('en')"
                                     class="w-10 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg flex items-center justify-center border border-slate-200"
-                                    title="Englisch Liste exportieren">
+                                    data-list-title="export:en" title="Englisch Liste exportieren">
                                     📤
                                 </button>
                                 <button onclick="deleteAdminBaseVocab('en')"
                                     class="w-10 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg flex items-center justify-center border border-red-100"
-                                    title="Englisch Liste leeren">
+                                    data-list-title="clear:en" title="Englisch Liste leeren">
                                     🗑️
                                 </button>
                             </div>
@@ -5856,7 +5855,7 @@
                         <div class="p-3 bg-white rounded-xl border border-slate-200">
                             <div class="flex justify-between items-center mb-2">
                                 <span class="text-xs font-bold text-slate-600" data-i18n="admin_lang_es">Spanisch</span>
-                                <span id="adminBaseVocabCountEs" class="text-[10px] text-slate-400">- Vokabeln</span>
+                                <span id="adminBaseVocabCountEs" class="text-[10px] text-slate-400" data-i18n="admin_count_vocab_empty">- Vokabeln</span>
                             </div>
                             <div class="flex gap-2">
                                 <input type="file" id="adminBaseVocabUploadEs" class="hidden" accept=".xlsx" onchange="uploadBaseVocab('es')">
@@ -5866,12 +5865,12 @@
                                 </button>
                                 <button onclick="downloadBaseVocab('es')"
                                     class="w-10 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg flex items-center justify-center border border-slate-200"
-                                    title="Spanisch Liste exportieren" aria-label="Spanisch Liste exportieren">
+                                    data-list-title="export:es" data-list-title="export:es" title="Spanisch Liste exportieren">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M8 12l4 4m0 0l4-4m-4 4V4"/></svg>
                                 </button>
                                 <button onclick="deleteAdminBaseVocab('es')"
                                     class="w-10 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg flex items-center justify-center border border-red-100"
-                                    title="Spanisch Liste leeren" aria-label="Spanisch Liste leeren">
+                                    data-list-title="clear:es" data-list-title="clear:es" title="Spanisch Liste leeren">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                 </button>
                             </div>
@@ -5889,7 +5888,7 @@
                         <div class="p-3 bg-white rounded-xl border border-slate-200">
                             <div class="flex justify-between items-center mb-2">
                                 <span class="text-xs font-bold text-slate-600" data-i18n="admin_lang_it">Italienisch</span>
-                                <span id="adminGrammarCountIt" class="text-[10px] text-slate-400">- Sätze</span>
+                                <span id="adminGrammarCountIt" class="text-[10px] text-slate-400" data-i18n="admin_count_sent_empty">- Sätze</span>
                             </div>
                             <div class="flex gap-2">
                                 <input type="file" id="adminGrammarUploadIt" class="hidden" accept=".xlsx" onchange="uploadGrammar('it')">
@@ -5899,12 +5898,12 @@
                                 </button>
                                 <button onclick="downloadGrammar('it')"
                                     class="w-10 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg flex items-center justify-center border border-slate-200"
-                                    title="Italienisch Liste exportieren">
+                                    data-list-title="export:it" title="Italienisch Liste exportieren">
                                     📤
                                 </button>
                                 <button onclick="deleteAdminGrammar('it')"
                                     class="w-10 bg-red-50 hover:bg-red-100 text-red-500 rounded-lg flex items-center justify-center border border-red-100"
-                                    title="Italienisch Liste leeren">
+                                    data-list-title="clear:it" title="Italienisch Liste leeren">
                                     🗑️
                                 </button>
                             </div>
@@ -5914,7 +5913,7 @@
                         <div class="p-3 bg-white rounded-xl border border-slate-200">
                             <div class="flex justify-between items-center mb-2">
                                 <span class="text-xs font-bold text-slate-600" data-i18n="admin_lang_en">Englisch</span>
-                                <span id="adminGrammarCountEn" class="text-[10px] text-slate-400">- Sätze</span>
+                                <span id="adminGrammarCountEn" class="text-[10px] text-slate-400" data-i18n="admin_count_sent_empty">- Sätze</span>
                             </div>
                             <div class="flex gap-2">
                                 <input type="file" id="adminGrammarUploadEn" class="hidden" accept=".xlsx" onchange="uploadGrammar('en')">
@@ -5924,12 +5923,12 @@
                                 </button>
                                 <button onclick="downloadGrammar('en')"
                                     class="w-10 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg flex items-center justify-center border border-slate-200"
-                                    title="Englisch Liste exportieren">
+                                    data-list-title="export:en" title="Englisch Liste exportieren">
                                     📤
                                 </button>
                                 <button onclick="deleteAdminGrammar('en')"
                                     class="w-10 bg-red-50 hover:bg-red-100 text-red-500 rounded-lg flex items-center justify-center border border-red-100"
-                                    title="Englisch Liste leeren">
+                                    data-list-title="clear:en" title="Englisch Liste leeren">
                                     🗑️
                                 </button>
                             </div>
@@ -5939,7 +5938,7 @@
                         <div class="p-3 bg-white rounded-xl border border-slate-200">
                             <div class="flex justify-between items-center mb-2">
                                 <span class="text-xs font-bold text-slate-600" data-i18n="admin_lang_es">Spanisch</span>
-                                <span id="adminGrammarCountEs" class="text-[10px] text-slate-400">- Sätze</span>
+                                <span id="adminGrammarCountEs" class="text-[10px] text-slate-400" data-i18n="admin_count_sent_empty">- Sätze</span>
                             </div>
                             <div class="flex gap-2">
                                 <input type="file" id="adminGrammarUploadEs" class="hidden" accept=".xlsx" onchange="uploadGrammar('es')">
@@ -5949,12 +5948,12 @@
                                 </button>
                                 <button onclick="downloadGrammar('es')"
                                     class="w-10 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg flex items-center justify-center border border-slate-200"
-                                    title="Spanisch Liste exportieren" aria-label="Spanisch Liste exportieren">
+                                    data-list-title="export:es" data-list-title="export:es" title="Spanisch Liste exportieren">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M8 12l4 4m0 0l4-4m-4 4V4"/></svg>
                                 </button>
                                 <button onclick="deleteAdminGrammar('es')"
                                     class="w-10 bg-red-50 hover:bg-red-100 text-red-500 rounded-lg flex items-center justify-center border border-red-100"
-                                    title="Spanisch Liste leeren" aria-label="Spanisch Liste leeren">
+                                    data-list-title="clear:es" data-list-title="clear:es" title="Spanisch Liste leeren">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                 </button>
                             </div>
@@ -6036,7 +6035,7 @@
                         <div class="flex gap-2">
                             <input id="adminAiKey" type="password" autocomplete="new-password" placeholder="Neuen Schlüssel eintragen" data-i18n-placeholder="admin_ai_key_placeholder"
                                 class="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
-                            <button type="button" id="adminAiClearKeyBtn" class="w-10 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl flex items-center justify-center border border-red-100" title="Schlüssel löschen">🗑️</button>
+                            <button type="button" id="adminAiClearKeyBtn" class="w-10 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl flex items-center justify-center border border-red-100" title="Schlüssel löschen" data-i18n-title="admin_ai_clear_key_title">🗑️</button>
                         </div>
                     </div>
 
@@ -6085,14 +6084,14 @@
                     </div>
                 <div class="admin-card mt-4">
                         <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-                            <h3 class="text-sm font-bold text-slate-700">🔎 Konjugationsprüfung (KI)</h3>
-                            <button type="button" id="adminVerbCheckRefreshBtn" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg border border-slate-200 text-xs font-semibold">Aktualisieren</button>
+                            <h3 class="text-sm font-bold text-slate-700" data-i18n="admin_verbcheck_title">🔎 Konjugationsprüfung (KI)</h3>
+                            <button type="button" id="adminVerbCheckRefreshBtn" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg border border-slate-200 text-xs font-semibold" data-i18n="admin_ai_usage_refresh">Aktualisieren</button>
                         </div>
-                        <p class="text-[11px] text-slate-500 mb-2">Die KI prüft jedes Verb (Basis-Vokabeln und Nutzerlisten) einmal und speichert die richtigen Formen für alle. Neue Verben kommen automatisch dazu; bei mehr als 50 offenen Verben wartet die Prüfung auf deine Freigabe.</p>
+                        <p class="text-[11px] text-slate-500 mb-2" data-i18n="admin_verbcheck_desc">Die KI prüft jedes Verb (Basis-Vokabeln und Nutzerlisten) einmal und speichert die richtigen Formen für alle. Neue Verben kommen automatisch dazu; bei mehr als 50 offenen Verben wartet die Prüfung auf deine Freigabe.</p>
                         <div id="adminVerbCheckStatus" class="space-y-2 text-xs"></div>
                         <div class="mt-3 p-2 bg-white rounded-lg border border-slate-100 flex flex-wrap items-center justify-between gap-2 min-w-0">
                             <span id="adminVerbCheckDiffs" class="text-xs text-slate-600 min-w-0 flex-1 basis-40 break-words"></span>
-                            <button type="button" id="adminVerbDiffExcelBtn" class="w-full sm:w-auto px-3 py-1.5 text-center bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold">📊 Abweichungen als Excel öffnen</button>
+                            <button type="button" id="adminVerbDiffExcelBtn" class="w-full sm:w-auto px-3 py-1.5 text-center bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold" data-i18n="admin_verbcheck_excel">📊 Abweichungen als Excel öffnen</button>
                         </div>
                     </div>
                 <p class="text-[11px] text-slate-400 mt-3 px-1" data-i18n="admin_ai_jwt_hint">Hinweis: Wird JWT_SECRET auf dem Server geändert, muss der Schlüssel neu eingetragen werden.</p>
@@ -6309,7 +6308,7 @@
         /**
          * Custom Confirmation Modal (Promise-based)
          */
-        function showConfirm(message, title = 'Bist du sicher?') {
+        function showConfirm(message, title = getI18n('confirm_default_title')) {
             return new Promise((resolve) => {
                 const modal = document.getElementById('confirmModal');
                 const titleEl = document.getElementById('confirmTitle');
@@ -6341,7 +6340,7 @@
         /**
          * Custom Prompt Modal (Promise-based)
          */
-        function showPrompt(message, title = 'Eingabe erforderlich', placeholder = '') {
+        function showPrompt(message, title = getI18n('prompt_default_title'), placeholder = '') {
             return new Promise((resolve) => {
                 const modal = document.getElementById('promptModal');
                 const titleEl = document.getElementById('promptTitle');
@@ -6399,9 +6398,9 @@
                 if (titleOpts) titleEl.textContent = titleOpts;
                 if (message) msgEl.textContent = message;
 
-                replaceText.textContent = optionsParam?.confirmText || 'Liste ersetzen (Löschen)';
-                addText.textContent = optionsParam?.toggleText || 'Liste ergänzen (Hinzufügen)';
-                cancelText.textContent = optionsParam?.cancelText || 'Abbrechen';
+                replaceText.textContent = optionsParam?.confirmText || getI18n('choice_replace_text');
+                addText.textContent = optionsParam?.toggleText || getI18n('choice_add_text');
+                cancelText.textContent = optionsParam?.cancelText || getI18n('btn_cancel');
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
 
@@ -6993,7 +6992,7 @@
                 direction: "Italienisch",
                 welcomePrefix: "Ciao,",
                 statsTitle: "Lern-Statistik",
-                grammarDescription: "Hier werden italienische Beispielsätze präsentiert..."
+                grammarDescription: ""
             },
             en: {
                 welcome: "Welcome!",
@@ -7010,7 +7009,7 @@
                 direction: "Englisch",
                 welcomePrefix: "Hello,",
                 statsTitle: "Learning Statistics",
-                grammarDescription: "Hier werden englische Beispielsätze präsentiert..."
+                grammarDescription: ""
             },
             es: {
                 welcome: "¡Bienvenido!",
@@ -7027,15 +7026,15 @@
                 direction: "Spanisch",
                 welcomePrefix: "Hola,",
                 statsTitle: "Lern-Statistik",
-                grammarDescription: "Hier werden spanische Beispielsätze präsentiert..."
+                grammarDescription: ""
             }
         };
 
         // Alles, was je Lernsprache anders ist, an einer Stelle (neue Sprache = hier ein Eintrag, plus Server utils/languages.js)
         const LANG_CONFIG = {
-            it: { name: 'Italienisch', nameEn: 'Italian', flag: itFlagSVG, locale: 'it', myMemory: 'it', placeholder: 'z.B. mangiare', sentencePlaceholder: 'z.B. Bevo volentieri il caffè.', infoId: 'infoContentIt', infoTitle: 'Grammatica Italiana', successLabel: 'Bravissimo!', articles: ['il', 'lo', 'la', 'l', 'i', 'gli', 'le', 'un', 'uno', 'una'] },
-            en: { name: 'Englisch', nameEn: 'English', flag: gbFlagSVG, locale: 'en', myMemory: 'en', placeholder: 'e.g. eat', sentencePlaceholder: 'z.B. I like drinking coffee.', infoId: 'infoContentEn', infoTitle: 'English Grammar Index', successLabel: 'Well done!', articles: ['to', 'the', 'a', 'an'] },
-            es: { name: 'Spanisch', nameEn: 'Spanish', flag: esFlagSVG, locale: 'es', myMemory: 'es', placeholder: 'z.B. hablar', sentencePlaceholder: 'z.B. Bebo café con gusto.', infoId: 'infoContentEs', infoTitle: 'Gramática Española', successLabel: '¡Muy bien!', articles: ['el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas'] }
+            it: { name: 'Italienisch', nameEn: 'Italian', flag: itFlagSVG, locale: 'it', myMemory: 'it', nameNative: 'Italiano', placeholder: 'mangiare', sentencePlaceholder: 'Bevo volentieri il caffè.', infoId: 'infoContentIt', infoTitle: 'Grammatica Italiana', successLabel: 'Bravissimo!', articles: ['il', 'lo', 'la', 'l', 'i', 'gli', 'le', 'un', 'uno', 'una'] },
+            en: { name: 'Englisch', nameEn: 'English', flag: gbFlagSVG, locale: 'en', myMemory: 'en', nameNative: 'English', placeholder: 'eat', sentencePlaceholder: 'I like drinking coffee.', infoId: 'infoContentEn', infoTitle: 'English Grammar Index', successLabel: 'Well done!', articles: ['to', 'the', 'a', 'an'] },
+            es: { name: 'Spanisch', nameEn: 'Spanish', flag: esFlagSVG, locale: 'es', myMemory: 'es', nameNative: 'Español', placeholder: 'hablar', sentencePlaceholder: 'Bebo café con gusto.', infoId: 'infoContentEs', infoTitle: 'Gramática Española', successLabel: '¡Muy bien!', articles: ['el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas'] }
         };
         const langConf = () => LANG_CONFIG[CURRENT_LANG] || LANG_CONFIG.it;
         // Sortiervergleich je Lernsprache (ñ nach n, Akzente ohne eigene Stelle)
@@ -7107,8 +7106,215 @@
         // App UI Language (i18n)
         let APP_UI_LANG = localStorage.getItem('ita-ui-lang') || 'de';
 
+        // Jede API-Anfrage meldet die Oberflächensprache (Header X-UI-Lang); der Server übersetzt Fehlermeldungen entsprechend
+        (function () {
+            const nativeFetch = window.fetch;
+            window.fetch = function (input, init) {
+                try {
+                    const url = typeof input === 'string' ? input : ((input && input.url) || '');
+                    if (url.indexOf('/api/') !== -1) {
+                        init = Object.assign({}, init);
+                        const h = new Headers(init.headers || (input && input.headers) || {});
+                        h.set('X-UI-Lang', APP_UI_LANG === 'en' ? 'en' : 'de');
+                        init.headers = h;
+                    }
+                } catch (e) { /* ohne Header weiter */ }
+                return nativeFetch.call(this, input, init);
+            };
+        })();
+
         const UI_TRANSLATIONS = {
             de: {
+                err_server_fetch: "Serverfehler beim Abrufen",
+                admin_base_cleared: "{0}-Basisliste geleert.",
+                import_ki_note_replace: "Die Datei enthält {0} KI-Sätze (Spalte Wort): die vorhandenen KI-Sätze werden ebenfalls ersetzt.",
+                import_ki_note_keep: "Vorhandene KI-Sätze bleiben erhalten.",
+                forgot_sending: "Sende...",
+                not_yet_sent: "Noch nicht versendet",
+                by: "Von",
+                list_limit_hint: "Nur die ersten 200 von {0} Treffern angezeigt (Performance-Limit). Bitte Suche verfeinern.",
+                list_show_all: "Alle {0} anzeigen",
+                list_full_shown: "Vollständige Liste von {0} Sätzen wird angezeigt.",
+                list_limit_view: "Anzeige begrenzen",
+                toast_global_upload_started: "Globaler Satz-Upload gestartet...",
+                toast_upload_started: "Upload gestartet...",
+                verbcheck_no_diff: "Keine Abweichungen von der Regelrechnung (oder noch nichts geprüft).",
+                verbcheck_diff_count: "{0} Abweichungen bei {1} Verben",
+                verbcheck_status: "{0} geprüft, {1} offen",
+                verbcheck_invalid: "{0} ungültig",
+                verbcheck_rejected: "{0} verworfen",
+                approx: "ca.",
+                verbcheck_approve_run: "Freigeben und prüfen",
+                verbcheck_run_now: "Jetzt prüfen",
+                verbcheck_confirm: "{0} {1}e Verben von der KI prüfen lassen",
+                verbcheck_start_title: "Verbprüfung starten",
+                verbcheck_started: "Verbprüfung gestartet – der Server arbeitet im Hintergrund. Später „Aktualisieren“ drücken.",
+                prompt_send_code_desc: "An welche E-Mail-Adresse soll der Code gesendet werden?",
+                prompt_send_code_title: "Code versenden",
+                err_send_short: "Fehler beim Senden",
+                err_network_send: "Netzwerkfehler beim Senden",
+                toast_code_deleted: "Code gelöscht",
+                toast_delete_error_short: "Fehler beim Löschen",
+                unknown: "Unbekannt",
+                admin_query_error: "Verbindungsfehler bei Admin-Abfrage.",
+                admin_no_users: "Keine Nutzer gefunden.",
+                admin_no_activity: "Noch keine Lernaktivität aufgezeichnet.",
+                admin_locked: "(Gesperrt)",
+                admin_block: "Sperren",
+                admin_unblock: "Entsperren",
+                admin_make_admin: "Admin machen",
+                admin_remove_admin: "Admin entfernen",
+                admin_search_loading: "Lade Benutzerdaten für Suche...",
+                admin_search_none: "Keine Ergebnisse für \"{0}\"",
+                admin_confirm_status: "Soll dieser Nutzer wirklich {0} werden?",
+                admin_confirm_status_title: "Nutzerstatus ändern",
+                admin_confirm_admin_title: "Admin-Status ändern",
+                admin_action_demote: "zum normalen Benutzer machen",
+                admin_action_promote: "zum Admin machen",
+                admin_no_export_data: "Keine Daten zum Exportieren!",
+                admin_count_vocab: "{0} Vokabeln",
+                admin_count_sent: "{0} Sätze",
+                admin_name_empty: "Der Name darf nicht leer sein.",
+                admin_name_changed: "Name erfolgreich geändert!",
+                admin_new_password_prompt: "Neues Passwort für den Nutzer (min. 6 Zeichen):",
+                admin_password_short: "Das Passwort muss mindestens 6 Zeichen lang sein.",
+                admin_password_changed: "Passwort erfolgreich geändert!",
+                admin_delete_user_confirm: "WARNUNG: Möchtest du User ID {0} und ALLE zugehörigen Vokabeln und Statistiken restlos löschen? Diese Aktion kann nicht rückgängig gemacht werden!",
+                admin_delete_user_title: "Nutzer löschen?",
+                admin_user_deleted: "Nutzer erfolgreich gelöscht.",
+                err_upload_part: "Fehler beim Upload von Teil {0}",
+                err_file_empty_header: "Datei ist leer oder hat kein Header-Format.",
+                err_no_valid_rows: "Keine gültigen Zeilen (Spalte 1 & 2 nötig) gefunden.",
+                admin_overwrite_base_confirm: "Möchtest du wirklich die {0}-Basisliste mit {1} neuen Einträgen ÜBERSCHREIBEN?",
+                import_confirm_title: "Import bestätigen",
+                import_entries_started: "Import von {0} Einträgen gestartet...",
+                import_base_vocab_done: "{0} {1}-Basis-Vokabeln erfolgreich importiert.",
+                import_level_not_saved: "Die Spalte „Niveau“ wird (noch) nicht gespeichert.",
+                import_error_prefix: "Import-Fehler:",
+                admin_base_empty: "Die {0}-Basisliste ist leer.",
+                export_error_prefix: "Export-Fehler:",
+                admin_clear_base_confirm: "Möchtest du wirklich die gesamte globale BASIS-LISTE ({0}) vom Server löschen?",
+                admin_clear_list_title: "Liste leeren?",
+                err_clear: "Fehler beim Leeren.",
+                err_file_empty: "Datei ist leer.",
+                err_no_valid_sentences: "Keine gültigen Sätze gefunden (Spalten {0} & {1} prüfen).",
+                admin_overwrite_grammar_confirm: "Die {0}-Grammatikliste mit {1} Sätzen ÜBERSCHREIBEN?",
+                import_sentences_started: "Import von {0} Sätzen gestartet...",
+                import_sentences_done: "{0} Sätze importiert.",
+                admin_grammar_empty: "Die {0}-Grammatikliste ist leer.",
+                export_error: "Export-Fehler.",
+                admin_clear_grammar_confirm: "Möchtest du wirklich die gesamte globale GRAMMATIK-LISTE ({0}) vom Server löschen?",
+                admin_grammar_cleared: "{0}-Grammatikliste gelöscht",
+                err_server_delete: "Serverfehler beim Löschen",
+                toast_info_on: "Zusatzinfos AN (Tippe auf Wörter)",
+                toast_info_off: "Zusatzinfos AUS (Wörter zum Zuordnen)",
+                cards_solution_shown: "Lösung gezeigt",
+                cards_click_flip: "Klicken zum Wenden",
+                admin_verbcheck_desc: "Die KI prüft jedes Verb (Basis-Vokabeln und Nutzerlisten) einmal und speichert die richtigen Formen für alle. Neue Verben kommen automatisch dazu; bei mehr als 50 offenen Verben wartet die Prüfung auf deine Freigabe.",
+                prompt_default_title: "Eingabe erforderlich",
+                err_timeout: "Timeout: Der Server antwortet nicht (schlechte Verbindung?)",
+                toast_sync_failed: "Sync fehlgeschlagen. Bitte versuche es später erneut.",
+                err_word_gone: "Wort nicht mehr vorhanden",
+                err_unknown_task: "Unbekannte Aufgabe: {0}",
+                auth_title_create: "Konto erstellen",
+                err_generic: "Fehler aufgetreten",
+                err_server_unreachable: "Server nicht erreichbar",
+                err_enter_email: "Bitte eine E-Mail eingeben.",
+                err_send: "Fehler beim Senden.",
+                err_password_short: "Passwort muss mind. 6 Zeichen lang sein.",
+                err_reset: "Fehler beim Zurücksetzen.",
+                toast_name_save_error: "Fehler beim Speichern des Namens:",
+                contact_file_choose: "📎 Datei auswählen",
+                contact_sending: "Wird gesendet...",
+                toast_message_error: "Fehler beim Senden der Nachricht:",
+                no_matching_entries: "Keine passenden Einträge für diesen Filter gefunden.",
+                feedback_correct: "Richtig!",
+                feedback_wrong: "Falsch",
+                grammar_not_quite: "Nicht ganz richtig.",
+                grammar_empty_for_focus: "Keine Sätze für \"{0}\" gefunden.",
+                grammar_empty_pick_other: "Wähle einen anderen Focus.",
+                level_own: "Eigene",
+                stats_no_activity: "Noch keine Aktivität.",
+                stats_words_unit: "Wörter",
+                verb_search_placeholder: "Verb suchen (z.B. {0}...)",
+                verb_search_placeholder_it: "Verb suchen (z.B. parlare, andare...)",
+                badge_own_vocab: "Eigene Vokabel",
+                btn_edit: "Bearbeiten",
+                btn_delete: "Löschen",
+                lang_name_de: "Deutsch",
+                eg_prefix: "z.B.",
+                target_language: "Zielsprache",
+                admin_list_export_title: "{0} Liste exportieren",
+                admin_list_clear_title: "{0} Liste leeren",
+                grammar_desc_it: "Hier werden italienische Beispielsätze präsentiert...",
+                grammar_desc_en: "Hier werden englische Beispielsätze präsentiert...",
+                grammar_desc_es: "Hier werden spanische Beispielsätze präsentiert...",
+                info_desc: "Index der wichtigsten Regeln und Konjugationstabellen.",
+                info_desc_en: "Überblick über die wichtigsten Regeln und Zeitformen.",
+                q_on_lang: "Auf {0}?",
+                q_infinitive_on: "Was ist der Infinitiv auf {0}?",
+                q_infinitive_means: "Was bedeutet dieser Infinitiv auf {0}?",
+                q_what_means_on: "Was heißt das auf {0}?",
+                q_correct_form: "Wie lautet die richtige Form von \"{0}\"? ({1})",
+                q_which_form: "Welche Form von \"{0}\" ({1}) ist das? ({2})",
+                word_of: "von",
+                person_1sg: "1. Person Singular",
+                person_2sg: "2. Person Singular",
+                person_3sg: "3. Person Singular",
+                person_1pl: "1. Person Plural",
+                person_2pl: "2. Person Plural",
+                person_3pl: "3. Person Plural",
+                auth_or: "oder",
+                auth_sso: "Mit Authentik anmelden",
+                auth_pw_min_placeholder: "Min. 6 Zeichen",
+                imp_source_code: "Quellcode",
+                imp_font: "(Schrift)",
+                onboarding_name_placeholder: "z.B. Mario",
+                confirm_default_title: "Bist du sicher?",
+                confirm_default_message: "Diese Aktion kann nicht rückgängig gemacht werden.",
+                prompt_email_placeholder: "name@beispiel.de",
+                choice_default_message: "Wie sollen die neuen Vokabeln verarbeitet werden?",
+                streak_title: "Großartig!",
+                streak_text_a: "Deine Lern-Serie ist nun bei",
+                streak_text_b: "Tagen!",
+                streak_keep_going: "Bleibe dran und lerne jeden Tag ein bisschen, um deine Serie zu halten.",
+                version_modal_pre: "Version",
+                version_modal_post: "ist da!",
+                version_news_1: "Korrigiert: Die englische Oberfläche ist jetzt vollständig englisch (Serie-Fenster, Meldungen, Platzhalter, Admin-Bereich, Grammatik-Erklärungen)",
+                version_modal_footer: "Viel Spaß beim Lernen! Melde Fehler bitte direkt an uns.",
+                version_modal_ok: "Alles klar!",
+                mobile_filter_title: "Einstellungen",
+                btn_done: "Fertig",
+                info_extra_title_btn: "Zusatzinfos",
+                sync_manual_title: "Klicken zum manuellen Synchronisieren",
+                never: "Nie",
+                app_version_label: "App-Version:",
+                type_fav_title: "Nur markierte Favoriten üben",
+                info_toggle_label: "Infos",
+                next_round: "Nächste Runde",
+                cards_prev: "Letzte Karte",
+                cards_next: "Nächste Karte",
+                loading_dots: "Lade...",
+                quiz_new_word: "Neues Wort spielen",
+                solution_label: "Lösung:",
+                write_placeholder: "Deine Antwort...",
+                grammar_next_sentence: "Nächster Satz",
+                verb_search_title: "Verb-Suche",
+                edit_entry_title: "Eintrag bearbeiten",
+                edit_sentence_title: "Satz bearbeiten",
+                edit_word_type: "Wortart (Typ)",
+                type_sentence_single: "Satz",
+                edit_save_changes: "Änderungen speichern",
+                vocab_auto_added: "automatisch ergänzt",
+                vocab_duplicate: "Vokabel bereits vorhanden",
+                loading_info: "Lade Informationen...",
+                admin_loading_activity: "Lade Aktivitäten...",
+                admin_loading_users: "Lade Nutzer...",
+                admin_count_vocab_empty: "- Vokabeln",
+                admin_count_sent_empty: "- Sätze",
+                admin_ai_clear_key_title: "Schlüssel löschen",
+                admin_verbcheck_title: "🔎 Konjugationsprüfung (KI)",
+                admin_verbcheck_excel: "📊 Abweichungen als Excel öffnen",
                 // Header
                 header_learn_it: "Italienisch Lernen",
                 header_learn_en: "Englisch Lernen",
@@ -7644,6 +7850,204 @@
                 info_no_extra: "Keine Zusatzinfos für dieses Wort vorhanden."
             },
             en: {
+                err_server_fetch: "Server error while fetching",
+                admin_base_cleared: "{0} base list cleared.",
+                import_ki_note_replace: "The file contains {0} AI sentences (“Wort” column): the existing AI sentences will also be replaced.",
+                import_ki_note_keep: "Existing AI sentences are kept.",
+                forgot_sending: "Sending...",
+                toast_loading_started: "Loading started...",
+                admin_search_placeholder: "Search users (name, email)...",
+                admin_search_tab: "Search",
+                admin_search_empty: "Enter a name or email...",
+                admin_total_users: "Number of users",
+                admin_last_online: "Last user online",
+                admin_recent_activity: "Recent activity (learning)",
+                toast_clearing_started: "Deletion started...",
+                confirm_load_server_base_vocab: "Do you want to load {0} base words ({1}) from the server?",
+                confirm_load_server_base_sentences: "Do you want to load {0} base sentences ({1}) from the server?",
+                list_limit_hint: "Only the first 200 of {0} results are shown (performance limit). Please refine your search.",
+                list_show_all: "Show all {0}",
+                list_full_shown: "Showing the full list of {0} sentences.",
+                list_limit_view: "Limit view",
+                toast_global_upload_started: "Global sentence upload started...",
+                toast_upload_started: "Upload started...",
+                verbcheck_no_diff: "No deviations from the rule-based calculation (or nothing checked yet).",
+                verbcheck_diff_count: "{0} deviations in {1} verbs",
+                verbcheck_status: "{0} checked, {1} open",
+                verbcheck_invalid: "{0} invalid",
+                verbcheck_rejected: "{0} rejected",
+                approx: "approx.",
+                verbcheck_approve_run: "Approve and check",
+                verbcheck_run_now: "Check now",
+                verbcheck_confirm: "Have the AI check {0} {1} verbs",
+                verbcheck_start_title: "Start verb check",
+                verbcheck_started: "Verb check started – the server is working in the background. Press “Refresh” later.",
+                prompt_send_code_desc: "Which email address should the code be sent to?",
+                prompt_send_code_title: "Send code",
+                err_send_short: "Error while sending",
+                err_network_send: "Network error while sending",
+                toast_code_deleted: "Code deleted",
+                toast_delete_error_short: "Error while deleting",
+                unknown: "Unknown",
+                admin_query_error: "Connection error during admin query.",
+                admin_no_users: "No users found.",
+                admin_no_activity: "No learning activity recorded yet.",
+                admin_locked: "(Locked)",
+                admin_block: "Block",
+                admin_unblock: "Unblock",
+                admin_make_admin: "Make admin",
+                admin_remove_admin: "Remove admin",
+                admin_search_loading: "Loading user data for search...",
+                admin_search_none: "No results for \"{0}\"",
+                admin_confirm_status: "Do you really want this user to be {0}?",
+                admin_confirm_status_title: "Change user status",
+                admin_confirm_admin_title: "Change admin status",
+                admin_action_demote: "made a regular user",
+                admin_action_promote: "made an admin",
+                admin_no_export_data: "No data to export!",
+                admin_count_vocab: "{0} words",
+                admin_count_sent: "{0} sentences",
+                admin_name_empty: "The name must not be empty.",
+                admin_name_changed: "Name changed successfully!",
+                admin_new_password_prompt: "New password for the user (min. 6 characters):",
+                admin_password_short: "The password must be at least 6 characters long.",
+                admin_password_changed: "Password changed successfully!",
+                admin_delete_user_confirm: "WARNING: Do you want to completely delete user ID {0} and ALL associated vocabulary and statistics? This action cannot be undone!",
+                admin_delete_user_title: "Delete user?",
+                admin_user_deleted: "User deleted successfully.",
+                err_upload_part: "Error uploading part {0}",
+                err_file_empty_header: "File is empty or has no header row.",
+                err_no_valid_rows: "No valid rows found (columns 1 & 2 required).",
+                admin_overwrite_base_confirm: "Do you really want to OVERWRITE the {0} base list with {1} new entries?",
+                import_confirm_title: "Confirm import",
+                import_entries_started: "Import of {0} entries started...",
+                import_base_vocab_done: "{0} {1} base words imported successfully.",
+                import_level_not_saved: "The “Level” column is not saved (yet).",
+                import_error_prefix: "Import error:",
+                admin_base_empty: "The {0} base list is empty.",
+                export_error_prefix: "Export error:",
+                admin_clear_base_confirm: "Do you really want to delete the entire global BASE LIST ({0}) from the server?",
+                admin_clear_list_title: "Clear list?",
+                err_clear: "Error while clearing.",
+                err_file_empty: "File is empty.",
+                err_no_valid_sentences: "No valid sentences found (check columns {0} & {1}).",
+                admin_overwrite_grammar_confirm: "OVERWRITE the {0} grammar list with {1} sentences?",
+                import_sentences_started: "Import of {0} sentences started...",
+                import_sentences_done: "{0} sentences imported.",
+                admin_grammar_empty: "The {0} grammar list is empty.",
+                export_error: "Export error.",
+                admin_clear_grammar_confirm: "Do you really want to delete the entire global GRAMMAR LIST ({0}) from the server?",
+                admin_grammar_cleared: "{0} grammar list deleted",
+                err_server_delete: "Server error while deleting",
+                toast_info_on: "Extra info ON (tap on words)",
+                toast_info_off: "Extra info OFF (words to match)",
+                cards_solution_shown: "Solution shown",
+                cards_click_flip: "Click to flip",
+                admin_verbcheck_desc: "The AI checks each verb (base vocabulary and user lists) once and stores the correct forms for everyone. New verbs are added automatically; if more than 50 verbs are open, the check waits for your approval.",
+                prompt_default_title: "Input required",
+                err_timeout: "Timeout: the server is not responding (poor connection?)",
+                toast_sync_failed: "Sync failed. Please try again later.",
+                err_word_gone: "Word no longer exists",
+                err_unknown_task: "Unknown task: {0}",
+                auth_title_create: "Create account",
+                err_generic: "An error occurred",
+                err_server_unreachable: "Server unreachable",
+                err_enter_email: "Please enter an email address.",
+                err_send: "Error while sending.",
+                err_password_short: "Password must be at least 6 characters long.",
+                err_reset: "Error while resetting.",
+                toast_name_save_error: "Error saving your name:",
+                contact_file_choose: "📎 Choose file",
+                contact_sending: "Sending...",
+                toast_message_error: "Error sending the message:",
+                no_matching_entries: "No matching entries found for this filter.",
+                feedback_correct: "Correct!",
+                feedback_wrong: "Wrong",
+                grammar_not_quite: "Not quite right.",
+                grammar_empty_for_focus: "No sentences found for \"{0}\".",
+                grammar_empty_pick_other: "Choose a different focus.",
+                level_own: "Own",
+                stats_no_activity: "No activity yet.",
+                stats_words_unit: "words",
+                verb_search_placeholder: "Search verb (e.g. {0}...)",
+                verb_search_placeholder_it: "Search verb (e.g. parlare, andare...)",
+                badge_own_vocab: "Own word",
+                btn_edit: "Edit",
+                btn_delete: "Delete",
+                lang_name_de: "German",
+                eg_prefix: "e.g.",
+                target_language: "Target language",
+                admin_list_export_title: "Export {0} list",
+                admin_list_clear_title: "Clear {0} list",
+                grammar_desc_it: "Italian example sentences are presented here...",
+                grammar_desc_en: "English example sentences are presented here...",
+                grammar_desc_es: "Spanish example sentences are presented here...",
+                info_desc: "Index of the most important rules and conjugation tables.",
+                info_desc_en: "Overview of the most important rules and tenses.",
+                q_on_lang: "In {0}?",
+                q_infinitive_on: "What is the infinitive in {0}?",
+                q_infinitive_means: "What does this infinitive mean in {0}?",
+                q_what_means_on: "What is this in {0}?",
+                q_correct_form: "What is the correct form of \"{0}\"? ({1})",
+                q_which_form: "Which form of \"{0}\" ({1}) is this? ({2})",
+                word_of: "of",
+                person_1sg: "1st person singular",
+                person_2sg: "2nd person singular",
+                person_3sg: "3rd person singular",
+                person_1pl: "1st person plural",
+                person_2pl: "2nd person plural",
+                person_3pl: "3rd person plural",
+                auth_or: "or",
+                auth_sso: "Sign in with Authentik",
+                auth_pw_min_placeholder: "Min. 6 characters",
+                imp_source_code: "Source code",
+                imp_font: "(font)",
+                onboarding_name_placeholder: "e.g. Mario",
+                confirm_default_title: "Are you sure?",
+                confirm_default_message: "This action cannot be undone.",
+                prompt_email_placeholder: "name@example.com",
+                choice_default_message: "How should the new vocabulary be processed?",
+                streak_title: "Great!",
+                streak_text_a: "Your learning streak is now at",
+                streak_text_b: "days!",
+                streak_keep_going: "Keep going and learn a little every day to keep your streak alive.",
+                version_modal_pre: "Version",
+                version_modal_post: "is here!",
+                version_news_1: "Fixed: The English interface is now fully in English (streak window, messages, placeholders, admin area, grammar explanations)",
+                version_modal_footer: "Enjoy learning! Please report any bugs directly to us.",
+                version_modal_ok: "Got it!",
+                mobile_filter_title: "Settings",
+                btn_done: "Done",
+                info_extra_title_btn: "Extra info",
+                sync_manual_title: "Click to sync manually",
+                never: "Never",
+                app_version_label: "App version:",
+                type_fav_title: "Practise starred favourites only",
+                info_toggle_label: "Info",
+                next_round: "Next round",
+                cards_prev: "Previous card",
+                cards_next: "Next card",
+                loading_dots: "Loading...",
+                quiz_new_word: "Play new word",
+                solution_label: "Solution:",
+                write_placeholder: "Your answer...",
+                grammar_next_sentence: "Next sentence",
+                verb_search_title: "Verb search",
+                edit_entry_title: "Edit entry",
+                edit_sentence_title: "Edit sentence",
+                edit_word_type: "Word type",
+                type_sentence_single: "Sentence",
+                edit_save_changes: "Save changes",
+                vocab_auto_added: "added automatically",
+                vocab_duplicate: "Word already exists",
+                loading_info: "Loading information...",
+                admin_loading_activity: "Loading activity...",
+                admin_loading_users: "Loading users...",
+                admin_count_vocab_empty: "- words",
+                admin_count_sent_empty: "- sentences",
+                admin_ai_clear_key_title: "Delete key",
+                admin_verbcheck_title: "🔎 Conjugation check (AI)",
+                admin_verbcheck_excel: "📊 Open deviations in Excel",
                 // Header
                 header_learn_it: "Learning Italian",
                 header_learn_en: "Learning English",
@@ -8175,6 +8579,17 @@
             }
         };
 
+        // Name einer Lernsprache bzw. von Deutsch in der Sprache der Oberfläche (Direction-Labels, Fragetexte)
+        function uiLangName(l) { return getI18n('admin_lang_' + l); }
+        // Anzeigename der gespeicherten Wortart (Werte in der Datenbank bleiben deutsch)
+        function typLabel(typ) {
+            const k = { Verb: 'vocab_type_verb', Substantiv: 'vocab_type_noun', Adjektiv: 'vocab_type_adj', Sonstiges: 'vocab_type_other', Satz: 'type_sentence_single' }[typ];
+            return k ? getI18n(k) : typ;
+        }
+        function uiDeName() { return getI18n('lang_name_de'); }
+        // Beispiel-Präfix („z.B.“ / „e.g.“) vor Platzhaltern
+        function egPh(s) { return getI18n('eg_prefix') + ' ' + s; }
+
         function getI18n(key, ...args) {
             let text = UI_TRANSLATIONS[APP_UI_LANG] && UI_TRANSLATIONS[APP_UI_LANG][key] ? UI_TRANSLATIONS[APP_UI_LANG][key] : key;
             if (args.length > 0) {
@@ -8194,6 +8609,35 @@
             document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
                 const key = el.getAttribute('data-i18n-placeholder');
                 el.placeholder = getI18n(key);
+            });
+            // Optionen der versteckten Auswahlfelder (Filter) mit übersetzen
+            const optKeys = { Alle: 'type_all', Substantiv: 'type_noun', VerbInfinitiv: 'type_verb_inf', Verb: 'type_verb', Adjektiv: 'type_adj', Sonstiges: 'type_other', Favoriten: 'type_fav', Satz: 'type_sentence', EigeneVokabeln: 'type_own_vocab' };
+            ['typeFilter', 'vocabListCatFilter'].forEach(id => {
+                document.querySelectorAll('#' + id + ' option').forEach(o => {
+                    const k = (id === 'vocabListCatFilter' && o.value === 'Alle') ? 'sentence_cat_all' : optKeys[o.value];
+                    if (k) o.textContent = getI18n(k);
+                });
+            });
+            const slAll = document.querySelector('#sentenceListCatFilter option[value="Alle"]'); if (slAll) slAll.textContent = getI18n('sentence_cat_all');
+            const slOwn = document.querySelector('#sentenceListCatFilter option[value="Eigene Sätze"]'); if (slOwn) slOwn.textContent = getI18n('type_sentence');
+            if (window.GrammarHelp && GrammarHelp.setUiLang) GrammarHelp.setUiLang(APP_UI_LANG);
+            document.querySelectorAll('[data-i18n-title]').forEach(el => {
+                el.title = getI18n(el.getAttribute('data-i18n-title'));
+            });
+            document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+                el.setAttribute('aria-label', getI18n(el.getAttribute('data-i18n-aria-label')));
+            });
+            // Admin: Exportieren/Leeren-Schaltflächen je Sprache (title + aria-label)
+            document.querySelectorAll('[data-list-title]').forEach(el => {
+                const [act, l] = el.getAttribute('data-list-title').split(':');
+                const txt = getI18n(act === 'export' ? 'admin_list_export_title' : 'admin_list_clear_title', uiLangName(l));
+                el.title = txt;
+                el.setAttribute('aria-label', txt);
+            });
+            // Flaggen-Schaltflächen der Lernsprachen
+            SUPPORTED_LANGS.forEach(l => {
+                const b = document.getElementById('lang' + l.charAt(0).toUpperCase() + l.slice(1) + 'Btn');
+                if (b) b.title = (LANG_CONFIG[l] || {}).nameNative || uiLangName(l);
             });
             document.querySelectorAll('[data-i18n-alt]').forEach(el => {
                 const key = el.getAttribute('data-i18n-alt');
@@ -8251,7 +8695,7 @@
         function renderAllLabels() {
             const t = translations[CURRENT_LANG];
             const currentFlag = langConf().flag;
-            const langName = translations[CURRENT_LANG].direction;
+            const langName = uiLangName(CURRENT_LANG);
 
             // Update Add Vocabulary Modal Labels
             const vInputLabel = document.getElementById('vocabInputLabel');
@@ -8268,38 +8712,38 @@
 
 
             const dLabel = document.getElementById('directionFilterLabel');
-            if (dLabel) dLabel.innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${currentFlag} ${langName}`;
+            if (dLabel) dLabel.innerHTML = `${deFlagSVG} ${uiDeName()} ${arrowSVG} ${currentFlag} ${langName}`;
 
             const dOptions = document.getElementById('directionFilterList').querySelectorAll('.cs-opt');
             if (dOptions.length >= 2) {
-                dOptions[0].innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${currentFlag} ${langName}`;
-                dOptions[1].innerHTML = `${currentFlag} ${langName} ${arrowSVG} ${deFlagSVG} Deutsch`;
+                dOptions[0].innerHTML = `${deFlagSVG} ${uiDeName()} ${arrowSVG} ${currentFlag} ${langName}`;
+                dOptions[1].innerHTML = `${currentFlag} ${langName} ${arrowSVG} ${deFlagSVG} ${uiDeName()}`;
             }
 
             const vTitle = document.getElementById('vocabListModalTitle');
             if (vTitle) vTitle.innerHTML = `${listSVG} ${getI18n('menu_vocab_list')}`;
 
             const vSortLabel = document.getElementById('vocabListSortDirLabel');
-            if (vSortLabel) vSortLabel.innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${currentFlag} ${langName}`;
+            if (vSortLabel) vSortLabel.innerHTML = `${deFlagSVG} ${uiDeName()} ${arrowSVG} ${currentFlag} ${langName}`;
 
             const vSortDeOpt = document.getElementById('vocabListSortDeOpt');
-            if (vSortDeOpt) vSortDeOpt.innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${currentFlag} ${langName}`;
+            if (vSortDeOpt) vSortDeOpt.innerHTML = `${deFlagSVG} ${uiDeName()} ${arrowSVG} ${currentFlag} ${langName}`;
 
             const vSortItOpt = document.getElementById('vocabListSortItOpt');
-            if (vSortItOpt) vSortItOpt.innerHTML = `${currentFlag} ${langName} ${arrowSVG} ${deFlagSVG} Deutsch`;
+            if (vSortItOpt) vSortItOpt.innerHTML = `${currentFlag} ${langName} ${arrowSVG} ${deFlagSVG} ${uiDeName()}`;
 
             // Sentence List Sorting Labels
             const sSortLabel = document.getElementById('sentenceListSortDirLabel');
-            if (sSortLabel) sSortLabel.innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${currentFlag} ${langName}`;
+            if (sSortLabel) sSortLabel.innerHTML = `${deFlagSVG} ${uiDeName()} ${arrowSVG} ${currentFlag} ${langName}`;
 
             const sSortDeOpt = document.getElementById('sentenceListSortDeOpt');
-            if (sSortDeOpt) sSortDeOpt.innerHTML = `${deFlagSVG} Deutsch ${arrowSVG} ${currentFlag} ${langName}`;
+            if (sSortDeOpt) sSortDeOpt.innerHTML = `${deFlagSVG} ${uiDeName()} ${arrowSVG} ${currentFlag} ${langName}`;
 
             const sSortItOpt = document.getElementById('sentenceListSortItOpt');
-            if (sSortItOpt) sSortItOpt.innerHTML = `${currentFlag} ${langName} ${arrowSVG} ${deFlagSVG} Deutsch`;
+            if (sSortItOpt) sSortItOpt.innerHTML = `${currentFlag} ${langName} ${arrowSVG} ${deFlagSVG} ${uiDeName()}`;
 
             // Versteckte Selects (Richtung) tragen denselben Text in Klartext
-            const dirDe = `Deutsch → ${langName}`, dirTarget = `${langName} → Deutsch`;
+            const dirDe = `${uiDeName()} → ${langName}`, dirTarget = `${langName} → ${uiDeName()}`;
             [['vocabListSortDeSelOpt', dirDe], ['vocabListSortItSelOpt', dirTarget], ['sentenceListSortDeSelOpt', dirDe], ['sentenceListSortItSelOpt', dirTarget]].forEach(([id, txt]) => { const o = document.getElementById(id); if (o) o.textContent = txt; });
             const dirSel = document.getElementById('directionFilter');
             if (dirSel && dirSel.options.length >= 2) { dirSel.options[0].textContent = dirDe; dirSel.options[1].textContent = dirTarget; }
@@ -8333,7 +8777,7 @@
 
             const grammarExplText = document.getElementById('grammarExplanationText');
             if (grammarExplText) {
-                grammarExplText.innerHTML = `<span id="grammarBulbIcon"></span> <b>${getI18n('grammar_expl_prefix')}</b> ${t.grammarDescription}`;
+                grammarExplText.innerHTML = `<span id="grammarBulbIcon"></span> <b>${getI18n('grammar_expl_prefix')}</b> ${getI18n('grammar_desc_' + CURRENT_LANG)}`;
                 const gIcon = document.getElementById('grammarBulbIcon');
                 if (gIcon) gIcon.innerHTML = `
                     <svg class="w-4 h-4 text-amber-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -8354,9 +8798,13 @@
 
             // Edit Vocab Modal
             const eVocabDeLabel = document.getElementById('editVocabLangDeLabel');
-            if (eVocabDeLabel) eVocabDeLabel.innerHTML = `${deFlagSVG} Deutsch`;
+            if (eVocabDeLabel) eVocabDeLabel.innerHTML = `${deFlagSVG} ${uiDeName()}`;
+            const eSentDeLabel = document.getElementById('editSentenceLangDeLabel');
+            if (eSentDeLabel) eSentDeLabel.innerHTML = `${deFlagSVG} ${uiDeName()}`;
+            const eSentTargetLabel = document.getElementById('editSentenceLangTargetLabel');
+            if (eSentTargetLabel) eSentTargetLabel.innerHTML = `${currentFlag} ${getI18n('target_language')}`;
             const eVocabTargetLabel = document.getElementById('editVocabLangTargetLabel');
-            if (eVocabTargetLabel) eVocabTargetLabel.innerHTML = `${currentFlag} Zielsprache`;
+            if (eVocabTargetLabel) eVocabTargetLabel.innerHTML = `${currentFlag} ${getI18n('target_language')}`;
 
             // Mode buttons
             const gBtn = document.getElementById('modeGrammarBtn');
@@ -8391,7 +8839,7 @@
 
             // Other dynamic IDs
             const setIc = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
-            setIc('onboardingVocabTitle', `Vokabeln eintragen! ${booksSVG}`);
+            setIc('onboardingVocabTitle', `${getI18n('onboarding_vocab_title')} ${booksSVG}`);
             setIc('choiceAddIcon', pencilSVG);
             setIc('onboardingSuccessFire', fireSVG);
             setIc('onboardingRocketIcon', rocketSVG);
@@ -8413,7 +8861,7 @@
             setIc('excelBooksIcon', booksSVG);
             setIc('liExcelCol1', getI18n('excel_format_col1_' + CURRENT_LANG));
             setIc('excelBulbFormat', bulbSVG);
-            setIc('vocabLangDeBtn', `${deFlagSVG} Deutsch`);
+            setIc('vocabLangDeBtn', `${deFlagSVG} ${uiDeName()}`);
             setIc('vocabLangItBtn', `${currentFlag} ${langName}`);
             setIc('guideFolderHeader', `${folderSVG} ${getI18n('guide_vocab')}`);
             setIc('guideListHeader', `${listSVG} ${getI18n('guide_list')}`);
@@ -8443,7 +8891,7 @@
                 box.classList.toggle('flex', show);
             });
             setIc('infoTitleText', langConf().infoTitle);
-            setIc('infoDescText', CURRENT_LANG === 'en' ? 'Overview of the most important rules and tenses.' : 'Index der wichtigsten Regeln und Konjugationstabellen.');
+            setIc('infoDescText', getI18n(CURRENT_LANG === 'en' ? 'info_desc_en' : 'info_desc'));
 
             const vMain = document.getElementById('appVersionMain');
             if (vMain) vMain.textContent = "2.0.4 Stable";
@@ -8547,7 +8995,7 @@
             });
             if (!es) hideAccentBar();
             const sentenceIt = document.getElementById('sentenceInputIt');
-            if (sentenceIt) sentenceIt.placeholder = langConf().sentencePlaceholder;
+            if (sentenceIt) sentenceIt.placeholder = egPh(langConf().sentencePlaceholder);
         }
         document.addEventListener('focusin', (ev) => {
             const el = ev.target;
@@ -9016,7 +9464,7 @@
                 clearTimeout(timeoutId);
                 if (err.status || err.isNetwork) throw err;
                 if (err.name === 'AbortError') {
-                    throw networkError('Timeout: Der Server antwortet nicht (schlechte Verbindung?)');
+                    throw networkError(getI18n('err_timeout'));
                 }
                 // Safari/iOS meldet "Load failed", Chrome "Failed to fetch": beides ein TypeError ohne Antwort
                 if (err instanceof TypeError || !navigator.onLine || err.message === 'Failed to fetch') {
@@ -9383,14 +9831,14 @@
             } catch (err) {
                 if (!isSilent) {
                     console.warn('Sync pull failed', err);
-                    showToast(err.message.includes('Timeout') ? err.message : "Sync fehlgeschlagen. Bitte versuche es später erneut.", "error");
+                    showToast(err.message.includes('Timeout') ? err.message : getI18n('toast_sync_failed'), "error");
                 }
                 else console.log('Silent sync failed (offline or server issues)');
 
                 if (!isSilent && !fullDictionary.length && cachedVocab) {
                     // Already loaded from cache above
                 } else if (!isSilent && !fullDictionary.length) {
-                    showToast("Server nicht erreichbar. Offline-Modus aktiv.", "info");
+                    showToast(getI18n('toast_offline_mode'), "info");
                 }
             } finally {
                 window._isSyncing = false;
@@ -9561,7 +10009,7 @@
         // Offline gemerkte Statistik senden – mit dem lokalen Stand zusammengeführt (höherer Wert gewinnt)
         async function sendQueuedStat(payload) {
             const id = realId(payload.wordId);
-            if (!id) { const gone = new Error('Wort nicht mehr vorhanden'); gone.status = 404; throw gone; }
+            if (!id) { const gone = new Error(getI18n('err_word_gone')); gone.status = 404; throw gone; }
             const q = payload.data || {};
             const cur = wordStats[payload.wordId] || wordStats[id] || {};
             const max = (k) => Math.max(q[k] || 0, cur[k] || 0);
@@ -9593,7 +10041,7 @@
             const p = task.payload;
             const needReal = (id) => {
                 const real = realId(id);
-                if (!real) { const gone = new Error('Wort nicht mehr vorhanden'); gone.status = 404; throw gone; }
+                if (!real) { const gone = new Error(getI18n('err_word_gone')); gone.status = 404; throw gone; }
                 return real;
             };
             switch (task.type) {
@@ -9624,7 +10072,7 @@
                 case 'sentenceActive': return apiFetch('/grammar-sentences/active', { method: 'PUT', body: JSON.stringify(p) });
                 case 'sentenceMode': return apiFetch('/grammar-sentences/settings', { method: 'PUT', body: JSON.stringify(p) });
                 default: {
-                    const unknown = new Error(`Unbekannte Aufgabe: ${task.type}`);
+                    const unknown = new Error(getI18n('err_unknown_task', task.type));
                     unknown.status = 400;
                     throw unknown;
                 }
@@ -9797,7 +10245,7 @@
         if (syncStatusItem) {
             syncStatusItem.addEventListener('click', () => {
                 if (API_TOKEN) {
-                    showToast("Synchronisierung gestartet...", "info", 1000);
+                    showToast(getI18n('toast_sync_started'), "info", 1000);
                     loadDataFromServer(true);
                 }
             });
@@ -9977,10 +10425,10 @@
 
         authToggleBtn.addEventListener('click', () => {
             isLoginMode = !isLoginMode;
-            authTitle.textContent = isLoginMode ? 'Willkommen!' : 'Konto erstellen';
-            authSubmitBtn.textContent = isLoginMode ? 'Anmelden' : 'Registrieren';
-            authToggleText.textContent = isLoginMode ? 'Noch kein Konto?' : 'Bereits ein Konto?';
-            authToggleBtn.textContent = isLoginMode ? 'Registrieren' : 'Anmelden';
+            authTitle.textContent = getI18n(isLoginMode ? 'auth_title_login' : 'auth_title_create');
+            authSubmitBtn.textContent = getI18n(isLoginMode ? 'auth_submit_login' : 'auth_submit_register');
+            authToggleText.textContent = getI18n(isLoginMode ? 'auth_toggle_text_login' : 'auth_toggle_text_register');
+            authToggleBtn.textContent = getI18n(isLoginMode ? 'auth_toggle_btn_login' : 'auth_toggle_btn_register');
             authError.classList.add('hidden');
             
             // Show/Hide Invite Code field
@@ -10077,15 +10525,15 @@
                     } else {
                         isLoginMode = true;
                         authToggleBtn.click();
-                        showToast('Registrierung erfolgreich. Bitte anmelden.', 'success');
+                        showToast(getI18n('toast_register_success'), 'success');
                         authError.classList.add('hidden');
                     }
                 } else {
-                    authError.textContent = data.error || 'Fehler aufgetreten';
+                    authError.textContent = data.error || getI18n('err_generic');
                     authError.classList.remove('hidden');
                 }
             } catch (err) {
-                authError.textContent = 'Server nicht erreichbar';
+                authError.textContent = getI18n('err_server_unreachable');
                 authError.classList.remove('hidden');
             }
         });
@@ -10105,7 +10553,7 @@
         forgotPasswordSubmitBtn.addEventListener('click', async () => {
             const email = forgotPasswordEmail.value;
             if (!email) {
-                forgotPasswordError.textContent = 'Bitte eine E-Mail eingeben.';
+                forgotPasswordError.textContent = getI18n('err_enter_email');
                 forgotPasswordError.classList.remove('hidden', 'bg-green-50', 'text-green-600', 'border-green-100');
                 forgotPasswordError.classList.add('bg-red-50', 'text-red-600', 'border-red-100');
                 return;
@@ -10113,7 +10561,7 @@
 
             try {
                 forgotPasswordSubmitBtn.disabled = true;
-                forgotPasswordSubmitBtn.textContent = 'Sende...';
+                forgotPasswordSubmitBtn.textContent = getI18n('forgot_sending');
 
                 const res = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
                     method: 'POST',
@@ -10128,17 +10576,17 @@
                     forgotPasswordError.classList.add('bg-green-50', 'text-green-600', 'border-green-100');
                     forgotPasswordEmail.value = '';
                 } else {
-                    forgotPasswordError.textContent = data.error || 'Fehler beim Senden.';
+                    forgotPasswordError.textContent = data.error || getI18n('err_send');
                     forgotPasswordError.classList.remove('hidden', 'bg-green-50', 'text-green-600', 'border-green-100');
                     forgotPasswordError.classList.add('bg-red-50', 'text-red-600', 'border-red-100');
                 }
             } catch (err) {
-                forgotPasswordError.textContent = 'Server nicht erreichbar.';
+                forgotPasswordError.textContent = getI18n('err_server_unreachable') + '.';
                 forgotPasswordError.classList.remove('hidden', 'bg-green-50', 'text-green-600', 'border-green-100');
                 forgotPasswordError.classList.add('bg-red-50', 'text-red-600', 'border-red-100');
             } finally {
                 forgotPasswordSubmitBtn.disabled = false;
-                forgotPasswordSubmitBtn.textContent = 'Link senden';
+                forgotPasswordSubmitBtn.textContent = getI18n('forgot_submit');
             }
         });
 
@@ -10146,7 +10594,7 @@
         resetPasswordSubmitBtn.addEventListener('click', async () => {
             const newPassword = resetPasswordInput.value;
             if (!newPassword || newPassword.length < 6) {
-                resetPasswordError.textContent = 'Passwort muss mind. 6 Zeichen lang sein.';
+                resetPasswordError.textContent = getI18n('err_password_short');
                 resetPasswordError.classList.remove('hidden', 'bg-green-50', 'text-green-600', 'border-green-100');
                 resetPasswordError.classList.add('bg-red-50', 'text-red-600', 'border-red-100');
                 return;
@@ -10174,17 +10622,17 @@
                         authOverlay.classList.remove('hidden');
                     }, 3000);
                 } else {
-                    resetPasswordError.textContent = data.error || 'Fehler beim Zurücksetzen.';
+                    resetPasswordError.textContent = data.error || getI18n('err_reset');
                     resetPasswordError.classList.remove('hidden', 'bg-green-50', 'text-green-600', 'border-green-100');
                     resetPasswordError.classList.add('bg-red-50', 'text-red-600', 'border-red-100');
                 }
             } catch (err) {
-                resetPasswordError.textContent = 'Server nicht erreichbar.';
+                resetPasswordError.textContent = getI18n('err_server_unreachable') + '.';
                 resetPasswordError.classList.remove('hidden', 'bg-green-50', 'text-green-600', 'border-green-100');
                 resetPasswordError.classList.add('bg-red-50', 'text-red-600', 'border-red-100');
             } finally {
                 resetPasswordSubmitBtn.disabled = false;
-                resetPasswordSubmitBtn.textContent = 'Passwort speichern';
+                resetPasswordSubmitBtn.textContent = getI18n('reset_submit');
             }
         });
 
@@ -10265,7 +10713,7 @@
 
         onboardingSubmitBtn.addEventListener('click', async () => {
             const name = onboardingNameInput.value.trim();
-            if (!name) return showToast("Bitte gib deinen Namen ein.", "warning");
+            if (!name) return showToast(getI18n('toast_enter_name'), "warning");
 
             try {
                 onboardingSubmitBtn.disabled = true;
@@ -10288,8 +10736,8 @@
                             <path fill="#fff" d="M0 0h640v480H0z"/><path fill="#000" d="M0 0h640v160H0z"/><path fill="#d00" d="M0 160h640v160H0z"/><path fill="#ffce00" d="M0 320h640v160H0z"/>
                         </svg>`;
                     const targetFlagSVG = roundFlagSVG(CURRENT_LANG);
-                    btnDe.innerHTML = `${deFlagSVG} Deutsch`;
-                    btnTarget.innerHTML = `${targetFlagSVG} ${langConf().name}`;
+                    btnDe.innerHTML = `${deFlagSVG} ${uiDeName()}`;
+                    btnTarget.innerHTML = `${targetFlagSVG} ${uiLangName(CURRENT_LANG)}`;
                     btnDe.classList.add('bg-blue-50', 'border-blue-200');
                     btnTarget.classList.remove('bg-blue-50', 'border-blue-200');
                 }
@@ -10304,7 +10752,7 @@
                 userDisplay.classList.remove('hidden');
                 userNameEl.textContent = CURRENT_USER_NAME;
             } catch (err) {
-                showToast("Fehler beim Speichern des Namens: " + err.message, "error");
+                showToast(getI18n('toast_name_save_error') + ' ' + err.message, "error");
             } finally {
                 onboardingSubmitBtn.disabled = false;
             }
@@ -10325,17 +10773,17 @@
         const contactFileName = document.getElementById('contactFileName');
 
         contactFileInput.addEventListener('change', (e) => {
-            const fileName = e.target.files[0] ? e.target.files[0].name : '📎 Datei auswählen';
+            const fileName = e.target.files[0] ? e.target.files[0].name : getI18n('contact_file_choose');
             contactFileName.textContent = fileName;
         });
 
         contactSubmitBtn.addEventListener('click', async () => {
             const message = contactMessageInput.value.trim();
-            if (!message) return showToast("Bitte gib eine Nachricht ein.", "warning");
+            if (!message) return showToast(getI18n('toast_enter_message'), "warning");
 
             try {
                 contactSubmitBtn.disabled = true;
-                contactSubmitBtn.textContent = 'Wird gesendet...';
+                contactSubmitBtn.textContent = getI18n('contact_sending');
 
                 const formData = new FormData();
                 formData.append('message', message);
@@ -10348,14 +10796,14 @@
                     body: formData
                 });
 
-                showToast("Deine Nachricht wurde gesendet!", "success");
+                showToast(getI18n('toast_message_sent'), "success");
                 contactMessageInput.value = '';
                 contactFileInput.value = '';
-                contactFileName.textContent = '📎 Datei auswählen';
+                contactFileName.textContent = getI18n('contact_file_choose');
                 contactModal.classList.add('hidden');
                 contactModal.classList.remove('flex');
             } catch (err) {
-                showToast("Fehler beim Senden der Nachricht: " + err.message, "error");
+                showToast(getI18n('toast_message_error') + ' ' + err.message, "error");
             } finally {
                 contactSubmitBtn.disabled = false;
                 contactSubmitBtn.textContent = 'Absenden';
@@ -10499,7 +10947,7 @@
                 currentWriteTarget = null;
                 const wc = document.getElementById('writeControls'); if (wc) wc.innerHTML = '';
                 writeInput.disabled = true;
-                writeQuestionDisplay.innerHTML = `<div class="pt-6 pb-2 px-2 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words text-slate-400">Keine passenden Einträge für diesen Filter gefunden.</div></div>`;
+                writeQuestionDisplay.innerHTML = `<div class="pt-6 pb-2 px-2 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words text-slate-400">${getI18n('no_matching_entries')}</div></div>`;
                 writeSubtext.textContent = "";
                 return;
             }
@@ -10528,10 +10976,10 @@
             const isDeToIt = (directionFilterEl.value === 'de-it');
             if (isDeToIt) {
                 writeQuestionDisplay.innerHTML = `<div class="pt-6 pb-2 px-2 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${currentWriteTarget.de}</div></div>`;
-                writeSubtext.textContent = `Auf ${langConf().name}?`;
+                writeSubtext.textContent = getI18n('q_on_lang', uiLangName(CURRENT_LANG));
             } else {
                 writeQuestionDisplay.innerHTML = `<div class="pt-6 pb-2 px-2 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${getFullIt(currentWriteTarget)}</div></div>`;
-                writeSubtext.textContent = "Auf Deutsch?";
+                writeSubtext.textContent = getI18n('q_on_lang', uiDeName());
             }
 
             // Add listeners
@@ -10577,7 +11025,7 @@
             writeFeedbackCorrect.textContent = `${correctAnswer} - ${questionText}`;
 
             if (isCorrect) {
-                writeFeedbackTitle.textContent = accentHint ? `Richtig! ${getI18n('write_accent_hint')}` : "Richtig!";
+                writeFeedbackTitle.textContent = accentHint ? `${getI18n('feedback_correct')} ${getI18n('write_accent_hint')}` : getI18n('feedback_correct');
                 writeFeedbackTitle.className = "text-lg md:text-2xl font-bold mb-2 text-green-600";
                 if (stats) {
                     stats.correct++;
@@ -10820,7 +11268,7 @@
                 const isMobile = window.innerWidth <= MOBILE_THRESHOLD;
                 const targetFlag = langConf().flag;
                 const targetName = getI18n('admin_lang_' + CURRENT_LANG);
-                dragColHeader.innerHTML = isMobile ? `${deFlagSVG} Deutsch` : `${deFlagSVG} ${getI18n('drag_de_pull')}`;
+                dragColHeader.innerHTML = isMobile ? `${deFlagSVG} ${uiDeName()}` : `${deFlagSVG} ${getI18n('drag_de_pull')}`;
                 dropColHeader.innerHTML = isMobile ? `${targetFlag} ${targetName}` : `${targetFlag} ${getI18n('drag_' + CURRENT_LANG + '_drop')}`;
             } else {
                 const isMobile = window.innerWidth <= MOBILE_THRESHOLD;
@@ -10828,7 +11276,7 @@
                 const targetName = getI18n('admin_lang_' + CURRENT_LANG);
                 dragColHeader.innerHTML = isMobile ? `${targetFlag} ${targetName}` : `${targetFlag} ${getI18n('drag_' + CURRENT_LANG + '_pull')}`;
                 
-                dropColHeader.innerHTML = isMobile ? `${deFlagSVG} Deutsch` : `${deFlagSVG} ${getI18n('drag_de_drop')}`;
+                dropColHeader.innerHTML = isMobile ? `${deFlagSVG} ${uiDeName()}` : `${deFlagSVG} ${getI18n('drag_de_drop')}`;
             }
 
             if (availableWords.length < ROUND_SIZE) {
@@ -11061,7 +11509,7 @@
         function showDragDropWrongFeedback() {
             if (window.innerWidth > MOBILE_THRESHOLD) return;
             if (!dragDropFeedback) return;
-            dragDropFeedback.innerHTML = '<div class="feedback-box"><span class="feedback-wrong">Falsch</span></div>';
+            dragDropFeedback.innerHTML = `<div class="feedback-box"><span class="feedback-wrong">${getI18n('feedback_wrong')}</span></div>`;
             dragDropFeedback.style.opacity = '1';
 
             if (feedbackTimer) clearTimeout(feedbackTimer);
@@ -11172,11 +11620,11 @@
             return `
                 <div class="font-bold border-b pb-2 mb-4 text-center text-lg">${getFullIt(pair)} <br><span class="font-normal opacity-60 text-sm">(${escapeHtml(pair.de)})</span></div>
                 <div class="grid grid-cols-1 gap-3 text-sm">
-                    <div class="bg-slate-50 p-2 rounded-lg"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">${es ? 'Presente' : 'Präsens'}</span>${pair.praesens || '-'}</div>
+                    <div class="bg-slate-50 p-2 rounded-lg"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">Presente</span>${pair.praesens || '-'}</div>
                     <div class="bg-slate-50 p-2 rounded-lg"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">${es ? 'Pretérito perfecto' : 'Passato Prossimo'}</span>${pair.passato || '-'}</div>
                     <div class="bg-slate-50 p-2 rounded-lg"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">${es ? 'Pretérito imperfecto' : 'Imperfetto'}</span>${pair.imperfetto || '-'}</div>
                     <div class="bg-slate-50 p-2 rounded-lg"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">Gerundio</span>${pair.gerundio || '-'}</div>
-                    <div class="bg-blue-50 p-2 rounded-lg border border-blue-100"><span class="block text-[10px] uppercase font-bold mb-1">${es ? 'Imperativo' : 'Imperativ'}</span><span class="text-blue-600 italic font-bold">${pair.imperativo || '-'}</span></div>
+                    <div class="bg-blue-50 p-2 rounded-lg border border-blue-100"><span class="block text-[10px] uppercase font-bold mb-1">Imperativo</span><span class="text-blue-600 italic font-bold">${pair.imperativo || '-'}</span></div>
                 </div>
             `;
         }
@@ -11268,11 +11716,11 @@
             if (isVerb && (isVerbInfinitivMode || isFavoritenMode || !isVerbConjugationMode)) {
                 if (isDeToIt) {
                     quizQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${currentQuizTarget.de}</div></div>`;
-                    quizSubtext.textContent = `Was ist der Infinitiv auf ${langConf().name}?`;
+                    quizSubtext.textContent = getI18n('q_infinitive_on', uiLangName(CURRENT_LANG));
                     options.forEach(opt => createQuizButton(opt.id, opt.it));
                 } else {
                     quizQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${currentQuizTarget.it}</div></div>`;
-                    quizSubtext.textContent = 'Was bedeutet dieser Infinitiv auf Deutsch?';
+                    quizSubtext.textContent = getI18n('q_infinitive_means', uiDeName());
                     options.forEach(opt => createQuizButton(opt.id, opt.de));
                 }
             }
@@ -11286,26 +11734,26 @@
                     const personIndex = Math.floor(Math.random() * 6);
                     const selectedForm = formsArr[personIndex] || formsArr[0];
                     const persons = CURRENT_LANG === 'es'
-                        ? ["1. Person Singular (yo)", "2. Person Singular (tú)", "3. Person Singular (él/ella/usted)", "1. Person Plural (nosotros)", "2. Person Plural (vosotros)", "3. Person Plural (ellos/ustedes)"]
-                        : ["1. Person Singular (io)", "2. Person Singular (tu)", "3. Person Singular (lui/lei)", "1. Person Plural (noi)", "2. Person Plural (voi)", "3. Person Plural (loro)"];
+                        ? [`${getI18n('person_1sg')} (yo)`, `${getI18n('person_2sg')} (tú)`, `${getI18n('person_3sg')} (él/ella/usted)`, `${getI18n('person_1pl')} (nosotros)`, `${getI18n('person_2pl')} (vosotros)`, `${getI18n('person_3pl')} (ellos/ustedes)`]
+                        : [`${getI18n('person_1sg')} (io)`, `${getI18n('person_2sg')} (tu)`, `${getI18n('person_3sg')} (lui/lei)`, `${getI18n('person_1pl')} (noi)`, `${getI18n('person_2pl')} (voi)`, `${getI18n('person_3pl')} (loro)`];
                     const displayTense = CURRENT_LANG === 'es'
                         ? (selectedTense === 'praesens' ? 'Presente' : 'Pretérito imperfecto')
-                        : (selectedTense === 'praesens' ? 'Präsens' : 'Imperfetto');
+                        : (selectedTense === 'praesens' ? 'Presente' : 'Imperfetto');
 
                     if (isDeToIt) {
-                        quizQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words leading-tight px-2">${persons[personIndex]} <br><span class="text-sm md:text-lg text-slate-500 font-medium">von</span> "${currentQuizTarget.de}"</div></div>`;
-                        quizSubtext.textContent = `Wie lautet die richtige Form von "${currentQuizTarget.it}"? (${displayTense})`;
+                        quizQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words leading-tight px-2">${persons[personIndex]} <br><span class="text-sm md:text-lg text-slate-500 font-medium">${getI18n('word_of')}</span> "${currentQuizTarget.de}"</div></div>`;
+                        quizSubtext.textContent = getI18n('q_correct_form', currentQuizTarget.it, displayTense);
                         let verbOptions = shuffleArray([{ id: currentQuizTarget.id, text: selectedForm }, ...shuffleArray([0, 1, 2, 3, 4, 5].filter(i => i !== personIndex)).slice(0, 3).map((idx, i) => ({ id: 'wrong-' + i, text: formsArr[idx] || formsArr[0] }))]);
                         verbOptions.forEach(opt => createQuizButton(opt.id, opt.text));
                     } else {
                         quizQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-3xl md:text-5xl font-bold break-words leading-tight px-2">${selectedForm}</div></div>`;
-                        quizSubtext.textContent = `Welche Form von "${currentQuizTarget.it}" (${currentQuizTarget.de}) ist das? (${displayTense})`;
+                        quizSubtext.textContent = getI18n('q_which_form', currentQuizTarget.it, currentQuizTarget.de, displayTense);
                         let verbOptions = shuffleArray([{ id: currentQuizTarget.id, text: persons[personIndex] }, ...shuffleArray(persons.filter((_, idx) => idx !== personIndex)).slice(0, 3).map((wp, idx) => ({ id: 'wrong-' + idx, text: wp }))]);
                         verbOptions.forEach(opt => createQuizButton(opt.id, opt.text));
                     }
                 } else {
-                    if (isDeToIt) { quizQuestionDisplay.innerHTML = `<div class="pt-6 pb-2 px-2 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${currentQuizTarget.de}</div></div>`; quizSubtext.textContent = `Was heißt das auf ${langConf().name}?`; options.forEach(opt => createQuizButton(opt.id, opt.it)); }
-                    else { quizQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${currentQuizTarget.it}</div></div>`; quizSubtext.textContent = `Was heißt das auf Deutsch?`; options.forEach(opt => createQuizButton(opt.id, opt.de)); }
+                    if (isDeToIt) { quizQuestionDisplay.innerHTML = `<div class="pt-6 pb-2 px-2 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${currentQuizTarget.de}</div></div>`; quizSubtext.textContent = getI18n('q_what_means_on', uiLangName(CURRENT_LANG)); options.forEach(opt => createQuizButton(opt.id, opt.it)); }
+                    else { quizQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full"><div class="text-xl md:text-3xl font-bold break-words">${currentQuizTarget.it}</div></div>`; quizSubtext.textContent = getI18n('q_what_means_on', uiDeName()); options.forEach(opt => createQuizButton(opt.id, opt.de)); }
                 }
             }
             // --- Standard Modus ---
@@ -11314,13 +11762,13 @@
                     quizQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full">
                         <div class="text-xl md:text-3xl font-bold break-words">${currentQuizTarget.de}</div>
                     </div>`;
-                    quizSubtext.textContent = `Auf ${langConf().name}?`;
+                    quizSubtext.textContent = getI18n('q_on_lang', uiLangName(CURRENT_LANG));
                     options.forEach(opt => createQuizButton(opt.id, getFullIt(opt)));
                 } else {
                     quizQuestionDisplay.innerHTML = `<div class="pt-12 pb-6 px-4 md:pt-16 md:pb-10 md:px-12 bg-transparent inline-block relative max-w-full">
                         <div class="text-xl md:text-3xl font-bold break-words">${getFullIt(currentQuizTarget)}</div>
                     </div>`;
-                    quizSubtext.textContent = "Auf Deutsch?";
+                    quizSubtext.textContent = getI18n('q_on_lang', uiDeName());
                     options.forEach(opt => createQuizButton(opt.id, opt.de));
                 }
             }
@@ -11458,15 +11906,18 @@
                 // If we are currently in grammar mode, refresh the round to show data if it was missing
                 if (currentMode === 'grammar' && grammarSentences.length > 0) {
                     const displayContent = grammarQuestionDisplay ? grammarQuestionDisplay.textContent : "";
-                    if (!currentGrammarSentence || displayContent.includes("Keine Grammatik-Sätze geladen") || displayContent.includes(getI18n('grammar_no_sentences'))) {
+                    if (!currentGrammarSentence || displayContent.includes(getI18n('grammar_no_sentences'))) {
                         startGrammarRound();
                     }
                 }
             } catch (err) {
-                if (adminGrammarCountEl) adminGrammarCountEl.textContent = "Fehler";
+                if (adminGrammarCountEl) adminGrammarCountEl.textContent = getI18n('error');
                 console.warn("Grammar fetch failed", err);
             }
         }
+
+        // Anzeigename einer Grammatik-Kategorie (nur „Eigene Sätze“ ist ein Oberflächentext; Zeitformen bleiben in der Lernsprache)
+        function focusLabel(cat) { return cat === 'Eigene Sätze' ? getI18n('type_sentence') : cat; }
 
         function updateGrammarFocusOptions() {
             const sel = document.getElementById('grammarFocusFilter');
@@ -11498,7 +11949,7 @@
             list.innerHTML = `<div class="cs-opt selected" data-value="Alle">${getI18n('grammar_focus_all')}</div>`;
 
             categories.forEach(cat => {
-                const text = "Focus " + cat;
+                const text = "Focus " + focusLabel(cat);
                 // Add to Select
                 const opt = document.createElement('option');
                 opt.value = cat;
@@ -11515,7 +11966,7 @@
 
             if (categories.includes(currentVal)) {
                 sel.value = currentVal;
-                label.textContent = "Focus " + currentVal;
+                label.textContent = "Focus " + focusLabel(currentVal);
             } else {
                 sel.value = "Alle";
                 label.textContent = getI18n('grammar_focus_all');
@@ -11772,7 +12223,7 @@
             }
 
             if (filteredSentences.length === 0) {
-                showGrammarEmptyState(`Keine Sätze für "${currentFocus}" gefunden.`, "Wähle einen anderen Focus.");
+                showGrammarEmptyState(getI18n('grammar_empty_for_focus', focusLabel(currentFocus)), getI18n('grammar_empty_pick_other'));
                 return;
             }
 
@@ -12107,8 +12558,8 @@
                 grammarActivityCount++;
                 recordDailyActivity();
                 saveAllDataLocally();
-                const almostMsg = accentOnly > 0 && wrongCount === 0 ? getI18n('grammar_accent_almost') : 'Nicht ganz richtig.';
-                grammarFeedback.innerHTML = `${escapeHtml(almostMsg)} <br> Lösung: <span class="font-bold">${escapeHtml(grammarAnswers.join(', '))}</span>`;
+                const almostMsg = accentOnly > 0 && wrongCount === 0 ? getI18n('grammar_accent_almost') : getI18n('grammar_not_quite');
+                grammarFeedback.innerHTML = `${escapeHtml(almostMsg)} <br> ${getI18n('solution_label')} <span class="font-bold">${escapeHtml(grammarAnswers.join(', '))}</span>`;
                 grammarFeedback.classList.add('bg-red-50', 'text-red-700');
                 grammarSubmitBtn.classList.add('hidden');
                 grammarNextBtn.classList.remove('hidden');
@@ -12308,12 +12759,12 @@
                 // FORCE: Initialize directions based on language
                 vocabInputLang = CURRENT_LANG;
                 vocabOutputLang = 'de';
-                vocabInput.placeholder = langConf().placeholder;
+                vocabInput.placeholder = egPh(langConf().placeholder);
                 
                 // Reset directions based on current language
                 vocabInputLang = CURRENT_LANG;
                 vocabOutputLang = 'de';
-                vocabInput.placeholder = langConf().placeholder;
+                vocabInput.placeholder = egPh(langConf().placeholder);
                 vocabTranslation.value = '';
                 
                 // Update direction buttons UI if they exist
@@ -12325,8 +12776,8 @@
                             <path fill="#fff" d="M0 0h640v480H0z"/><path fill="#000" d="M0 0h640v160H0z"/><path fill="#d00" d="M0 160h640v160H0z"/><path fill="#ffce00" d="M0 320h640v160H0z"/>
                         </svg>`;
                     const targetFlagSVG = roundFlagSVG(CURRENT_LANG);
-                    btnDe.innerHTML = `${deFlagSVG} Deutsch`;
-                    btnTarget.innerHTML = `${targetFlagSVG} ${langConf().name}`;
+                    btnDe.innerHTML = `${deFlagSVG} ${uiDeName()}`;
+                    btnTarget.innerHTML = `${targetFlagSVG} ${uiLangName(CURRENT_LANG)}`;
                     btnDe.classList.add('bg-blue-50', 'border-blue-200');
                     btnTarget.classList.remove('bg-blue-50', 'border-blue-200');
                 }
@@ -12342,7 +12793,7 @@
                 if (typeFilterEl.value === 'Verb') {
                     typeFilterEl.value = 'Alle';
                     const tLabel = document.getElementById('typeFilterLabel');
-                    if (tLabel) tLabel.textContent = 'Alle mischen';
+                    if (tLabel) tLabel.textContent = getI18n('type_all');
                     document.querySelectorAll('#typeFilterList .cs-opt').forEach(o => o.classList.remove('selected'));
                     const allOpt = document.querySelector('#typeFilterList [data-value="Alle"]');
                     if (allOpt) allOpt.classList.add('selected');
@@ -12447,7 +12898,7 @@
                 if (CURRENT_LANG === 'it' || CURRENT_LANG === 'es') {
                     verbSearchSection.classList.remove('hidden');
                     verbSearchInput.value = '';
-                    verbSearchInput.placeholder = CURRENT_LANG === 'es' ? 'Verb suchen (z.B. hablar, ir...)' : 'Verb suchen (z.B. parlare, andare...)';
+                    verbSearchInput.placeholder = getI18n('verb_search_placeholder', CURRENT_LANG === 'es' ? 'hablar, ir' : 'parlare, andare');
                     verbSearchResults.classList.add('hidden');
                     verbFoundDetails.classList.add('hidden');
 
@@ -12530,7 +12981,7 @@
         // Version Update Modal Logic
         const versionModal = document.getElementById('versionUpdateModal');
         const closeVersionBtn = document.getElementById('closeVersionModalBtn');
-        const vKey = 'hasSeenVersion_2_2_26';
+        const vKey = 'hasSeenVersion_2_2_27';
         closeVersionBtn.addEventListener('click', () => {
             localStorage.setItem(vKey, 'true');
             versionModal.classList.add('hidden');
@@ -12820,7 +13271,7 @@
 
             wordsWithStats.forEach(word => {
                 const tr = document.createElement('tr'); tr.className = "hover:bg-slate-50 transition-colors";
-                const lastRevStr = word.stats.lastReviewedDate ? new Date(word.stats.lastReviewedDate).toLocaleDateString('de-DE') : '-';
+                const lastRevStr = word.stats.lastReviewedDate ? new Date(word.stats.lastReviewedDate).toLocaleDateString(APP_UI_LANG === 'en' ? 'en-US' : 'de-DE') : '-';
                 tr.innerHTML = `<td class="p-3 text-slate-800 border-b border-slate-100">${word.de} <span class="text-slate-300 mx-1 md:mx-2">|</span> <span class="font-medium text-blue-600">${word.it}</span></td><td class="p-3 text-center text-slate-900 font-semibold border-b border-slate-100">${word.stats.presented}</td><td class="p-3 text-center text-green-600 font-bold border-b border-slate-100">${word.stats.correct}</td><td class="p-3 text-center text-red-500 font-bold border-b border-slate-100">${word.stats.incorrect}</td><td class="p-3 text-center text-slate-600 border-b border-slate-100">${lastRevStr}</td>`;
                 tbody.appendChild(tr);
             });
@@ -12829,12 +13280,12 @@
         function renderDailyStats() {
             dailyStatsList.innerHTML = '';
             const dates = Object.keys(dailyActivity).sort((a, b) => new Date(b) - new Date(a));
-            if (dates.length === 0) { dailyStatsList.innerHTML = '<li class="p-4 text-center text-slate-500 italic">Noch keine Aktivität.</li>'; return; }
+            if (dates.length === 0) { dailyStatsList.innerHTML = `<li class="p-4 text-center text-slate-500 italic">${getI18n('stats_no_activity')}</li>`; return; }
             dates.forEach(dateStr => {
                 const count = dailyActivity[dateStr]; const dateObj = new Date(dateStr);
                 const options = { weekday: 'long', year: 'numeric', month: '2-digit', day: '2-digit' };
                 const li = document.createElement('li'); li.className = "flex justify-between items-center p-3 md:p-4 hover:bg-slate-50 transition-colors";
-                li.innerHTML = `<span class="font-medium text-slate-700">${dateObj.toLocaleDateString('de-DE', options)}</span><span class="bg-blue-100 text-blue-800 font-bold py-1 px-3 md:px-4 rounded-full text-xs md:text-sm shadow-sm">${count} Wörter</span>`;
+                li.innerHTML = `<span class="font-medium text-slate-700">${dateObj.toLocaleDateString(APP_UI_LANG === 'en' ? 'en-US' : 'de-DE', options)}</span><span class="bg-blue-100 text-blue-800 font-bold py-1 px-3 md:px-4 rounded-full text-xs md:text-sm shadow-sm">${count} ${getI18n('stats_words_unit')}</span>`;
                 dailyStatsList.appendChild(li);
             });
         }
@@ -13040,15 +13491,15 @@
                             <span class="font-bold text-slate-800 text-sm md:text-base text-left">${primary}</span>
                             <span class="text-slate-400 mx-1 text-xs md:text-sm">|</span>
                             <span class="font-bold text-blue-600 text-sm md:text-base">${secondary}</span>
-                            ${word.typ ? `<span class="ml-1 text-xs text-slate-400 italic">${word.typ}</span>` : ''}
-                            ${word.isOwn ? `<span class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[0.65rem] font-medium bg-blue-100 text-blue-800">Eigene Vokabel</span>` : ''}
+                            ${word.typ ? `<span class="ml-1 text-xs text-slate-400 italic">${typLabel(word.typ)}</span>` : ''}
+                            ${word.isOwn ? `<span class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[0.65rem] font-medium bg-blue-100 text-blue-800">${getI18n('badge_own_vocab')}</span>` : ''}
                         </div>
                     </div>
                     <div class="flex items-center gap-1.5 ml-2 flex-shrink-0">
-                        <button class="edit-btn text-slate-400 hover:text-blue-500 transition-colors p-1" data-id="${word.id}" title="Bearbeiten">
+                        <button class="edit-btn text-slate-400 hover:text-blue-500 transition-colors p-1" data-id="${word.id}" title="${getI18n('btn_edit')}">
                             <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                         </button>
-                        <button class="delete-btn text-slate-400 hover:text-red-500 transition-colors p-1" data-id="${word.id}" title="Löschen">
+                        <button class="delete-btn text-slate-400 hover:text-red-500 transition-colors p-1" data-id="${word.id}" title="${getI18n('btn_delete')}">
                             <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                         </button>
                         <svg class="star-icon w-6 h-6 md:w-7 md:h-7 cursor-pointer ${word.isMarked ? 'marked' : ''}"
@@ -13162,12 +13613,12 @@
             if (words.length > 200 && !window.sentenceListShowAll) {
                 const hint = document.createElement('div');
                 hint.className = 'p-4 text-center text-amber-600 bg-amber-50 font-medium text-sm border-b border-amber-100';
-                hint.innerHTML = `<svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg> Nur die ersten 200 von ${words.length} Treffern angezeigt (Performance-Limit). Bitte Suche verfeinern. <button onclick="window.sentenceListShowAll=true; renderSentenceList()" class="underline font-bold text-amber-700 hover:text-amber-900 ml-1">Alle ${words.length} anzeigen</button>`;
+                hint.innerHTML = `<svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg> ${getI18n('list_limit_hint', words.length)} <button onclick="window.sentenceListShowAll=true; renderSentenceList()" class="underline font-bold text-amber-700 hover:text-amber-900 ml-1">${getI18n('list_show_all', words.length)}</button>`;
                 container.appendChild(hint);
             } else if (window.sentenceListShowAll && words.length > 200) {
                  const hint = document.createElement('div');
                  hint.className = 'p-2 text-center text-slate-400 bg-slate-50 text-xs border-b border-slate-100';
-                 hint.innerHTML = `Vollständige Liste von ${words.length} Sätzen wird angezeigt. <button onclick="window.sentenceListShowAll=false; renderSentenceList()" class="underline ml-1">Anzeige begrenzen</button>`;
+                 hint.innerHTML = `${getI18n('list_full_shown', words.length)} <button onclick="window.sentenceListShowAll=false; renderSentenceList()" class="underline ml-1">${getI18n('list_limit_view')}</button>`;
                  container.appendChild(hint);
             }
 
@@ -13185,16 +13636,16 @@
                             <span class="font-bold text-slate-800 text-sm md:text-base text-left">${primary}</span>
                             <span class="text-slate-400 mx-1 text-xs md:text-sm">|</span>
                             <span class="font-bold text-blue-600 text-sm md:text-base">${secondary}</span>
-                            ${word.typ ? `<span class="ml-1 text-xs text-slate-400 italic">${word.typ}</span>` : ''}
+                            ${word.typ ? `<span class="ml-1 text-xs text-slate-400 italic">${typLabel(word.typ)}</span>` : ''}
                             ${word.forWord ? `<span class="ml-1 text-[10px] font-semibold text-purple-600">KI · ${escapeHtml(word.forWord)}</span>` : ''}
                         </div>
                     </div>
                     <div class="flex items-center gap-1.5 ml-2 flex-shrink-0">
                         ${word.isOwn ? `
-                        <button class="edit-btn text-slate-400 hover:text-blue-500 transition-colors p-1" data-id="${word.id}" title="Bearbeiten">
+                        <button class="edit-btn text-slate-400 hover:text-blue-500 transition-colors p-1" data-id="${word.id}" title="${getI18n('btn_edit')}">
                             <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                         </button>
-                        <button class="delete-btn text-slate-400 hover:text-red-500 transition-colors p-1" data-id="${word.id}" title="Löschen">
+                        <button class="delete-btn text-slate-400 hover:text-red-500 transition-colors p-1" data-id="${word.id}" title="${getI18n('btn_delete')}">
                             <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                         </button>
                         ` : ''}
@@ -13660,7 +14111,7 @@
                             const globalChoice = await showChoice(getI18n('choice_admin_global_sentences'), getI18n('title_global_base_sentences'), { confirmText: getI18n('action_replace'), toggleText: getI18n('action_add'), cancelText: getI18n('action_local') });
                             if (globalChoice === 'replace' || globalChoice === 'append') {
                                 const baseSentences = wordsToUpload.map(w => ({ de: w.de, it: w.it, category: w.grammatica, language: CURRENT_LANG }));
-                                showToast("Globaler Satz-Upload gestartet...", "info");
+                                showToast(getI18n('toast_global_upload_started'), "info");
                                 await uploadInChunks('/admin/grammar-sentences/bulk', 'sentences', baseSentences, CURRENT_LANG, 'Global Grammar', globalChoice === 'replace' ? 'overwrite' : 'append');
                                 showToast(getI18n('toast_admin_global_sentences_success', globalChoice === 'replace' ? getI18n('action_replaced') : getI18n('action_added')), "success");
                             }
@@ -13674,7 +14125,7 @@
                             await apiFetch(`/vocab/clear/all?language=${CURRENT_LANG}&typ=${delTyp}&isOwn=true`, { method: 'DELETE' });
                         }
 
-                        showToast("Upload gestartet...", "info");
+                        showToast(getI18n('toast_upload_started'), "info");
                         const resultCount = await uploadInChunks('/vocab/bulk', 'words', wordsToUpload, CURRENT_LANG, 'User Data', 'append');
                         if (resultCount > 0) {
                             loadDataFromServer();
@@ -13864,7 +14315,7 @@
                 wordInfoCache.set(cacheKey, info);
                 return info;
             } catch (err) {
-                if (/nicht aktiviert|Tageslimit|Kein gültiger/.test(err.message)) wordInfoUnavailable = true;
+                if (/nicht aktiviert|Tageslimit|Kein gültiger|not enabled|[Dd]aily limit|No valid API key/.test(err.message)) wordInfoUnavailable = true;
                 return null;
             }
         }
@@ -13942,7 +14393,7 @@
                 vocabLangDeBtn.classList.remove('bg-white', 'shadow-sm', 'font-semibold', 'text-slate-800'); vocabLangDeBtn.classList.add('text-slate-500', 'font-medium');
                 vocabInputLabel.textContent = getI18n('word_' + CURRENT_LANG + '_input');
                 vocabTranslationLabel.textContent = getI18n('label_german_translation');
-                vocabInput.placeholder = langConf().placeholder;
+                vocabInput.placeholder = egPh(langConf().placeholder);
                 vocabTranslation.placeholder = getI18n('placeholder_auto_manual_input');
             }
             vocabInput.value = ''; vocabTranslation.value = ''; vocabAutoTag.classList.add('hidden');
@@ -14910,7 +15361,7 @@
         document.getElementById('adminAiUsageRefreshBtn').addEventListener('click', loadAdminAiUsage);
 
         // --- Konjugationsprüfung (KI): Stand, Freigabe, Abweichungen von der Regelrechnung ---
-        const VERB_LANG_NAMES = { it: 'Italienisch', en: 'Englisch', es: 'Spanisch' };
+        const VERB_LANG_NAMES = new Proxy({}, { get: (_, l) => uiLangName(l) }); // Sprachname in der Oberflächensprache
 
         function diffVerbForms(lang, infinitive, ver) {
             const rules = GrammarHelp.conjugate(infinitive, lang, { ignoreVerified: true });
@@ -14968,8 +15419,8 @@
                 }
             }
             summary.textContent = verbDiffRows.length === 0
-                ? 'Keine Abweichungen von der Regelrechnung (oder noch nichts geprüft).'
-                : `${verbDiffRows.length} Abweichungen bei ${verbs.size} Verben`;
+                ? getI18n('verbcheck_no_diff')
+                : getI18n('verbcheck_diff_count', verbDiffRows.length, verbs.size);
             document.getElementById('adminVerbDiffExcelBtn').disabled = verbDiffRows.length === 0;
         }
 
@@ -14992,19 +15443,19 @@
                     row.className = 'flex flex-wrap items-center justify-between gap-2 p-2 bg-white rounded-lg border border-slate-100 min-w-0';
                     const text = document.createElement('span');
                     text.className = 'min-w-0 flex-1 basis-40 break-words';
-                    const cost = st.estimateEur === null || st.pending === 0 ? '' : ` (ca. ${formatEuro(st.estimateEur)})`;
-                    text.textContent = `${VERB_LANG_NAMES[lang]}: ${st.verified} geprüft, ${st.pending} offen${cost}` + (st.invalid ? `, ${st.invalid} ungültig` : '') + (st.rejected ? `, ${st.rejected} verworfen` : '');
+                    const cost = st.estimateEur === null || st.pending === 0 ? '' : ` (${getI18n('approx')} ${formatEuro(st.estimateEur)})`;
+                    text.textContent = `${VERB_LANG_NAMES[lang]}: ${getI18n('verbcheck_status', st.verified, st.pending)}${cost}` + (st.invalid ? `, ${getI18n('verbcheck_invalid', st.invalid)}` : '') + (st.rejected ? `, ${getI18n('verbcheck_rejected', st.rejected)}` : '');
                     row.appendChild(text);
                     if (st.pending > 0) {
                         const run = document.createElement('button');
                         run.type = 'button';
                         run.className = 'w-full sm:w-auto px-3 py-1.5 text-center bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-semibold';
-                        run.textContent = st.needsConfirm ? 'Freigeben und prüfen' : 'Jetzt prüfen';
+                        run.textContent = getI18n(st.needsConfirm ? 'verbcheck_approve_run' : 'verbcheck_run_now');
                         run.addEventListener('click', async () => {
-                            if (!(await showConfirm(`${st.pending} ${VERB_LANG_NAMES[lang]}e Verben von der KI prüfen lassen${cost}?`, 'Verbprüfung starten'))) return;
+                            if (!(await showConfirm(getI18n('verbcheck_confirm', st.pending, VERB_LANG_NAMES[lang]) + cost + '?', getI18n('verbcheck_start_title')))) return;
                             try {
                                 await apiFetch('/admin/verb-check/run', { method: 'POST', body: JSON.stringify({ language: lang }) });
-                                showToast('Verbprüfung gestartet – der Server arbeitet im Hintergrund. Später „Aktualisieren“ drücken.', 'success');
+                                showToast(getI18n('verbcheck_started'), 'success');
                             } catch (err) { showToast(err.message, 'error'); }
                         });
                         row.appendChild(run);
@@ -15239,20 +15690,20 @@
                     body: JSON.stringify({ count: 1 })
                 });
                 if (res.ok) {
-                    showToast("Einladungscode generiert", "success");
+                    showToast(getI18n('toast_code_generated'), "success");
                     loadAdminInviteCodes();
                 }
             } catch (err) {
-                showToast("Fehler beim Generieren", "error");
+                showToast(getI18n('toast_code_gen_error'), "error");
             }
         }
 
         async function sendInviteCodePrompt(code) {
-            const email = await showPrompt("An welche E-Mail-Adresse soll der Code gesendet werden?", "Code versenden", "name@beispiel.de");
+            const email = await showPrompt(getI18n('prompt_send_code_desc'), getI18n('prompt_send_code_title'), getI18n('prompt_email_placeholder'));
             if (!email || !email.includes('@')) return;
 
             try {
-                showToast("E-Mail wird gesendet...", "info");
+                showToast(getI18n('toast_email_sending'), "info");
                 const res = await fetch(`${API_BASE_URL}/api/admin/invite-codes/send`, {
                     method: 'POST',
                     headers: { 
@@ -15262,14 +15713,14 @@
                     body: JSON.stringify({ code, email })
                 });
                 if (res.ok) {
-                    showToast("Code erfolgreich versendet", "success");
+                    showToast(getI18n('toast_email_sent'), "success");
                     loadAdminInviteCodes();
                 } else {
                     const data = await res.json();
-                    showToast(data.error || "Fehler beim Senden", "error");
+                    showToast(data.error || getI18n('err_send_short'), "error");
                 }
             } catch (err) {
-                showToast("Netzwerkfehler beim Senden", "error");
+                showToast(getI18n('err_network_send'), "error");
             }
         }
 
@@ -15281,11 +15732,11 @@
                     headers: { 'Authorization': `Bearer ${API_TOKEN}` }
                 });
                 if (res.ok) {
-                    showToast("Code gelöscht", "success");
+                    showToast(getI18n('toast_code_deleted'), "success");
                     loadAdminInviteCodes();
                 }
             } catch (err) {
-                showToast("Fehler beim Löschen", "error");
+                showToast(getI18n('toast_delete_error_short'), "error");
             }
         }
 
@@ -15296,10 +15747,10 @@
                 if (res.ok) {
                     renderAdminUsers(users);
                 } else {
-                    adminUserList.innerHTML = `<p class="text-red-500 text-sm">Fehler: ${users.error || 'Unbekannt'}</p>`;
+                    adminUserList.innerHTML = `<p class="text-red-500 text-sm">${getI18n('error')}: ${users.error || getI18n('unknown')}</p>`;
                 }
             } catch (err) {
-                adminUserList.innerHTML = `<p class="text-red-500 text-sm">Verbindungsfehler bei Admin-Abfrage.</p>`;
+                adminUserList.innerHTML = `<p class="text-red-500 text-sm">${getI18n('admin_query_error')}</p>`;
             }
         }
 
@@ -15314,7 +15765,7 @@
             const adminTotalUsersKpi = document.getElementById('adminTotalUsersKpi');
 
             if (!users || users.length === 0) {
-                adminUserList.innerHTML = `<p class="text-slate-500 text-sm text-center">Keine Nutzer gefunden.</p>`;
+                adminUserList.innerHTML = `<p class="text-slate-500 text-sm text-center">${getI18n('admin_no_users')}</p>`;
                 if (adminTotalUsersKpi) adminTotalUsersKpi.textContent = '0';
                 if (kpiOpenInviteCodes) kpiOpenInviteCodes.textContent = '0';
                 if (kpiLearnedVocabIt) kpiLearnedVocabIt.textContent = '0';
@@ -15357,7 +15808,7 @@
 
             if (adminRecentActivityList) {
                 if (latestLearners.length === 0) {
-                    adminRecentActivityList.innerHTML = `<p class="text-[11px] text-slate-400 italic">Noch keine Lernaktivität aufgezeichnet.</p>`;
+                    adminRecentActivityList.innerHTML = `<p class="text-[11px] text-slate-400 italic">${getI18n('admin_no_activity')}</p>`;
                 } else {
                     adminRecentActivityList.innerHTML = latestLearners.map(u => {
                         const dateStr = new Date(u.lastActivity).toLocaleString(APP_UI_LANG === 'en' ? 'en-US' : 'de-DE');
@@ -15395,13 +15846,13 @@
             const fireSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 inline-block text-orange-500 mr-1"><path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248Z" clip-rule="evenodd" /></svg>';
             const powerIcon = isPowerUser ? fireSvg : '';
             const localeStr = APP_UI_LANG === 'en' ? 'en-US' : 'de-DE';
-            const neverStr = CURRENT_LANG === 'en' ? 'Never' : 'Nie';
-            const lockedStr = CURRENT_LANG === 'en' ? '(Locked)' : '(Gesperrt)';
-            const blockStr = CURRENT_LANG === 'en' ? 'Block' : 'Sperren';
-            const unblockStr = CURRENT_LANG === 'en' ? 'Unblock' : 'Entsperren';
-            const deleteStr = CURRENT_LANG === 'en' ? 'Delete' : 'Löschen';
-            const makeAdminStr = CURRENT_LANG === 'en' ? 'Make Admin' : 'Admin machen';
-            const removeAdminStr = CURRENT_LANG === 'en' ? 'Remove Admin' : 'Admin entfernen';
+            const neverStr = getI18n('never');
+            const lockedStr = getI18n('admin_locked');
+            const blockStr = getI18n('admin_block');
+            const unblockStr = getI18n('admin_unblock');
+            const deleteStr = getI18n('btn_delete');
+            const makeAdminStr = getI18n('admin_make_admin');
+            const removeAdminStr = getI18n('admin_remove_admin');
 
             const lastLoginStr = u.lastLogin ? new Date(u.lastLogin).toLocaleString(localeStr) : neverStr;
             const lastActivityStr = u.lastActivity ? new Date(u.lastActivity).toLocaleString(localeStr) : neverStr;
@@ -15448,7 +15899,7 @@
 
             // Android/Stability Fix: Ensure we have users to search
             if (!currentAdminUsers || currentAdminUsers.length === 0) {
-                resultsList.innerHTML = `<p class="text-slate-500 text-xs text-center py-4 italic animate-pulse">Lade Benutzerdaten für Suche...</p>`;
+                resultsList.innerHTML = `<p class="text-slate-500 text-xs text-center py-4 italic animate-pulse">${getI18n('admin_search_loading')}</p>`;
                 fetchAdminUsers().then(() => {
                     // Try filtering again after fetch
                     if (query) filterAdminUsers();
@@ -15466,7 +15917,7 @@
             );
 
             if (filtered.length === 0) {
-                resultsList.innerHTML = `<p class="text-slate-500 text-sm text-center py-8 italic">Keine Ergebnisse für "${query}"</p>`;
+                resultsList.innerHTML = `<p class="text-slate-500 text-sm text-center py-8 italic">${getI18n('admin_search_none', escapeHtml(query))}</p>`;
             } else {
                 resultsList.innerHTML = filtered.map(u => renderUserCard(u)).join('');
             }
@@ -15474,7 +15925,7 @@
 
         window.toggleUserActive = async function (id, currentStatus) {
             const action = currentStatus ? "sperren" : "entsperren";
-            if (!(await showConfirm(`Soll dieser Nutzer wirklich ${action} werden?`, 'Nutzerstatus ändern'))) return;
+            if (!(await showConfirm(getI18n('admin_confirm_status', action), getI18n('admin_confirm_status_title')))) return;
             try {
                 const res = await fetch(`${API_BASE_URL}/api/admin/users/${id}/toggle-active`, {
                     method: 'PUT',
@@ -15484,16 +15935,16 @@
                     fetchAdminUsers();
                 } else {
                     const data = await res.json();
-                    showToast("Fehler: " + (data.error || 'Unbekannt'), "error");
+                    showToast(getI18n('error') + ': ' + (data.error || getI18n('unknown')), "error");
                 }
             } catch (err) {
-                showToast("Server nicht erreichbar", "error");
+                showToast(getI18n('err_server_unreachable'), "error");
             }
         };
 
         window.toggleUserAdmin = async function (id, currentIsAdmin) {
-            const action = currentIsAdmin ? 'zum normalen Benutzer machen' : 'zum Admin machen';
-            if (!(await showConfirm(`Soll dieser Nutzer wirklich ${action} werden?`, 'Admin-Status ändern'))) return;
+            const action = getI18n(currentIsAdmin ? 'admin_action_demote' : 'admin_action_promote');
+            if (!(await showConfirm(getI18n('admin_confirm_status', action), getI18n('admin_confirm_admin_title')))) return;
             try {
                 const res = await fetch(`${API_BASE_URL}/api/admin/users/${id}/toggle-admin`, {
                     method: 'PUT',
@@ -15503,15 +15954,15 @@
                     fetchAdminUsers();
                 } else {
                     const data = await res.json();
-                    showToast("Fehler: " + (data.error || 'Unbekannt'), "error");
+                    showToast(getI18n('error') + ': ' + (data.error || getI18n('unknown')), "error");
                 }
             } catch (err) {
-                showToast("Server nicht erreichbar", "error");
+                showToast(getI18n('err_server_unreachable'), "error");
             }
         };
 
         window.exportAdminCSV = function () {
-            if (!currentAdminUsers || currentAdminUsers.length === 0) return showToast('Keine Daten zum Exportieren!', 'warning');
+            if (!currentAdminUsers || currentAdminUsers.length === 0) return showToast(getI18n('admin_no_export_data'), 'warning');
 
             // UTF-8 BOM für Excel
             let csvContent = "\ufeff";
@@ -15564,9 +16015,9 @@
                     vocabCount[l] = (vocabRes[idx] && vocabRes[idx].length) || 0;
                     grammarCount[l] = (grammarRes[idx] && grammarRes[idx].length) || 0;
                     const elV = document.getElementById('adminBaseVocabCount' + cap(l));
-                    if (elV) elV.textContent = `${vocabCount[l]} Vokabeln`;
+                    if (elV) elV.textContent = getI18n('admin_count_vocab', vocabCount[l]);
                     const elG = document.getElementById('adminGrammarCount' + cap(l));
-                    if (elG) elG.textContent = `${grammarCount[l]} Sätze`;
+                    if (elG) elG.textContent = getI18n('admin_count_sent', grammarCount[l]);
                 });
 
                 // Update User Modal (Excel Modal) dynamically
@@ -15601,7 +16052,7 @@
             const newName = prompt(getI18n('admin_rename_prompt'), existingUser?.name || '');
             if (newName === null) return;
             const trimmedName = newName.trim();
-            if (!trimmedName) return showToast("Der Name darf nicht leer sein.", "warning");
+            if (!trimmedName) return showToast(getI18n('admin_name_empty'), "warning");
             try {
                 const res = await fetch(`${API_BASE_URL}/api/admin/users/${id}/name`, {
                     method: 'PUT',
@@ -15609,48 +16060,48 @@
                     body: JSON.stringify({ name: trimmedName })
                 });
                 if (res.ok) {
-                    showToast("Name erfolgreich geändert!", "success");
+                    showToast(getI18n('admin_name_changed'), "success");
                     fetchAdminUsers();
                 } else {
                     const data = await res.json();
-                    showToast(`Fehler: ${data.error}`, "error");
+                    showToast(`${getI18n('error')}: ${data.error}`, "error");
                 }
             } catch (err) {
-                showToast("Server nicht erreichbar", "error");
+                showToast(getI18n('err_server_unreachable'), "error");
             }
         };
 
         window.resetUserPassword = async function (id) {
-            const newPassword = prompt("Neues Passwort für den Nutzer (min. 6 Zeichen):");
+            const newPassword = prompt(getI18n('admin_new_password_prompt'));
             if (!newPassword) return;
-            if (newPassword.length < 6) return showToast("Das Passwort muss mindestens 6 Zeichen lang sein.", "warning");
+            if (newPassword.length < 6) return showToast(getI18n('admin_password_short'), "warning");
             try {
                 const res = await fetch(`${API_BASE_URL}/api/admin/users/${id}/password`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${API_TOKEN}` },
                     body: JSON.stringify({ newPassword })
                 });
-                if (res.ok) showToast("Passwort erfolgreich geändert!", "success");
+                if (res.ok) showToast(getI18n('admin_password_changed'), "success");
                 else {
                     const data = await res.json();
-                    showToast(`Fehler: ${data.error}`, "error");
+                    showToast(`${getI18n('error')}: ${data.error}`, "error");
                 }
             } catch (err) { showToast("Verbindungsfehler", "error"); }
         }
 
         window.deleteUser = async function (id) {
-            if (!(await showConfirm(`WARNUNG: Möchtest du User ID ${id} und ALLE zugehörigen Vokabeln und Statistiken restlos löschen? Diese Aktion kann nicht rückgängig gemacht werden!`, 'Nutzer löschen?'))) return;
+            if (!(await showConfirm(getI18n('admin_delete_user_confirm', id), getI18n('admin_delete_user_title')))) return;
             try {
                 const res = await fetch(`${API_BASE_URL}/api/admin/users/${id}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': `Bearer ${API_TOKEN}` }
                 });
                 if (res.ok) {
-                    showToast("Nutzer erfolgreich gelöscht.", "success");
+                    showToast(getI18n('admin_user_deleted'), "success");
                     fetchAdminUsers();
                 } else {
                     const data = await res.json();
-                    showToast(`Fehler: ${data.error}`, "error");
+                    showToast(`${getI18n('error')}: ${data.error}`, "error");
                 }
             } catch (err) { showToast("Verbindungsfehler", "error"); }
         }
@@ -15681,7 +16132,7 @@
 
                 if (!res.ok) {
                     const errData = await res.json();
-                    throw new Error(errData.error || `Fehler beim Upload von Teil ${Math.floor(i/chunkSize) + 1}`);
+                    throw new Error(errData.error || getI18n('err_upload_part', Math.floor(i/chunkSize) + 1));
                 }
                 const resData = await res.json();
                 successCount += (resData.length || chunk.length);
@@ -15746,24 +16197,24 @@
                     const sheet = workbook.Sheets[sheetName];
                     const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-                    if (!json || json.length < 2) return showToast("Datei ist leer oder hat kein Header-Format.", "warning");
+                    if (!json || json.length < 2) return showToast(getI18n('err_file_empty_header'), "warning");
 
                     const { words: wordsToUpload, hasLevelColumn } = parseBaseVocabRows(json, lang);
 
-                    if (wordsToUpload.length === 0) return showToast("Keine gültigen Zeilen (Spalte 1 & 2 nötig) gefunden.", "warning");
+                    if (wordsToUpload.length === 0) return showToast(getI18n('err_no_valid_rows'), "warning");
 
-                    const confirmMsg = `Möchtest du wirklich die ${lang.toUpperCase()}-Basisliste mit ${wordsToUpload.length} neuen Einträgen ÜBERSCHREIBEN?`;
-                    if (await showConfirm(confirmMsg, "Import bestätigen")) {
-                        showToast(`Import von ${wordsToUpload.length} Einträgen gestartet...`, "info");
+                    const confirmMsg = getI18n('admin_overwrite_base_confirm', lang.toUpperCase(), wordsToUpload.length);
+                    if (await showConfirm(confirmMsg, getI18n('import_confirm_title'))) {
+                        showToast(getI18n('import_entries_started', wordsToUpload.length), "info");
                         const count = await uploadInChunks('/admin/base-vocab/bulk', 'words', wordsToUpload, lang, 'BaseVocab');
                         
-                        showToast(`${count} ${lang.toUpperCase()}-Basis-Vokabeln erfolgreich importiert.` + (hasLevelColumn ? ' Die Spalte „Niveau“ wird (noch) nicht gespeichert.' : ''), "success");
+                        showToast(getI18n('import_base_vocab_done', count, lang.toUpperCase()) + (hasLevelColumn ? ' ' + getI18n('import_level_not_saved') : ''), "success");
                         updateAdminBaseVocabCount();
                         input.value = '';
                     }
                 } catch (err) {
                     console.error("[UPLOAD ERROR]", err);
-                    showToast("Import-Fehler: " + err.message, "error");
+                    showToast(getI18n('import_error_prefix') + ' ' + err.message, "error");
                 }
             };
             reader.readAsArrayBuffer(file);
@@ -15775,10 +16226,10 @@
                 const res = await fetch(`${API_BASE_URL}/api/base-vocab?language=${lang}`, {
                     headers: { 'Authorization': `Bearer ${API_TOKEN}` }
                 });
-                if (!res.ok) throw new Error("Serverfehler beim Abrufen");
+                if (!res.ok) throw new Error(getI18n('err_server_fetch'));
                 const baseVocab = await res.json();
 
-                if (!baseVocab || baseVocab.length === 0) return showToast(`Die ${lang.toUpperCase()}-Basisliste ist leer.`, "info");
+                if (!baseVocab || baseVocab.length === 0) return showToast(getI18n('admin_base_empty', lang.toUpperCase()), "info");
 
                 const wsData = [
                     [(LANG_CONFIG[lang] || LANG_CONFIG.it).name, "Deutsch", "Wortart", "Emoji", "Grammatik", "Niveau"],
@@ -15790,12 +16241,12 @@
                 XLSX.writeFile(wb, `Basis_Vokabeln_${lang.toUpperCase()}_Global.xlsx`);
             } catch (err) {
                 console.error("[DOWNLOAD ERROR]", err);
-                showToast("Export-Fehler: " + err.message, "error");
+                showToast(getI18n('export_error_prefix') + ' ' + err.message, "error");
             }
         };
 
         window.deleteAdminBaseVocab = async function(lang) {
-            if (!(await showConfirm(`Möchtest du wirklich die gesamte globale BASIS-LISTE (${lang.toUpperCase()}) vom Server löschen?`, "Liste leeren?"))) return;
+            if (!(await showConfirm(getI18n('admin_clear_base_confirm', lang.toUpperCase()), getI18n('admin_clear_list_title')))) return;
             try {
                 const res = await fetch(`${API_BASE_URL}/api/admin/base-vocab/bulk`, {
                     method: 'POST',
@@ -15806,10 +16257,10 @@
                     body: JSON.stringify({ words: [], language: lang })
                 });
                 if (res.ok) {
-                    showToast(`${lang.toUpperCase()}-Basisliste geleert.`, "success");
+                    showToast(getI18n('admin_base_cleared', lang.toUpperCase()), "success");
                     updateAdminBaseVocabCount();
                 }
-            } catch (err) { showToast("Fehler beim Leeren.", "error"); }
+            } catch (err) { showToast(getI18n('err_clear'), "error"); }
         };
 
         window.uploadGrammar = async function(lang) {
@@ -15830,7 +16281,7 @@
                     // Leere Zeilen rausfiltern
                     rows = rows.filter(row => row.length > 0 && row.some(cell => cell !== undefined && cell !== null && String(cell).trim() !== ''));
 
-                    if (rows.length === 0) return showToast("Datei ist leer.", "warning");
+                    if (rows.length === 0) return showToast(getI18n('err_file_empty'), "warning");
 
                     // Prüfen ob die erste Zeile ein Header ist (enthält Schlüsselworte)
                     const firstRowStr = String(rows[0].join(' ')).toLowerCase();
@@ -15875,19 +16326,19 @@
 
                     if (sentencesToUpload.length === 0) {
                         const langName = (LANG_CONFIG[lang] || LANG_CONFIG.it).name;
-                        return showToast(`Keine gültigen Sätze gefunden (Spalten ${langName} & Deutsch prüfen).`, "warning");
+                        return showToast(getI18n('err_no_valid_sentences', langName, uiDeName()), "warning");
                     }
 
                     // Enthält die Datei KI-Sätze (Spalte Wort), ist sie eine vollständige Sicherung: dann werden auch die vorhandenen KI-Sätze ersetzt
                     const kiCount = sentencesToUpload.filter(s => s.forWord).length;
                     const kiNote = kiCount > 0
-                        ? ` Die Datei enthält ${kiCount} KI-Sätze (Spalte Wort): die vorhandenen KI-Sätze werden ebenfalls ersetzt.`
-                        : ' Vorhandene KI-Sätze bleiben erhalten.';
-                    if (await showConfirm(`Die ${lang.toUpperCase()}-Grammatikliste mit ${sentencesToUpload.length} Sätzen ÜBERSCHREIBEN?${kiNote}`, "Import bestätigen")) {
-                        showToast(`Import von ${sentencesToUpload.length} Sätzen gestartet...`, "info");
+                        ? ' ' + getI18n('import_ki_note_replace', kiCount)
+                        : ' ' + getI18n('import_ki_note_keep');
+                    if (await showConfirm(getI18n('admin_overwrite_grammar_confirm', lang.toUpperCase(), sentencesToUpload.length) + kiNote, getI18n('import_confirm_title'))) {
+                        showToast(getI18n('import_sentences_started', sentencesToUpload.length), "info");
                         const count = await uploadInChunks('/admin/grammar-sentences/bulk', 'sentences', sentencesToUpload, lang, 'Grammatik', kiCount > 0 ? 'overwrite-all' : 'overwrite');
                         
-                        showToast(`${count} Sätze importiert.`, "success");
+                        showToast(getI18n('import_sentences_done', count), "success");
                         if (lang === CURRENT_LANG) updateAdminGrammarCount();
                         updateAdminBaseVocabCount();
                         if (currentMode === 'grammar') startGrammarRound();
@@ -15895,7 +16346,7 @@
                     input.value = '';
                 } catch (err) {
                     console.error(err);
-                    showToast("Fehler: " + err.message, "error");
+                    showToast(getI18n('error') + ': ' + err.message, "error");
                 }
             };
             reader.readAsArrayBuffer(file);
@@ -15909,7 +16360,7 @@
                 if (!res.ok) throw new Error("Serverfehler");
                 const sentences = await res.json();
                 
-                if (!sentences || sentences.length === 0) return showToast(`Die ${lang.toUpperCase()}-Grammatikliste ist leer.`, "info");
+                if (!sentences || sentences.length === 0) return showToast(getI18n('admin_grammar_empty', lang.toUpperCase()), "info");
 
                 const wsData = [
                     [(LANG_CONFIG[lang] || LANG_CONFIG.it).name, "Deutsch", "Kategorie", "Niveau", "Wort"],
@@ -15921,27 +16372,27 @@
                 XLSX.writeFile(wb, `Grammatik_Saetze_${lang.toUpperCase()}_Global.xlsx`);
             } catch (err) {
                 console.error(err);
-                showToast("Export-Fehler.", "error");
+                showToast(getI18n('export_error'), "error");
             }
         };
 
         window.deleteAdminGrammar = async function(lang) {
-            if (!(await showConfirm(`Möchtest du wirklich die gesamte globale GRAMMATIK-LISTE (${lang.toUpperCase()}) vom Server löschen?`, "Liste leeren?"))) return;
+            if (!(await showConfirm(getI18n('admin_clear_grammar_confirm', lang.toUpperCase()), getI18n('admin_clear_list_title')))) return;
             try {
                 const res = await fetch(`${API_BASE_URL}/api/admin/grammar-sentences?language=${lang}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': `Bearer ${API_TOKEN}` }
                 });
                 if (res.ok) {
-                    showToast(`${lang.toUpperCase()}-Grammatikliste gelöscht`, "success");
+                    showToast(getI18n('admin_grammar_cleared', lang.toUpperCase()), "success");
                     if (lang === CURRENT_LANG) updateAdminGrammarCount();
                     updateAdminBaseVocabCount();
                 } else {
                     const data = await res.json();
-                    showToast("Fehler: " + (data.error || 'Unbekannt'), "error");
+                    showToast(getI18n('error') + ': ' + (data.error || getI18n('unknown')), "error");
                 }
             } catch (err) {
-                showToast("Serverfehler beim Löschen", "error");
+                showToast(getI18n('err_server_delete'), "error");
             }
         };
 
@@ -16310,7 +16761,7 @@
                    infoIconBtn.classList.toggle('bg-blue-600', !isInfoModeActive);
                    infoIconBtn.classList.toggle('bg-green-600', isInfoModeActive); // Green when active hint mode
                 }
-                showToast(isInfoModeActive ? "Zusatzinfos AN (Tippe auf Wörter)" : "Zusatzinfos AUS (Wörter zum Zuordnen)", isInfoModeActive ? "info" : "warning", 2000);
+                showToast(getI18n(isInfoModeActive ? 'toast_info_on' : 'toast_info_off'), isInfoModeActive ? "info" : "warning", 2000);
             }
 
             if (infoModeBtn) {
@@ -16415,7 +16866,7 @@
             } else {
                 cardsQuestionDisplay.textContent = isFlashcardReversed ? deText : itText;
             }
-            cardsSubtext.textContent = isFlashcardReversed ? "Lösung gezeigt" : "Klicken zum Wenden";
+            cardsSubtext.textContent = getI18n(isFlashcardReversed ? 'cards_solution_shown' : 'cards_click_flip');
         }
 
         if (cardsFlashcard) {

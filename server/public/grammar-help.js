@@ -201,6 +201,209 @@
         }
     };
 
+    // ---------------------------------------------------------------------------------------
+    // Erklärungen für die englische Oberfläche (UI-Sprache „en“); gleiche Schlüssel wie EXPLANATIONS.
+    // Beispielsätze und Regeln in der Lernsprache bleiben stehen, übersetzt wird nur Erklärendes.
+    // ---------------------------------------------------------------------------------------
+    const EXPLANATIONS_EN = {
+        it: {
+            'Presente': {
+                title: 'Presente (present tense)',
+                text: 'For actions happening now or regularly, and for fixed plans in the near future.',
+                rule: 'stem + -o, -i, -a/-e, -iamo, -ate/-ete/-ite, -ano/-ono',
+                example: 'Ogni mattina bevo un caffè. – Every morning I drink a coffee.'
+            },
+            'Passato Prossimo': {
+                title: 'Passato prossimo (present perfect)',
+                text: 'For completed actions in the past. Verbs of movement and change of state, as well as reflexive verbs, form it with “essere” – then the participle agrees with the subject (andato/andata/andati/andate).',
+                rule: 'avere/essere in the Presente + past participle (-ato, -uto, -ito)',
+                example: 'Ieri abbiamo mangiato la pizza. / Maria è partita. – Yesterday we ate pizza. / Maria has left.'
+            },
+            'Imperfetto': {
+                title: 'Imperfetto (past, background)',
+                text: 'For habits, descriptions and states in the past, and for actions that were in progress when something else happened.',
+                rule: 'stem + -avo/-evo/-ivo, -avi, -ava, -avamo, -avate, -avano',
+                example: 'Da bambino giocavo sempre in giardino. – As a child I always played in the garden.'
+            },
+            'Gerundio': {
+                title: 'Gerundio (continuous form)',
+                text: 'With “stare” it describes what is happening right now (“I am in the middle of …”). On its own it expresses simultaneous actions (“while/by …ing”).',
+                rule: 'stare + stem + -ando (-are) / -endo (-ere, -ire)',
+                example: 'Sto leggendo un libro. – I am reading a book.'
+            },
+            'Preposizioni Articolate': {
+                title: 'Preposizioni articolate (combined prepositions)',
+                text: 'The prepositions di, a, da, in, su merge with the definite article into one word. The form depends on the following noun (gender, number, first letter).',
+                rule: 'di+il = del, a+la = alla, da+i = dai, in+lo = nello, su+le = sulle …',
+                example: 'Il libro è sul tavolo nella cucina. – The book is on the table in the kitchen.'
+            },
+            'Gemischt': {
+                title: 'Passato prossimo and Imperfetto combined',
+                text: 'The Imperfetto describes the background or an ongoing action, the Passato prossimo the new, completed action that interrupts it.',
+                rule: 'background: Imperfetto – event: Passato prossimo',
+                example: 'Mentre leggevo, è squillato il telefono. – While I was reading, the phone rang.'
+            },
+            'Imperativo': {
+                title: 'Imperativo (imperative)',
+                text: 'For commands, requests and advice. The negative form for “tu” is “non” + infinitive. Pronouns attach to the end with tu/noi/voi (dimmi, alzati).',
+                rule: 'tu: parla / prendi / senti – Lei: parli / prenda – noi: parliamo – voi: parlate',
+                example: 'Chiudi la finestra, per favore! Non parlare così forte! – Please close the window! Don’t talk so loudly!'
+            },
+            'Congiuntivo': {
+                title: 'Congiuntivo (subjunctive)',
+                text: 'Used in subordinate clauses after expressions of opinion, wish, doubt, feeling or necessity (penso che, spero che, voglio che, è importante che) and after benché, affinché, prima che.',
+                rule: '-are: parli, parli, parli, parliamo, parliate, parlino – -ere/-ire: prenda … prendano',
+                example: 'Penso che Marco abbia ragione. – I think Marco is right.'
+            },
+            'Condizionale': {
+                title: 'Condizionale (wishes, polite requests)',
+                text: 'For polite requests, wishes, advice and possible (not certain) actions. The stem is the same as in the future, plus the conditional endings.',
+                rule: 'future stem + -ei, -esti, -ebbe, -emmo, -este, -ebbero',
+                example: 'Vorrei un caffè. / Potresti aiutarmi? – I would like a coffee. / Could you help me?'
+            },
+            'Futuro Semplice': {
+                title: 'Futuro semplice (future)',
+                text: 'For actions in the future, but also for assumptions about the present (“sarà stanco” – he is probably tired).',
+                rule: 'infinitive without -e (-are → -er-) + -ò, -ai, -à, -emo, -ete, -anno',
+                example: 'L’anno prossimo andrò in Italia. – Next year I will go to Italy.'
+            }
+        },
+        en: {
+            'Simple Present': {
+                title: 'Simple Present',
+                text: 'For habits, facts and regular routines. With he/she/it an -s is added to the verb. Questions and negatives are formed with do/does.',
+                rule: 'I work – he works – Do you work? – She doesn’t work.',
+                example: 'She drinks coffee every morning.'
+            },
+            'Present Continuous': {
+                title: 'Present Continuous',
+                text: 'For actions happening right now or temporarily, and for fixed plans. Stative verbs (know, like, want, need) are not used in this form.',
+                rule: 'am/is/are + verb-ing',
+                example: 'I am reading a book right now.'
+            },
+            'Simple Past': {
+                title: 'Simple Past',
+                text: 'For completed actions at a specific point in the past (yesterday, last week, in 2010). Regular verbs take -ed, irregular verbs have their own forms.',
+                rule: 'worked / went – Did you go? – I didn’t go.',
+                example: 'We visited our grandparents last weekend.'
+            },
+            'Present Perfect': {
+                title: 'Present Perfect',
+                text: 'Links past and present: for experiences, results that matter now, and actions up to now (since, for, already, yet, ever, never). No specific point in time in the past.',
+                rule: 'have/has + past participle (worked, seen, been)',
+                example: 'I have never been to London.'
+            },
+            'Modalverb': {
+                title: 'Modal verbs',
+                text: 'can, could, must, should, may, might express ability, obligation, advice or possibility. They take no -s and are followed by the infinitive without “to”.',
+                rule: 'modal verb + infinitive (He can swim. You should rest.)',
+                example: 'You must wear a helmet.'
+            },
+            'Imperativ': {
+                title: 'Imperative',
+                text: 'For commands, instructions and requests. Use the base form of the verb without a subject; negative with “don’t”.',
+                rule: 'Open the door! – Don’t touch it!',
+                example: 'Please close the window.'
+            },
+            'Conditional': {
+                title: 'Conditional (if-clauses)',
+                text: 'Type 1 – real condition: if + Simple Present, will + infinitive. Type 2 – unlikely or imagined condition: if + Simple Past, would + infinitive.',
+                rule: 'If it rains, we will stay home. / If I had time, I would help you.',
+                example: 'If you study, you will pass the test.'
+            },
+            'Future': {
+                title: 'Future (will / going to)',
+                text: '“will” for spontaneous decisions, promises and predictions; “be going to” for plans and intentions and for predictions based on visible signs.',
+                rule: 'will + infinitive / am/is/are going to + infinitive',
+                example: 'Look at the clouds – it is going to rain.'
+            },
+            'Subjunctive': {
+                title: 'Subjunctive',
+                text: 'For wishes and imagined situations (“If I were …”, “I wish I were …”) and after verbs like suggest, insist, recommend (then the base form without -s).',
+                rule: 'If I were you … / I suggest that he see a doctor.',
+                example: 'I wish I were on holiday.'
+            }
+        },
+        es: {
+            'Presente': {
+                title: 'Presente (present tense)',
+                text: 'For actions happening now or regularly, and for fixed plans in the near future. Many common verbs have a stem change (pensar → pienso, poder → puedo, pedir → pido), which does not occur with nosotros and vosotros.',
+                rule: '-ar: -o, -as, -a, -amos, -áis, -an – -er: -o, -es, -e, -emos, -éis, -en – -ir: -o, -es, -e, -imos, -ís, -en',
+                example: 'Todas las mañanas bebo un café. – Every morning I drink a coffee.'
+            },
+            'Pretérito Perfecto': {
+                title: 'Pretérito perfecto (present perfect)',
+                text: 'For actions within a period of time that extends up to now (hoy, esta semana, este año, ya, todavía no), and for experiences. It is used very often in Spain. The participle after “haber” never changes (-ado, -ido).',
+                rule: 'haber (he, has, ha, hemos, habéis, han) + past participle (hablado, comido, vivido) – irregular: hecho, dicho, visto, puesto, escrito, abierto',
+                example: 'Hoy he comido paella. – Today I have eaten paella.'
+            },
+            'Pretérito Indefinido': {
+                title: 'Pretérito indefinido (completed past)',
+                text: 'For completed actions in a period that is over (ayer, el año pasado, en 2010, hace dos días). Many common verbs are irregular (ser/ir → fui, tener → tuve, hacer → hice).',
+                rule: '-ar: -é, -aste, -ó, -amos, -asteis, -aron – -er/-ir: -í, -iste, -ió, -imos, -isteis, -ieron',
+                example: 'Ayer visité a mis abuelos. – Yesterday I visited my grandparents.'
+            },
+            'Pretérito Imperfecto': {
+                title: 'Pretérito imperfecto (past, background)',
+                text: 'For habits, descriptions and states in the past, and for actions that were in progress. Only three verbs are irregular: ser (era), ir (iba), ver (veía).',
+                rule: '-ar: -aba, -abas, -aba, -ábamos, -abais, -aban – -er/-ir: -ía, -ías, -ía, -íamos, -íais, -ían',
+                example: 'De niño jugaba siempre en el jardín. – As a child I always played in the garden.'
+            },
+            'Gerundio': {
+                title: 'Gerundio (continuous form)',
+                text: 'With “estar” it describes what is happening right now (“I am in the middle of …”). On its own it expresses simultaneous actions (“by, while”). Pronouns attach to the end (estoy lavándome / me estoy lavando).',
+                rule: 'estar + stem + -ando (-ar) / -iendo (-er, -ir) – leer → leyendo, dormir → durmiendo, decir → diciendo',
+                example: 'Estoy leyendo un libro. – I am reading a book.'
+            },
+            'Imperativo': {
+                title: 'Imperativo (imperative)',
+                text: 'For commands, requests and advice. In the affirmative, “tú” takes the 3rd person singular form and “vosotros” ends in -d. In the negative (and for usted/ustedes/nosotros) the subjunctive is used. Pronouns attach to the end of affirmative commands (dime, siéntate).',
+                rule: 'tú: habla / come / escribe – usted: hable / coma – vosotros: hablad / comed – negative: no hables / no comas',
+                example: 'Cierra la ventana, por favor. No hables tan alto. – Please close the window. Don’t talk so loudly.'
+            },
+            'Subjuntivo': {
+                title: 'Subjuntivo (subjunctive)',
+                text: 'Used in subordinate clauses after wish, doubt, feeling, command or necessity (quiero que, espero que, es posible que, dudo que, para que, cuando + future). The stem comes from the yo form of the Presente.',
+                rule: '-ar: -e, -es, -e, -emos, -éis, -en – -er/-ir: -a, -as, -a, -amos, -áis, -an (tengo → tenga)',
+                example: 'Quiero que vengas a mi fiesta. – I want you to come to my party.'
+            },
+            'Futuro': {
+                title: 'Futuro simple (future)',
+                text: 'For actions in the future, but also for assumptions about the present (“estará cansado” – he is probably tired). In everyday speech “ir a + infinitive” is often used (voy a viajar).',
+                rule: 'infinitive + -é, -ás, -á, -emos, -éis, -án – stem change with tener (tendré), hacer (haré), poder (podré), decir (diré)',
+                example: 'El año que viene viajaré a España. – Next year I will travel to Spain.'
+            },
+            'Condicional': {
+                title: 'Condicional simple (wishes, polite requests)',
+                text: 'For polite requests, wishes, advice and possible (not certain) actions. The stem is the same as in the future, plus the endings of haber in the Imperfecto.',
+                rule: 'infinitive + -ía, -ías, -ía, -íamos, -íais, -ían',
+                example: '¿Podrías ayudarme? Me gustaría un café. – Could you help me? I would like a coffee.'
+            },
+            'Gemischt': {
+                title: 'Indefinido and Imperfecto combined',
+                text: 'The Imperfecto describes the background or an ongoing action, the Indefinido the new, completed action that interrupts it.',
+                rule: 'background: Imperfecto – event: Indefinido',
+                example: 'Mientras leía, sonó el teléfono. – While I was reading, the phone rang.'
+            },
+            'Ser y Estar': {
+                title: 'Ser and estar',
+                text: '“Ser” for identity, origin, profession, characteristics and time; “estar” for location, states, feelings and the continuous form (estar + gerundio).',
+                rule: 'ser: soy, eres, es, somos, sois, son – estar: estoy, estás, está, estamos, estáis, están',
+                example: 'Soy alemán, pero estoy en Madrid. – I am German, but I am in Madrid.'
+            },
+            'Por y Para': {
+                title: 'Por and para',
+                text: '“Para” expresses goal, purpose, recipient and deadline; “por” expresses reason, cause, route, duration and exchange.',
+                rule: 'para + goal/purpose/deadline – por + reason/route/duration/price',
+                example: 'Este regalo es para ti. Gracias por tu ayuda. – This gift is for you. Thank you for your help.'
+            }
+        }
+    };
+
+    // Sprache der Oberfläche (de/en): bestimmt Erklärtexte und Hinweise der Konjugationstabellen
+    let uiLang = 'de';
+    function setUiLang(l) { uiLang = l === 'en' ? 'en' : 'de'; }
+
     // Welche Zeitform der Tabelle zur Kategorie passt (wird im Dialog zuerst gezeigt)
     const CATEGORY_TENSE = {
         it: { 'Presente': 'presente', 'Passato Prossimo': 'passato', 'Imperfetto': 'imperfetto', 'Gerundio': 'gerundio',
@@ -235,7 +438,8 @@
 
     function getExplanations(category, lang) {
         const table = EXPLANATIONS[lang] || {};
-        return splitCategories(category).map(c => table[canonicalCategory(c, lang)]).filter(Boolean);
+        const tableEn = uiLang === 'en' ? (EXPLANATIONS_EN[lang] || {}) : {};
+        return splitCategories(category).map(c => { const k = canonicalCategory(c, lang); return tableEn[k] || table[k]; }).filter(Boolean);
     }
 
     function preferredTense(category, lang) {
@@ -603,7 +807,7 @@
                 { id: 'continuous', name: 'Present Continuous', forms: withPron(beNow.map(b => `${b} ${ing}`)) },
                 { id: 'past', name: 'Simple Past', forms: withPron(pastForms) },
                 { id: 'perfect', name: 'Present Perfect', forms: withPron(haveNow.map(h => `${h} ${part}`)) },
-                { id: 'future', name: 'Future (will / going to)', forms: withPron(Array(6).fill(`will ${v}`)), extra: `oder: am/is/are going to ${v}` },
+                { id: 'future', name: 'Future (will / going to)', forms: withPron(Array(6).fill(`will ${v}`)), extra: `${uiLang === 'en' ? 'or' : 'oder'}: am/is/are going to ${v}` },
                 { id: 'conditional', name: 'Conditional (would)', forms: withPron(Array(6).fill(`would ${v}`)) }
             ],
             noPersonColumn: true
@@ -1258,6 +1462,7 @@
     api.normalizeAnswer = normalizeAnswer;
     api.compareAnswers = compareAnswers;
     api.analyzeSentence = analyzeSentence;
+    api.setUiLang = setUiLang;
     api.isIscVerb = (infinitive) => IT_ISC.has(String(infinitive || '').toLowerCase().trim());
     if (typeof module !== 'undefined' && module.exports) module.exports = api;
     else root.GrammarHelp = api;

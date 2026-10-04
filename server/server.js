@@ -25,11 +25,12 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors());
+app.use(require('./utils/uiMessages').uiMessagesMiddleware); // API-Meldungen in der Sprache der Oberfläche (Header X-UI-Lang)
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Health Check
-app.get('/api/health', (req, res) => res.json({ status: 'ok', version: '2.2.26', timestamp: new Date() }));
+app.get('/api/health', (req, res) => res.json({ status: 'ok', version: '2.2.27', timestamp: new Date() }));
 
 // Mount routes
 app.use('/api/auth/oidc', require('./routes/oidc'));
