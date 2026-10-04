@@ -295,6 +295,7 @@
 
         /* Admin Tabs */
         .admin-tab-btn {
+            flex-shrink: 0;
             padding: 8px 16px;
             font-size: 0.875rem;
             font-weight: 600;
@@ -4137,12 +4138,12 @@
                 </div>
             </div>
 
-            <div class="flex justify-between items-center mb-4 shrink-0 px-1 border-b border-slate-100">
-                <div class="flex gap-4">
+            <div class="flex items-center mb-4 shrink-0 px-1 border-b border-slate-100 min-w-0">
+                <div id="adminTabBar" class="flex gap-1 md:gap-4 overflow-x-auto whitespace-nowrap min-w-0 flex-1" style="scrollbar-width: none; -webkit-overflow-scrolling: touch;">
                     <button onclick="switchAdminTab('users')" id="adminTabUsers" class="admin-tab-btn active" data-i18n="admin_users_tab">👥 Benutzer</button>
                     <button onclick="switchAdminTab('lists')" id="adminTabLists" class="admin-tab-btn" data-i18n="admin_lists_tab">📚 Listen</button>
                     <button onclick="switchAdminTab('invites')" id="adminTabInvites" class="admin-tab-btn hidden lg:inline-block" data-i18n="admin_invites_tab">🎟️ Einladungen</button>
-                    <button onclick="switchAdminTab('search')" id="adminTabSearch" class="admin-tab-btn" data-i18n="admin_search_tab">🔍 Suche</button>
+                    <button onclick="switchAdminTab('search')" id="adminTabSearch" class="admin-tab-btn" data-i18n="admin_search_tab">Suche</button>
                     <button onclick="switchAdminTab('ai')" id="adminTabAi" class="admin-tab-btn" data-i18n="admin_ai_tab">KI</button>
                 </div>
             </div>
@@ -4387,6 +4388,11 @@
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="adminAiLimit" data-i18n="admin_ai_limit">Tageslimit pro Nutzer (Sätze, Admins unbegrenzt)</label>
                         <input id="adminAiLimit" type="number" min="0" max="1000" class="w-32 bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="adminAiLookupLimit" data-i18n="admin_ai_lookup_limit">Tageslimit KI-Wortinfo pro Nutzer (Wortart/Geschlecht, Admins unbegrenzt)</label>
+                        <input id="adminAiLookupLimit" type="number" min="0" max="5000" class="w-32 bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
                     </div>
 
                     <div>
@@ -5590,6 +5596,7 @@
                 conj_in_sentence: "im Satz",
                 conj_open: "Konjugationstabelle öffnen",
                 conj_tap_hint: "Tippe auf ein Verb für die Konjugationstabelle:",
+                admin_ai_lookup_limit: "Tageslimit KI-Wortinfo pro Nutzer (Wortart/Geschlecht, Admins unbegrenzt)",
                 admin_ai_rate: "Umrechnungskurs 1 US-Dollar in Euro (für die Kostenanzeige)",
                 admin_ai_usage_title: "📊 Verbrauch und Kosten",
                 admin_ai_usage_refresh: "Aktualisieren",
@@ -5682,7 +5689,7 @@
                 admin_last_online: "Letzter Benutzer online",
                 admin_recent_activity: "Letzte Aktivitäten (Lernen)",
                 admin_search_placeholder: "Benutzer suchen (Name, Email)...",
-                admin_search_tab: "🔍 Suche",
+                admin_search_tab: "Suche",
                 admin_search_empty: "Geben Sie einen Namen oder eine Email ein...",
                 admin_user_name: "Name:",
                 admin_user_reg: "Registriert:",
@@ -6068,6 +6075,7 @@
                 conj_in_sentence: "in the sentence",
                 conj_open: "Open conjugation table",
                 conj_tap_hint: "Tap a verb to see its conjugation table:",
+                admin_ai_lookup_limit: "Daily limit for AI word info per user (word type/gender, admins unlimited)",
                 admin_ai_rate: "Exchange rate 1 US dollar to euro (for the cost display)",
                 admin_ai_usage_title: "📊 Usage and cost",
                 admin_ai_usage_refresh: "Refresh",
@@ -11183,6 +11191,73 @@
             return '';
         }
 
+        // --- Wortart und Geschlecht automatisch bestimmen: erst einfache Regeln, bei Unsicherheit die KI ---
+        let vocabTypManual = false;          // Nutzer hat die Wortart selbst gewählt: nichts überschreiben
+        let vocabGrammaticaManual = false;
+        let vocabAutoSetting = false;
+        let wordInfoUnavailable = false;     // KI nicht eingerichtet oder Tageslimit erreicht: in dieser Sitzung nicht weiter fragen
+        let wordInfoTimer = null;
+        const wordInfoCache = new Map();
+        const ITALIAN_NOUNS_ON_RE = new Set(['mare', 'altare', 'collare', 'cantare', 'pare']);
+        const ARTICLE_GENDER = { il: 'm-sg', lo: 'm-sg', un: 'm-sg', uno: 'm-sg', la: 'f-sg', una: 'f-sg', i: 'm-pl', gli: 'm-pl', le: 'f-pl' };
+
+        // Liefert { typ, grammatica? } oder null, wenn die Regeln nicht sicher genug sind
+        function guessWordInfoByRules(foreignWord) {
+            const w = foreignWord.trim().toLowerCase();
+            if (!w) return null;
+            if (CURRENT_LANG === 'en') return /^to\s+\S+$/.test(w) ? { typ: 'Verb' } : null;
+            const withArticle = /^(il|lo|la|i|gli|le|un|uno|una)\s+(\S.*)$/.exec(w);
+            if (withArticle) return { typ: 'Substantiv', grammatica: ARTICLE_GENDER[withArticle[1]] };
+            const apostrophe = /^l['’]\s*(\S.*)$/.exec(w);
+            if (apostrophe) return { typ: 'Substantiv', grammatica: autoDetectGrammatica(apostrophe[1]) };
+            if (/^[a-zàèéìòù]+(are|ere|ire|arsi|ersi|irsi)$/.test(w) && w.length >= 5 && !/iere$/.test(w) && !ITALIAN_NOUNS_ON_RE.has(w)) return { typ: 'Verb' };
+            return null;
+        }
+
+        function applyWordInfo(info) {
+            vocabAutoSetting = true;
+            try {
+                if (!vocabTypManual) setVocabTypUI(info.typ);
+                if (!vocabGrammaticaManual && CURRENT_LANG === 'it') setVocabGrammaticaUI(info.typ === 'Substantiv' ? (info.grammatica || '') : '');
+            } finally {
+                vocabAutoSetting = false;
+            }
+        }
+
+        async function fetchWordInfoFromAi(foreignWord, germanWord) {
+            const cacheKey = `${CURRENT_LANG}:${foreignWord.toLowerCase()}`;
+            if (wordInfoCache.has(cacheKey)) return wordInfoCache.get(cacheKey);
+            try {
+                const info = await apiFetch('/ai/word-info', { method: 'POST', timeoutMs: 30000, body: JSON.stringify({ word: foreignWord, translation: germanWord || null, language: CURRENT_LANG }) });
+                wordInfoCache.set(cacheKey, info);
+                return info;
+            } catch (err) {
+                if (/nicht aktiviert|Tageslimit|Kein gültiger/.test(err.message)) wordInfoUnavailable = true;
+                return null;
+            }
+        }
+
+        // Regeln sofort, KI erst nach kurzer Pause beim Tippen (spart Aufrufe)
+        function autoFillWordInfo() {
+            clearTimeout(wordInfoTimer);
+            if (vocabTypManual && vocabGrammaticaManual) return;
+            const foreign = (vocabInputLang === CURRENT_LANG ? vocabInput.value : vocabTranslation.value).trim();
+            if (!foreign) return;
+            const byRules = guessWordInfoByRules(foreign);
+            if (byRules) return applyWordInfo(byRules);
+            if (wordInfoUnavailable || foreign.length < 2) return;
+            wordInfoTimer = setTimeout(async () => {
+                const german = (vocabInputLang === 'de' ? vocabInput.value : vocabTranslation.value).trim();
+                const info = await fetchWordInfoFromAi(foreign, german);
+                const stillSame = foreign === (vocabInputLang === CURRENT_LANG ? vocabInput.value : vocabTranslation.value).trim();
+                if (info && stillSame) applyWordInfo(info);
+            }, 1200);
+        }
+
+        // Eigene Auswahl des Nutzers merken (programmatisches Setzen löst keinen Klick auf die Optionen aus)
+        document.querySelectorAll('#vocabTypList .cs-opt').forEach(opt => opt.addEventListener('click', () => { if (!vocabAutoSetting) vocabTypManual = true; }));
+        document.querySelectorAll('#vocabGrammaticaList .cs-opt').forEach(opt => opt.addEventListener('click', () => { if (!vocabAutoSetting) vocabGrammaticaManual = true; }));
+
         function setVocabGrammaticaUI(val) {
             vocabGrammatica.value = val;
             const label = document.querySelector(`#vocabGrammaticaList [data-value="${val}"]`)?.textContent || '-';
@@ -11210,6 +11285,7 @@
             closeVocabModalBtn,
             () => {
                 vocabInput.value = ''; vocabTranslation.value = '';
+                vocabTypManual = false; vocabGrammaticaManual = false;
                 setVocabTypUI('Substantiv');
                 setVocabGrammaticaUI('');
                 vocabEmoji.value = '';
@@ -11378,6 +11454,7 @@
                 vocabAutoTag.classList.add('hidden');
             } finally {
                 checkDuplicate(); // Always check for duplicates after translation attempt
+                autoFillWordInfo(); // Wortart/Geschlecht: Regeln, bei Unsicherheit KI
             }
         }, 500));
 
@@ -12029,6 +12106,7 @@
         const adminAiEnabled = document.getElementById('adminAiEnabled');
         const adminAiLimit = document.getElementById('adminAiLimit');
         const adminAiRate = document.getElementById('adminAiRate');
+        const adminAiLookupLimit = document.getElementById('adminAiLookupLimit');
         const adminAiTestResult = document.getElementById('adminAiTestResult');
 
         // Füllt die Modell-Auswahl; das aktuell gewählte Modell bleibt auch dann auswählbar, wenn es nicht in der Liste steht
@@ -12072,6 +12150,7 @@
             adminAiEnabled.checked = adminAiConfig.enabled;
             adminAiLimit.value = adminAiConfig.dailyLimit;
             adminAiRate.value = adminAiConfig.usdToEur;
+            adminAiLookupLimit.value = adminAiConfig.lookupLimit;
             adminAiTestResult.classList.add('hidden');
             renderAdminAiProvider();
         }
@@ -12094,6 +12173,7 @@
                 enabled: adminAiEnabled.checked,
                 dailyLimit: adminAiLimit.value,
                 usdToEur: adminAiRate.value,
+                lookupLimit: adminAiLookupLimit.value,
                 ...extra
             };
             const key = adminAiKeyInput.value.trim();
@@ -12241,6 +12321,19 @@
         } catch (adminErr) {
             console.warn("Admin initialization failed", adminErr);
         }
+
+        // Tab-Leiste im Admin-Bereich: mit Mausrad/Trackpad und per Wischen verschiebbar, aktiver Tab bleibt sichtbar
+        (function () {
+            const bar = document.getElementById('adminTabBar');
+            if (!bar) return;
+            bar.addEventListener('wheel', (e) => {
+                if (bar.scrollWidth > bar.clientWidth && Math.abs(e.deltaY) > Math.abs(e.deltaX)) { bar.scrollLeft += e.deltaY; e.preventDefault(); }
+            }, { passive: false });
+            bar.addEventListener('click', () => setTimeout(() => {
+                const active = bar.querySelector('.admin-tab-btn.active');
+                if (active) active.scrollIntoView({ inline: 'nearest', block: 'nearest' });
+            }, 0));
+        })();
 
         function switchAdminTab(tabName) {
             const userTab = document.getElementById('adminUserTabContent');

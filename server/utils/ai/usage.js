@@ -35,15 +35,23 @@ async function remainingToday(user, dailyLimit) {
     return Math.max(0, dailyLimit - (usage ? usage.count : 0));
 }
 
-async function addUsage(userId, sentences, usage) {
+async function addUsage(userId, sentences, usage, lookups = 0) {
     const [row] = await AiUsage.findOrCreate({ where: { UserId: userId, day: today() }, defaults: { count: 0 } });
     await row.increment({
         count: sentences,
         calls: 1,
+        lookups,
         inputTokens: usage.input,
         outputTokens: usage.output,
         costUsd: usage.costUsd || 0
     });
 }
 
-module.exports = { MAX_COUNT, DEFAULT_PREFS, parsePrefs, prefsForLanguage, remainingToday, addUsage };
+// Verbleibende KI-Wortinfo-Abfragen heute; Admins unbegrenzt (null)
+async function remainingLookups(user, lookupLimit) {
+    if (user.isAdmin) return null;
+    const row = await AiUsage.findOne({ where: { UserId: user.id, day: today() } });
+    return Math.max(0, lookupLimit - (row ? row.lookups : 0));
+}
+
+module.exports = { remainingLookups, MAX_COUNT, DEFAULT_PREFS, parsePrefs, prefsForLanguage, remainingToday, addUsage };

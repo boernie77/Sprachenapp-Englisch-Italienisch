@@ -13,6 +13,7 @@ const DEFAULTS = {
     enabled: false,
     dailyLimit: 50,
     models: Object.fromEntries(Object.entries(PROVIDERS).map(([id, p]) => [id, p.defaultModel])),
+    lookupLimit: 200, // KI-Wortinfo-Abfragen (Wortart/Geschlecht) pro Nutzer und Tag, Admins unbegrenzt
     usdToEur: 0.86, // Umrechnung für die Kostenanzeige im Admin-Bereich
     keys: {} // provider -> verschlüsselter Schlüssel
 };
@@ -55,7 +56,7 @@ function publicConfig(config) {
             keyHint: plain ? `••••${plain.slice(-4)}` : null
         };
     }
-    return { provider: config.provider, enabled: config.enabled, dailyLimit: config.dailyLimit, usdToEur: config.usdToEur, providers };
+    return { provider: config.provider, enabled: config.enabled, dailyLimit: config.dailyLimit, lookupLimit: config.lookupLimit, usdToEur: config.usdToEur, providers };
 }
 
 function getProvider(id) {
@@ -166,4 +167,34 @@ async function generateSentences({ word, translation, language, levels, categori
     return { sentences, usage: { input: usage.input, output: usage.output, costUsd: costUsd(model, usage.input, usage.output) } };
 }
 
-module.exports = { loadConfig, saveConfig, publicConfig, getApiKey, getProvider, generateSentences, encrypt, AiError, PROVIDERS };
+const LOOKUP_SYSTEM = 'Du bestimmst für eine Vokabel-App die Wortart und bei italienischen Substantiven das grammatische Geschlecht samt Zahl. Antworte ausschließlich nach dem Schema.';
+
+const lookupSchema = {
+    type: 'object',
+    properties: {
+        typ: { type: 'string', enum: ['Substantiv', 'Verb', 'Adjektiv', 'Sonstiges'] },
+        gender: { type: 'string', enum: ['m-sg', 'f-sg', 'm-pl', 'f-pl', 'none'] }
+    },
+    required: ['typ', 'gender'],
+    additionalProperties: false
+};
+
+// Wortart (und bei italienischen Substantiven Geschlecht) eines einzelnen Worts
+async function lookupWord({ word, translation, language }) {
+    const config = await loadConfig();
+    if (!config.enabled) throw new AiError('Die KI-Funktion ist nicht aktiviert', 409);
+    const provider = getProvider(config.provider);
+    const apiKey = getApiKey(config, config.provider);
+    if (!apiKey) throw new AiError('Kein gültiger API-Schlüssel hinterlegt', 503);
+    const model = config.models[config.provider];
+    const { data, usage } = await provider.generateJson({
+        apiKey, model, system: LOOKUP_SYSTEM,
+        prompt: `Sprache: ${LANGUAGE_NAMES[language]}\nWort: ${word}${translation ? `\nDeutsche Bedeutung: ${translation}` : ''}\n\nBestimme die Wortart (Substantiv, Verb, Adjektiv oder Sonstiges). "gender" ist bei italienischen Substantiven m-sg (männlich Einzahl), f-sg, m-pl oder f-pl, sonst none.`,
+        schema: lookupSchema
+    });
+    const typ = ['Substantiv', 'Verb', 'Adjektiv', 'Sonstiges'].includes(data && data.typ) ? data.typ : 'Sonstiges';
+    const gender = language === 'it' && typ === 'Substantiv' && ['m-sg', 'f-sg', 'm-pl', 'f-pl'].includes(data.gender) ? data.gender : '';
+    return { info: { typ, grammatica: gender }, usage: { input: usage.input, output: usage.output, costUsd: costUsd(model, usage.input, usage.output) } };
+}
+
+module.exports = { lookupWord, loadConfig, saveConfig, publicConfig, getApiKey, getProvider, generateSentences, encrypt, AiError, PROVIDERS };

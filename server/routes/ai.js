@@ -1,9 +1,9 @@
 const express = require('express');
 const { User } = require('../models');
 const { authenticateToken, asyncHandler } = require('../middleware/auth');
-const { loadConfig, generateSentences, PROVIDERS } = require('../utils/ai');
+const { loadConfig, generateSentences, lookupWord, PROVIDERS } = require('../utils/ai');
 const { LEVELS, NEW_CATEGORIES, getCategories, isSupportedLanguage } = require('../utils/ai/grammar');
-const { MAX_COUNT, parsePrefs, prefsForLanguage, remainingToday, addUsage } = require('../utils/ai/usage');
+const { MAX_COUNT, parsePrefs, prefsForLanguage, remainingToday, remainingLookups, addUsage } = require('../utils/ai/usage');
 const auto = require('../utils/ai/autoGenerate');
 const { estimateCall } = require('../utils/ai/estimate');
 
@@ -113,6 +113,23 @@ router.post('/backfill', authenticateToken, asyncHandler(async (req, res) => {
     const status = await workStatus(user, language);
     auto.requestBackfill(user.id, language);
     res.json({ words: status.backfillWords });
+}));
+
+// Wortart und Geschlecht eines neuen Worts (nur wenn die einfachen Regeln im Frontend nicht ausreichen)
+router.post('/word-info', authenticateToken, asyncHandler(async (req, res) => {
+    const { word, translation, language } = req.body;
+    if (!isSupportedLanguage(language)) return res.status(400).json({ error: 'Sprache nicht unterstützt' });
+    if (typeof word !== 'string' || !word.trim() || word.length > 100) return res.status(400).json({ error: 'Ungültiges Wort' });
+    if (translation != null && (typeof translation !== 'string' || translation.length > 100)) return res.status(400).json({ error: 'Übersetzung zu lang' });
+
+    const [config, user] = await Promise.all([loadConfig(), User.findByPk(req.user.id)]);
+    if (!user) return res.sendStatus(401);
+    const remaining = await remainingLookups(user, config.lookupLimit);
+    if (remaining !== null && remaining < 1) return res.status(429).json({ error: 'Tageslimit für KI-Wortinfo erreicht' });
+
+    const { info, usage } = await lookupWord({ word: word.trim(), translation: translation ? translation.trim() : null, language });
+    await addUsage(user.id, 0, usage, 1);
+    res.json(info);
 }));
 
 router.post('/sentences', authenticateToken, asyncHandler(async (req, res) => {

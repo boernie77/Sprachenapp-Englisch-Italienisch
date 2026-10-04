@@ -237,7 +237,7 @@ router.get('/ai-settings', authenticateToken, requireAdmin, asyncHandler(async (
 }));
 
 router.put('/ai-settings', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
-    const { provider, model, enabled, dailyLimit, apiKey, clearKey, usdToEur } = req.body;
+    const { provider, model, enabled, dailyLimit, lookupLimit, apiKey, clearKey, usdToEur } = req.body;
     const config = await ai.loadConfig();
 
     if (provider !== undefined) {
@@ -255,6 +255,11 @@ router.put('/ai-settings', authenticateToken, requireAdmin, asyncHandler(async (
         const limit = parseInt(dailyLimit, 10);
         if (!Number.isInteger(limit) || limit < 0 || limit > 1000) return res.status(400).json({ error: 'Tageslimit muss zwischen 0 und 1000 liegen' });
         config.dailyLimit = limit;
+    }
+    if (lookupLimit !== undefined) {
+        const limit = parseInt(lookupLimit, 10);
+        if (!Number.isInteger(limit) || limit < 0 || limit > 5000) return res.status(400).json({ error: 'Limit für Wortinfo muss zwischen 0 und 5000 liegen' });
+        config.lookupLimit = limit;
     }
     if (usdToEur !== undefined) {
         const rate = Number(usdToEur);

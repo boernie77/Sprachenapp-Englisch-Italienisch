@@ -135,6 +135,7 @@ const AiUsage = sequelize.define('AiUsage', {
   day: { type: DataTypes.DATEONLY, allowNull: false },
   count: { type: DataTypes.INTEGER, defaultValue: 0 },
   calls: { type: DataTypes.INTEGER, defaultValue: 0 },
+  lookups: { type: DataTypes.INTEGER, defaultValue: 0 }, // KI-Wortinfo-Abfragen (Wortart/Geschlecht) für das Tageslimit
   inputTokens: { type: DataTypes.BIGINT, defaultValue: 0 },
   outputTokens: { type: DataTypes.BIGINT, defaultValue: 0 },
   costUsd: { type: DataTypes.DOUBLE, defaultValue: 0 } // nur Modelle mit bekanntem Preis
