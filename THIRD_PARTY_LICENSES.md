@@ -155,5 +155,6 @@ Erzeugt mit `license-checker` aus `server/package.json`. Alle Lizenzen sind frei
 - SheetJS Community Edition (Apache-2.0) – `server/public/vendor/xlsx.full.min.js`
 - DragDropTouch (MIT) – `server/public/vendor/DragDropTouch.js`
 - Capacitor (MIT) – iOS/Android-Hülle
+- @capacitor-community/text-to-speech 8.x (MIT) – native Sprachausgabe (Android; iOS optional), Quellen: https://github.com/capacitor-community/text-to-speech
 - Inter (SIL OFL 1.1) – `server/public/fonts/`
 - OpenMoji (CC BY-SA 4.0) – `server/public/openmoji/`
