@@ -1231,6 +1231,24 @@
     const verifiedLang = (lang) => (lang === 'en' || lang === 'es' ? lang : 'it');
     api.setVerifiedForms = (lang, map) => { verified[verifiedLang(lang)] = map || {}; };
     api.getVerified = (lang, infinitive) => (verified[verifiedLang(lang)] || {})[String(infinitive || '').toLowerCase().trim()] || null;
+    // Alle einwortigen Verbformen eines spanischen Verbs (für die Rückwärtssuche Form -> Grundform im Grammatikmodus)
+    api.spanishForms = (infinitive) => {
+        const bare = String(infinitive || '').toLowerCase().trim().replace(/(ar|er|ir|ír)se$/, m => m.slice(0, -2));
+        const conj = conjugateSpanish(bare);
+        if (!conj) return [];
+        const out = new Set();
+        conj.tenses.forEach(t => {
+            if (t.id === 'perfecto' || t.id === 'gerundio') return;
+            t.forms.forEach(f => {
+                if (!f) return;
+                const w = String(f).toLowerCase().replace(/^(que|no) /, '');
+                if (!/\s/.test(w)) out.add(w);
+            });
+        });
+        if (conj.participio) out.add(conj.participio);
+        if (conj.gerundio) out.add(conj.gerundio);
+        return [...out];
+    };
     api.esArticle = esArticle;
     api.esGuessGender = esGuessGender;
     api.normalizeAnswer = normalizeAnswer;
