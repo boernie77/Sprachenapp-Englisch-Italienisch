@@ -35,6 +35,7 @@
     <script src="app-config.js"></script>
     <script src="app-config.local.js" onerror="this.remove()"></script>
     <script src="grammar-help.js"></script>
+    <script src="tts.js"></script>
 
     <style>
         body {
@@ -528,7 +529,7 @@
             }
 
             #vocabModal .bg-white,
-            #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
+            #ttsModal .bg-white, #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
             #conjugationModal .bg-white,
             #sentenceModal .bg-white,
             #vocabListModal .bg-white,
@@ -574,7 +575,7 @@
             #statsModal,
             #sentenceModal,
             #vocabModal,
-            #aiSentenceModal, #wordSentencesModal,
+            #ttsModal, #aiSentenceModal, #wordSentencesModal,
             #conjugationModal,
             #vocabListModal,
             #sentenceListModal,
@@ -601,7 +602,7 @@
             #statsModal .bg-white,
             #sentenceModal .bg-white,
             #vocabModal .bg-white,
-            #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
+            #ttsModal .bg-white, #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
             #conjugationModal .bg-white,
             #vocabListModal .bg-white,
             #sentenceListModal .bg-white,
@@ -794,7 +795,7 @@
             #vocabListModal .bg-white, #sentenceListModal .bg-white,
             #sentenceModal .bg-white,
             #vocabModal .bg-white,
-            #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
+            #ttsModal .bg-white, #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
             #conjugationModal .bg-white {
                 box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             }
@@ -802,7 +803,7 @@
             #vocabListModal, #sentenceListModal,
             #sentenceModal,
             #vocabModal,
-            #aiSentenceModal, #wordSentencesModal,
+            #ttsModal, #aiSentenceModal, #wordSentencesModal,
             #conjugationModal {
                 backdrop-filter: blur(8px);
                 -webkit-backdrop-filter: blur(8px);
@@ -811,7 +812,7 @@
             #vocabListModal .bg-white, #sentenceListModal .bg-white,
             #sentenceModal .bg-white,
             #vocabModal .bg-white,
-            #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
+            #ttsModal .bg-white, #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
             #conjugationModal .bg-white {
                 animation: modalSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             }
@@ -819,10 +820,10 @@
             #vocabListModal input, #sentenceListModal input,
             #vocabListModal select, #sentenceListModal select,
             #vocabModal input,
-            #aiSentenceModal input, #wordSentencesModal input,
+            #ttsModal input, #aiSentenceModal input, #wordSentencesModal input,
             #conjugationModal input,
             #vocabModal select,
-            #aiSentenceModal select, #wordSentencesModal select,
+            #ttsModal select, #aiSentenceModal select, #wordSentencesModal select,
             #conjugationModal select {
                 font-family: 'DM Sans', sans-serif;
             }
@@ -834,16 +835,16 @@
             #vocabListModal p, #sentenceListModal p,
             #vocabListModal span, #sentenceListModal span,
             #vocabModal label,
-            #aiSentenceModal label, #wordSentencesModal label,
+            #ttsModal label, #aiSentenceModal label, #wordSentencesModal label,
             #conjugationModal label,
             #vocabModal h2,
-            #aiSentenceModal h2, #wordSentencesModal h2,
+            #ttsModal h2, #aiSentenceModal h2, #wordSentencesModal h2,
             #conjugationModal h2,
             #vocabModal p,
-            #aiSentenceModal p, #wordSentencesModal p,
+            #ttsModal p, #aiSentenceModal p, #wordSentencesModal p,
             #conjugationModal p,
             #vocabModal span,
-            #aiSentenceModal span, #wordSentencesModal span,
+            #ttsModal span, #aiSentenceModal span, #wordSentencesModal span,
             #conjugationModal span {
                 letter-spacing: -0.01em;
             }
@@ -1026,13 +1027,13 @@
 
             /* Final Contrast Fixes for Inputs and Tables */
             #vocabModal input,
-            #aiSentenceModal input, #wordSentencesModal input,
+            #ttsModal input, #aiSentenceModal input, #wordSentencesModal input,
             #conjugationModal input,
             #vocabModal select,
-            #aiSentenceModal select, #wordSentencesModal select,
+            #ttsModal select, #aiSentenceModal select, #wordSentencesModal select,
             #conjugationModal select,
             #vocabModal textarea,
-            #aiSentenceModal textarea, #wordSentencesModal textarea,
+            #ttsModal textarea, #aiSentenceModal textarea, #wordSentencesModal textarea,
             #conjugationModal textarea,
             #vocabListModal input,
             #vocabListModal select,
@@ -1049,10 +1050,10 @@
             }
 
             #vocabModal label,
-            #aiSentenceModal label, #wordSentencesModal label,
+            #ttsModal label, #aiSentenceModal label, #wordSentencesModal label,
             #conjugationModal label,
             #vocabModal h2,
-            #aiSentenceModal h2, #wordSentencesModal h2,
+            #ttsModal h2, #aiSentenceModal h2, #wordSentencesModal h2,
             #conjugationModal h2,
             #vocabListModal label,
             #vocabListModal h2,
@@ -1138,10 +1139,10 @@
             #sentenceListModal .cs-btn,
             #sentenceListModal .cs-list,
             #vocabModal .cs-btn,
-            #aiSentenceModal .cs-btn, #wordSentencesModal .cs-btn,
+            #ttsModal .cs-btn, #aiSentenceModal .cs-btn, #wordSentencesModal .cs-btn,
             #conjugationModal .cs-btn,
             #vocabModal .cs-list,
-            #aiSentenceModal .cs-list, #wordSentencesModal .cs-list,
+            #ttsModal .cs-list, #aiSentenceModal .cs-list, #wordSentencesModal .cs-list,
             #conjugationModal .cs-list,
             #editVocabModal .cs-btn,
             #editVocabModal .cs-list,
@@ -1155,7 +1156,7 @@
             #vocabListModal .cs-opt,
             #sentenceListModal .cs-opt,
             #vocabModal .cs-opt,
-            #aiSentenceModal .cs-opt, #wordSentencesModal .cs-opt,
+            #ttsModal .cs-opt, #aiSentenceModal .cs-opt, #wordSentencesModal .cs-opt,
             #conjugationModal .cs-opt,
             #editVocabModal .cs-opt,
             #editSentenceModal .cs-opt {
@@ -1166,7 +1167,7 @@
             #vocabListModal .cs-opt:hover,
             #sentenceListModal .cs-opt:hover,
             #vocabModal .cs-opt:hover,
-            #aiSentenceModal .cs-opt:hover, #wordSentencesModal .cs-opt:hover,
+            #ttsModal .cs-opt:hover, #aiSentenceModal .cs-opt:hover, #wordSentencesModal .cs-opt:hover,
             #conjugationModal .cs-opt:hover,
             #editVocabModal .cs-opt:hover,
             #editSentenceModal .cs-opt:hover {
@@ -1176,7 +1177,7 @@
             #vocabListModal .cs-opt.selected,
             #sentenceListModal .cs-opt.selected,
             #vocabModal .cs-opt.selected,
-            #aiSentenceModal .cs-opt.selected, #wordSentencesModal .cs-opt.selected,
+            #ttsModal .cs-opt.selected, #aiSentenceModal .cs-opt.selected, #wordSentencesModal .cs-opt.selected,
             #conjugationModal .cs-opt.selected,
             #editVocabModal .cs-opt.selected,
             #editSentenceModal .cs-opt.selected {
@@ -1187,7 +1188,7 @@
             #vocabListModal .cs-chevron,
             #sentenceListModal .cs-chevron,
             #vocabModal .cs-chevron,
-            #aiSentenceModal .cs-chevron, #wordSentencesModal .cs-chevron,
+            #ttsModal .cs-chevron, #aiSentenceModal .cs-chevron, #wordSentencesModal .cs-chevron,
             #conjugationModal .cs-chevron,
             #editVocabModal .cs-chevron,
             #editSentenceModal .cs-chevron {
@@ -1198,7 +1199,7 @@
             #vocabListModal input,
             #sentenceListModal input,
             #vocabModal input,
-            #aiSentenceModal input, #wordSentencesModal input,
+            #ttsModal input, #aiSentenceModal input, #wordSentencesModal input,
             #conjugationModal input,
             #editVocabModal input,
             #editSentenceModal input,
@@ -1212,7 +1213,7 @@
             #vocabListModal input::placeholder,
             #sentenceListModal input::placeholder,
             #vocabModal input::placeholder,
-            #aiSentenceModal input::placeholder, #wordSentencesModal input::placeholder,
+            #ttsModal input::placeholder, #aiSentenceModal input::placeholder, #wordSentencesModal input::placeholder,
             #conjugationModal input::placeholder,
             #editVocabModal input::placeholder,
             #editSentenceModal input::placeholder {
@@ -1560,7 +1561,7 @@
             div[id$="Modal"], 
             #authOverlay,
             #vocabModal,
-            #aiSentenceModal, #wordSentencesModal,
+            #ttsModal, #aiSentenceModal, #wordSentencesModal,
             #conjugationModal,
             #statsModal,
             #excelModal {
@@ -1765,6 +1766,33 @@
     @media (max-width: 1024px) { #adminModal .admin-card { background: rgba(255,255,255,0.04) !important; border: 1px solid rgba(255,255,255,0.1) !important; } }
     #adminAiTabContent .overflow-x-auto { max-width: 100%; }
     #adminAiTabContent input[type="number"] { max-width: 100%; }
+    /* Sprachausgabe: Lautsprecher-Knöpfe und Schalter */
+    .tts-btn { display: inline-flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; flex-shrink: 0; border-radius: 9999px; border: 0; background: transparent; color: #2563eb; cursor: pointer; transition: background-color .15s, color .15s; -webkit-tap-highlight-color: transparent; }
+    .tts-btn:hover { background: rgba(37, 99, 235, 0.12); }
+    .tts-btn.speaking { background: #2563eb; color: #fff; }
+    .tts-btn.tts-btn-sm { width: 1.75rem; height: 1.75rem; }
+    .tts-btn.tts-btn-sm svg { width: 16px; height: 16px; }
+    .tts-btn:focus-visible, .tts-switch:focus-visible, #ttsModal select:focus-visible, #ttsModal input[type="range"]:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+    html.tts-off .tts-btn { display: none; }
+    .tts-switch { position: relative; width: 2.75rem; height: 1.5rem; flex-shrink: 0; border-radius: 9999px; border: 0; background: #cbd5e1; cursor: pointer; transition: background-color .15s; }
+    .tts-switch .tts-knob { position: absolute; top: 2px; left: 2px; width: 1.25rem; height: 1.25rem; border-radius: 9999px; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.3); transition: transform .15s; }
+    .tts-switch[aria-pressed="true"] { background: #2563eb; }
+    .tts-switch[aria-pressed="true"] .tts-knob { transform: translateX(1.25rem); }
+    .tts-source-btn { border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 0.6rem 0.75rem; text-align: left; background: #fff; cursor: pointer; flex: 1 1 10rem; min-width: 0; }
+    .tts-source-btn[aria-pressed="true"] { border-color: #2563eb; box-shadow: inset 0 0 0 1px #2563eb; }
+    .tts-source-btn:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+    @media (max-width: 1024px) {
+        .tts-btn { color: #93c5fd; }
+        .tts-btn:hover { background: rgba(147, 197, 253, 0.18); }
+        .tts-btn.speaking { background: #2563eb; color: #fff; }
+        .tts-switch { background: #475569; }
+        .tts-switch[aria-pressed="true"] { background: #3b82f6; }
+        .tts-source-btn { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2); color: #f1f5f9; }
+        .tts-source-btn[aria-pressed="true"] { border-color: #60a5fa; box-shadow: inset 0 0 0 1px #60a5fa; }
+        #ttsModal select, #ttsModal option { background-color: #0f172a; color: #f1f5f9; border-color: rgba(255,255,255,0.2); }
+        #ttsModal .text-slate-400 { color: #cbd5e1 !important; }
+        #ttsModal input[type="range"] { accent-color: #60a5fa; }
+    }
 </style>
 </head>
 
@@ -1897,6 +1925,7 @@
                         <li><a href="https://sheetjs.com" target="_blank" rel="noopener" class="text-blue-600 hover:underline">SheetJS Community Edition</a> – Apache-2.0</li>
                         <li><a href="https://github.com/Bernardo-Castilho/dragdroptouch" target="_blank" rel="noopener" class="text-blue-600 hover:underline">DragDropTouch</a> – MIT</li>
                         <li><a href="https://capacitorjs.com" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Capacitor</a> – MIT</li>
+                        <li><a href="https://github.com/capacitor-community/text-to-speech" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Capacitor Text-to-Speech</a> – MIT</li>
                         <li><a href="https://rsms.me/inter/" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Inter</a> <span data-i18n="imp_font">(Schrift)</span> – SIL Open Font License 1.1</li>
                         <li data-i18n="imp_license_server">Server: Express, Sequelize, PostgreSQL-Treiber u. a. – MIT, ISC, BSD, Apache-2.0 (Liste im Quellcode: THIRD_PARTY_LICENSES.md)</li>
                     </ul>
@@ -1905,13 +1934,13 @@
                         Lizenz: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"
                             class="text-blue-600 hover:underline">CC BY-SA 4.0</a>
                     </p>
-                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.27</p>
+                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.28</p>
                     <p class="text-[10px] text-slate-400" data-i18n="imp_rights">© 2026 Christian Bernauer – Apache License 2.0</p>
                 </div>
             </div>
             <!-- App-Style Bottom Section -->
             <div class="mt-8 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.27</p>
+                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.28</p>
             </div>
         </div>
     </div>
@@ -2177,11 +2206,11 @@
             <div class="w-16 h-16 shrink-0 bg-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
                 <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3"><span data-i18n="version_modal_pre">Version</span> 2.2.27 <span data-i18n="version_modal_post">ist da!</span> <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
+            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3"><span data-i18n="version_modal_pre">Version</span> 2.2.28 <span data-i18n="version_modal_post">ist da!</span> <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
             <div class="text-left space-y-3 mb-6 overflow-y-auto min-h-0 flex-1 pr-1">
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
-                    <p class="text-slate-600 font-medium leading-tight text-sm" data-i18n="version_news_1">Korrigiert: Die englische Oberfläche ist jetzt vollständig englisch (Serie-Fenster, Meldungen, Platzhalter, Admin-Bereich, Grammatik-Erklärungen)</p>
+                    <p class="text-slate-600 font-medium leading-tight text-sm" data-i18n="version_news_1">Neu: Sprachausgabe – Wörter und Sätze lassen sich vorlesen (Menü > Sprachausgabe)</p>
                 </div>
                 
                 <p class="text-slate-500 text-[10px] italic text-center mt-4 px-4 leading-normal" data-i18n="version_modal_footer">
@@ -2205,7 +2234,7 @@
             </div>
             <h3 class="text-xl font-bold text-slate-800 mb-2" data-i18n="example_sentence_title">Beispielsatz</h3>
             <div id="exampleSentenceBox" class="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-6 text-left">
-                <p id="exampleSentenceForeign" class="text-lg font-bold text-blue-700 mb-2 leading-tight"></p>
+                <div class="flex items-start gap-2 mb-2"><p id="exampleSentenceForeign" class="flex-1 min-w-0 text-lg font-bold text-blue-700 leading-tight"></p><span id="exampleSpeakSlot" class="shrink-0"></span></div>
                 <p id="exampleSentenceGerman" class="text-sm text-slate-600 italic"></p>
             </div>
             <button id="closeExampleSentenceBtn" class="w-full py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl shadow-md transition-all active:scale-95" data-i18n="btn_ok">OK</button>
@@ -2281,6 +2310,8 @@
                     class="block w-full text-left px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100"><span data-i18n="menu_manage_excel">Excel-Liste verwalten</span></button>
                 <button id="openAiPrefsBtn"
                     class="block w-full text-left px-4 py-2 text-sm font-medium text-purple-700 hover:bg-purple-50 border-b border-slate-100"><span data-i18n="menu_ai_prefs">✨ KI-Beispielsätze</span></button>
+                <button id="openTtsBtn"
+                    class="block w-full text-left px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100"><span data-i18n="menu_tts">Sprachausgabe</span></button>
                 <button id="openAdminDashboardBtn"
                     class="hidden w-full text-left px-4 py-2 text-sm font-medium text-purple-600 hover:bg-purple-50 border-b border-slate-100"><span data-i18n="menu_admin_dashboard">Admin Dashboard</span></button>
                 <button id="openContactModalBtn"
@@ -2326,7 +2357,7 @@
                 </div>
                 <div class="px-4 py-1.5 text-[10px] text-slate-400 bg-slate-50/50 flex items-center justify-between border-t border-slate-100/50">
                     <span data-i18n="app_version_label">App-Version:</span>
-                    <span class="font-mono font-medium text-slate-500">2.2.27</span>
+                    <span class="font-mono font-medium text-slate-500">2.2.28</span>
                 </div>
                 </div>
                 <input type="file" id="excelUploadEl" accept=".xlsx, .xls" class="hidden">
@@ -2602,6 +2633,7 @@
             <div
                 class="bg-white p-6 md:p-12 rounded-3xl shadow-sm border border-slate-200 w-full text-center flex flex-col items-center justify-center flex-shrink-0 cursor-pointer hover:bg-slate-50 transition-colors relative"
                 id="cardsFlashcard">
+                <div id="cardsSpeakSlot" class="absolute top-2 left-2 md:top-4 md:left-4"></div>
                 <div class="absolute top-2 right-2 md:top-4 md:right-4 flex items-center gap-3">
                     <svg id="cardsStarIcon" class="star-icon w-6 h-6 md:w-8 md:h-8" 
                          onclick="event.stopPropagation(); toggleMark(currentFlashcardTarget.id, this)" 
@@ -2650,6 +2682,7 @@
             <div id="quizOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full flex-shrink-0"></div>
             <div id="quizFeedback"
                 class="hidden flex-col items-center gap-2 w-full mt-2 p-3 bg-white rounded-xl shadow-sm border border-slate-100 flex-shrink-0">
+                <div id="quizSpeakSlot" class="flex justify-center"></div>
                 <button id="quizNextBtn"
                     class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors shadow-md active:transform active:scale-95 text-sm md:text-base flex items-center gap-2 mx-auto">
                     <span data-i18n="quiz_new_word">Neues Wort spielen</span> <span class="vocab-btn-arrow"></span>
@@ -2676,6 +2709,7 @@
                     </div>
                     <div class="text-slate-500 text-center text-sm md:text-base"><span data-i18n="solution_label">Lösung:</span> <span id="writeFeedbackCorrect"
                             class="font-bold text-slate-700"></span></div>
+                    <div id="writeSpeakSlot" class="mt-2 flex justify-center"></div>
                 </div>
             </div>
             <div class="w-full relative mt-4">
@@ -2704,6 +2738,7 @@
                 </div>
 
                 <div id="grammarFeedback" class="hidden w-full mt-6 p-4 rounded-xl text-center font-bold"></div>
+                <div id="grammarSpeakSlot" class="mt-2 flex justify-center"></div>
 
                 <div id="grammarHelpBox" class="hidden w-full mt-4 p-4 rounded-xl bg-indigo-50 border border-indigo-100 text-left text-sm text-slate-700 space-y-3"></div>
 
@@ -5655,6 +5690,87 @@
         </div>
     </div>
 
+    <!-- Sprachausgabe (Einstellungen) -->
+    <div id="ttsModal"
+        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4" role="dialog" aria-modal="true" aria-labelledby="ttsModalTitle">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-xl w-full shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="flex justify-between items-center mb-4 shrink-0">
+                <h2 id="ttsModalTitle" class="text-xl font-bold text-slate-800" data-i18n="tts_title">Sprachausgabe</h2>
+                <button id="closeTtsModalBtn" type="button" aria-label="Close" class="text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
+            </div>
+            <div class="overflow-y-auto pr-1 flex-1 min-h-0">
+                <p class="text-xs text-slate-500 mb-4" data-i18n="tts_intro"></p>
+                <p id="ttsNoEngine" class="hidden text-xs font-semibold text-red-600 mb-3" data-i18n="tts_no_engine"></p>
+                <div class="flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100 mb-3">
+                    <label for="ttsEnabledBtn" class="min-w-0 flex-1 cursor-pointer">
+                        <span class="block text-sm font-semibold text-slate-800" data-i18n="tts_enabled"></span>
+                    </label>
+                    <button type="button" id="ttsEnabledBtn" role="switch" aria-pressed="false" class="tts-switch"><span class="tts-knob"></span></button>
+                </div>
+                <div class="flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100 mb-3">
+                    <label for="ttsAutoBtn" class="min-w-0 flex-1 cursor-pointer">
+                        <span class="block text-sm font-semibold text-slate-800" data-i18n="tts_auto"></span>
+                        <span class="block text-[11px] text-slate-400 mt-0.5" data-i18n="tts_auto_hint"></span>
+                    </label>
+                    <button type="button" id="ttsAutoBtn" role="switch" aria-pressed="false" class="tts-switch"><span class="tts-knob"></span></button>
+                </div>
+                <div class="flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100 mb-3">
+                    <label for="ttsSpeakDeBtn" class="min-w-0 flex-1 cursor-pointer">
+                        <span class="block text-sm font-semibold text-slate-800" data-i18n="tts_speak_de"></span>
+                        <span class="block text-[11px] text-slate-400 mt-0.5" data-i18n="tts_speak_de_hint"></span>
+                    </label>
+                    <button type="button" id="ttsSpeakDeBtn" role="switch" aria-pressed="false" class="tts-switch"><span class="tts-knob"></span></button>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 mb-3">
+                    <div class="flex items-center justify-between gap-3 mb-1">
+                        <label for="ttsRate" class="text-sm font-semibold text-slate-800" data-i18n="tts_rate">Tempo</label>
+                        <span id="ttsRateValue" class="text-xs font-mono text-slate-500"></span>
+                    </div>
+                    <input id="ttsRate" type="range" min="0.6" max="1.2" step="0.05" value="0.9" class="w-full accent-blue-600">
+                </div>
+                <div id="ttsSourceBox" class="hidden mb-3">
+                    <p class="text-xs font-semibold text-slate-700 mb-1.5" id="ttsSourceTitle" data-i18n="tts_source">Stimmenquelle</p>
+                    <div class="flex flex-wrap gap-2" role="group" aria-labelledby="ttsSourceTitle">
+                        <button type="button" id="ttsSourceDevice" class="tts-source-btn" aria-pressed="true"><span class="block text-sm font-bold text-slate-800" data-i18n="tts_source_device"></span><span class="block text-[11px] text-slate-500" data-i18n="tts_source_device_hint"></span></button>
+                        <button type="button" id="ttsSourceCloud" class="tts-source-btn" aria-pressed="false"><span class="block text-sm font-bold text-slate-800" data-i18n="tts_source_cloud"></span><span class="block text-[11px] text-slate-500" data-i18n="tts_source_cloud_hint"></span></button>
+                    </div>
+                </div>
+                <div id="ttsVoicesBox" class="mb-3">
+                    <div class="mb-2">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1" for="ttsVoice_it" id="ttsVoiceLabel_it"></label>
+                        <div class="flex gap-2">
+                            <select id="ttsVoice_it" autocomplete="off" data-lang="it" class="flex-1 min-w-0 bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-800 outline-none focus:border-blue-400"></select>
+                            <button type="button" data-tts-test="it" class="shrink-0 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl border border-slate-200 text-xs font-bold" data-i18n="tts_test">Testen</button>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1" for="ttsVoice_en" id="ttsVoiceLabel_en"></label>
+                        <div class="flex gap-2">
+                            <select id="ttsVoice_en" autocomplete="off" data-lang="en" class="flex-1 min-w-0 bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-800 outline-none focus:border-blue-400"></select>
+                            <button type="button" data-tts-test="en" class="shrink-0 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl border border-slate-200 text-xs font-bold" data-i18n="tts_test">Testen</button>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1" for="ttsVoice_es" id="ttsVoiceLabel_es"></label>
+                        <div class="flex gap-2">
+                            <select id="ttsVoice_es" autocomplete="off" data-lang="es" class="flex-1 min-w-0 bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-800 outline-none focus:border-blue-400"></select>
+                            <button type="button" data-tts-test="es" class="shrink-0 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl border border-slate-200 text-xs font-bold" data-i18n="tts_test">Testen</button>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1" for="ttsVoice_de" id="ttsVoiceLabel_de"></label>
+                        <div class="flex gap-2">
+                            <select id="ttsVoice_de" autocomplete="off" data-lang="de" class="flex-1 min-w-0 bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-800 outline-none focus:border-blue-400"></select>
+                            <button type="button" data-tts-test="de" class="shrink-0 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl border border-slate-200 text-xs font-bold" data-i18n="tts_test">Testen</button>
+                        </div>
+                    </div>
+                </div>
+                <p id="ttsPlatformHint" class="text-[11px] text-slate-500 mb-1"></p>
+                <p id="ttsDownloadHint" class="text-[11px] text-slate-500"></p>
+            </div>
+        </div>
+    </div>
+
     <!-- Sätze zu einem Wort (Modal, aus dem Grammatik-Modus) -->
     <div id="wordSentencesModal"
         class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
@@ -6060,6 +6176,46 @@
                     </div>
                     <p id="adminAiTestResult" class="text-xs hidden"></p>
                     </div>
+                <div class="admin-card mt-4 space-y-4">
+                    <h3 class="text-sm font-bold text-slate-700" data-i18n="admin_tts_title">Cloudstimme (Sprachausgabe)</h3>
+                    <p class="text-xs text-slate-500" data-i18n="admin_tts_desc"></p>
+                    <label class="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                        <input type="checkbox" id="adminTtsEnabled" class="w-4 h-4">
+                        <span data-i18n="admin_tts_enabled">Cloudstimme für Nutzer anbieten</span>
+                    </label>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="adminTtsProvider" data-i18n="admin_tts_provider">Anbieter</label>
+                        <select id="adminTtsProvider" autocomplete="off" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400"></select>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-700 mb-1.5" data-i18n="admin_tts_voices">Stimmen je Sprache</p>
+                        <div class="flex items-center gap-2 mb-1.5"><label class="w-16 shrink-0 text-xs font-semibold text-slate-600" for="adminTtsVoice_it">IT</label><input id="adminTtsVoice_it" type="text" autocomplete="off" spellcheck="false" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400"></div>
+                        <div class="flex items-center gap-2 mb-1.5"><label class="w-16 shrink-0 text-xs font-semibold text-slate-600" for="adminTtsVoice_en">EN</label><input id="adminTtsVoice_en" type="text" autocomplete="off" spellcheck="false" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400"></div>
+                        <div class="flex items-center gap-2 mb-1.5"><label class="w-16 shrink-0 text-xs font-semibold text-slate-600" for="adminTtsVoice_es">ES</label><input id="adminTtsVoice_es" type="text" autocomplete="off" spellcheck="false" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400"></div>
+                        <div class="flex items-center gap-2 mb-1.5"><label class="w-16 shrink-0 text-xs font-semibold text-slate-600" for="adminTtsVoice_de">DE</label><input id="adminTtsVoice_de" type="text" autocomplete="off" spellcheck="false" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400"></div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="adminTtsKey">
+                            <span data-i18n="admin_ai_key">API-Schlüssel</span>
+                            <span id="adminTtsKeyStatus" class="ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded-full"></span>
+                        </label>
+                        <div class="flex gap-2">
+                            <input id="adminTtsKey" type="password" autocomplete="new-password" placeholder="Neuen Schlüssel eintragen" data-i18n-placeholder="admin_ai_key_placeholder"
+                                class="flex-1 min-w-0 bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
+                            <button type="button" id="adminTtsClearKeyBtn" class="w-10 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl flex items-center justify-center border border-red-100" title="Schlüssel löschen" data-i18n-title="admin_ai_clear_key_title">🗑️</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="adminTtsLimit" data-i18n="admin_tts_limit">Tageslimit pro Nutzer</label>
+                        <input id="adminTtsLimit" type="number" min="0" max="5000" class="w-32 bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
+                    </div>
+                    <p class="text-[11px] text-slate-500" data-i18n="admin_tts_cost"></p>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <button type="button" id="adminTtsSaveBtn" class="flex-1 min-w-[8rem] bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-md" data-i18n="admin_ai_save">Speichern</button>
+                        <button type="button" id="adminTtsTestBtn" class="flex-1 min-w-[8rem] bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-md" data-i18n="admin_ai_test">Verbindung testen</button>
+                    </div>
+                    <p id="adminTtsTestResult" class="text-xs hidden"></p>
+                </div>
                 <div class="admin-card mt-4">
                         <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
                             <h3 class="text-sm font-bold text-slate-700" data-i18n="admin_ai_usage_title">📊 Verbrauch und Kosten</h3>
@@ -7032,9 +7188,9 @@
 
         // Alles, was je Lernsprache anders ist, an einer Stelle (neue Sprache = hier ein Eintrag, plus Server utils/languages.js)
         const LANG_CONFIG = {
-            it: { name: 'Italienisch', nameEn: 'Italian', flag: itFlagSVG, locale: 'it', myMemory: 'it', nameNative: 'Italiano', placeholder: 'mangiare', sentencePlaceholder: 'Bevo volentieri il caffè.', infoId: 'infoContentIt', infoTitle: 'Grammatica Italiana', successLabel: 'Bravissimo!', articles: ['il', 'lo', 'la', 'l', 'i', 'gli', 'le', 'un', 'uno', 'una'] },
-            en: { name: 'Englisch', nameEn: 'English', flag: gbFlagSVG, locale: 'en', myMemory: 'en', nameNative: 'English', placeholder: 'eat', sentencePlaceholder: 'I like drinking coffee.', infoId: 'infoContentEn', infoTitle: 'English Grammar Index', successLabel: 'Well done!', articles: ['to', 'the', 'a', 'an'] },
-            es: { name: 'Spanisch', nameEn: 'Spanish', flag: esFlagSVG, locale: 'es', myMemory: 'es', nameNative: 'Español', placeholder: 'hablar', sentencePlaceholder: 'Bebo café con gusto.', infoId: 'infoContentEs', infoTitle: 'Gramática Española', successLabel: '¡Muy bien!', articles: ['el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas'] }
+            it: { name: 'Italienisch', nameEn: 'Italian', flag: itFlagSVG, locale: 'it', ttsLocale: 'it-IT', myMemory: 'it', nameNative: 'Italiano', placeholder: 'mangiare', sentencePlaceholder: 'Bevo volentieri il caffè.', infoId: 'infoContentIt', infoTitle: 'Grammatica Italiana', successLabel: 'Bravissimo!', articles: ['il', 'lo', 'la', 'l', 'i', 'gli', 'le', 'un', 'uno', 'una'] },
+            en: { name: 'Englisch', nameEn: 'English', flag: gbFlagSVG, locale: 'en', ttsLocale: 'en-GB', myMemory: 'en', nameNative: 'English', placeholder: 'eat', sentencePlaceholder: 'I like drinking coffee.', infoId: 'infoContentEn', infoTitle: 'English Grammar Index', successLabel: 'Well done!', articles: ['to', 'the', 'a', 'an'] },
+            es: { name: 'Spanisch', nameEn: 'Spanish', flag: esFlagSVG, locale: 'es', ttsLocale: 'es-ES', myMemory: 'es', nameNative: 'Español', placeholder: 'hablar', sentencePlaceholder: 'Bebo café con gusto.', infoId: 'infoContentEs', infoTitle: 'Gramática Española', successLabel: '¡Muy bien!', articles: ['el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas'] }
         };
         const langConf = () => LANG_CONFIG[CURRENT_LANG] || LANG_CONFIG.it;
         // Sortiervergleich je Lernsprache (ñ nach n, Akzente ohne eigene Stelle)
@@ -7125,6 +7281,44 @@
 
         const UI_TRANSLATIONS = {
             de: {
+                menu_tts: "Sprachausgabe",
+                tts_title: "Sprachausgabe",
+                tts_intro: "Die App liest Wörter und Sätze in der Lernsprache vor. Tippe dafür auf das Lautsprecher-Symbol.",
+                tts_enabled: "Sprachausgabe einschalten",
+                tts_auto: "Automatisch vorlesen",
+                tts_auto_hint: "Liest nach einer richtigen Antwort, beim Aufdecken einer Karte und nach dem Prüfen von selbst vor.",
+                tts_speak_de: "Deutsch mitsprechen",
+                tts_speak_de_hint: "Spricht nach dem Fremdwort auch die deutsche Übersetzung.",
+                tts_rate: "Tempo",
+                tts_voice_for: "Stimme: {0}",
+                tts_voice_auto: "Automatisch (beste verfügbare)",
+                tts_test: "Testen",
+                tts_source: "Stimmenquelle",
+                tts_source_device: "Gerätestimme",
+                tts_source_device_hint: "Kostenlos, auch offline. Die Qualität hängt vom Gerät ab.",
+                tts_source_cloud: "Cloudstimme",
+                tts_source_cloud_hint: "Natürlichere Stimme vom Server (braucht Internet).",
+                tts_cloud_title: "Cloudstimme einschalten?",
+                tts_cloud_privacy: "Zum Vorlesen werden die Texte (einzelne Wörter und Sätze, ohne Namen oder Konto) an den Anbieter {0} gesendet. Cloudstimme einschalten?",
+                tts_cloud_failed: "Die Cloudstimme ist gerade nicht verfügbar. Es wird die Gerätestimme verwendet.",
+                tts_ios_hint: "iPhone: Die Sprachausgabe folgt dem Klingelschalter. Steht er auf stumm, bleibt sie still.",
+                tts_download_hint_ios: "Bessere Stimmen laden: Einstellungen > Bedienungshilfen > Gesprochene Inhalte > Stimmen.",
+                tts_download_hint_android: "Bessere Stimmen laden: Einstellungen > Sprachausgabe (Text-to-Speech) des Geräts.",
+                tts_download_hint_other: "Bessere Stimmen kannst du in den Spracheinstellungen deines Systems oder Browsers laden.",
+                tts_no_engine: "Auf diesem Gerät ist keine Sprachausgabe verfügbar.",
+                tts_no_voice_ios: "Für {0} ist keine Stimme installiert. Laden: Einstellungen > Bedienungshilfen > Gesprochene Inhalte > Stimmen.",
+                tts_no_voice_android: "Für {0} ist keine Stimme installiert. Laden: Einstellungen > Sprachausgabe des Geräts.",
+                tts_no_voice_other: "Für {0} ist keine Stimme installiert. Bitte lade eine Stimme in den Spracheinstellungen deines Systems.",
+                tts_speak: "Vorlesen",
+                admin_tts_title: "Cloudstimme (Sprachausgabe)",
+                admin_tts_desc: "Optionale, natürlichere Stimme. Erzeugte Audios werden auf dem Server gespeichert und nie ein zweites Mal bezahlt. Der API-Schlüssel wird verschlüsselt gespeichert und nie wieder angezeigt.",
+                admin_tts_enabled: "Cloudstimme für Nutzer anbieten",
+                admin_tts_provider: "Anbieter",
+                admin_tts_voices: "Stimmen je Sprache (Name beim Anbieter)",
+                admin_tts_limit: "Tageslimit pro Nutzer (neue, nicht gespeicherte Aufrufe, Admins unbegrenzt)",
+                admin_tts_cost: "Richtwerte pro 1 Mio. Zeichen: Standard/WaveNet ca. 4 $, Neural2 ca. 16 $, Chirp3-HD bis ca. 30 $; OpenAI tts-1 ca. 15 $. Bitte aktuelle Preise beim Anbieter prüfen. Maximal 300 Zeichen pro Text.",
+                admin_tts_saved: "Cloudstimme gespeichert",
+                version_news_1: "Neu: Sprachausgabe – Wörter und Sätze lassen sich vorlesen (Menü > Sprachausgabe)",
                 err_server_fetch: "Serverfehler beim Abrufen",
                 admin_base_cleared: "{0}-Basisliste geleert.",
                 import_ki_note_replace: "Die Datei enthält {0} KI-Sätze (Spalte Wort): die vorhandenen KI-Sätze werden ebenfalls ersetzt.",
@@ -7280,7 +7474,6 @@
                 streak_keep_going: "Bleibe dran und lerne jeden Tag ein bisschen, um deine Serie zu halten.",
                 version_modal_pre: "Version",
                 version_modal_post: "ist da!",
-                version_news_1: "Korrigiert: Die englische Oberfläche ist jetzt vollständig englisch (Serie-Fenster, Meldungen, Platzhalter, Admin-Bereich, Grammatik-Erklärungen)",
                 version_modal_footer: "Viel Spaß beim Lernen! Melde Fehler bitte direkt an uns.",
                 version_modal_ok: "Alles klar!",
                 mobile_filter_title: "Einstellungen",
@@ -7850,6 +8043,44 @@
                 info_no_extra: "Keine Zusatzinfos für dieses Wort vorhanden."
             },
             en: {
+                menu_tts: "Speech output",
+                tts_title: "Speech output",
+                tts_intro: "The app reads words and sentences in the learning language aloud. Tap the speaker icon to listen.",
+                tts_enabled: "Turn on speech output",
+                tts_auto: "Read aloud automatically",
+                tts_auto_hint: "Reads aloud by itself after a correct answer, when a card is revealed and after checking.",
+                tts_speak_de: "Also speak German",
+                tts_speak_de_hint: "Speaks the German translation after the foreign word.",
+                tts_rate: "Speed",
+                tts_voice_for: "Voice: {0}",
+                tts_voice_auto: "Automatic (best available)",
+                tts_test: "Test",
+                tts_source: "Voice source",
+                tts_source_device: "Device voice",
+                tts_source_device_hint: "Free, works offline. Quality depends on your device.",
+                tts_source_cloud: "Cloud voice",
+                tts_source_cloud_hint: "More natural voice from the server (needs internet).",
+                tts_cloud_title: "Turn on the cloud voice?",
+                tts_cloud_privacy: "To read aloud, the texts (single words and sentences, without names or account) are sent to the provider {0}. Turn on the cloud voice?",
+                tts_cloud_failed: "The cloud voice is not available right now. The device voice is used instead.",
+                tts_ios_hint: "iPhone: speech output follows the ring/silent switch. When it is set to silent, nothing is spoken.",
+                tts_download_hint_ios: "Get better voices: Settings > Accessibility > Spoken Content > Voices.",
+                tts_download_hint_android: "Get better voices: your device Settings > Text-to-speech output.",
+                tts_download_hint_other: "You can download better voices in the language settings of your system or browser.",
+                tts_no_engine: "Speech output is not available on this device.",
+                tts_no_voice_ios: "No voice is installed for {0}. Install one: Settings > Accessibility > Spoken Content > Voices.",
+                tts_no_voice_android: "No voice is installed for {0}. Install one: device Settings > Text-to-speech output.",
+                tts_no_voice_other: "No voice is installed for {0}. Please install a voice in the language settings of your system.",
+                tts_speak: "Read aloud",
+                admin_tts_title: "Cloud voice (speech output)",
+                admin_tts_desc: "Optional, more natural voice. Generated audio is stored on the server and never paid for twice. The API key is stored encrypted and never shown again.",
+                admin_tts_enabled: "Offer the cloud voice to users",
+                admin_tts_provider: "Provider",
+                admin_tts_voices: "Voices per language (name at the provider)",
+                admin_tts_limit: "Daily limit per user (new, not yet stored calls, admins unlimited)",
+                admin_tts_cost: "Rough prices per 1 million characters: Standard/WaveNet about $4, Neural2 about $16, Chirp3-HD up to about $30; OpenAI tts-1 about $15. Please check current prices with the provider. Max. 300 characters per text.",
+                admin_tts_saved: "Cloud voice saved",
+                version_news_1: "New: speech output - words and sentences can be read aloud (menu > Speech output)",
                 err_server_fetch: "Server error while fetching",
                 admin_base_cleared: "{0} base list cleared.",
                 import_ki_note_replace: "The file contains {0} AI sentences (“Wort” column): the existing AI sentences will also be replaced.",
@@ -8013,7 +8244,6 @@
                 streak_keep_going: "Keep going and learn a little every day to keep your streak alive.",
                 version_modal_pre: "Version",
                 version_modal_post: "is here!",
-                version_news_1: "Fixed: The English interface is now fully in English (streak window, messages, placeholders, admin area, grammar explanations)",
                 version_modal_footer: "Enjoy learning! Please report any bugs directly to us.",
                 version_modal_ok: "Got it!",
                 mobile_filter_title: "Settings",
@@ -9034,6 +9264,8 @@
         // (Daten, aktuelle Runde/Satz, Auswahl-/Filterzustände, Timer, sprachgebundene Popups)
         function resetLanguageBoundState() {
             window._langEpoch = (window._langEpoch || 0) + 1;
+            Tts.stop();
+            ['cardsSpeakSlot', 'quizSpeakSlot', 'writeSpeakSlot', 'grammarSpeakSlot', 'exampleSpeakSlot'].forEach(id => { const e = document.getElementById(id); if (e) e.innerHTML = ''; });
             // Daten (werden gleich aus dem Zwischenspeicher der neuen Sprache geladen)
             fullDictionary = [];
             allBaseSentences = [];
@@ -9189,6 +9421,7 @@
             });
 
             closeExampleSentenceBtn?.addEventListener('click', () => {
+                Tts.stop();
                 exampleSentenceModal.classList.add('hidden');
                 exampleSentenceModal.classList.remove('flex');
             });
@@ -9621,12 +9854,20 @@
                 match = matches[randomIndex];
             }
 
+            const exampleSpeakSlot = document.getElementById('exampleSpeakSlot');
             if (match) {
                 exampleSentenceForeign.textContent = match.it;
                 exampleSentenceGerman.textContent = match.de;
+                if (exampleSpeakSlot) exampleSpeakSlot.innerHTML = speakBtnHtml(match.it, CURRENT_LANG, match.de);
+                if (Tts.autoAllowed()) { // nur bei „Automatisch vorlesen“, nach dem Wort (Queue)
+                    const ep = window._langEpoch || 0;
+                    Tts.speak(match.it, CURRENT_LANG, { queue: true, epoch: ep });
+                    if (Tts.getSettings().speakDe) Tts.speak(match.de, 'de', { queue: true, epoch: ep });
+                }
             } else {
                 exampleSentenceForeign.textContent = wordObj.it;
                 exampleSentenceGerman.textContent = getI18n('example_sentence_not_found');
+                if (exampleSpeakSlot) exampleSpeakSlot.innerHTML = '';
             }
 
             exampleSentenceModal.classList.remove('hidden');
@@ -10669,6 +10910,7 @@
         logoutBtn.addEventListener('click', logout);
 
         function showApp() {
+            if (typeof refreshTtsStatus === 'function') refreshTtsStatus();
             authOverlay.classList.add('hidden');
             mainAppContent.classList.remove('hidden');
 
@@ -10931,6 +11173,7 @@
         }
 
         function startWriteRound() {
+            Tts.stop(); ttsClearSlot('writeSpeakSlot');
             writeQuestionArea.classList.remove('hidden');
             writeFeedbackArea.classList.add('hidden');
             writeInput.value = ''; writeInput.disabled = false;
@@ -11050,6 +11293,9 @@
             writeQuestionArea.classList.add('hidden');
             writeFeedbackArea.classList.remove('hidden');
             writeFeedbackArea.classList.add('flex');
+            const writeSpeakSlot = document.getElementById('writeSpeakSlot');
+            if (writeSpeakSlot) writeSpeakSlot.innerHTML = speakBtnHtml(getFullIt(currentWriteTarget), CURRENT_LANG, currentWriteTarget.de);
+            ttsSpeakEntry(currentWriteTarget, true);
 
             // Toggle button to "Next"
             writeSubmitBtn.setAttribute('data-state', 'next');
@@ -11227,6 +11473,7 @@
         }
 
         function startDragDropRound() {
+            Tts.stop();
             score = 0; scoreEl.textContent = score;
             nextBtn.classList.add('hidden');
             successText.classList.add('hidden');
@@ -11557,7 +11804,7 @@
                 };
 
                 infoCard.innerHTML = `
-                    <div class="font-bold text-slate-800 border-b border-slate-100 pb-2 mb-2">${getFullIt(pair)} <span class="font-normal text-slate-500 text-sm">(${pair.de})</span></div>
+                    <div class="font-bold text-slate-800 border-b border-slate-100 pb-2 mb-2 flex items-center gap-1 flex-wrap"><span>${getFullIt(pair)}</span> ${speakBtnHtml(getFullIt(pair), CURRENT_LANG, pair.de)} <span class="font-normal text-slate-500 text-sm">(${pair.de})</span></div>
                     <div class="flex flex-col gap-2 text-slate-700 text-xs md:text-sm">
                         <div><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">${labels.praesens}</span>${pair.praesens || '-'}</div>
                         <div><span class="text-[9px] md:text-[10px] text-slate-400 block uppercase font-bold tracking-wider mb-0.5">${labels.passato}</span>${pair.passato || '-'}</div>
@@ -11575,7 +11822,7 @@
                     <div class="flex flex-col items-center gap-4">
                         <div class="font-bold text-xl text-slate-800">${pair.de}</div>
                         ${pair.emoji ? `<div class="text-6xl">${emojiImg(pair.emoji, '5rem')}</div>` : '<div class="text-4xl opacity-30 text-slate-300">🖼️</div>'}
-                        <div class="text-lg text-blue-600 font-bold">${getFullIt(pair)}</div>
+                        <div class="text-lg text-blue-600 font-bold flex items-center justify-center gap-1">${getFullIt(pair)} ${speakBtnHtml(getFullIt(pair), CURRENT_LANG, pair.de)}</div>
                     </div>
                 `;
                 infoMain.appendChild(infoCard);
@@ -11608,6 +11855,7 @@
                 }, 500);
             }
             try { displayExtraInfo(matchedPair, true); } catch(e) { console.warn('displayExtraInfo error:', e); }
+            ttsSpeakEntry(matchedPair, true);
             try { triggerExampleSentencePopup(matchedPair); } catch(e) {}
             dropzone.classList.add('cursor-pointer', 'hover:bg-green-100', 'transition-colors');
             dropzone.addEventListener('click', () => { try { displayExtraInfo(matchedPair, true); } catch(e) {} });
@@ -11618,7 +11866,7 @@
         function renderVerbInfo(pair) {
             const es = CURRENT_LANG === 'es'; // Zeitformnamen in der Lernsprache (Immersionsregel)
             return `
-                <div class="font-bold border-b pb-2 mb-4 text-center text-lg">${getFullIt(pair)} <br><span class="font-normal opacity-60 text-sm">(${escapeHtml(pair.de)})</span></div>
+                <div class="font-bold border-b pb-2 mb-4 text-center text-lg">${getFullIt(pair)} ${speakBtnHtml(getFullIt(pair), CURRENT_LANG, pair.de)}<br><span class="font-normal opacity-60 text-sm">(${escapeHtml(pair.de)})</span></div>
                 <div class="grid grid-cols-1 gap-3 text-sm">
                     <div class="bg-slate-50 p-2 rounded-lg"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">Presente</span>${pair.praesens || '-'}</div>
                     <div class="bg-slate-50 p-2 rounded-lg"><span class="block text-[10px] opacity-50 uppercase font-bold mb-1">${es ? 'Pretérito perfecto' : 'Passato Prossimo'}</span>${pair.passato || '-'}</div>
@@ -11647,11 +11895,11 @@
                     <div class="flex flex-col items-center gap-4">
                         <div class="font-bold text-xl">${pair.de}</div>
                         ${pair.emoji ? `<div class="text-6xl">${emojiImg(pair.emoji, '5rem')}</div>` : '<div class="text-4xl opacity-30">🖼️</div>'}
-                        <div class="text-lg text-blue-400 font-bold">${getFullIt(pair)}</div>
+                        <div class="text-lg text-blue-400 font-bold flex items-center justify-center gap-1">${getFullIt(pair)} ${speakBtnHtml(getFullIt(pair), CURRENT_LANG, pair.de)}</div>
                     </div>
                 `;
             } else {
-                content.innerHTML = `<div class="text-slate-700 text-center font-bold text-lg mb-2">${pair.de}</div><div class="text-blue-600 text-center font-bold text-xl">${getFullIt(pair)}</div>`;
+                content.innerHTML = `<div class="text-slate-700 text-center font-bold text-lg mb-2">${pair.de}</div><div class="text-blue-600 text-center font-bold text-xl flex items-center justify-center gap-1">${getFullIt(pair)} ${speakBtnHtml(getFullIt(pair), CURRENT_LANG, pair.de)}</div>`;
             }
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -11664,6 +11912,7 @@
         });
 
         function startQuizRound() {
+            Tts.stop(); ttsClearSlot('quizSpeakSlot');
             quizFeedback.classList.add('hidden'); quizFeedback.classList.remove('flex'); quizOptionsContainer.innerHTML = '';
             let availableWords = getAvailableWords();
             if (availableWords.length < 4) {
@@ -11840,6 +12089,9 @@
                     saveStatToServer(currentQuizTarget.id);
                 }
             } catch (e) { console.error("Stats sync failed", e); }
+            const quizSpeakSlot = document.getElementById('quizSpeakSlot');
+            if (quizSpeakSlot) quizSpeakSlot.innerHTML = speakBtnHtml(getFullIt(currentQuizTarget), CURRENT_LANG, currentQuizTarget.de);
+            if (isCorrect) ttsSpeakEntry(currentQuizTarget, true);
             quizFeedback.classList.remove('hidden');
             quizFeedback.classList.add('flex');
         }
@@ -12202,6 +12454,7 @@
         }
 
         function startGrammarRound() {
+            Tts.stop(); ttsClearSlot('grammarSpeakSlot');
             if (grammarSentences.length === 0) {
                 showGrammarEmptyState(getI18n('grammar_no_sentences'), getI18n('grammar_upload_hint'));
                 return;
@@ -12564,6 +12817,11 @@
                 grammarSubmitBtn.classList.add('hidden');
                 grammarNextBtn.classList.remove('hidden');
             }
+            if (currentGrammarSentence) { // aufgelöster Satz erst nach dem Prüfen
+                const gSlot = document.getElementById('grammarSpeakSlot');
+                if (gSlot) gSlot.innerHTML = speakBtnHtml(currentGrammarSentence.it, CURRENT_LANG, currentGrammarSentence.de);
+                if (Tts.autoAllowed()) Tts.speak(currentGrammarSentence.it, CURRENT_LANG, { epoch: window._langEpoch || 0 });
+            }
             showGrammarHelp();
         }
 
@@ -12610,7 +12868,7 @@
                 h.textContent = tense.name + (highlight ? ` · ${getI18n('conj_in_sentence')}` : '');
                 card.appendChild(h);
                 const grid = document.createElement('div');
-                grid.className = 'grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-sm';
+                grid.className = 'grid grid-cols-[auto_1fr_auto] items-center gap-x-3 gap-y-0.5 text-sm';
                 const persons = tense.personsOverride || conj.persons;
                 tense.forms.forEach((form, i) => {
                     if (!form) return;
@@ -12620,7 +12878,10 @@
                     const f = document.createElement('span');
                     f.className = 'font-semibold text-slate-800';
                     f.textContent = form;
-                    grid.append(p, f);
+                    const sp = document.createElement('span');
+                    const person = conj.noPersonColumn ? '' : String(persons[i] || '').split('/')[0].trim();
+                    sp.innerHTML = Tts.buttonHtml({ text: `${person} ${form}`.trim(), lang: CURRENT_LANG }, 'tts-btn-sm');
+                    grid.append(p, f, sp);
                 });
                 card.appendChild(grid);
                 if (tense.extra) {
@@ -12722,6 +12983,7 @@
         }
 
         function switchMode(mode) {
+            Tts.stop();
             currentMode = mode; successText.classList.add('hidden');
             setTimeout(updateMobileFilterRow, 0);
             
@@ -12981,7 +13243,7 @@
         // Version Update Modal Logic
         const versionModal = document.getElementById('versionUpdateModal');
         const closeVersionBtn = document.getElementById('closeVersionModalBtn');
-        const vKey = 'hasSeenVersion_2_2_27';
+        const vKey = 'hasSeenVersion_2_2_28';
         closeVersionBtn.addEventListener('click', () => {
             localStorage.setItem(vKey, 'true');
             versionModal.classList.add('hidden');
@@ -13496,6 +13758,7 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-1.5 ml-2 flex-shrink-0">
+                        ${Tts.buttonHtml({ src: 'vocab', id: word.id }, 'tts-btn-sm')}
                         <button class="edit-btn text-slate-400 hover:text-blue-500 transition-colors p-1" data-id="${word.id}" title="${getI18n('btn_edit')}">
                             <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                         </button>
@@ -13641,6 +13904,7 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-1.5 ml-2 flex-shrink-0">
+                        ${Tts.buttonHtml({ src: 'sentence', id: word.id }, 'tts-btn-sm')}
                         ${word.isOwn ? `
                         <button class="edit-btn text-slate-400 hover:text-blue-500 transition-colors p-1" data-id="${word.id}" title="${getI18n('btn_edit')}">
                             <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
@@ -15521,6 +15785,63 @@
             }
         });
 
+        // --- Cloudstimme (Admin-Tab KI) ---
+        let adminTtsConfig = null;
+        const adminTtsEl = (id) => document.getElementById(id);
+        function renderAdminTts() {
+            const c = adminTtsConfig;
+            const sel = adminTtsEl('adminTtsProvider');
+            sel.innerHTML = '';
+            Object.entries(c.providers).forEach(([id, p]) => { const o = document.createElement('option'); o.value = id; o.textContent = p.label; sel.appendChild(o); });
+            sel.value = c.provider;
+            adminTtsEl('adminTtsEnabled').checked = c.enabled;
+            adminTtsEl('adminTtsLimit').value = c.dailyLimit;
+            renderAdminTtsProvider();
+            adminTtsEl('adminTtsTestResult').classList.add('hidden');
+        }
+        function renderAdminTtsProvider() {
+            const p = adminTtsConfig.providers[adminTtsEl('adminTtsProvider').value];
+            ['it', 'en', 'es', 'de'].forEach(l => { adminTtsEl('adminTtsVoice_' + l).value = (p.voices || {})[l] || ''; });
+            adminTtsEl('adminTtsKey').value = '';
+            const st = adminTtsEl('adminTtsKeyStatus');
+            if (p.keyReadable) { st.textContent = getI18n('admin_ai_key_set', p.keyHint); st.className = 'ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700'; }
+            else if (p.keySet) { st.textContent = getI18n('admin_ai_key_unreadable'); st.className = 'ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-red-50 text-red-600'; }
+            else { st.textContent = getI18n('admin_ai_key_missing'); st.className = 'ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-500'; }
+        }
+        async function loadAdminTts() {
+            try { adminTtsConfig = await apiFetch('/admin/tts-settings'); renderAdminTts(); }
+            catch (err) { showToast(getI18n('admin_ai_load_error', err.message), 'error'); }
+        }
+        async function saveAdminTts(extra = {}) {
+            const voices = {};
+            ['it', 'en', 'es', 'de'].forEach(l => { voices[l] = adminTtsEl('adminTtsVoice_' + l).value.trim(); });
+            const body = { provider: adminTtsEl('adminTtsProvider').value, enabled: adminTtsEl('adminTtsEnabled').checked, dailyLimit: adminTtsEl('adminTtsLimit').value, voices, ...extra };
+            const key = adminTtsEl('adminTtsKey').value.trim();
+            if (key) body.apiKey = key;
+            adminTtsConfig = await apiFetch('/admin/tts-settings', { method: 'PUT', body: JSON.stringify(body) });
+            renderAdminTts();
+            refreshTtsStatus();
+        }
+        adminTtsEl('adminTtsProvider').addEventListener('change', renderAdminTtsProvider);
+        adminTtsEl('adminTtsSaveBtn').addEventListener('click', async () => {
+            try { await saveAdminTts(); showToast(getI18n('admin_tts_saved'), 'success'); }
+            catch (err) { showToast(getI18n('admin_ai_save_error', err.message), 'error'); }
+        });
+        adminTtsEl('adminTtsClearKeyBtn').addEventListener('click', async () => {
+            if (!(await showConfirm(getI18n('admin_ai_clear_confirm'), getI18n('admin_ai_clear_title')))) return;
+            try { adminTtsEl('adminTtsKey').value = ''; await saveAdminTts({ clearKey: true }); showToast(getI18n('admin_ai_key_cleared'), 'success'); }
+            catch (err) { showToast(getI18n('admin_ai_save_error', err.message), 'error'); }
+        });
+        adminTtsEl('adminTtsTestBtn').addEventListener('click', async () => {
+            const out = adminTtsEl('adminTtsTestResult');
+            out.className = 'text-xs text-slate-500'; out.textContent = getI18n('admin_ai_testing');
+            try {
+                await saveAdminTts();
+                const result = await apiFetch('/admin/tts-settings/test', { method: 'POST', body: JSON.stringify({}), timeoutMs: 30000 });
+                out.className = 'text-xs font-semibold text-emerald-600'; out.textContent = '✅ ' + result.message;
+            } catch (err) { out.className = 'text-xs font-semibold text-red-600'; out.textContent = '❌ ' + err.message; }
+        });
+
         document.getElementById('adminAiLoadModelsBtn').addEventListener('click', async () => {
             try {
                 const result = await apiFetch(`/admin/ai-settings/models?provider=${encodeURIComponent(adminAiProviderSel.value)}`, { timeoutMs: 30000 });
@@ -15617,6 +15938,7 @@
                 if (aiTab) aiTab.classList.remove('hidden');
                 if (aiBtn) aiBtn.classList.add('active');
                 loadAdminAiSettings();
+                loadAdminTts();
             } else if (tabName === 'search') {
                 if (searchTab) searchTab.classList.remove('hidden');
                 if (searchBtn) searchBtn.classList.add('active');
@@ -16790,10 +17112,12 @@
         let cardsHistory = [];
 
         function startCardsRound(isBack = false) {
+            Tts.stop();
             let words = getAvailableWords();
 
             if (words.length === 0) {
                 if (cardsQuestionDisplay) cardsQuestionDisplay.innerHTML = getI18n('no_vocab_short');
+                ttsClearSlot('cardsSpeakSlot');
                 if (cardsSubtext) cardsSubtext.textContent = '';
                 const cStar = document.getElementById('cardsStarIcon');
                 if (cStar) { cStar.removeAttribute('data-mark-id'); cStar.classList.remove('marked'); }
@@ -16832,6 +17156,7 @@
         }
 
         function showPreviousCard() {
+            Tts.stop();
             if (cardsHistory.length === 0) return;
             const prevId = cardsHistory.pop();
             const prevWord = fullDictionary.find(w => w.id == prevId);
@@ -16861,11 +17186,16 @@
             const itText = getFullIt(currentFlashcardTarget);
             const deText = currentFlashcardTarget.de;
 
+            let foreignShown;
             if (direction === 'de-it') {
                 cardsQuestionDisplay.textContent = isFlashcardReversed ? itText : deText;
+                foreignShown = isFlashcardReversed;
             } else {
                 cardsQuestionDisplay.textContent = isFlashcardReversed ? deText : itText;
+                foreignShown = !isFlashcardReversed;
             }
+            const cardsSpeakSlot = document.getElementById('cardsSpeakSlot');
+            if (cardsSpeakSlot) cardsSpeakSlot.innerHTML = foreignShown ? speakBtnHtml(itText, CURRENT_LANG, deText) : speakBtnHtml(deText, 'de');
             cardsSubtext.textContent = getI18n(isFlashcardReversed ? 'cards_solution_shown' : 'cards_click_flip');
         }
 
@@ -16874,6 +17204,7 @@
                 if (!currentFlashcardTarget) return;
                 isFlashcardReversed = !isFlashcardReversed;
                 renderFlashcard();
+                if (isFlashcardReversed) ttsSpeakEntry(currentFlashcardTarget, true); else Tts.stop(); // Auto-Vorlesen beim Aufdecken
             });
         }
 
@@ -16901,6 +17232,143 @@
                 }
             });
         }
+        // =====================================================================
+        // Sprachausgabe (tts.js): Verdrahtung, Einstellungsfenster, Cloudstimme
+        // =====================================================================
+        Object.keys(LANG_CONFIG).forEach(l => { if (LANG_CONFIG[l].ttsLocale) Tts.TTS_LOCALES[l] = LANG_CONFIG[l].ttsLocale; });
+        let ttsCloud = { available: false, provider: null };
+        const ttsLangName = (l) => l === 'de' ? uiDeName() : uiLangName(l);
+        const ttsPlatform = () => { try { return window.Capacitor && Capacitor.isNativePlatform && Capacitor.isNativePlatform() ? Capacitor.getPlatform() : 'web'; } catch (e) { return 'web'; } };
+
+        function speakBtnHtml(text, lang, de, extraClass) { return Tts.buttonHtml({ text, lang, de }, extraClass); }
+        function ttsClearSlot(id) { const e = document.getElementById(id); if (e) e.innerHTML = ''; }
+        // Fremdwort (samt Artikel wie auf der Karte) sprechen; auto = nur bei „Automatisch vorlesen“ und nach Nutzergeste
+        function ttsSpeakEntry(entry, auto, opts) {
+            if (!entry || (auto && !Tts.autoAllowed())) return;
+            Tts.speakEntry(entry, { lang: CURRENT_LANG, full: getFullIt(entry) }, { epoch: window._langEpoch || 0, ...(opts || {}) });
+        }
+        function ttsResolveById(src, id) {
+            if (src === 'vocab') {
+                const w = fullDictionary.find(x => String(x.id) === String(id));
+                return w ? { text: getFullIt(w), lang: CURRENT_LANG, de: w.de } : null;
+            }
+            const sid = String(id);
+            const sentence = sid.startsWith('base-') ? (allBaseSentences || []).find(x => 'base-' + x.id === sid) : fullDictionary.find(x => String(x.id) === sid);
+            return sentence ? { text: sentence.it, lang: CURRENT_LANG, de: sentence.de } : null;
+        }
+        async function ttsFetchAudio(text, lang) {
+            const res = await fetch(`${API_BASE_URL}/api/tts`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${API_TOKEN}` },
+                body: JSON.stringify({ text, lang })
+            });
+            if (!res.ok) {
+                const data = await res.json().catch(() => ({}));
+                const err = new Error(data.error || `HTTP ${res.status}`);
+                err.status = res.status;
+                throw err;
+            }
+            return res.blob();
+        }
+        function ttsNotify(kind, lang, err) {
+            if (kind === 'no_voice') {
+                const plat = ttsPlatform();
+                showToast(getI18n(plat === 'ios' ? 'tts_no_voice_ios' : plat === 'android' ? 'tts_no_voice_android' : 'tts_no_voice_other', ttsLangName(lang)), 'warning', 9000);
+            } else if (kind === 'cloud_failed') {
+                showToast(err && err.status === 429 && err.message ? err.message : getI18n('tts_cloud_failed'), 'warning', 6000);
+            }
+        }
+        async function refreshTtsStatus() {
+            if (!API_TOKEN) return;
+            try { ttsCloud = await apiFetch('/tts/status'); } catch (e) { /* offline: Status bleibt */ }
+            updateTtsUi();
+        }
+        function updateTtsUi() {
+            document.documentElement.classList.toggle('tts-off', !Tts.available());
+            if (currentMode === 'flashcard' && currentFlashcardTarget) renderFlashcard();
+            if (ttsModal && ttsModal.classList.contains('flex')) renderTtsModal();
+        }
+
+        Tts.init({
+            getLearningLang: () => CURRENT_LANG,
+            getEpoch: () => window._langEpoch || 0,
+            label: () => getI18n('tts_speak'),
+            cloudAvailable: () => !!ttsCloud.available,
+            fetchAudio: ttsFetchAudio,
+            notify: ttsNotify,
+            resolveById: ttsResolveById,
+            onChange: () => updateTtsUi()
+        });
+        document.documentElement.classList.toggle('tts-off', !Tts.available());
+        // Schließen-Knöpfe von Fenstern beenden die Ausgabe
+        document.addEventListener('click', (e) => { if (e.target.closest && e.target.closest('button[id^="close"]')) Tts.stop(); }, true);
+
+        // --- Einstellungsfenster ---
+        const ttsModal = document.getElementById('ttsModal');
+        const TTS_SAMPLES = { it: 'Buongiorno, come stai?', en: 'Good morning, how are you?', es: 'Buenos días, ¿cómo estás?', de: 'Guten Tag, wie geht es dir?' };
+        const setTtsSwitch = (id, on) => document.getElementById(id).setAttribute('aria-pressed', on ? 'true' : 'false');
+
+        async function renderTtsModal() {
+            const s = Tts.getSettings();
+            setTtsSwitch('ttsEnabledBtn', s.enabled); setTtsSwitch('ttsAutoBtn', s.auto); setTtsSwitch('ttsSpeakDeBtn', s.speakDe);
+            document.getElementById('ttsRate').value = s.rate;
+            document.getElementById('ttsRateValue').textContent = `${s.rate.toFixed(2)}×`;
+            const cloudOn = s.engine === 'cloud' && ttsCloud.available;
+            document.getElementById('ttsSourceBox').classList.toggle('hidden', !ttsCloud.available);
+            setTtsSwitch('ttsSourceDevice', !cloudOn); setTtsSwitch('ttsSourceCloud', cloudOn);
+            const plat = ttsPlatform();
+            document.getElementById('ttsPlatformHint').textContent = plat === 'ios' || /iPhone|iPad/.test(navigator.userAgent) ? getI18n('tts_ios_hint') : '';
+            document.getElementById('ttsDownloadHint').textContent = getI18n(plat === 'ios' || /iPhone|iPad/.test(navigator.userAgent) ? 'tts_download_hint_ios' : plat === 'android' || /Android/.test(navigator.userAgent) ? 'tts_download_hint_android' : 'tts_download_hint_other');
+            const hasDevice = !!(window.speechSynthesis || (window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.TextToSpeech));
+            document.getElementById('ttsNoEngine').classList.toggle('hidden', hasDevice || ttsCloud.available);
+            document.getElementById('ttsVoicesBox').classList.toggle('hidden', !hasDevice);
+            const voices = hasDevice ? await Tts.getVoices() : [];
+            ['it', 'en', 'es', 'de'].forEach(l => {
+                document.getElementById('ttsVoiceLabel_' + l).textContent = getI18n('tts_voice_for', ttsLangName(l));
+                const sel = document.getElementById('ttsVoice_' + l);
+                const family = Tts.TTS_LOCALES[l].slice(0, 2);
+                sel.innerHTML = '';
+                const auto = document.createElement('option'); auto.value = ''; auto.textContent = getI18n('tts_voice_auto'); sel.appendChild(auto);
+                voices.filter(v => String(v.lang || '').replace('_', '-').toLowerCase().startsWith(family)).forEach(v => {
+                    const o = document.createElement('option'); o.value = v.uri; o.textContent = `${v.name} (${String(v.lang).replace('_', '-')})`; sel.appendChild(o);
+                });
+                sel.value = s.voice[l] || '';
+                if (sel.value !== (s.voice[l] || '')) sel.value = '';
+                sel.disabled = cloudOn;
+            });
+        }
+        document.getElementById('openTtsBtn').addEventListener('click', async () => {
+            closeAllModals();
+            dropdownMenu.classList.add('hidden');
+            ttsModal.classList.remove('hidden'); ttsModal.classList.add('flex');
+            await renderTtsModal();
+            await refreshTtsStatus(); // Cloud-Angebot kann sich geändert haben
+        });
+        setupModal(ttsModal, null, document.getElementById('closeTtsModalBtn'), null, () => Tts.stop());
+        [['ttsEnabledBtn', 'enabled'], ['ttsAutoBtn', 'auto'], ['ttsSpeakDeBtn', 'speakDe']].forEach(([id, key]) => {
+            document.getElementById(id).addEventListener('click', () => { Tts.setSettings({ [key]: !Tts.getSettings()[key] }); renderTtsModal(); });
+        });
+        document.getElementById('ttsRate').addEventListener('input', (e) => {
+            const rate = parseFloat(e.target.value);
+            Tts.setSettings({ rate });
+            document.getElementById('ttsRateValue').textContent = `${rate.toFixed(2)}×`;
+        });
+        document.getElementById('ttsSourceDevice').addEventListener('click', () => { Tts.setSettings({ engine: 'device' }); renderTtsModal(); });
+        document.getElementById('ttsSourceCloud').addEventListener('click', async () => {
+            if (Tts.getSettings().engine === 'cloud') return;
+            const provider = (ttsCloud.provider || '').replace(/^./, c => c.toUpperCase());
+            if (!(await showConfirm(getI18n('tts_cloud_privacy', provider), getI18n('tts_cloud_title')))) return;
+            Tts.setSettings({ engine: 'cloud' });
+            renderTtsModal();
+        });
+        ['it', 'en', 'es', 'de'].forEach(l => {
+            document.getElementById('ttsVoice_' + l).addEventListener('change', (e) => Tts.setSettings({ voice: { [l]: e.target.value } }));
+        });
+        ttsModal.querySelectorAll('[data-tts-test]').forEach(btn => btn.addEventListener('click', () => {
+            const l = btn.dataset.ttsTest;
+            Tts.speak(TTS_SAMPLES[l], l);
+        }));
+
         // Initialize DOM Elements and Triggers
         userNameEl = document.getElementById('userName');
         userNameMobileEl = document.getElementById('userNameMobile');
