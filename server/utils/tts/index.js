@@ -122,7 +122,7 @@ function createService({ providers = PROVIDERS, cacheDir = CACHE_DIR(), maxBytes
         if (!config.enabled || !provider || !apiKey) throw new TtsError('Die Cloudstimme ist nicht eingerichtet', 503);
 
         const voice = (config.voices[config.provider] || {})[lang] || provider.defaultVoices[lang];
-        const key = cacheKey({ provider: config.provider, voice, lang, text: clean });
+        const key = cacheKey({ provider: config.provider + (provider.cacheVersion ? ':' + provider.cacheVersion : ''), voice, lang, text: clean });
         const hit = readCache(cacheDir, key);
         if (hit) return { audio: hit, cached: true };
 

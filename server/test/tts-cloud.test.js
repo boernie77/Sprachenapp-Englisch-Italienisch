@@ -94,7 +94,8 @@ test('Anbieter: Google und OpenAI bauen die Anfrage richtig auf (gemockter fetch
     assert.equal(JSON.parse(seen.init.body).voice.languageCode, 'it-IT');
     const o = await PROVIDERS.openai.synthesize({ apiKey: 'K', text: 'Ciao', lang: 'it', voice: 'alloy', fetchImpl });
     assert.equal(o.toString(), 'mp3');
-    assert.equal(JSON.parse(seen.init.body).model, 'tts-1');
+    assert.equal(JSON.parse(seen.init.body).model, 'gpt-4o-mini-tts');
+    assert.match(JSON.parse(seen.init.body).instructions, /Italian/);
     const bad = async () => ({ ok: false, status: 429 });
     await assert.rejects(PROVIDERS.openai.synthesize({ apiKey: 'K', text: 'x', lang: 'it', voice: 'alloy', fetchImpl: bad }), { status: 429 });
 });

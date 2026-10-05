@@ -52,14 +52,20 @@ const google = {
     }
 };
 
+// tts-1 hat keinen Sprachparameter und rät die Sprache aus dem Text: bei Einzelwörtern spricht es sie mit
+// englischem Akzent. gpt-4o-mini-tts nimmt eine Anweisung mit, die die Sprache festlegt.
+const OPENAI_LANG_NAMES = { it: 'Italian', en: 'British English', es: 'Spanish (Spain)', de: 'German' };
+const openaiInstructions = (lang) => `The text is in ${OPENAI_LANG_NAMES[lang] || lang}, possibly a single word or a short phrase. Pronounce it clearly like a native ${OPENAI_LANG_NAMES[lang] || lang} speaker, with a neutral calm tone, and do not add anything.`;
+
 const openai = {
-    label: 'OpenAI (tts-1)',
+    label: 'OpenAI (gpt-4o-mini-tts)',
+    cacheVersion: 'mini-tts-1',   // fließt in den Zwischenspeicher-Schlüssel ein (alte tts-1-Aufnahmen werden nicht mehr genutzt)
     defaultVoices: { it: 'alloy', en: 'alloy', es: 'alloy', de: 'alloy' },
-    async synthesize({ apiKey, text, voice, fetchImpl = fetch }) {
+    async synthesize({ apiKey, text, lang, voice, fetchImpl = fetch }) {
         const res = await request(fetchImpl, 'https://api.openai.com/v1/audio/speech', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
-            body: JSON.stringify({ model: 'tts-1', voice, input: text, response_format: 'mp3' })
+            body: JSON.stringify({ model: 'gpt-4o-mini-tts', voice, input: text, instructions: openaiInstructions(lang), response_format: 'mp3' })
         });
         if (!res.ok) throw mapStatus(res);
         const buf = Buffer.from(await res.arrayBuffer());
