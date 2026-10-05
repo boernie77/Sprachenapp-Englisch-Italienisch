@@ -1934,13 +1934,13 @@
                         Lizenz: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"
                             class="text-blue-600 hover:underline">CC BY-SA 4.0</a>
                     </p>
-                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.28</p>
+                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.2.29</p>
                     <p class="text-[10px] text-slate-400" data-i18n="imp_rights">© 2026 Christian Bernauer – Apache License 2.0</p>
                 </div>
             </div>
             <!-- App-Style Bottom Section -->
             <div class="mt-8 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.28</p>
+                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.2.29</p>
             </div>
         </div>
     </div>
@@ -2206,7 +2206,7 @@
             <div class="w-16 h-16 shrink-0 bg-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
                 <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3"><span data-i18n="version_modal_pre">Version</span> 2.2.28 <span data-i18n="version_modal_post">ist da!</span> <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
+            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3"><span data-i18n="version_modal_pre">Version</span> 2.2.29 <span data-i18n="version_modal_post">ist da!</span> <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
             <div class="text-left space-y-3 mb-6 overflow-y-auto min-h-0 flex-1 pr-1">
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
@@ -2357,7 +2357,7 @@
                 </div>
                 <div class="px-4 py-1.5 text-[10px] text-slate-400 bg-slate-50/50 flex items-center justify-between border-t border-slate-100/50">
                     <span data-i18n="app_version_label">App-Version:</span>
-                    <span class="font-mono font-medium text-slate-500">2.2.28</span>
+                    <span class="font-mono font-medium text-slate-500">2.2.29</span>
                 </div>
                 </div>
                 <input type="file" id="excelUploadEl" accept=".xlsx, .xls" class="hidden">
@@ -13243,7 +13243,7 @@
         // Version Update Modal Logic
         const versionModal = document.getElementById('versionUpdateModal');
         const closeVersionBtn = document.getElementById('closeVersionModalBtn');
-        const vKey = 'hasSeenVersion_2_2_28';
+        const vKey = 'hasSeenVersion_2_2_29';
         closeVersionBtn.addEventListener('click', () => {
             localStorage.setItem(vKey, 'true');
             versionModal.classList.add('hidden');
@@ -17322,7 +17322,7 @@
             const hasDevice = !!(window.speechSynthesis || (window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.TextToSpeech));
             document.getElementById('ttsNoEngine').classList.toggle('hidden', hasDevice || ttsCloud.available);
             document.getElementById('ttsVoicesBox').classList.toggle('hidden', !hasDevice);
-            const voices = hasDevice ? await Tts.getVoices() : [];
+            const voices = hasDevice ? await Tts.getVoices({ refresh: true }) : [];
             ['it', 'en', 'es', 'de'].forEach(l => {
                 document.getElementById('ttsVoiceLabel_' + l).textContent = getI18n('tts_voice_for', ttsLangName(l));
                 const sel = document.getElementById('ttsVoice_' + l);

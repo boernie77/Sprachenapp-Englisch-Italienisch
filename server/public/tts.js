@@ -8,7 +8,7 @@
     const TTS_LOCALES = { it: 'it-IT', en: 'en-GB', es: 'es-ES', de: 'de-DE' };
     const LANGS = ['it', 'en', 'es', 'de'];
     const STORAGE_KEY = 'lernapp-tts';
-    const DEFAULT_SETTINGS = { enabled: true, auto: false, rate: 0.9, voice: { it: '', en: '', es: '', de: '' }, speakDe: false, engine: 'device', nativeIos: false };
+    const DEFAULT_SETTINGS = { enabled: true, auto: false, rate: 0.9, voice: { it: '', en: '', es: '', de: '' }, speakDe: false, engine: 'device' };
 
     // ---------------------------------------------------------------------------------------
     // Textaufbereitung
@@ -117,12 +117,13 @@
     };
     const isIos = () => { try { return hasWindow && window.Capacitor.getPlatform() === 'ios'; } catch (e) { return false; } };
 
-    // Plugin nur, wo es besser ist: Android (dort fehlt/hakt speechSynthesis im WebView). Auf iOS bleibt die
-    // Web-API Standard (sie spricht dieselbe AVSpeechSynthesizer-Stimme); `nativeIos` schaltet das Plugin zum Vergleichen zu.
+    // Plugin auf Android (dort fehlt/hakt speechSynthesis im WebView) und auf iOS: Die Web-API zeigt im WKWebView
+    // nicht alle geladenen Stimmen (erweiterte/hochwertige fehlen), das Plugin liest AVSpeechSynthesisVoice.speechVoices().
+    // `webIos: true` in den Einstellungen schaltet iOS zurück auf die Web-API (der frühere Schlüssel `nativeIos` gilt nicht mehr, alte Werte blieben im Speicher stehen).
     function nativePlugin() {
         const p = plugin();
         if (!p) return null;
-        return isIos() && !loadSettings().nativeIos && webSynth() ? null : p;
+        return isIos() && loadSettings().webIos === true && webSynth() ? null : p;
     }
 
     function loadSettings() {
@@ -160,7 +161,9 @@
     // ---------------------------------------------------------------------------------------
     const normalizeWeb = (v) => ({ uri: v.voiceURI || v.name, name: v.name, lang: v.lang, local: v.localService !== false, default: !!v.default, raw: v });
 
-    function getVoices() {
+    // opts.refresh: Liste neu holen (nachträglich geladene Stimmen erscheinen so ohne App-Neustart)
+    function getVoices(opts) {
+        if (opts && opts.refresh) { state.voices = null; state.voicesEmptyAt = 0; }
         if (state.voices && state.voices.length) return Promise.resolve(state.voices);
         const p = nativePlugin();
         if (p) {
