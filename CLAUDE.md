@@ -18,6 +18,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Test-Deploy** (self-hosted Runner auf dem Heimserver) hängt oft in `queued` → Runner offline; Live ist davon unabhängig.
 - **Hinweis zum Teamwechsel (iOS):** Alte Installationen mit Team `YP6683AT3R` lassen sich nicht überinstallieren (CoreDeviceError 3002) → erst App löschen. Mobile-Signatur Android: `VOKABELN_RELEASE_*` in `~/.gradle/gradle.properties`.
 
+## Arbeiten auf mehreren Rechnern (Checkliste)
+
+**Grundregel:** Git ist die einzige Quelle der Wahrheit für den Code. Am Ende jeder Session `git push` (angefangene Arbeit als WIP auf einen Branch pushen), am Anfang `git pull`. Der Projektordner mit `.git` darf **nie** in Nextcloud o. Ä. liegen („conflicted copy“ hat das Repo schon zerschossen).
+
+**Neuer Rechner einrichten:**
+1. `git clone https://github.com/boernie77/Sprachenapp-Englisch-Italienisch.git` (bzw. `git pull`, sonst `git fetch && git reset --hard origin/main`), `git config` mit Identität ist nicht gesetzt → Commits mit `git -c user.name=… -c user.email=… commit`.
+2. `npm install` im Projektstamm (Capacitor) und in `server/`; Tests: `cd server && npm test`.
+3. Geheimnisse von Hand vom Hauptrechner übertragen (USB-Stick/Passwortmanager, **nie** per Git/Cloud-Sync): SSH-Key für den Live-Server, `~/.gradle/gradle.properties` (`VOKABELN_RELEASE_*`, `VOKABELN_UPLOAD_*`), Keystores in `android/app/*.jks` (gitignored; zusätzlich verschlüsselt sichern, ein Verlust blockiert Play-Store-Updates), ungetrackte `server/public/app-config.local.js` (Server-Voreinstellung für eigene Mobile-Builds), die lokale `Neue_Lernapp/CLAUDE.md` mit den Zugangsdaten.
+4. Mobile: `npx cap sync ios` bzw. `android` (erzeugt `Package.swift`/Gradle-Dateien und kopiert `server/public`; nichts davon committen). iOS-Archiv: `xcodebuild archive -project ios/App/App.xcodeproj -scheme "Vokabeln Multi" -destination 'generic/platform=iOS' -archivePath … -allowProvisioningUpdates`, Installation mit `xcrun devicectl device install app --device <UDID> <Archiv>/Products/Applications/*.app`.
+
+**Was nicht ins Repo gehört und separat liegt:** Excel-Listen (`Excellisten für Lernapp/`, am besten ein Nextcloud-Ordner **außerhalb** des Git-Projekts), Builds (`build/*.xcarchive`, `*.aab`, jederzeit neu baubar), Sicherungen, das Claude-Gedächtnis (`~/.claude/projects/<Projektpfad>/memory/`, bei Bedarf einmal kopieren; Wichtiges steht in dieser Datei).
+
 ## Project Overview
 
 **Sprachenapp-Test** is a language learning app (Italian/English/Spanish) with vocabulary, grammar, quiz, flashcard, and drag-and-drop exercises. Stack: Vanilla JS SPA frontend, Node.js/Express backend, PostgreSQL, Capacitor for iOS/Android.
