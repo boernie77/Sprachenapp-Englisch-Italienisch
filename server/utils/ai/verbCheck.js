@@ -7,34 +7,14 @@ const { costUsd } = require('./pricing');
 const { addUsage } = require('./usage');
 
 const { LANGUAGES } = require('../languages');
-const BATCH_SIZE = 15;
-const BULK_THRESHOLD = 50; // ab so vielen offenen Verben fragt der Admin-Bereich erst nach Freigabe
+const core = require('../../public/ai-core');
+const { THINKING_MODELS, normalizeInfinitive, VERB_SCHEMAS: SCHEMAS, VERB_SYSTEM: SYSTEM, verbPrompt: promptFor, parseVerbBatch } = core;
+const BATCH_SIZE = core.VERB_BATCH_SIZE;
+const BULK_THRESHOLD = core.VERB_BULK_THRESHOLD; // ab so vielen offenen Verben fragt der Admin-Bereich erst nach Freigabe
 const MAX_FAILURES = 3;
-const THINKING_MODELS = /^claude-(opus|sonnet|fable|mythos)-5/;
 
 const confirmed = new Set(); // Sprachen mit Freigabe des Admins (bis nichts mehr offen ist; verfällt beim Neustart)
 let running = false;
-
-// Grundform wie im Frontend: italienisch -rsi → Grundverb, englisch ohne "to"; null, wenn kein einzelnes Verbwort
-function normalizeInfinitive(raw, language) {
-    let inf = String(raw || '').toLowerCase().trim();
-    if (language === 'en') {
-        inf = inf.replace(/^to\s+/, '');
-        return /^[a-z]+(-[a-z]+)?$/.test(inf) && inf.length >= 2 ? inf : null;
-    }
-    if (language === 'es') {
-        // Reflexiv: lavarse -> lavar (Grundverb); Endungen -ar/-er/-ir (auch -ír: oír, reír, sonreír)
-        if (/(ar|er|ir|ír)se$/.test(inf)) inf = inf.slice(0, -2);
-        if (!/^[a-záéíóúüñ]+$/.test(inf)) return null;
-        return /(ar|er|ir|ír)$/.test(inf) && inf.length >= (inf === 'ir' ? 2 : 3) ? inf : null;
-    }
-    if (!/^[a-zàèéìòù]+$/.test(inf)) return null;
-    if (/rsi$/.test(inf)) {
-        inf = inf.slice(0, -3) + 're';
-        if (/(po|tra|du)re$/.test(inf)) inf = inf.slice(0, -2) + 'rre';
-    }
-    return /(are|ere|ire|rre)$/.test(inf) && inf.length >= 4 ? inf : null;
-}
 
 async function candidateVerbs(language) {
     const where = { language, typ: { [Op.iLike]: '%verb%' } };
@@ -56,99 +36,6 @@ async function pendingVerbs(language) {
     return candidates.filter(v => !known.has(v));
 }
 
-// --- KI-Aufruf ---
-const arr6 = { type: 'array', items: { type: 'string' } };
-const SCHEMAS = {
-    it: {
-        type: 'object',
-        properties: { verbs: { type: 'array', items: { type: 'object', properties: {
-            infinitive: { type: 'string' }, valid: { type: 'boolean' },
-            presente: arr6, imperfetto: arr6, futuro: arr6, condizionale: arr6, congiuntivo: arr6,
-            imperativo: { type: 'object', properties: { tu: { type: 'string' }, Lei: { type: 'string' }, noi: { type: 'string' }, voi: { type: 'string' } }, required: ['tu', 'Lei', 'noi', 'voi'], additionalProperties: false },
-            participio: { type: 'string' }, aux: { type: 'string', enum: ['avere', 'essere'] }, gerundio: { type: 'string' }
-        }, required: ['infinitive', 'valid', 'presente', 'imperfetto', 'futuro', 'condizionale', 'congiuntivo', 'imperativo', 'participio', 'aux', 'gerundio'], additionalProperties: false } } },
-        required: ['verbs'], additionalProperties: false
-    },
-    es: {
-        type: 'object',
-        properties: { verbs: { type: 'array', items: { type: 'object', properties: {
-            infinitive: { type: 'string' }, valid: { type: 'boolean' },
-            presente: arr6, indefinido: arr6, imperfecto: arr6, futuro: arr6, condicional: arr6, subjuntivo: arr6,
-            imperativo: { type: 'object', properties: { tu: { type: 'string' }, usted: { type: 'string' }, nosotros: { type: 'string' }, vosotros: { type: 'string' }, ustedes: { type: 'string' } }, required: ['tu', 'usted', 'nosotros', 'vosotros', 'ustedes'], additionalProperties: false },
-            participio: { type: 'string' }, gerundio: { type: 'string' }
-        }, required: ['infinitive', 'valid', 'presente', 'indefinido', 'imperfecto', 'futuro', 'condicional', 'subjuntivo', 'imperativo', 'participio', 'gerundio'], additionalProperties: false } } },
-        required: ['verbs'], additionalProperties: false
-    },
-    en: {
-        type: 'object',
-        properties: { verbs: { type: 'array', items: { type: 'object', properties: {
-            infinitive: { type: 'string' }, valid: { type: 'boolean' },
-            thirdPerson: { type: 'string' }, past: { type: 'string' }, participio: { type: 'string' }, gerundio: { type: 'string' }
-        }, required: ['infinitive', 'valid', 'thirdPerson', 'past', 'participio', 'gerundio'], additionalProperties: false } } },
-        required: ['verbs'], additionalProperties: false
-    }
-};
-
-const SYSTEM = 'Du bist Sprachwissenschaftler und liefern für eine Lern-App die korrekten Standardformen von Verben. Sei genau: Kontrolliere unregelmäßige Verben, Stammwechsel (Spanisch), Verben mit -isc- (Italienisch) und Rechtschreibregeln.';
-
-function promptFor(language, verbs) {
-    if (language === 'it') {
-        return `Gib für jedes der folgenden italienischen Verben die korrekten Formen an. Reihenfolge der sechs Personen: io, tu, lui/lei, noi, voi, loro.
-- presente, imperfetto, futuro (semplice), condizionale (presente): je sechs Formen ohne Pronomen.
-- congiuntivo: Congiuntivo presente, sechs Formen ohne "che" und ohne Pronomen.
-- imperativo: Formen für tu, Lei, noi und voi (bei tu die bejahte Form, z. B. "va'" oder "pulisci").
-- participio: Partizip Perfekt (männlich Singular), aux: Hilfsverb im Passato prossimo (avere oder essere), gerundio: z. B. "pulendo".
-Reflexive Verben (-rsi) wurden auf die Grundform zurückgeführt: gib die Formen ohne Reflexivpronomen an. Wenn ein Wort kein echtes italienisches Verb ist (Tippfehler, anderes Wort), setze valid auf false und fülle die Felder mit leeren Werten.
-Bei mehreren korrekten Varianten nimm die gebräuchlichste.
-
-Verben: ${verbs.join(', ')}`;
-    }
-    if (language === 'es') {
-        return `Gib für jedes der folgenden spanischen Verben die korrekten Formen an (Spanisch aus Spanien, Anrede mit vosotros). Reihenfolge der sechs Personen: yo, tú, él/ella/usted, nosotros, vosotros, ellos/ellas/ustedes.
-- presente, indefinido (pretérito indefinido), imperfecto (pretérito imperfecto), futuro (simple), condicional (simple): je sechs Formen ohne Pronomen.
-- subjuntivo: Subjuntivo presente, sechs Formen ohne "que" und ohne Pronomen.
-- imperativo: Formen für tu (bejaht, z. B. "ven" oder "come"), usted, nosotros, vosotros (bejaht, auf -d, z. B. "comed") und ustedes.
-- participio: Partizip (z. B. "comido", "hecho"), gerundio: z. B. "comiendo", "diciendo".
-Reflexive Verben (-se) wurden auf die Grundform zurückgeführt: gib die Formen ohne Reflexivpronomen an. Beachte die Akzente. Wenn ein Wort kein echtes spanisches Verb ist (Tippfehler, anderes Wort), setze valid auf false und fülle die Felder mit leeren Werten.
-Bei mehreren korrekten Varianten nimm die gebräuchlichste.
-
-Verben: ${verbs.join(', ')}`;
-    }
-    return `Give for each of the following English verbs the correct forms: thirdPerson (he/she/it present, e.g. "goes"), past (Simple Past; for "be" use "was/were"), participio (past participle), gerundio (-ing form with correct spelling). If a word is not a real English verb, set valid to false and use empty strings. If several variants are correct, use the most common one (e.g. "learnt/learned" -> "learned" for American usage is fine, but write both separated by " / " if both are common).
-
-Verbs: ${verbs.join(', ')}`;
-}
-
-const isForm = (v) => typeof v === 'string' && v.trim().length > 0 && v.length <= 60;
-const isSix = (a) => Array.isArray(a) && a.length === 6 && a.every(isForm);
-
-function cleanItalian(item) {
-    const imp = item.imperativo || {};
-    if (!(isSix(item.presente) && isSix(item.imperfetto) && isSix(item.futuro) && isSix(item.condizionale) && isSix(item.congiuntivo)
-        && ['tu', 'Lei', 'noi', 'voi'].every(k => isForm(imp[k])) && isForm(item.participio) && isForm(item.gerundio) && ['avere', 'essere'].includes(item.aux))) return null;
-    const trim = a => a.map(x => x.trim());
-    return {
-        presente: trim(item.presente), imperfetto: trim(item.imperfetto), futuro: trim(item.futuro), condizionale: trim(item.condizionale), congiuntivo: trim(item.congiuntivo),
-        imperativo: { tu: imp.tu.trim(), Lei: imp.Lei.trim(), noi: imp.noi.trim(), voi: imp.voi.trim() },
-        participio: item.participio.trim(), aux: item.aux, gerundio: item.gerundio.trim()
-    };
-}
-function cleanSpanish(item) {
-    const imp = item.imperativo || {};
-    const keys = ['presente', 'indefinido', 'imperfecto', 'futuro', 'condicional', 'subjuntivo'];
-    if (!(keys.every(k => isSix(item[k])) && ['tu', 'usted', 'nosotros', 'vosotros', 'ustedes'].every(k => isForm(imp[k])) && isForm(item.participio) && isForm(item.gerundio))) return null;
-    const out = {};
-    keys.forEach(k => { out[k] = item[k].map(x => x.trim()); });
-    out.imperativo = { tu: imp.tu.trim(), usted: imp.usted.trim(), nosotros: imp.nosotros.trim(), vosotros: imp.vosotros.trim(), ustedes: imp.ustedes.trim() };
-    out.participio = item.participio.trim();
-    out.gerundio = item.gerundio.trim();
-    return out;
-}
-function cleanEnglish(item) {
-    if (!['thirdPerson', 'past', 'participio', 'gerundio'].every(k => isForm(item[k]))) return null;
-    return { thirdPerson: item.thirdPerson.trim(), past: item.past.trim(), participio: item.participio.trim(), gerundio: item.gerundio.trim() };
-}
-
 async function checkBatch(language, verbs, config) {
     const provider = getProvider(config.provider);
     const apiKey = getApiKey(config, config.provider);
@@ -156,15 +43,7 @@ async function checkBatch(language, verbs, config) {
     const model = config.models[config.provider];
     const { data, usage } = await provider.generateJson({ apiKey, model, system: SYSTEM, prompt: promptFor(language, verbs), schema: SCHEMAS[language] });
 
-    const byInf = new Map((Array.isArray(data && data.verbs) ? data.verbs : []).map(v => [String(v.infinitive || '').toLowerCase().trim(), v]));
-    const rows = [];
-    verbs.forEach(inf => {
-        const item = byInf.get(inf);
-        if (!item) return; // fehlt in der Antwort: nächster Lauf versucht es erneut
-        if (item.valid === false) return rows.push({ language, infinitive: inf, forms: null, status: 'invalid', model });
-        const forms = language === 'it' ? cleanItalian(item) : language === 'es' ? cleanSpanish(item) : cleanEnglish(item);
-        if (forms) rows.push({ language, infinitive: inf, forms: JSON.stringify(forms), status: 'verified', model });
-    });
+    const rows = parseVerbBatch(language, verbs, data, model);
     if (rows.length > 0) await VerbForm.bulkCreate(rows, { ignoreDuplicates: true });
     return { saved: rows.length, usage: { input: usage.input, output: usage.output, costUsd: costUsd(model, usage.input, usage.output) } };
 }
@@ -213,13 +92,6 @@ function start() {
     setInterval(runOnce, 15 * 60 * 1000);
 }
 
-// Kosten pro Verb (grob): ein Aufruf mit BATCH_SIZE Verben
-function estimateUsdPerVerb(model, language) {
-    const perVerbOut = language === 'it' ? 170 : language === 'es' ? 190 : 40;
-    const input = 450 + BATCH_SIZE * 8;
-    const output = BATCH_SIZE * perVerbOut + (THINKING_MODELS.test(model) ? 400 : 0);
-    const usd = costUsd(model, input, output);
-    return usd === null ? null : usd / BATCH_SIZE;
-}
+const estimateUsdPerVerb = core.estimateVerbUsd;
 
 module.exports = { start, trigger, confirmLanguage, pendingVerbs, normalizeInfinitive, estimateUsdPerVerb, BULK_THRESHOLD, LANGUAGES };

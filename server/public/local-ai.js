@@ -543,6 +543,71 @@
             return { ok: true, bytes: audio.byteLength };
         }
 
+        // ---- Verbprüfung (wie utils/ai/verbCheck.js; ohne Server nur auf Knopfdruck, weil es Geld kostet) ----
+        const verbKey = (language) => `verbforms-${language}`;
+        const loadVerbs = (language) => store.getMeta(verbKey(language), {});
+
+        async function pendingVerbs(language) {
+            const [own, base, known] = await Promise.all([ctx.liveVocab(language), ctx.baseVocab(language), loadVerbs(language)]);
+            const set = new Set();
+            [...own, ...base].filter(w => /verb/i.test(w.typ || '')).forEach(w => { const inf = core.normalizeInfinitive(w.it, language); if (inf) set.add(inf); });
+            return [...set].sort().filter(v => !known[v]);
+        }
+
+        async function verbStatus(language) {
+            if (!core.isSupportedLanguage(language)) throw err(400, 'Sprache nicht unterstützt');
+            const [pending, known, config] = await Promise.all([pendingVerbs(language), loadVerbs(language), loadConfig()]);
+            const perVerb = core.estimateVerbUsd(config.models[config.provider], language);
+            return {
+                pending: pending.length,
+                verified: Object.values(known).filter(k => k.status === 'verified').length,
+                estimateEur: perVerb === null ? null : perVerb * pending.length * USD_TO_EUR
+            };
+        }
+
+        // Prüft alle offenen Verben in Paketen; bricht nach drei Fehlern in Folge ab. -> { saved, left }
+        async function verbCheckRun(language) {
+            if (!core.isSupportedLanguage(language)) throw err(400, 'Sprache nicht unterstützt');
+            const { config, key, ready } = await readyAi();
+            if (!config.enabled) throw new AiError('Die KI-Funktion ist nicht aktiviert', 409);
+            if (!ready) throw new AiError('Kein gültiger API-Schlüssel hinterlegt', 503);
+            const pending = await pendingVerbs(language);
+            const model = config.models[config.provider];
+            let failures = 0, saved = 0, lastError = null;
+            for (let i = 0; i < pending.length && failures < MAX_FAILURES; i += core.VERB_BATCH_SIZE) {
+                const batch = pending.slice(i, i + core.VERB_BATCH_SIZE);
+                try {
+                    const { data, usage: tok } = await P.AI[config.provider].generateJson({
+                        apiKey: key, model, system: core.VERB_SYSTEM, prompt: core.verbPrompt(language, batch), schema: core.VERB_SCHEMAS[language]
+                    });
+                    await addUsage({ tokens: { input: tok.input, output: tok.output, costUsd: core.costUsd(model, tok.input, tok.output) }, model });
+                    const rows = core.parseVerbBatch(language, batch, data, model);
+                    const known = await loadVerbs(language);
+                    rows.forEach(r => { known[r.infinitive] = { status: r.status, forms: r.forms, updatedAt: now().toISOString() }; });
+                    await store.setMeta(verbKey(language), known);
+                    saved += rows.length;
+                    failures = rows.length === 0 ? failures + 1 : 0;
+                } catch (e) {
+                    lastError = e;
+                    failures++;
+                }
+            }
+            if (saved === 0 && lastError) throw lastError;
+            return { saved, left: (await pendingVerbs(language)).length };
+        }
+
+        // Geprüfte Formen für die App (Form wie GET /api/verb-forms): mit since nur Änderungen, sonst nur gültige
+        async function verbForms(language, since) {
+            const nowIso = now().toISOString();
+            const known = await loadVerbs(language);
+            const t = since ? new Date(since).getTime() : NaN;
+            const delta = !isNaN(t);
+            const verbs = Object.entries(known)
+                .filter(([, k]) => (delta ? new Date(k.updatedAt).getTime() > t : k.status === 'verified'))
+                .map(([infinitive, k]) => ({ infinitive, status: k.status, forms: k.status === 'verified' && k.forms ? JSON.parse(k.forms) : null }));
+            return { now: nowIso, verbs };
+        }
+
         async function usageSummary() {
             const u = await usage();
             const c = await loadConfig();
@@ -552,7 +617,7 @@
         return {
             publicConfig, saveConfig, usageSummary, testAi, listModels, testTts,
             options, savePrefs, sentences, wordInfo, autoStatus, confirmBulk, backfill, runAuto,
-            ttsStatus, ttsAudio
+            ttsStatus, ttsAudio, verbStatus, verbCheckRun, verbForms
         };
     }
 

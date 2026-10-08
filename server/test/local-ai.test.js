@@ -262,3 +262,54 @@ test('Gemeinsamer Kern: Plan verteilt Arten und Niveaus gleichmäßig, Wortschl�
     assert.deepStrictEqual(core.categoriesFor('en', ['Present Simple (Comparative)', 'Grammatik', 'Simple Present + Modalverb']).filter(c => /Comparative|Grammatik/.test(c)), []);
     assert.strictEqual(core.costUsd('gpt-5', 1000, 1000), null);
 });
+
+// Antwort der KI für die Verben aus dem Prompt ("Verben: a, b, c"); `bad` ist kein echtes Verb
+function verbReply(bad = []) {
+    const six = (s) => ['io', 'tu', 'lui', 'noi', 'voi', 'loro'].map(p => `${s}${p}`);
+    return ({ reply, body }) => {
+        const verbs = body.messages[0].content.split('Verben: ')[1].split(', ');
+        const out = verbs.map(infinitive => (bad.includes(infinitive)
+            ? { infinitive, valid: false, presente: [], imperfetto: [], futuro: [], condizionale: [], congiuntivo: [], imperativo: { tu: '', Lei: '', noi: '', voi: '' }, participio: '', aux: 'avere', gerundio: '' }
+            : { infinitive, valid: true, presente: six(infinitive), imperfetto: six(infinitive), futuro: six(infinitive), condizionale: six(infinitive), congiuntivo: six(infinitive),
+                imperativo: { tu: 'a', Lei: 'b', noi: 'c', voi: 'd' }, participio: `${infinitive}to`, aux: 'avere', gerundio: `${infinitive}ndo` }));
+        return reply(200, { stop_reason: 'end_turn', content: [{ type: 'text', text: JSON.stringify({ verbs: out }) }], usage: { input_tokens: 800, output_tokens: 900 } });
+    };
+}
+
+test('Verbprüfung: offene Verben zählen, in Paketen prüfen, Ergebnis wie vom Server ausliefern', async () => {
+    const { api, calls } = setup({ handlers: { 'https://api.anthropic.com/v1/messages': verbReply(['pippare']) } });
+    await configure(api);
+    await api.handle('POST', '/vocab', { de: 'Quatsch', it: 'pippare', typ: 'Verb', language: 'it' });
+    await api.handle('POST', '/vocab', { de: 'waschen', it: 'lavarsi', typ: 'Verb', language: 'it' });
+    const st = await api.handle('GET', '/local-ai/verb-status?language=it');
+    assert.ok(st.pending > 100, `offen: ${st.pending}`);
+    assert.strictEqual(st.verified, 0);
+    assert.ok(st.estimateEur > 0);
+
+    const run = await api.handle('POST', '/local-ai/verb-check', { language: 'it' });
+    assert.strictEqual(run.left, 0);
+    assert.strictEqual(run.saved, st.pending);
+    assert.strictEqual(calls.length, Math.ceil(st.pending / core.VERB_BATCH_SIZE));
+    assert.ok(calls.every(c => c.parsed.system === core.VERB_SYSTEM));
+
+    const all = await api.handle('GET', '/verb-forms?language=it');
+    const lavare = all.verbs.find(v => v.infinitive === 'lavare'); // reflexiv -> Grundform
+    assert.ok(lavare && lavare.status === 'verified' && lavare.forms.presente.length === 6 && lavare.forms.aux === 'avere');
+    assert.ok(!all.verbs.some(v => v.infinitive === 'pippare')); // ungültige Verben nicht in der Standardliste
+    const delta = await api.handle('GET', `/verb-forms?language=it&since=${encodeURIComponent('2000-01-01T00:00:00Z')}`);
+    assert.ok(delta.verbs.some(v => v.infinitive === 'pippare' && v.status === 'invalid' && v.forms === null));
+    assert.strictEqual((await api.handle('GET', `/verb-forms?language=it&since=${encodeURIComponent('2999-01-01T00:00:00Z')}`)).verbs.length, 0);
+    assert.strictEqual((await api.handle('GET', '/local-ai/verb-status?language=it')).pending, 0);
+
+    const before = calls.length;
+    await api.handle('POST', '/local-ai/verb-check', { language: 'it' });
+    assert.strictEqual(calls.length, before); // nichts mehr offen: kein Aufruf
+});
+
+test('Verbprüfung: bei Anbieterfehlern Abbruch mit verständlicher Meldung', async () => {
+    const { api, calls } = setup({ handlers: { 'https://api.anthropic.com/v1/messages': ({ reply }) => reply(401, {}) } });
+    await configure(api);
+    await assert.rejects(api.handle('POST', '/local-ai/verb-check', { language: 'it' }), (e) => e.message === 'API-Schlüssel ungültig');
+    assert.strictEqual(calls.length, 3);
+    assert.strictEqual((await api.handle('GET', '/verb-forms?language=it')).verbs.length, 0);
+});

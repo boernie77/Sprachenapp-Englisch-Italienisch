@@ -126,7 +126,7 @@
                 id: first + i, it: s.it, de: s.de, category: s.category || null, level: s.level || null, language, forWord: s.forWord || null
             })));
         }
-        const ai = createAi ? createAi({ store, now, sentencesFor, addSentences: (l, list) => serial(() => addSentences(l, list)), liveVocab }) : null;
+        const ai = createAi ? createAi({ store, now, sentencesFor, addSentences: (l, list) => serial(() => addSentences(l, list)), liveVocab, baseVocab }) : null;
 
         // ---- Routen ----
         const routes = [];
@@ -281,6 +281,8 @@
             route('GET', '/local-ai/models', ({ q }) => ai.listModels(q.get('provider')));
             route('POST', '/local-ai/test', () => ai.testAi());
             route('POST', '/local-ai/tts-test', () => ai.testTts());
+            route('GET', '/local-ai/verb-status', ({ q }) => ai.verbStatus(q.get('language')));
+            route('POST', '/local-ai/verb-check', ({ body }) => ai.verbCheckRun(body.language));
         } else {
             route('GET', '/tts/status', async () => ({ available: false, provider: null }));
             route('GET', '/ai/options', async () => ({
@@ -289,8 +291,8 @@
             }));
         }
 
-        // Geprüfte Verbformen gibt es ohne Server nicht (später: Prüfung per KI)
-        route('GET', '/verb-forms', async () => ({ now: iso(), verbs: [] }));
+        // Geprüfte Verbformen: aus der Prüfung per KI in der App (ohne KI-Einrichtung leer)
+        route('GET', '/verb-forms', ({ q }) => (ai ? ai.verbForms(q.get('language'), q.get('since')) : { now: iso(), verbs: [] }));
 
         async function handle(method, endpoint, body) {
             const [path, query] = String(endpoint).split('?');

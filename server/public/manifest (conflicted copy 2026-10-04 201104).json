@@ -1,0 +1,17 @@
+{
+  "name": "Vokabeln – Sprachen lernen",
+  "short_name": "Vokabeln",
+  "description": "Lerne Italienisch, Englisch und Spanisch mit Drag & Drop, Quiz, Schreiben und Grammatik",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/197/197626.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -36,12 +36,6 @@
     <script src="app-config.local.js" onerror="this.remove()"></script>
     <script src="grammar-help.js"></script>
     <script src="tts.js"></script>
-    <script src="ui-messages.js"></script>
-    <script src="ai-core.js"></script>
-    <script src="ai-providers.js"></script>
-    <script src="local-store.js"></script>
-    <script src="local-ai.js"></script>
-    <script src="local-api.js"></script>
 
     <style>
         body {
@@ -535,7 +529,7 @@
             }
 
             #vocabModal .bg-white,
-            #ttsModal .bg-white, #localAiModal .bg-white, #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
+            #ttsModal .bg-white, #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
             #conjugationModal .bg-white,
             #sentenceModal .bg-white,
             #vocabListModal .bg-white,
@@ -581,7 +575,7 @@
             #statsModal,
             #sentenceModal,
             #vocabModal,
-            #ttsModal, #localAiModal, #aiSentenceModal, #wordSentencesModal,
+            #ttsModal, #aiSentenceModal, #wordSentencesModal,
             #conjugationModal,
             #vocabListModal,
             #sentenceListModal,
@@ -608,7 +602,7 @@
             #statsModal .bg-white,
             #sentenceModal .bg-white,
             #vocabModal .bg-white,
-            #ttsModal .bg-white, #localAiModal .bg-white, #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
+            #ttsModal .bg-white, #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
             #conjugationModal .bg-white,
             #vocabListModal .bg-white,
             #sentenceListModal .bg-white,
@@ -801,7 +795,7 @@
             #vocabListModal .bg-white, #sentenceListModal .bg-white,
             #sentenceModal .bg-white,
             #vocabModal .bg-white,
-            #ttsModal .bg-white, #localAiModal .bg-white, #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
+            #ttsModal .bg-white, #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
             #conjugationModal .bg-white {
                 box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             }
@@ -809,7 +803,7 @@
             #vocabListModal, #sentenceListModal,
             #sentenceModal,
             #vocabModal,
-            #ttsModal, #localAiModal, #aiSentenceModal, #wordSentencesModal,
+            #ttsModal, #aiSentenceModal, #wordSentencesModal,
             #conjugationModal {
                 backdrop-filter: blur(8px);
                 -webkit-backdrop-filter: blur(8px);
@@ -818,7 +812,7 @@
             #vocabListModal .bg-white, #sentenceListModal .bg-white,
             #sentenceModal .bg-white,
             #vocabModal .bg-white,
-            #ttsModal .bg-white, #localAiModal .bg-white, #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
+            #ttsModal .bg-white, #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
             #conjugationModal .bg-white {
                 animation: modalSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             }
@@ -826,10 +820,10 @@
             #vocabListModal input, #sentenceListModal input,
             #vocabListModal select, #sentenceListModal select,
             #vocabModal input,
-            #ttsModal input, #localAiModal input, #aiSentenceModal input, #wordSentencesModal input,
+            #ttsModal input, #aiSentenceModal input, #wordSentencesModal input,
             #conjugationModal input,
             #vocabModal select,
-            #ttsModal select, #localAiModal select, #aiSentenceModal select, #wordSentencesModal select,
+            #ttsModal select, #aiSentenceModal select, #wordSentencesModal select,
             #conjugationModal select {
                 font-family: 'DM Sans', sans-serif;
             }
@@ -841,16 +835,16 @@
             #vocabListModal p, #sentenceListModal p,
             #vocabListModal span, #sentenceListModal span,
             #vocabModal label,
-            #ttsModal label, #localAiModal label, #aiSentenceModal label, #wordSentencesModal label,
+            #ttsModal label, #aiSentenceModal label, #wordSentencesModal label,
             #conjugationModal label,
             #vocabModal h2,
-            #ttsModal h2, #localAiModal h2, #aiSentenceModal h2, #wordSentencesModal h2,
+            #ttsModal h2, #aiSentenceModal h2, #wordSentencesModal h2,
             #conjugationModal h2,
             #vocabModal p,
-            #ttsModal p, #localAiModal p, #aiSentenceModal p, #wordSentencesModal p,
+            #ttsModal p, #aiSentenceModal p, #wordSentencesModal p,
             #conjugationModal p,
             #vocabModal span,
-            #ttsModal span, #localAiModal span, #aiSentenceModal span, #wordSentencesModal span,
+            #ttsModal span, #aiSentenceModal span, #wordSentencesModal span,
             #conjugationModal span {
                 letter-spacing: -0.01em;
             }
@@ -1033,13 +1027,13 @@
 
             /* Final Contrast Fixes for Inputs and Tables */
             #vocabModal input,
-            #ttsModal input, #localAiModal input, #aiSentenceModal input, #wordSentencesModal input,
+            #ttsModal input, #aiSentenceModal input, #wordSentencesModal input,
             #conjugationModal input,
             #vocabModal select,
-            #ttsModal select, #localAiModal select, #aiSentenceModal select, #wordSentencesModal select,
+            #ttsModal select, #aiSentenceModal select, #wordSentencesModal select,
             #conjugationModal select,
             #vocabModal textarea,
-            #ttsModal textarea, #localAiModal textarea, #aiSentenceModal textarea, #wordSentencesModal textarea,
+            #ttsModal textarea, #aiSentenceModal textarea, #wordSentencesModal textarea,
             #conjugationModal textarea,
             #vocabListModal input,
             #vocabListModal select,
@@ -1056,10 +1050,10 @@
             }
 
             #vocabModal label,
-            #ttsModal label, #localAiModal label, #aiSentenceModal label, #wordSentencesModal label,
+            #ttsModal label, #aiSentenceModal label, #wordSentencesModal label,
             #conjugationModal label,
             #vocabModal h2,
-            #ttsModal h2, #localAiModal h2, #aiSentenceModal h2, #wordSentencesModal h2,
+            #ttsModal h2, #aiSentenceModal h2, #wordSentencesModal h2,
             #conjugationModal h2,
             #vocabListModal label,
             #vocabListModal h2,
@@ -1145,10 +1139,10 @@
             #sentenceListModal .cs-btn,
             #sentenceListModal .cs-list,
             #vocabModal .cs-btn,
-            #ttsModal .cs-btn, #localAiModal .cs-btn, #aiSentenceModal .cs-btn, #wordSentencesModal .cs-btn,
+            #ttsModal .cs-btn, #aiSentenceModal .cs-btn, #wordSentencesModal .cs-btn,
             #conjugationModal .cs-btn,
             #vocabModal .cs-list,
-            #ttsModal .cs-list, #localAiModal .cs-list, #aiSentenceModal .cs-list, #wordSentencesModal .cs-list,
+            #ttsModal .cs-list, #aiSentenceModal .cs-list, #wordSentencesModal .cs-list,
             #conjugationModal .cs-list,
             #editVocabModal .cs-btn,
             #editVocabModal .cs-list,
@@ -1162,7 +1156,7 @@
             #vocabListModal .cs-opt,
             #sentenceListModal .cs-opt,
             #vocabModal .cs-opt,
-            #ttsModal .cs-opt, #localAiModal .cs-opt, #aiSentenceModal .cs-opt, #wordSentencesModal .cs-opt,
+            #ttsModal .cs-opt, #aiSentenceModal .cs-opt, #wordSentencesModal .cs-opt,
             #conjugationModal .cs-opt,
             #editVocabModal .cs-opt,
             #editSentenceModal .cs-opt {
@@ -1183,7 +1177,7 @@
             #vocabListModal .cs-opt.selected,
             #sentenceListModal .cs-opt.selected,
             #vocabModal .cs-opt.selected,
-            #ttsModal .cs-opt.selected, #localAiModal .cs-opt.selected, #aiSentenceModal .cs-opt.selected, #wordSentencesModal .cs-opt.selected,
+            #ttsModal .cs-opt.selected, #aiSentenceModal .cs-opt.selected, #wordSentencesModal .cs-opt.selected,
             #conjugationModal .cs-opt.selected,
             #editVocabModal .cs-opt.selected,
             #editSentenceModal .cs-opt.selected {
@@ -1194,7 +1188,7 @@
             #vocabListModal .cs-chevron,
             #sentenceListModal .cs-chevron,
             #vocabModal .cs-chevron,
-            #ttsModal .cs-chevron, #localAiModal .cs-chevron, #aiSentenceModal .cs-chevron, #wordSentencesModal .cs-chevron,
+            #ttsModal .cs-chevron, #aiSentenceModal .cs-chevron, #wordSentencesModal .cs-chevron,
             #conjugationModal .cs-chevron,
             #editVocabModal .cs-chevron,
             #editSentenceModal .cs-chevron {
@@ -1205,7 +1199,7 @@
             #vocabListModal input,
             #sentenceListModal input,
             #vocabModal input,
-            #ttsModal input, #localAiModal input, #aiSentenceModal input, #wordSentencesModal input,
+            #ttsModal input, #aiSentenceModal input, #wordSentencesModal input,
             #conjugationModal input,
             #editVocabModal input,
             #editSentenceModal input,
@@ -1567,7 +1561,7 @@
             div[id$="Modal"], 
             #authOverlay,
             #vocabModal,
-            #ttsModal, #localAiModal, #aiSentenceModal, #wordSentencesModal,
+            #ttsModal, #aiSentenceModal, #wordSentencesModal,
             #conjugationModal,
             #statsModal,
             #excelModal {
@@ -1811,10 +1805,7 @@
     <div id="serverSetupOverlay"
         class="hidden fixed inset-0 bg-slate-900 bg-opacity-95 backdrop-blur-md z-[55000] items-center justify-center p-4">
         <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl">
-            <h2 class="text-2xl font-bold text-slate-800 mb-3" data-i18n="setup_title">Wie möchtest du lernen?</h2>
-            <button id="serverSetupLocalBtn" type="button" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl text-base transition-all" data-i18n="setup_local_btn">📱 Ohne Server starten</button>
-            <p class="text-xs text-slate-500 mt-2 mb-4" data-i18n="setup_local_desc">Alles bleibt auf deinem Gerät, du brauchst weder Konto noch Server. Einen Server kannst du später jederzeit verbinden.</p>
-            <div class="flex items-center gap-3 mb-3"><div class="h-px flex-1 bg-slate-200"></div><span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide" data-i18n="setup_or">oder mit eigenem Server</span><div class="h-px flex-1 bg-slate-200"></div></div>
+            <h2 class="text-2xl font-bold text-slate-800 mb-2" data-i18n="setup_title">Mit deinem Server verbinden</h2>
             <p class="text-sm text-slate-500 mb-4" data-i18n="setup_desc">Gib die Adresse deines Lernapp-Servers ein, z. B. https://lernapp.example.com oder im Heimnetz http://192.168.1.20:3001.</p>
             <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="serverSetupInput" data-i18n="setup_label">Server-Adresse</label>
             <input id="serverSetupInput" type="url" inputmode="url" autocapitalize="off" autocorrect="off" autocomplete="off" placeholder="https://"
@@ -1935,7 +1926,6 @@
                         <li><a href="https://github.com/Bernardo-Castilho/dragdroptouch" target="_blank" rel="noopener" class="text-blue-600 hover:underline">DragDropTouch</a> – MIT</li>
                         <li><a href="https://capacitorjs.com" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Capacitor</a> – MIT</li>
                         <li><a href="https://github.com/capacitor-community/text-to-speech" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Capacitor Text-to-Speech</a> – MIT</li>
-                        <li><a href="https://github.com/martinkasa/capacitor-secure-storage-plugin" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Capacitor Secure Storage Plugin</a> – MIT</li>
                         <li><a href="https://rsms.me/inter/" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Inter</a> <span data-i18n="imp_font">(Schrift)</span> – SIL Open Font License 1.1</li>
                         <li data-i18n="imp_license_server">Server: Express, Sequelize, PostgreSQL-Treiber u. a. – MIT, ISC, BSD, Apache-2.0 (Liste im Quellcode: THIRD_PARTY_LICENSES.md)</li>
                     </ul>
@@ -2088,8 +2078,6 @@
                 Es werden <strong>mindestens 10 Vokabeln</strong> benötigt, damit das Programm einwandfrei funktioniert.
             </p>
 
-            <button id="onboardingLoadBaseBtn" type="button" data-i18n="onboarding_load_base"
-                class="hidden w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition-all shadow-md active:scale-95 mb-3">📖 Basisliste laden</button>
             <button id="onboardingVocabSubmitBtn" data-i18n="onboarding_vocab_submit"
                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-md active:scale-95">Alles
                 klar, OK!</button>
@@ -2322,8 +2310,6 @@
                     class="block w-full text-left px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100"><span data-i18n="menu_manage_excel">Excel-Liste verwalten</span></button>
                 <button id="openAiPrefsBtn"
                     class="block w-full text-left px-4 py-2 text-sm font-medium text-purple-700 hover:bg-purple-50 border-b border-slate-100"><span data-i18n="menu_ai_prefs">✨ KI-Beispielsätze</span></button>
-                <button id="openLocalAiBtn"
-                    class="hidden w-full text-left px-4 py-2 text-sm font-medium text-purple-700 hover:bg-purple-50 border-b border-slate-100"><span data-i18n="lai_menu">✨ KI & Stimme einrichten</span></button>
                 <button id="openTtsBtn"
                     class="block w-full text-left px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100"><span data-i18n="menu_tts">Sprachausgabe</span></button>
                 <button id="openAdminDashboardBtn"
@@ -5705,86 +5691,6 @@
     </div>
 
     <!-- Sprachausgabe (Einstellungen) -->
-    <div id="localAiModal"
-        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4" role="dialog" aria-modal="true" aria-labelledby="localAiTitle">
-        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-xl w-full shadow-2xl flex flex-col max-h-[90vh]">
-            <div class="flex justify-between items-center mb-4 shrink-0">
-                <h2 id="localAiTitle" class="text-xl font-bold text-slate-800" data-i18n="lai_title">KI & Stimme</h2>
-                <button id="closeLocalAiModalBtn" type="button" aria-label="Close" class="text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
-            </div>
-            <div class="overflow-y-auto pr-1 flex-1 min-h-0">
-                <p class="text-xs text-slate-500 mb-4" data-i18n="lai_intro"></p>
-
-                <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 mb-4">
-                    <div class="flex items-center justify-between gap-3 mb-3">
-                        <span class="text-sm font-bold text-slate-800" data-i18n="lai_ai_title">KI</span>
-                        <button type="button" id="laiAiEnabled" role="switch" aria-pressed="false" aria-label="KI" class="tts-switch"><span class="tts-knob"></span></button>
-                    </div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1" for="laiAiProvider" data-i18n="lai_provider">Anbieter</label>
-                    <select id="laiAiProvider" autocomplete="off" class="w-full mb-3 bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
-                        <option value="anthropic">Claude (Anthropic)</option>
-                        <option value="openai">OpenAI (ChatGPT)</option>
-                    </select>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1" for="laiAiKey" data-i18n="lai_key">API-Schlüssel</label>
-                    <input id="laiAiKey" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" class="w-full mb-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
-                    <div class="flex items-center justify-between gap-2 mb-3">
-                        <span id="laiAiKeyHint" class="text-[11px] text-slate-400"></span>
-                        <button type="button" id="laiAiKeyRemove" class="hidden text-[11px] font-semibold text-red-600" data-i18n="lai_key_remove">Schlüssel entfernen</button>
-                    </div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1" for="laiAiModel" data-i18n="lai_model">Modell</label>
-                    <div class="flex gap-2 mb-3">
-                        <input id="laiAiModel" list="laiAiModelList" autocomplete="off" autocapitalize="off" spellcheck="false" class="flex-1 min-w-0 bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
-                        <datalist id="laiAiModelList"></datalist>
-                        <button type="button" id="laiAiLoadModels" class="shrink-0 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl border border-slate-200 text-xs font-bold" data-i18n="lai_load_models">Modelle laden</button>
-                    </div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1" for="laiAiLimit" data-i18n="lai_ai_limit">Tageslimit Sätze (0 = unbegrenzt)</label>
-                    <input id="laiAiLimit" type="number" min="0" step="1" inputmode="numeric" class="w-full mb-3 bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
-                    <div class="flex items-center gap-3">
-                        <button type="button" id="laiAiTest" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl border border-slate-200 text-xs font-bold" data-i18n="lai_test">Verbindung testen</button>
-                        <span id="laiAiTestResult" class="text-xs min-w-0"></span>
-                    </div>
-                </div>
-
-                <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 mb-4">
-                    <div class="flex items-center justify-between gap-3 mb-3">
-                        <span class="text-sm font-bold text-slate-800" data-i18n="lai_tts_title">Cloudstimme</span>
-                        <button type="button" id="laiTtsEnabled" role="switch" aria-pressed="false" aria-label="Cloudstimme" class="tts-switch"><span class="tts-knob"></span></button>
-                    </div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1" for="laiTtsProvider" data-i18n="lai_provider">Anbieter</label>
-                    <select id="laiTtsProvider" autocomplete="off" class="w-full mb-3 bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
-                        <option value="google">Google Cloud Text-to-Speech</option>
-                        <option value="openai">OpenAI (gpt-4o-mini-tts)</option>
-                    </select>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1" for="laiTtsKey" data-i18n="lai_key">API-Schlüssel</label>
-                    <input id="laiTtsKey" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" class="w-full mb-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
-                    <div class="flex items-center justify-between gap-2 mb-3">
-                        <span id="laiTtsKeyHint" class="text-[11px] text-slate-400"></span>
-                        <button type="button" id="laiTtsKeyRemove" class="hidden text-[11px] font-semibold text-red-600" data-i18n="lai_key_remove">Schlüssel entfernen</button>
-                    </div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1" for="laiTtsLimit" data-i18n="lai_tts_limit">Tageslimit neue Aufnahmen (0 = unbegrenzt)</label>
-                    <input id="laiTtsLimit" type="number" min="0" step="1" inputmode="numeric" class="w-full mb-3 bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
-                    <div class="flex items-center gap-3">
-                        <button type="button" id="laiTtsTest" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl border border-slate-200 text-xs font-bold" data-i18n="lai_tts_test">Stimme testen</button>
-                        <span id="laiTtsTestResult" class="text-xs min-w-0"></span>
-                    </div>
-                </div>
-
-                <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 mb-4">
-                    <span class="block text-sm font-bold text-slate-800 mb-1" data-i18n="lai_verb_title">Konjugationen mit KI prüfen</span>
-                    <p class="text-xs text-slate-500 mb-2" data-i18n="lai_verb_desc"></p>
-                    <p id="laiVerbStatus" class="text-xs font-semibold text-slate-700 mb-2"></p>
-                    <button type="button" id="laiVerbRun" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl border border-slate-200 text-xs font-bold disabled:opacity-40" data-i18n="lai_verb_run">Jetzt prüfen</button>
-                </div>
-
-                <p id="laiUsage" class="text-xs text-slate-500 mb-2"></p>
-                <p class="text-[11px] text-slate-400 mb-4" data-i18n="lai_hint"></p>
-            </div>
-            <div class="shrink-0 pt-3">
-                <button id="laiSaveBtn" type="button" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm transition-all disabled:opacity-40" data-i18n="lai_save">Speichern</button>
-            </div>
-        </div>
-    </div>
-
     <div id="ttsModal"
         class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4" role="dialog" aria-modal="true" aria-labelledby="ttsModalTitle">
         <div class="bg-white rounded-3xl p-6 md:p-8 max-w-xl w-full shadow-2xl flex flex-col max-h-[90vh]">
@@ -6925,22 +6831,7 @@
         let API_BASE_URL = isCapacitor
             ? (normalizeServerUrl(localStorage.getItem(SERVER_URL_KEY)) || normalizeServerUrl(APP_CONFIG.defaultServerUrl))
             : '';
-        // Betrieb ohne Server (Standalone): Alle Daten liegen im Gerät (local-store.js / local-api.js), apiFetch() beantwortet die
-        // Aufrufe lokal. Gewählt wird er beim ersten Start der App; zum Entwickeln im Browser mit ?standalone=1 (aus: ?standalone=0).
-        const LOCAL_MODE_KEY = 'lernapp-mode';
-        try {
-            const sp = new URLSearchParams(window.location.search).get('standalone');
-            if (sp === '1') localStorage.setItem(LOCAL_MODE_KEY, 'local');
-            else if (sp === '0') localStorage.removeItem(LOCAL_MODE_KEY);
-        } catch (e) { /* kein Speicher: normaler Betrieb */ }
-        const LOCAL_MODE = localStorage.getItem(LOCAL_MODE_KEY) === 'local';
-        const netOnline = () => LOCAL_MODE || navigator.onLine; // im lokalen Betrieb gibt es keine Verbindung, auf die man wartet
-        const needsServerSetup = isCapacitor && !API_BASE_URL && !LOCAL_MODE;
-        const localApi = LOCAL_MODE ? LocalApi.create({
-            store: LocalStore.createDefault(),
-            createAi: (ctx) => LocalAi.create({ ...ctx, secrets: LocalAi.createSecrets(), http: LocalAi.createHttp() }),
-            loadJson: async (path) => { const r = await fetch(path); if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); }
-        }) : null;
+        const needsServerSetup = isCapacitor && !API_BASE_URL;
 
         console.log("App Info:", {
             protocol: window.location.protocol,
@@ -6977,10 +6868,10 @@
             window.history.replaceState(null, '', u.pathname + (u.search ? u.search : ''));
             setTimeout(() => alert('SSO-Login: ' + err), 100);
         })();
-        let API_TOKEN = LOCAL_MODE ? LocalApi.LOCAL_TOKEN : localStorage.getItem('ita-token');
-        let IS_ADMIN = !LOCAL_MODE && localStorage.getItem('ita-admin') === 'true';
+        let API_TOKEN = localStorage.getItem('ita-token');
+        let IS_ADMIN = localStorage.getItem('ita-admin') === 'true';
         let CURRENT_USER_NAME = localStorage.getItem('ita-user-name');
-        let CURRENT_USER_ID = LOCAL_MODE ? LocalApi.LOCAL_USER_ID : (parseInt(localStorage.getItem('ita-user-id')) || null);
+        let CURRENT_USER_ID = parseInt(localStorage.getItem('ita-user-id')) || null;
         // Lernsprachen: it, en, es. Die Spalte `it` (Fremdwort) heißt aus Altgründen so, gilt aber für jede Lernsprache.
         const SUPPORTED_LANGS = ['it', 'en', 'es'];
         let CURRENT_LANG = SUPPORTED_LANGS.includes(localStorage.getItem('ita-lang')) ? localStorage.getItem('ita-lang') : 'it';
@@ -7310,7 +7201,7 @@
         let fullDictionary = [];
         let allBaseSentences = [];
         // Verbindungszustand: 'offline' (kein Internet), 'server' (Internet, aber Server nicht erreichbar), 'connected'
-        let connectionState = netOnline() ? 'connected' : 'offline';
+        let connectionState = navigator.onLine ? 'connected' : 'offline';
         // Globale Sätze: 'auto' = KI-Sätze sind aktiv, wenn ihr Wort in der Vokabelliste aktiv ist (Excel-Sätze immer);
         // 'manual' = eigene Auswahl (manualActive vom Server). Abgewählte Sätze zählen nicht für Übung und Beispiel-Popups.
         let sentenceMode = 'auto';
@@ -7705,15 +7596,7 @@
                 info_extra_placeholder: "Hier erscheinen Zusatzinformationen oder Bilder.",
                 info_type_verb: "Verbformen",
                 info_type_noun: "Bild",
-                setup_title: "Wie möchtest du lernen?",
-                setup_local_btn: "📱 Ohne Server starten",
-                onboarding_load_base: "📖 Basisliste laden",
-                onboarding_vocab_desc_local: "Damit du loslegen kannst, brauchst du Vokabeln. Lade die mitgelieferte <strong>Basisliste</strong> oder trage eigene Vokabeln ein (manuell über <strong>\"Vokabel hinzufügen\"</strong> oder per <strong>Excelliste</strong> im Menü). Es werden mindestens 10 Vokabeln benötigt.",
-                setup_local_desc: "Alles bleibt auf deinem Gerät, du brauchst weder Konto noch Server. Einen Server kannst du später jederzeit verbinden.",
-                setup_or: "oder mit eigenem Server",
-                menu_leave_local: "Lokaler Betrieb – Auswahl ändern",
-                confirm_leave_local: "Du kehrst zur Startauswahl zurück. Deine Daten bleiben auf dem Gerät gespeichert, solange du die App nicht löschst. Fortfahren?",
-                local_mode_label: "Daten nur auf diesem Gerät",
+                setup_title: "Mit deinem Server verbinden",
                 setup_desc: "Gib die Adresse deines Lernapp-Servers ein, z. B. https://lernapp.example.com oder im Heimnetz http://192.168.1.20:3001.",
                 setup_label: "Server-Adresse",
                 setup_test: "Verbindung testen",
@@ -7965,40 +7848,6 @@
                 ai_remaining: "Heute noch {0} von {1} Sätzen · {2}",
                 ai_remaining_unlimited: "Admin: kein Tageslimit · {0}",
                 ai_not_available: "Die KI-Funktion ist derzeit nicht verfügbar",
-                lai_menu: "✨ KI & Stimme einrichten",
-                lai_title: "KI & Stimme",
-                lai_intro: "Ohne Server nutzt die App KI und Cloudstimme direkt bei deinem Anbieter. Dafür brauchst du einen eigenen API-Schlüssel aus deinem Konto beim Anbieter. Er bleibt verschlüsselt auf diesem Gerät. Wörter und Sätze gehen direkt an den Anbieter, die Kosten trägst du selbst. Ohne Einrichtung funktioniert alles andere, auch die Sprachausgabe des Geräts.",
-                lai_ai_title: "KI für Beispielsätze und Wortinfo",
-                lai_tts_title: "Cloudstimme",
-                lai_provider: "Anbieter",
-                lai_key: "API-Schlüssel",
-                lai_key_set: "Gespeichert: {0} – leer lassen, um ihn zu behalten",
-                lai_key_none: "Noch kein Schlüssel hinterlegt",
-                lai_key_shared: "Nutzt den OpenAI-Schlüssel der KI mit",
-                lai_key_remove: "Schlüssel entfernen",
-                lai_model: "Modell",
-                lai_load_models: "Modelle laden",
-                lai_ai_limit: "Tageslimit Sätze (0 = unbegrenzt)",
-                lai_tts_limit: "Tageslimit neue Aufnahmen (0 = unbegrenzt)",
-                lai_test: "Verbindung testen",
-                lai_tts_test: "Stimme testen",
-                lai_test_ok: "✓ Funktioniert",
-                lai_models_loaded: "{0} Modelle geladen",
-                lai_save: "Speichern",
-                lai_saved: "Einstellungen gespeichert",
-                lai_usage: "Heute: {0} Sätze, {1} neue Stimmen-Aufnahmen, ca. {2}",
-                lai_hint: "Schlüssel erstellst du im Konto des Anbieters (Anthropic, OpenAI oder Google Cloud). Die Preise nennt der Anbieter. Die Cloudstimme speichert erzeugte Aufnahmen auf dem Gerät, gleiche Texte kosten nur einmal.",
-                lai_need_key: "Bitte zuerst einen API-Schlüssel eintragen",
-                lai_verb_title: "Konjugationen mit KI prüfen",
-                lai_verb_desc: "Die KI prüft die Verbformen deiner Verben in der aktuellen Lernsprache einmal. Danach nutzt die App die geprüften Formen statt der Regelrechnung.",
-                lai_verb_status: "Offen: {0} Verben (ca. {1}), bereits geprüft: {2}",
-                lai_verb_status_noprice: "Offen: {0} Verben, bereits geprüft: {1}",
-                lai_verb_run: "Jetzt prüfen",
-                lai_verb_confirm: "{0} Verben mit der KI prüfen? Das kostet etwa {1}.",
-                lai_verb_confirm_noprice: "{0} Verben mit der KI prüfen? Dabei fallen Kosten beim Anbieter an.",
-                lai_verb_done: "{0} Verben geprüft",
-                lai_verb_none: "Alle Verben sind geprüft",
-                ai_not_available_local: "Die KI ist noch nicht eingerichtet. Trage dazu deinen API-Schlüssel ein.",
                 ai_need_grammar: "Bitte mindestens eine Grammatikart wählen",
                 ai_count_range: "Anzahl zwischen 1 und {0}",
                 ai_prefs_saved: "KI-Einstellungen gespeichert",
@@ -8621,15 +8470,7 @@
                 info_extra_placeholder: "Additional information or pictures will appear here.",
                 info_type_verb: "Verb Forms",
                 info_type_noun: "Picture",
-                setup_title: "How do you want to learn?",
-                setup_local_btn: "📱 Start without a server",
-                onboarding_load_base: "📖 Load starter list",
-                onboarding_vocab_desc_local: "You need vocabulary to get started. Load the built-in <strong>starter list</strong> or add your own words (manually via <strong>\"Add vocabulary\"</strong> or from an <strong>Excel list</strong> in the menu). At least 10 words are needed.",
-                setup_local_desc: "Everything stays on your device – no account or server needed. You can connect a server any time later.",
-                setup_or: "or with your own server",
-                menu_leave_local: "Local mode – change selection",
-                confirm_leave_local: "You return to the start selection. Your data stays on this device as long as you do not delete the app. Continue?",
-                local_mode_label: "Data only on this device",
+                setup_title: "Connect to your server",
                 setup_desc: "Enter the address of your Lernapp server, e.g. https://lernapp.example.com or on your home network http://192.168.1.20:3001.",
                 setup_label: "Server address",
                 setup_test: "Test connection",
@@ -8766,40 +8607,6 @@
                 ai_remaining: "{0} of {1} sentences left today · {2}",
                 ai_remaining_unlimited: "Admin: no daily limit · {0}",
                 ai_not_available: "The AI feature is currently unavailable",
-                lai_menu: "✨ Set up AI & voice",
-                lai_title: "AI & voice",
-                lai_intro: "Without a server the app uses AI and the cloud voice directly at your provider. You need your own API key from your provider account. It stays encrypted on this device. Words and sentences go straight to the provider and you pay the costs yourself. Everything else works without setup, including your device's own speech output.",
-                lai_ai_title: "AI for example sentences and word info",
-                lai_tts_title: "Cloud voice",
-                lai_provider: "Provider",
-                lai_key: "API key",
-                lai_key_set: "Saved: {0} – leave empty to keep it",
-                lai_key_none: "No key saved yet",
-                lai_key_shared: "Also uses the OpenAI key of the AI",
-                lai_key_remove: "Remove key",
-                lai_model: "Model",
-                lai_load_models: "Load models",
-                lai_ai_limit: "Daily limit sentences (0 = unlimited)",
-                lai_tts_limit: "Daily limit new recordings (0 = unlimited)",
-                lai_test: "Test connection",
-                lai_tts_test: "Test voice",
-                lai_test_ok: "✓ Works",
-                lai_models_loaded: "{0} models loaded",
-                lai_save: "Save",
-                lai_saved: "Settings saved",
-                lai_usage: "Today: {0} sentences, {1} new voice recordings, approx. {2}",
-                lai_hint: "You create keys in your provider account (Anthropic, OpenAI or Google Cloud). The provider sets the prices. The cloud voice stores generated recordings on the device, so identical texts are only paid once.",
-                lai_need_key: "Please enter an API key first",
-                lai_verb_title: "Check conjugations with AI",
-                lai_verb_desc: "The AI checks the verb forms of your verbs in the current learning language once. After that the app uses the checked forms instead of the rule-based ones.",
-                lai_verb_status: "Open: {0} verbs (approx. {1}), already checked: {2}",
-                lai_verb_status_noprice: "Open: {0} verbs, already checked: {1}",
-                lai_verb_run: "Check now",
-                lai_verb_confirm: "Check {0} verbs with the AI? This costs about {1}.",
-                lai_verb_confirm_noprice: "Check {0} verbs with the AI? The provider will charge you for it.",
-                lai_verb_done: "{0} verbs checked",
-                lai_verb_none: "All verbs are checked",
-                ai_not_available_local: "AI is not set up yet. Enter your API key to use it.",
                 ai_need_grammar: "Please choose at least one grammar type",
                 ai_count_range: "Count between 1 and {0}",
                 ai_prefs_saved: "AI settings saved",
@@ -9810,7 +9617,7 @@
         // Anmeldung aktiv halten: Token (30 Tage gültig) wird bei Nutzung spätestens nach 12 h erneuert
         let _tokenRefreshRunning = false;
         async function refreshTokenIfDue() {
-            if (!API_TOKEN || !netOnline() || _tokenRefreshRunning) return;
+            if (!API_TOKEN || !navigator.onLine || _tokenRefreshRunning) return;
             let issuedAt = 0;
             try {
                 const b64 = API_TOKEN.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
@@ -9839,21 +9646,7 @@
             return err;
         }
 
-        // Lokaler Betrieb: gleiche Aufrufe, Antwort aus dem Gerätespeicher
-        async function localApiFetch(endpoint, options = {}) {
-            if (!endpoint.includes('language=')) endpoint += `${endpoint.includes('?') ? '&' : '?'}language=${CURRENT_LANG}`;
-            let body = options.body;
-            if (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) { body = {}; } }
-            try {
-                return await localApi.handle(options.method || 'GET', endpoint, body);
-            } catch (err) { // Meldungen wie der Server in der Oberflächensprache
-                if (APP_UI_LANG === 'en' && typeof UiMessages !== 'undefined') err.message = UiMessages.translate(err.message, 'en');
-                throw err;
-            }
-        }
-
         async function apiFetch(endpoint, options = {}) {
-            if (LOCAL_MODE) return localApiFetch(endpoint, options);
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), options.timeoutMs || 20000); // Standard 20 s, KI-Aufrufe länger
 
@@ -10122,7 +9915,7 @@
 
             try {
                 // Erst eigene, noch wartende Änderungen senden, damit der Abruf sie nicht überholt
-                if (netOnline() && syncOutbox.length > 0) await processSyncOutbox();
+                if (navigator.onLine && syncOutbox.length > 0) await processSyncOutbox();
                 if (isCapacitor) console.log("Fetching vocab...");
                 const vocab = await apiFetch('/vocab');
                 if (CURRENT_LANG !== langAtStart) return;
@@ -10530,7 +10323,7 @@
         let outboxRunning = false;
         async function processSyncOutbox() {
             if (outboxRunning || !API_TOKEN || syncOutbox.length === 0) return;
-            if (!netOnline()) { setConnectionState('offline'); return; }
+            if (!navigator.onLine) { setConnectionState('offline'); return; }
             outboxRunning = true;
             try {
                 for (const task of [...syncOutbox]) {
@@ -10630,7 +10423,6 @@
         restorePendingOutbox();
 
         async function checkConnection() {
-            if (LOCAL_MODE) { setConnectionState('connected'); return true; }
             try {
                 // Short timeout for ping to avoid blocking
                 const controller = new AbortController();
@@ -10649,7 +10441,7 @@
             if (!API_TOKEN) return;
 
             // Proactively check connection even if navigator.onLine is uncertain
-            const isActuallyOnline = netOnline() || await checkConnection();
+            const isActuallyOnline = navigator.onLine || await checkConnection();
 
             if (isActuallyOnline) {
                 console.log("Network confirmed - triggering full sync pull/push");
@@ -10662,7 +10454,7 @@
         window.addEventListener('offline', () => setConnectionState('offline'));
         // Ist der Server nicht erreichbar, regelmäßig nachsehen und dann gleich abgleichen
         setInterval(async () => {
-            if (API_TOKEN && connectionState !== 'connected' && netOnline()) {
+            if (API_TOKEN && connectionState !== 'connected' && navigator.onLine) {
                 if (await checkConnection()) handleSyncReconnection();
             }
         }, 20000);
@@ -10683,7 +10475,7 @@
 
         setInterval(processSyncOutbox, 30000); // Push every 30s
         setInterval(() => {
-            if (netOnline() && API_TOKEN) {
+            if (navigator.onLine && API_TOKEN) {
                 refreshTokenIfDue();
                 loadDataFromServer(true); // Silent Pull every 60s
             }
@@ -10753,24 +10545,9 @@
 
             if (needsServerSetup) show();
 
-            document.getElementById('serverSetupLocalBtn').addEventListener('click', () => {
-                localStorage.setItem(LOCAL_MODE_KEY, 'local');
-                location.reload();
-            });
-
             if (isCapacitor && changeBtn) {
                 changeBtn.classList.remove('hidden');
                 changeBtn.classList.add('block');
-                if (LOCAL_MODE) {
-                    changeBtn.querySelector('[data-i18n]').setAttribute('data-i18n', 'menu_leave_local');
-                    changeBtn.querySelector('[data-i18n]').textContent = getI18n('menu_leave_local');
-                    document.getElementById('changeServerHost').textContent = getI18n('local_mode_label');
-                    changeBtn.addEventListener('click', async () => {
-                        if (!(await showConfirm(getI18n('confirm_leave_local'), getI18n('menu_leave_local')))) return;
-                        localStorage.removeItem(LOCAL_MODE_KEY);
-                        location.reload();
-                    });
-                } else {
                 document.getElementById('changeServerHost').textContent = (API_BASE_URL || '').replace(/^https?:\/\//, '');
                 changeBtn.addEventListener('click', async () => {
                     if (!(await showConfirm(getI18n('confirm_change_server'), getI18n('menu_change_server')))) return;
@@ -10779,17 +10556,8 @@
                     localStorage.removeItem(SERVER_URL_KEY);
                     location.reload();
                 });
-                }
             }
         })();
-
-        // Lokaler Betrieb: kein Konto, keine Anmeldung, kein Abgleich – die zugehörigen Menüpunkte entfallen
-        if (LOCAL_MODE) {
-            ['logoutBtn', 'deleteAccountBtn', 'syncStateRow', 'syncStatus', 'openContactModalBtn'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.style.setProperty('display', 'none', 'important');
-            });
-        }
 
         // --- Konto löschen (Pflicht für Apps mit Registrierung) ---
         (function setupDeleteAccount() {
@@ -11178,8 +10946,7 @@
 
             loadDataFromServer();
 
-            // Show version popup only once per device, after login (nicht beim allerersten Start: dann gibt es nichts Neues)
-            if (!CURRENT_USER_NAME && !localStorage.getItem(vKey)) localStorage.setItem(vKey, 'true');
+            // Show version popup only once per device, after login
             if (!localStorage.getItem(vKey)) {
                 versionModal.classList.remove('hidden');
                 versionModal.classList.add('flex');
@@ -11237,35 +11004,6 @@
             onboardingVocabModal.classList.add('hidden');
             onboardingVocabModal.classList.remove('flex');
         });
-
-        // Ohne Server gibt es keinen Admin, der eine Basisliste bereitstellt: die mitgelieferte Liste gleich beim Start anbieten
-        if (LOCAL_MODE) {
-            const loadBaseBtn = document.getElementById('onboardingLoadBaseBtn');
-            const descEl = onboardingVocabModal.querySelector('[data-i18n="onboarding_vocab_desc"]');
-            if (descEl) { descEl.setAttribute('data-i18n', 'onboarding_vocab_desc_local'); descEl.innerHTML = getI18n('onboarding_vocab_desc_local'); }
-            loadBaseBtn.classList.remove('hidden');
-            loadBaseBtn.addEventListener('click', async () => {
-                loadBaseBtn.disabled = true;
-                try {
-                    const base = await apiFetch(`/base-vocab?language=${CURRENT_LANG}`);
-                    await apiFetch('/vocab/bulk', {
-                        method: 'POST',
-                        body: JSON.stringify({
-                            language: CURRENT_LANG,
-                            words: base.map(v => ({ de: v.de, it: v.it, typ: v.typ, emoji: v.emoji, grammatica: v.grammatica, language: CURRENT_LANG, isOwn: false }))
-                        })
-                    });
-                    await loadDataFromServer();
-                    showToast(getI18n('toast_vocab_loaded_success', base.length, getI18n('action_added')), 'success');
-                    onboardingVocabModal.classList.add('hidden');
-                    onboardingVocabModal.classList.remove('flex');
-                } catch (err) {
-                    showToast(getI18n('toast_import_error') + ': ' + err.message, 'error');
-                } finally {
-                    loadBaseBtn.disabled = false;
-                }
-            });
-        }
 
         setupModal(
             contactModal,
@@ -15538,10 +15276,7 @@
             closeAllModals();
             dropdownMenu.classList.add('hidden');
             if (!(await requireServer())) return;
-            if (!await loadAiOptions()) {
-                if (LOCAL_MODE) { showToast(getI18n('ai_not_available_local'), 'info'); return openLocalAiModal(); }
-                return showToast(getI18n('ai_not_available'), 'warning');
-            }
+            if (!await loadAiOptions()) return showToast(getI18n('ai_not_available'), 'warning');
             aiAutoEnabled.checked = aiOptions.prefs.enabled;
             aiSelectedLevels.clear();
             aiOptions.prefs.levels.forEach(l => aiSelectedLevels.add(l));
@@ -17522,10 +17257,6 @@
             return sentence ? { text: sentence.it, lang: CURRENT_LANG, de: sentence.de } : null;
         }
         async function ttsFetchAudio(text, lang) {
-            if (LOCAL_MODE) { // eigener Schlüssel, direkt beim Anbieter (Zwischenspeicher im Gerät)
-                const { audio } = await localApi.ai.ttsAudio(text, lang);
-                return new Blob([audio], { type: 'audio/mpeg' });
-            }
             const res = await fetch(`${API_BASE_URL}/api/tts`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${API_TOKEN}` },
@@ -17637,159 +17368,6 @@
             const l = btn.dataset.ttsTest;
             Tts.speak(TTS_SAMPLES[l], l);
         }));
-
-
-        // --- Lokaler Betrieb: KI und Cloudstimme mit eigenem Schlüssel einrichten ---
-        const localAiModal = document.getElementById('localAiModal');
-        let openLocalAiModal = () => { };
-        if (LOCAL_MODE) (function setupLocalAi() {
-            document.getElementById('openLocalAiBtn').classList.remove('hidden');
-            const $ = (id) => document.getElementById(id);
-            const aiSwitch = $('laiAiEnabled'), ttsSwitch = $('laiTtsEnabled');
-            const pending = { ai: {}, tts: {} };   // eingetippte, noch nicht gespeicherte Schlüssel je Anbieter
-            const removed = { ai: new Set(), tts: new Set() };
-            let cfg = null, shownAi = null, shownTts = null;
-            const setSwitch = (btn, on) => btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-            const isOn = (btn) => btn.getAttribute('aria-pressed') === 'true';
-            [aiSwitch, ttsSwitch].forEach(b => b.addEventListener('click', () => setSwitch(b, !isOn(b))));
-            const result = (el, text, ok) => { el.textContent = text; el.className = `text-xs min-w-0 ${ok ? 'text-green-600 font-semibold' : 'text-red-500 font-semibold'}`; };
-
-            function keyUi(kind, provider) {
-                const p = (kind === 'ai' ? cfg.providers : cfg.tts.providers)[provider];
-                const input = $(kind === 'ai' ? 'laiAiKey' : 'laiTtsKey');
-                const hint = $(kind === 'ai' ? 'laiAiKeyHint' : 'laiTtsKeyHint');
-                const rm = $(kind === 'ai' ? 'laiAiKeyRemove' : 'laiTtsKeyRemove');
-                input.value = pending[kind][provider] || '';
-                const stored = p.keySet && !removed[kind].has(provider);
-                hint.textContent = stored ? getI18n('lai_key_set', p.keyHint) : (p.sharesAiKey ? getI18n('lai_key_shared') : getI18n('lai_key_none'));
-                rm.classList.toggle('hidden', !stored);
-            }
-            function stashTyped() {
-                if (shownAi) pending.ai[shownAi] = $('laiAiKey').value.trim();
-                if (shownTts) pending.tts[shownTts] = $('laiTtsKey').value.trim();
-            }
-            function showAiProvider(id) {
-                shownAi = id;
-                $('laiAiProvider').value = id;
-                $('laiAiModel').value = cfg.providers[id].model;
-                $('laiAiModelList').innerHTML = cfg.providers[id].suggestedModels.map(m => `<option value="${escapeHtml(m)}"></option>`).join('');
-                keyUi('ai', id);
-            }
-            function showTtsProvider(id) { shownTts = id; $('laiTtsProvider').value = id; keyUi('tts', id); }
-
-            async function fill() {
-                cfg = await apiFetch('/local-ai/settings');
-                Object.keys(pending.ai).forEach(k => delete pending.ai[k]); Object.keys(pending.tts).forEach(k => delete pending.tts[k]);
-                removed.ai.clear(); removed.tts.clear();
-                setSwitch(aiSwitch, cfg.enabled); setSwitch(ttsSwitch, cfg.tts.enabled);
-                $('laiAiLimit').value = cfg.dailyLimit; $('laiTtsLimit').value = cfg.tts.dailyLimit;
-                showAiProvider(cfg.provider); showTtsProvider(cfg.tts.provider);
-                $('laiAiTestResult').textContent = ''; $('laiTtsTestResult').textContent = '';
-                try {
-                    const u = await apiFetch('/local-ai/usage');
-                    $('laiUsage').textContent = getI18n('lai_usage', u.count, u.ttsCalls, formatEuro(u.costEur));
-                } catch (e) { $('laiUsage').textContent = ''; }
-                await refreshVerbStatus();
-            }
-
-            // Stand der Verbprüfung (Sprache = aktuelle Lernsprache)
-            let verbInfo = null;
-            async function refreshVerbStatus() {
-                try {
-                    verbInfo = await apiFetch(`/local-ai/verb-status?language=${CURRENT_LANG}`);
-                    $('laiVerbStatus').textContent = verbInfo.pending === 0 ? getI18n('lai_verb_none')
-                        : (verbInfo.estimateEur === null ? getI18n('lai_verb_status_noprice', verbInfo.pending, verbInfo.verified)
-                            : getI18n('lai_verb_status', verbInfo.pending, formatEuro(verbInfo.estimateEur), verbInfo.verified));
-                    $('laiVerbRun').disabled = verbInfo.pending === 0;
-                } catch (e) { verbInfo = null; $('laiVerbStatus').textContent = ''; }
-            }
-            $('laiVerbRun').addEventListener('click', async () => {
-                if (!verbInfo || verbInfo.pending === 0) return;
-                const ok = await showConfirm(verbInfo.estimateEur === null ? getI18n('lai_verb_confirm_noprice', verbInfo.pending) : getI18n('lai_verb_confirm', verbInfo.pending, formatEuro(verbInfo.estimateEur)), getI18n('lai_verb_title'));
-                if (!ok) return;
-                const btn = $('laiVerbRun'); btn.disabled = true; $('laiVerbStatus').textContent = '…';
-                try {
-                    await save();
-                    const r = await apiFetch('/local-ai/verb-check', { method: 'POST', body: JSON.stringify({ language: CURRENT_LANG }) });
-                    showToast(getI18n('lai_verb_done', r.saved), 'success');
-                    if (typeof loadVerifiedVerbForms === 'function') await loadVerifiedVerbForms();
-                } catch (err) { showToast(err.message, 'error'); }
-                finally { await refreshVerbStatus(); }
-            });
-            $('laiAiProvider').addEventListener('change', (e) => { stashTyped(); showAiProvider(e.target.value); });
-            $('laiTtsProvider').addEventListener('change', (e) => { stashTyped(); showTtsProvider(e.target.value); });
-            $('laiAiKeyRemove').addEventListener('click', () => { removed.ai.add(shownAi); pending.ai[shownAi] = ''; keyUi('ai', shownAi); });
-            $('laiTtsKeyRemove').addEventListener('click', () => { removed.tts.add(shownTts); pending.tts[shownTts] = ''; keyUi('tts', shownTts); });
-
-            // Alles aus dem Fenster speichern (Schlüssel nur, wenn neu eingetippt oder entfernt)
-            async function save() {
-                stashTyped();
-                const keys = {}, ttsKeys = {};
-                Object.entries(pending.ai).forEach(([id, k]) => { if (k) keys[id] = k; });
-                Object.entries(pending.tts).forEach(([id, k]) => { if (k) ttsKeys[id] = k; });
-                removed.ai.forEach(id => { if (!keys[id]) keys[id] = ''; });
-                removed.tts.forEach(id => { if (!ttsKeys[id]) ttsKeys[id] = ''; });
-                const body = {
-                    provider: $('laiAiProvider').value, enabled: isOn(aiSwitch), dailyLimit: parseInt($('laiAiLimit').value, 10),
-                    models: { [$('laiAiProvider').value]: $('laiAiModel').value }, keys,
-                    tts: { provider: $('laiTtsProvider').value, enabled: isOn(ttsSwitch), dailyLimit: parseInt($('laiTtsLimit').value, 10), keys: ttsKeys }
-                };
-                cfg = await apiFetch('/local-ai/settings', { method: 'PUT', body: JSON.stringify(body) });
-                Object.keys(pending.ai).forEach(k => delete pending.ai[k]); Object.keys(pending.tts).forEach(k => delete pending.tts[k]);
-                removed.ai.clear(); removed.tts.clear();
-                showAiProvider(cfg.provider); showTtsProvider(cfg.tts.provider);
-                aiOptions = null; aiOptionsLang = null;
-                if (typeof refreshTtsStatus === 'function') await refreshTtsStatus();
-            }
-
-            $('laiSaveBtn').addEventListener('click', async () => {
-                $('laiSaveBtn').disabled = true;
-                try { await save(); showToast(getI18n('lai_saved'), 'success'); closeLocalAi(); }
-                catch (err) { showToast(err.message, 'error'); }
-                finally { $('laiSaveBtn').disabled = false; }
-            });
-            $('laiAiTest').addEventListener('click', async () => {
-                const btn = $('laiAiTest'); btn.disabled = true; $('laiAiTestResult').textContent = '…';
-                try {
-                    await save();
-                    if (!cfg.providers[cfg.provider].keySet) throw new Error(getI18n('lai_need_key'));
-                    await apiFetch('/local-ai/test', { method: 'POST' });
-                    result($('laiAiTestResult'), getI18n('lai_test_ok'), true);
-                } catch (err) { result($('laiAiTestResult'), err.message, false); }
-                finally { btn.disabled = false; }
-            });
-            $('laiAiLoadModels').addEventListener('click', async () => {
-                const btn = $('laiAiLoadModels'); btn.disabled = true;
-                try {
-                    await save();
-                    const r = await apiFetch(`/local-ai/models?provider=${encodeURIComponent(cfg.provider)}`);
-                    $('laiAiModelList').innerHTML = r.models.map(m => `<option value="${escapeHtml(m.id)}">${escapeHtml(m.name)}</option>`).join('');
-                    result($('laiAiTestResult'), getI18n('lai_models_loaded', r.models.length), true);
-                } catch (err) { result($('laiAiTestResult'), err.message, false); }
-                finally { btn.disabled = false; }
-            });
-            $('laiTtsTest').addEventListener('click', async () => {
-                const btn = $('laiTtsTest'); btn.disabled = true; $('laiTtsTestResult').textContent = '…';
-                try {
-                    await save();
-                    await apiFetch('/local-ai/tts-test', { method: 'POST' });
-                    result($('laiTtsTestResult'), getI18n('lai_test_ok'), true);
-                } catch (err) { result($('laiTtsTestResult'), err.message, false); }
-                finally { btn.disabled = false; }
-            });
-
-            const closeLocalAi = setupModal(localAiModal, $('openLocalAiBtn'), $('closeLocalAiModalBtn'), () => { fill().catch(e => showToast(e.message, 'error')); });
-            openLocalAiModal = () => {
-                closeAllModals(); dropdownMenu.classList.add('hidden');
-                fill().catch(e => showToast(e.message, 'error'));
-                localAiModal.classList.remove('hidden'); localAiModal.classList.add('flex');
-            };
-
-            // Die Automatik für Beispielsätze läuft in der App, solange sie geöffnet ist (Server-Dienst gibt es nicht)
-            const runAuto = () => localApi.ai.runAuto().catch(() => { });
-            setTimeout(runAuto, 20000);
-            setInterval(runAuto, 60000);
-        })();
 
         // Initialize DOM Elements and Triggers
         userNameEl = document.getElementById('userName');
