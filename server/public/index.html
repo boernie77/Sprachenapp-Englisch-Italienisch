@@ -36,6 +36,8 @@
     <script src="app-config.local.js" onerror="this.remove()"></script>
     <script src="grammar-help.js"></script>
     <script src="tts.js"></script>
+    <script src="local-store.js"></script>
+    <script src="local-api.js"></script>
 
     <style>
         body {
@@ -1805,7 +1807,10 @@
     <div id="serverSetupOverlay"
         class="hidden fixed inset-0 bg-slate-900 bg-opacity-95 backdrop-blur-md z-[55000] items-center justify-center p-4">
         <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl">
-            <h2 class="text-2xl font-bold text-slate-800 mb-2" data-i18n="setup_title">Mit deinem Server verbinden</h2>
+            <h2 class="text-2xl font-bold text-slate-800 mb-3" data-i18n="setup_title">Wie möchtest du lernen?</h2>
+            <button id="serverSetupLocalBtn" type="button" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl text-base transition-all" data-i18n="setup_local_btn">📱 Ohne Server starten</button>
+            <p class="text-xs text-slate-500 mt-2 mb-4" data-i18n="setup_local_desc">Alles bleibt auf deinem Gerät, du brauchst weder Konto noch Server. Einen Server kannst du später jederzeit verbinden.</p>
+            <div class="flex items-center gap-3 mb-3"><div class="h-px flex-1 bg-slate-200"></div><span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide" data-i18n="setup_or">oder mit eigenem Server</span><div class="h-px flex-1 bg-slate-200"></div></div>
             <p class="text-sm text-slate-500 mb-4" data-i18n="setup_desc">Gib die Adresse deines Lernapp-Servers ein, z. B. https://lernapp.example.com oder im Heimnetz http://192.168.1.20:3001.</p>
             <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="serverSetupInput" data-i18n="setup_label">Server-Adresse</label>
             <input id="serverSetupInput" type="url" inputmode="url" autocapitalize="off" autocorrect="off" autocomplete="off" placeholder="https://"
@@ -2078,6 +2083,8 @@
                 Es werden <strong>mindestens 10 Vokabeln</strong> benötigt, damit das Programm einwandfrei funktioniert.
             </p>
 
+            <button id="onboardingLoadBaseBtn" type="button" data-i18n="onboarding_load_base"
+                class="hidden w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition-all shadow-md active:scale-95 mb-3">📖 Basisliste laden</button>
             <button id="onboardingVocabSubmitBtn" data-i18n="onboarding_vocab_submit"
                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-md active:scale-95">Alles
                 klar, OK!</button>
@@ -6831,7 +6838,21 @@
         let API_BASE_URL = isCapacitor
             ? (normalizeServerUrl(localStorage.getItem(SERVER_URL_KEY)) || normalizeServerUrl(APP_CONFIG.defaultServerUrl))
             : '';
-        const needsServerSetup = isCapacitor && !API_BASE_URL;
+        // Betrieb ohne Server (Standalone): Alle Daten liegen im Gerät (local-store.js / local-api.js), apiFetch() beantwortet die
+        // Aufrufe lokal. Gewählt wird er beim ersten Start der App; zum Entwickeln im Browser mit ?standalone=1 (aus: ?standalone=0).
+        const LOCAL_MODE_KEY = 'lernapp-mode';
+        try {
+            const sp = new URLSearchParams(window.location.search).get('standalone');
+            if (sp === '1') localStorage.setItem(LOCAL_MODE_KEY, 'local');
+            else if (sp === '0') localStorage.removeItem(LOCAL_MODE_KEY);
+        } catch (e) { /* kein Speicher: normaler Betrieb */ }
+        const LOCAL_MODE = localStorage.getItem(LOCAL_MODE_KEY) === 'local';
+        const netOnline = () => LOCAL_MODE || navigator.onLine; // im lokalen Betrieb gibt es keine Verbindung, auf die man wartet
+        const needsServerSetup = isCapacitor && !API_BASE_URL && !LOCAL_MODE;
+        const localApi = LOCAL_MODE ? LocalApi.create({
+            store: LocalStore.createDefault(),
+            loadJson: async (path) => { const r = await fetch(path); if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); }
+        }) : null;
 
         console.log("App Info:", {
             protocol: window.location.protocol,
@@ -6868,10 +6889,10 @@
             window.history.replaceState(null, '', u.pathname + (u.search ? u.search : ''));
             setTimeout(() => alert('SSO-Login: ' + err), 100);
         })();
-        let API_TOKEN = localStorage.getItem('ita-token');
-        let IS_ADMIN = localStorage.getItem('ita-admin') === 'true';
+        let API_TOKEN = LOCAL_MODE ? LocalApi.LOCAL_TOKEN : localStorage.getItem('ita-token');
+        let IS_ADMIN = !LOCAL_MODE && localStorage.getItem('ita-admin') === 'true';
         let CURRENT_USER_NAME = localStorage.getItem('ita-user-name');
-        let CURRENT_USER_ID = parseInt(localStorage.getItem('ita-user-id')) || null;
+        let CURRENT_USER_ID = LOCAL_MODE ? LocalApi.LOCAL_USER_ID : (parseInt(localStorage.getItem('ita-user-id')) || null);
         // Lernsprachen: it, en, es. Die Spalte `it` (Fremdwort) heißt aus Altgründen so, gilt aber für jede Lernsprache.
         const SUPPORTED_LANGS = ['it', 'en', 'es'];
         let CURRENT_LANG = SUPPORTED_LANGS.includes(localStorage.getItem('ita-lang')) ? localStorage.getItem('ita-lang') : 'it';
@@ -7201,7 +7222,7 @@
         let fullDictionary = [];
         let allBaseSentences = [];
         // Verbindungszustand: 'offline' (kein Internet), 'server' (Internet, aber Server nicht erreichbar), 'connected'
-        let connectionState = navigator.onLine ? 'connected' : 'offline';
+        let connectionState = netOnline() ? 'connected' : 'offline';
         // Globale Sätze: 'auto' = KI-Sätze sind aktiv, wenn ihr Wort in der Vokabelliste aktiv ist (Excel-Sätze immer);
         // 'manual' = eigene Auswahl (manualActive vom Server). Abgewählte Sätze zählen nicht für Übung und Beispiel-Popups.
         let sentenceMode = 'auto';
@@ -7596,7 +7617,15 @@
                 info_extra_placeholder: "Hier erscheinen Zusatzinformationen oder Bilder.",
                 info_type_verb: "Verbformen",
                 info_type_noun: "Bild",
-                setup_title: "Mit deinem Server verbinden",
+                setup_title: "Wie möchtest du lernen?",
+                setup_local_btn: "📱 Ohne Server starten",
+                onboarding_load_base: "📖 Basisliste laden",
+                onboarding_vocab_desc_local: "Damit du loslegen kannst, brauchst du Vokabeln. Lade die mitgelieferte <strong>Basisliste</strong> oder trage eigene Vokabeln ein (manuell über <strong>\"Vokabel hinzufügen\"</strong> oder per <strong>Excelliste</strong> im Menü). Es werden mindestens 10 Vokabeln benötigt.",
+                setup_local_desc: "Alles bleibt auf deinem Gerät, du brauchst weder Konto noch Server. Einen Server kannst du später jederzeit verbinden.",
+                setup_or: "oder mit eigenem Server",
+                menu_leave_local: "Lokaler Betrieb – Auswahl ändern",
+                confirm_leave_local: "Du kehrst zur Startauswahl zurück. Deine Daten bleiben auf dem Gerät gespeichert, solange du die App nicht löschst. Fortfahren?",
+                local_mode_label: "Daten nur auf diesem Gerät",
                 setup_desc: "Gib die Adresse deines Lernapp-Servers ein, z. B. https://lernapp.example.com oder im Heimnetz http://192.168.1.20:3001.",
                 setup_label: "Server-Adresse",
                 setup_test: "Verbindung testen",
@@ -8470,7 +8499,15 @@
                 info_extra_placeholder: "Additional information or pictures will appear here.",
                 info_type_verb: "Verb Forms",
                 info_type_noun: "Picture",
-                setup_title: "Connect to your server",
+                setup_title: "How do you want to learn?",
+                setup_local_btn: "📱 Start without a server",
+                onboarding_load_base: "📖 Load starter list",
+                onboarding_vocab_desc_local: "You need vocabulary to get started. Load the built-in <strong>starter list</strong> or add your own words (manually via <strong>\"Add vocabulary\"</strong> or from an <strong>Excel list</strong> in the menu). At least 10 words are needed.",
+                setup_local_desc: "Everything stays on your device – no account or server needed. You can connect a server any time later.",
+                setup_or: "or with your own server",
+                menu_leave_local: "Local mode – change selection",
+                confirm_leave_local: "You return to the start selection. Your data stays on this device as long as you do not delete the app. Continue?",
+                local_mode_label: "Data only on this device",
                 setup_desc: "Enter the address of your Lernapp server, e.g. https://lernapp.example.com or on your home network http://192.168.1.20:3001.",
                 setup_label: "Server address",
                 setup_test: "Test connection",
@@ -9617,7 +9654,7 @@
         // Anmeldung aktiv halten: Token (30 Tage gültig) wird bei Nutzung spätestens nach 12 h erneuert
         let _tokenRefreshRunning = false;
         async function refreshTokenIfDue() {
-            if (!API_TOKEN || !navigator.onLine || _tokenRefreshRunning) return;
+            if (!API_TOKEN || !netOnline() || _tokenRefreshRunning) return;
             let issuedAt = 0;
             try {
                 const b64 = API_TOKEN.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
@@ -9646,7 +9683,16 @@
             return err;
         }
 
+        // Lokaler Betrieb: gleiche Aufrufe, Antwort aus dem Gerätespeicher
+        async function localApiFetch(endpoint, options = {}) {
+            if (!endpoint.includes('language=')) endpoint += `${endpoint.includes('?') ? '&' : '?'}language=${CURRENT_LANG}`;
+            let body = options.body;
+            if (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) { body = {}; } }
+            return localApi.handle(options.method || 'GET', endpoint, body);
+        }
+
         async function apiFetch(endpoint, options = {}) {
+            if (LOCAL_MODE) return localApiFetch(endpoint, options);
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), options.timeoutMs || 20000); // Standard 20 s, KI-Aufrufe länger
 
@@ -9915,7 +9961,7 @@
 
             try {
                 // Erst eigene, noch wartende Änderungen senden, damit der Abruf sie nicht überholt
-                if (navigator.onLine && syncOutbox.length > 0) await processSyncOutbox();
+                if (netOnline() && syncOutbox.length > 0) await processSyncOutbox();
                 if (isCapacitor) console.log("Fetching vocab...");
                 const vocab = await apiFetch('/vocab');
                 if (CURRENT_LANG !== langAtStart) return;
@@ -10323,7 +10369,7 @@
         let outboxRunning = false;
         async function processSyncOutbox() {
             if (outboxRunning || !API_TOKEN || syncOutbox.length === 0) return;
-            if (!navigator.onLine) { setConnectionState('offline'); return; }
+            if (!netOnline()) { setConnectionState('offline'); return; }
             outboxRunning = true;
             try {
                 for (const task of [...syncOutbox]) {
@@ -10423,6 +10469,7 @@
         restorePendingOutbox();
 
         async function checkConnection() {
+            if (LOCAL_MODE) { setConnectionState('connected'); return true; }
             try {
                 // Short timeout for ping to avoid blocking
                 const controller = new AbortController();
@@ -10441,7 +10488,7 @@
             if (!API_TOKEN) return;
 
             // Proactively check connection even if navigator.onLine is uncertain
-            const isActuallyOnline = navigator.onLine || await checkConnection();
+            const isActuallyOnline = netOnline() || await checkConnection();
 
             if (isActuallyOnline) {
                 console.log("Network confirmed - triggering full sync pull/push");
@@ -10454,7 +10501,7 @@
         window.addEventListener('offline', () => setConnectionState('offline'));
         // Ist der Server nicht erreichbar, regelmäßig nachsehen und dann gleich abgleichen
         setInterval(async () => {
-            if (API_TOKEN && connectionState !== 'connected' && navigator.onLine) {
+            if (API_TOKEN && connectionState !== 'connected' && netOnline()) {
                 if (await checkConnection()) handleSyncReconnection();
             }
         }, 20000);
@@ -10475,7 +10522,7 @@
 
         setInterval(processSyncOutbox, 30000); // Push every 30s
         setInterval(() => {
-            if (navigator.onLine && API_TOKEN) {
+            if (netOnline() && API_TOKEN) {
                 refreshTokenIfDue();
                 loadDataFromServer(true); // Silent Pull every 60s
             }
@@ -10545,9 +10592,24 @@
 
             if (needsServerSetup) show();
 
+            document.getElementById('serverSetupLocalBtn').addEventListener('click', () => {
+                localStorage.setItem(LOCAL_MODE_KEY, 'local');
+                location.reload();
+            });
+
             if (isCapacitor && changeBtn) {
                 changeBtn.classList.remove('hidden');
                 changeBtn.classList.add('block');
+                if (LOCAL_MODE) {
+                    changeBtn.querySelector('[data-i18n]').setAttribute('data-i18n', 'menu_leave_local');
+                    changeBtn.querySelector('[data-i18n]').textContent = getI18n('menu_leave_local');
+                    document.getElementById('changeServerHost').textContent = getI18n('local_mode_label');
+                    changeBtn.addEventListener('click', async () => {
+                        if (!(await showConfirm(getI18n('confirm_leave_local'), getI18n('menu_leave_local')))) return;
+                        localStorage.removeItem(LOCAL_MODE_KEY);
+                        location.reload();
+                    });
+                } else {
                 document.getElementById('changeServerHost').textContent = (API_BASE_URL || '').replace(/^https?:\/\//, '');
                 changeBtn.addEventListener('click', async () => {
                     if (!(await showConfirm(getI18n('confirm_change_server'), getI18n('menu_change_server')))) return;
@@ -10556,8 +10618,17 @@
                     localStorage.removeItem(SERVER_URL_KEY);
                     location.reload();
                 });
+                }
             }
         })();
+
+        // Lokaler Betrieb: kein Konto, keine Anmeldung, kein Abgleich – die zugehörigen Menüpunkte entfallen
+        if (LOCAL_MODE) {
+            ['logoutBtn', 'deleteAccountBtn', 'syncStateRow', 'syncStatus', 'openContactModalBtn'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.setProperty('display', 'none', 'important');
+            });
+        }
 
         // --- Konto löschen (Pflicht für Apps mit Registrierung) ---
         (function setupDeleteAccount() {
@@ -10946,7 +11017,8 @@
 
             loadDataFromServer();
 
-            // Show version popup only once per device, after login
+            // Show version popup only once per device, after login (nicht beim allerersten Start: dann gibt es nichts Neues)
+            if (!CURRENT_USER_NAME && !localStorage.getItem(vKey)) localStorage.setItem(vKey, 'true');
             if (!localStorage.getItem(vKey)) {
                 versionModal.classList.remove('hidden');
                 versionModal.classList.add('flex');
@@ -11004,6 +11076,35 @@
             onboardingVocabModal.classList.add('hidden');
             onboardingVocabModal.classList.remove('flex');
         });
+
+        // Ohne Server gibt es keinen Admin, der eine Basisliste bereitstellt: die mitgelieferte Liste gleich beim Start anbieten
+        if (LOCAL_MODE) {
+            const loadBaseBtn = document.getElementById('onboardingLoadBaseBtn');
+            const descEl = onboardingVocabModal.querySelector('[data-i18n="onboarding_vocab_desc"]');
+            if (descEl) { descEl.setAttribute('data-i18n', 'onboarding_vocab_desc_local'); descEl.innerHTML = getI18n('onboarding_vocab_desc_local'); }
+            loadBaseBtn.classList.remove('hidden');
+            loadBaseBtn.addEventListener('click', async () => {
+                loadBaseBtn.disabled = true;
+                try {
+                    const base = await apiFetch(`/base-vocab?language=${CURRENT_LANG}`);
+                    await apiFetch('/vocab/bulk', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            language: CURRENT_LANG,
+                            words: base.map(v => ({ de: v.de, it: v.it, typ: v.typ, emoji: v.emoji, grammatica: v.grammatica, language: CURRENT_LANG, isOwn: false }))
+                        })
+                    });
+                    await loadDataFromServer();
+                    showToast(getI18n('toast_vocab_loaded_success', base.length, getI18n('action_added')), 'success');
+                    onboardingVocabModal.classList.add('hidden');
+                    onboardingVocabModal.classList.remove('flex');
+                } catch (err) {
+                    showToast(getI18n('toast_import_error') + ': ' + err.message, 'error');
+                } finally {
+                    loadBaseBtn.disabled = false;
+                }
+            });
+        }
 
         setupModal(
             contactModal,
