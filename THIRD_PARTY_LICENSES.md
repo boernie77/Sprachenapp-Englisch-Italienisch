@@ -156,5 +156,6 @@ Erzeugt mit `license-checker` aus `server/package.json`. Alle Lizenzen sind frei
 - DragDropTouch (MIT) – `server/public/vendor/DragDropTouch.js`
 - Capacitor (MIT) – iOS/Android-Hülle
 - @capacitor-community/text-to-speech 8.x (MIT) – native Sprachausgabe (Android; iOS optional), Quellen: https://github.com/capacitor-community/text-to-speech
+- capacitor-secure-storage-plugin 0.x (MIT) – API-Schlüssel im Schlüsselbund/Keystore des Geräts (lokaler Betrieb), Quellen: https://github.com/martinkasa/capacitor-secure-storage-plugin
 - Inter (SIL OFL 1.1) – `server/public/fonts/`
 - OpenMoji (CC BY-SA 4.0) – `server/public/openmoji/`

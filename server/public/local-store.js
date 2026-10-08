@@ -5,8 +5,8 @@
     'use strict';
 
     const DB_NAME = 'lernapp-local';
-    const DB_VERSION = 1;
-    const STORES = { vocab: 'id', stats: 'vocabId', sentences: 'id', choices: 'sentenceId', meta: 'key' };
+    const DB_VERSION = 2; // 2: + audio (Zwischenspeicher der Cloudstimme)
+    const STORES = { vocab: 'id', stats: 'vocabId', sentences: 'id', choices: 'sentenceId', meta: 'key', audio: 'key' };
 
     function wrap(req) {
         return new Promise((resolve, reject) => {
@@ -57,6 +57,21 @@
                 return done(t);
             },
             async clear(store) { const t = await tx(store, 'readwrite'); t.objectStore(store).clear(); return done(t); },
+            // Geht alle Zeilen durch und liefert nur, was `pick` zurückgibt (große Werte wie Audio bleiben dabei nicht im Speicher)
+            async scan(store, pick) {
+                const os = (await tx(store, 'readonly')).objectStore(store);
+                return new Promise((resolve, reject) => {
+                    const out = [];
+                    const req = os.openCursor();
+                    req.onsuccess = () => {
+                        const cur = req.result;
+                        if (!cur) return resolve(out);
+                        out.push(pick(cur.value));
+                        cur.continue();
+                    };
+                    req.onerror = () => reject(req.error);
+                });
+            },
             async destroy() {
                 if (dbPromise) { (await dbPromise).close(); dbPromise = null; }
                 await wrap(idb.deleteDatabase(DB_NAME));
@@ -67,7 +82,7 @@
     function createMemoryBackend() {
         const data = {};
         Object.keys(STORES).forEach(s => { data[s] = new Map(); });
-        const copy = (v) => (v === undefined ? undefined : JSON.parse(JSON.stringify(v)));
+        const copy = (v) => (v === undefined ? undefined : structuredClone(v));
         return {
             async getAll(store) { return [...data[store].values()].map(copy); },
             async get(store, key) { return copy(data[store].get(key)); },
@@ -75,6 +90,7 @@
             async putMany(store, objs) { objs.forEach(o => data[store].set(o[STORES[store]], copy(o))); },
             async removeMany(store, keys) { keys.forEach(k => data[store].delete(k)); },
             async clear(store) { data[store].clear(); },
+            async scan(store, pick) { return [...data[store].values()].map(v => pick(copy(v))); },
             async destroy() { Object.keys(STORES).forEach(s => data[s].clear()); }
         };
     }

@@ -10,60 +10,13 @@ const { parsePrefs, prefsForLanguage, remainingToday, addUsage } = require('./us
 const { LANGUAGES } = require('../languages');
 const TICK_MS = 60 * 1000;
 const MAX_FAILURES = 3;
-const MAX_KI_FACTOR = 2; // höchstens so viele KI-Sätze pro Wort (und Niveau): Faktor mal eingestellte Anzahl
-const BULK_THRESHOLD = 50; // ab so vielen offenen Wörtern startet die Automatik erst nach Freigabe durch den Nutzer
-const ARTICLES = {
-    it: ['il', 'lo', 'la', 'l', 'i', 'gli', 'le', 'un', 'uno', 'una'],
-    en: ['to', 'the', 'a', 'an'],
-    es: ['el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas']
-};
+const { MAX_KI_FACTOR, BULK_THRESHOLD, buildIndex, isCovered, wordKey } = require('../../public/ai-core');
 
 let running = false;
 const bulkConfirmed = new Set(); // `${userId}:${language}` – freigegebene große Mengen; endet, wenn keine Wörter mehr offen sind
 const backfillRequests = new Set(); // `${userId}:${language}` – vom Nutzer angestoßenes Nachrüsten fehlender Niveaus
 const doneWords = new Set(); // `${userId}:${wordId}` – bis zum Neustart nie ein zweites Mal erzeugen (zweite Sicherung gegen Endlosschleifen)
 const failedWords = new Set(); // `${userId}:${wordId}` – nach einem Fehler bis zum nächsten Serverstart nicht erneut versuchen
-
-const tokenize = (text) => String(text || '').toLowerCase().replace(/[’']/g, ' ').split(/[^\p{L}]+/u).filter(Boolean);
-
-// Index aller Wörter in den vorhandenen Sätzen: erste 3 Buchstaben -> Wortformen
-function buildIndex(sentenceTexts) {
-    const forms = new Set();
-    sentenceTexts.forEach(text => tokenize(text).forEach(t => forms.add(t)));
-    const byPrefix = new Map();
-    forms.forEach(t => {
-        const key = t.slice(0, 3);
-        if (!byPrefix.has(key)) byPrefix.set(key, []);
-        byPrefix.get(key).push(t);
-    });
-    return { forms, byPrefix };
-}
-
-function stemOf(token, language, typ) {
-    if (language === 'it' && /verb/i.test(typ || '') && /(are|ere|ire)$/.test(token) && token.length > 4) return token.slice(0, -3);
-    if (language === 'es' && /verb/i.test(typ || '') && /(ar|er|ir)$/.test(token) && token.length > 4) return token.slice(0, -2);
-    if (token.length >= 5) return token.slice(0, -1); // Mehrzahl und Endungen grob abfangen
-    return token;
-}
-
-function isCovered(word, language, index) {
-    let tokens = tokenize(word.it);
-    if (tokens.length > 1 && (ARTICLES[language] || []).includes(tokens[0])) tokens = tokens.slice(1);
-    if (tokens.length === 0) return true; // nichts Sinnvolles zu suchen
-    return tokens.every(token => {
-        if (index.forms.has(token)) return true;
-        const stem = stemOf(token, language, word.typ);
-        if (stem.length < 3 || stem === token) return false;
-        return (index.byPrefix.get(stem.slice(0, 3)) || []).some(form => form.startsWith(stem) && form.length <= token.length + 3);
-    });
-}
-
-// Fremdwort ohne Artikel, klein geschrieben (gleicher Schlüssel für "la casa" und "casa")
-function wordKey(text, language) {
-    const tokens = tokenize(text);
-    if (tokens.length > 1 && (ARTICLES[language] || []).includes(tokens[0])) tokens.shift();
-    return tokens.join(' ');
-}
 
 // Aktive Wörter des Nutzers in dieser Sprache, die noch in keinem Satz vorkommen
 async function pendingWords(userId, language) {

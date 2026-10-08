@@ -1,32 +1,14 @@
 // Einstellungen der Nutzer (aiPrefs) und Tagesverbrauch der KI-Sätze; gemeinsam genutzt von Routen und Hintergrunddienst
 const { AiUsage } = require('../../models');
-const { LEVELS } = require('./grammar');
 
-const MAX_COUNT = 10;
+const { MAX_COUNT, DEFAULT_PREFS, prefsForLanguage } = require('../../public/ai-core');
 const today = () => new Date().toISOString().slice(0, 10);
-
-const DEFAULT_PREFS = { enabled: false, levels: ['A1'], categories: [], count: 3 };
-
-// Frühere Einstellungen kannten nur ein Niveau (level)
-function storedLevels(prefs) {
-    const raw = Array.isArray(prefs.levels) ? prefs.levels : (prefs.level ? [prefs.level] : []);
-    const valid = LEVELS.filter(l => raw.includes(l));
-    return valid.length ? valid : DEFAULT_PREFS.levels;
-}
 
 function parsePrefs(user) {
     let stored = {};
     try { stored = user.aiPrefs ? JSON.parse(user.aiPrefs) : {}; } catch (err) { stored = {}; }
     return { ...DEFAULT_PREFS, ...stored };
 }
-
-// Einstellungen pro Sprache: Grammatikarten unterscheiden sich zwischen Italienisch und Englisch
-const prefsForLanguage = (prefs, language) => ({
-    enabled: prefs.enabled === true,
-    levels: storedLevels(prefs),
-    count: Number.isInteger(prefs.count) ? Math.min(MAX_COUNT, Math.max(1, prefs.count)) : DEFAULT_PREFS.count,
-    categories: Array.isArray(prefs.categoriesByLang && prefs.categoriesByLang[language]) ? prefs.categoriesByLang[language] : []
-});
 
 // Verbleibende Sätze heute; Admins haben kein Limit (null)
 async function remainingToday(user, dailyLimit) {

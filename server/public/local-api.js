@@ -21,7 +21,8 @@
     // Wie routes/grammar.js: im manuellen Modus sind Excel-Sätze aktiv, KI-Sätze (forWord) erst nach Auswahl
     const defaultActive = (sentence) => !sentence.forWord;
 
-    function create({ store, loadJson, now = () => new Date() }) {
+    // createAi (optional): Fabrik für die KI-Funktionen (local-ai.js); ohne sie melden die KI-Routen „nicht eingerichtet“
+    function create({ store, loadJson, now = () => new Date(), createAi = null }) {
         const iso = () => now().toISOString();
         const baseCache = {};
         let chain = Promise.resolve();
@@ -112,6 +113,20 @@
                 .filter(s => !s.deleted && (!language || s.language === language))
                 .map(s => ({ ...s, manualActive: chosen.has(s.id) ? chosen.get(s.id) : defaultActive(s) }));
         }
+
+        // Sätze einer Sprache (mitgelieferte, selbst erzeugte KI-Sätze) für die KI-Funktionen
+        async function sentencesFor(language) {
+            await ensureSentences(language);
+            return (await store.getAll('sentences')).filter(s => !s.deleted && s.language === language);
+        }
+        async function addSentences(language, list) {
+            if (!list.length) return;
+            const first = await nextIds('seq-sentence', USER_SENTENCE_START, list.length);
+            await store.putMany('sentences', list.map((s, i) => ({
+                id: first + i, it: s.it, de: s.de, category: s.category || null, level: s.level || null, language, forWord: s.forWord || null
+            })));
+        }
+        const ai = createAi ? createAi({ store, now, sentencesFor, addSentences: (l, list) => serial(() => addSentences(l, list)), liveVocab }) : null;
 
         // ---- Routen ----
         const routes = [];
@@ -250,12 +265,29 @@
             return { message: 'Activity incremented', dailyActivity: activity };
         }));
 
-        // KI und Cloudstimme laufen ohne Server mit eigenem Schlüssel direkt aus der App (folgt); bis dahin als nicht eingerichtet melden
-        route('GET', '/tts/status', async () => ({ available: false, provider: null }));
-        route('GET', '/ai/options', async () => ({
-            enabled: false, provider: null, levels: ['A1', 'A2', 'B1', 'B2'], categories: [], newCategories: [], maxCount: 10, remaining: 0, dailyLimit: 0,
-            prefs: { enabled: false, levels: ['A1'], count: 3, categories: [] }
-        }));
+        // KI und Cloudstimme: mit eigenem Schlüssel direkt aus der App (local-ai.js); ohne diese Funktionen als nicht eingerichtet melden
+        if (ai) {
+            route('GET', '/ai/options', ({ q }) => ai.options(q.get('language')));
+            route('PUT', '/ai/preferences', ({ body }) => ai.savePrefs(body));
+            route('GET', '/ai/auto-status', ({ q }) => ai.autoStatus(q.get('language')));
+            route('POST', '/ai/confirm-bulk', ({ body }) => ai.confirmBulk(body.language));
+            route('POST', '/ai/backfill', ({ body }) => ai.backfill(body.language));
+            route('POST', '/ai/word-info', ({ body }) => ai.wordInfo(body));
+            route('POST', '/ai/sentences', ({ body }) => ai.sentences(body));
+            route('GET', '/tts/status', () => ai.ttsStatus());
+            route('GET', '/local-ai/settings', () => ai.publicConfig());
+            route('PUT', '/local-ai/settings', ({ body }) => ai.saveConfig(body));
+            route('GET', '/local-ai/usage', () => ai.usageSummary());
+            route('GET', '/local-ai/models', ({ q }) => ai.listModels(q.get('provider')));
+            route('POST', '/local-ai/test', () => ai.testAi());
+            route('POST', '/local-ai/tts-test', () => ai.testTts());
+        } else {
+            route('GET', '/tts/status', async () => ({ available: false, provider: null }));
+            route('GET', '/ai/options', async () => ({
+                enabled: false, provider: null, levels: ['A1', 'A2', 'B1', 'B2'], categories: [], newCategories: [], maxCount: 10, remaining: 0, dailyLimit: 0,
+                prefs: { enabled: false, levels: ['A1'], count: 3, categories: [] }
+            }));
+        }
 
         // Geprüfte Verbformen gibt es ohne Server nicht (später: Prüfung per KI)
         route('GET', '/verb-forms', async () => ({ now: iso(), verbs: [] }));
@@ -275,7 +307,7 @@
         // Sicherung / Wiederherstellung des gesamten lokalen Bestands (auch Grundlage für den Serverabgleich)
         async function exportData() {
             const out = { format: 'lernapp-local', version: 1, exportedAt: iso() };
-            for (const s of Object.keys(root.LocalStore ? root.LocalStore.STORES : { vocab: 1, stats: 1, sentences: 1, choices: 1, meta: 1 })) {
+            for (const s of ['vocab', 'stats', 'sentences', 'choices', 'meta']) { // ohne audio (nur Zwischenspeicher)
                 out[s] = await store.getAll(s);
             }
             return out;
@@ -291,7 +323,7 @@
         }
         async function wipe() { return serial(() => store.destroy()); }
 
-        return { handle, exportData, importData, wipe, LOCAL_TOKEN, LOCAL_USER_ID };
+        return { handle, exportData, importData, wipe, ai, LOCAL_TOKEN, LOCAL_USER_ID };
     }
 
     const api = { create, LOCAL_TOKEN, LOCAL_USER_ID, DATA_VERSION };
