@@ -41,6 +41,8 @@
     <script src="ai-providers.js"></script>
     <script src="local-store.js"></script>
     <script src="local-ai.js"></script>
+    <script src="local-sync.js"></script>
+    <script src="legal-local.js"></script>
     <script src="local-api.js"></script>
 
     <style>
@@ -535,7 +537,7 @@
             }
 
             #vocabModal .bg-white,
-            #ttsModal .bg-white, #localAiModal .bg-white, #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
+            #ttsModal .bg-white, #localDataModal .bg-white, #localAiModal .bg-white .bg-white, #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
             #conjugationModal .bg-white,
             #sentenceModal .bg-white,
             #vocabListModal .bg-white,
@@ -581,7 +583,7 @@
             #statsModal,
             #sentenceModal,
             #vocabModal,
-            #ttsModal, #localAiModal, #aiSentenceModal, #wordSentencesModal,
+            #ttsModal, #localDataModal, #localAiModal, #aiSentenceModal, #wordSentencesModal,
             #conjugationModal,
             #vocabListModal,
             #sentenceListModal,
@@ -608,7 +610,7 @@
             #statsModal .bg-white,
             #sentenceModal .bg-white,
             #vocabModal .bg-white,
-            #ttsModal .bg-white, #localAiModal .bg-white, #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
+            #ttsModal .bg-white, #localDataModal .bg-white, #localAiModal .bg-white .bg-white, #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
             #conjugationModal .bg-white,
             #vocabListModal .bg-white,
             #sentenceListModal .bg-white,
@@ -801,7 +803,7 @@
             #vocabListModal .bg-white, #sentenceListModal .bg-white,
             #sentenceModal .bg-white,
             #vocabModal .bg-white,
-            #ttsModal .bg-white, #localAiModal .bg-white, #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
+            #ttsModal .bg-white, #localDataModal .bg-white, #localAiModal .bg-white .bg-white, #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
             #conjugationModal .bg-white {
                 box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             }
@@ -809,7 +811,7 @@
             #vocabListModal, #sentenceListModal,
             #sentenceModal,
             #vocabModal,
-            #ttsModal, #localAiModal, #aiSentenceModal, #wordSentencesModal,
+            #ttsModal, #localDataModal, #localAiModal, #aiSentenceModal, #wordSentencesModal,
             #conjugationModal {
                 backdrop-filter: blur(8px);
                 -webkit-backdrop-filter: blur(8px);
@@ -818,7 +820,7 @@
             #vocabListModal .bg-white, #sentenceListModal .bg-white,
             #sentenceModal .bg-white,
             #vocabModal .bg-white,
-            #ttsModal .bg-white, #localAiModal .bg-white, #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
+            #ttsModal .bg-white, #localDataModal .bg-white, #localAiModal .bg-white .bg-white, #aiSentenceModal .bg-white, #wordSentencesModal .bg-white,
             #conjugationModal .bg-white {
                 animation: modalSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             }
@@ -826,10 +828,10 @@
             #vocabListModal input, #sentenceListModal input,
             #vocabListModal select, #sentenceListModal select,
             #vocabModal input,
-            #ttsModal input, #localAiModal input, #aiSentenceModal input, #wordSentencesModal input,
+            #ttsModal input, #localDataModal input, #localAiModal input input, #aiSentenceModal input, #wordSentencesModal input,
             #conjugationModal input,
             #vocabModal select,
-            #ttsModal select, #localAiModal select, #aiSentenceModal select, #wordSentencesModal select,
+            #ttsModal select, #localDataModal select, #localAiModal select select, #aiSentenceModal select, #wordSentencesModal select,
             #conjugationModal select {
                 font-family: 'DM Sans', sans-serif;
             }
@@ -841,16 +843,16 @@
             #vocabListModal p, #sentenceListModal p,
             #vocabListModal span, #sentenceListModal span,
             #vocabModal label,
-            #ttsModal label, #localAiModal label, #aiSentenceModal label, #wordSentencesModal label,
+            #ttsModal label, #localDataModal label, #localAiModal label label, #aiSentenceModal label, #wordSentencesModal label,
             #conjugationModal label,
             #vocabModal h2,
-            #ttsModal h2, #localAiModal h2, #aiSentenceModal h2, #wordSentencesModal h2,
+            #ttsModal h2, #localDataModal h2, #localAiModal h2 h2, #aiSentenceModal h2, #wordSentencesModal h2,
             #conjugationModal h2,
             #vocabModal p,
-            #ttsModal p, #localAiModal p, #aiSentenceModal p, #wordSentencesModal p,
+            #ttsModal p, #localDataModal p, #localAiModal p p, #aiSentenceModal p, #wordSentencesModal p,
             #conjugationModal p,
             #vocabModal span,
-            #ttsModal span, #localAiModal span, #aiSentenceModal span, #wordSentencesModal span,
+            #ttsModal span, #localDataModal span, #localAiModal span span, #aiSentenceModal span, #wordSentencesModal span,
             #conjugationModal span {
                 letter-spacing: -0.01em;
             }
@@ -1033,13 +1035,13 @@
 
             /* Final Contrast Fixes for Inputs and Tables */
             #vocabModal input,
-            #ttsModal input, #localAiModal input, #aiSentenceModal input, #wordSentencesModal input,
+            #ttsModal input, #localDataModal input, #localAiModal input input, #aiSentenceModal input, #wordSentencesModal input,
             #conjugationModal input,
             #vocabModal select,
-            #ttsModal select, #localAiModal select, #aiSentenceModal select, #wordSentencesModal select,
+            #ttsModal select, #localDataModal select, #localAiModal select select, #aiSentenceModal select, #wordSentencesModal select,
             #conjugationModal select,
             #vocabModal textarea,
-            #ttsModal textarea, #localAiModal textarea, #aiSentenceModal textarea, #wordSentencesModal textarea,
+            #ttsModal textarea, #localDataModal textarea, #localAiModal textarea textarea, #aiSentenceModal textarea, #wordSentencesModal textarea,
             #conjugationModal textarea,
             #vocabListModal input,
             #vocabListModal select,
@@ -1056,10 +1058,10 @@
             }
 
             #vocabModal label,
-            #ttsModal label, #localAiModal label, #aiSentenceModal label, #wordSentencesModal label,
+            #ttsModal label, #localDataModal label, #localAiModal label label, #aiSentenceModal label, #wordSentencesModal label,
             #conjugationModal label,
             #vocabModal h2,
-            #ttsModal h2, #localAiModal h2, #aiSentenceModal h2, #wordSentencesModal h2,
+            #ttsModal h2, #localDataModal h2, #localAiModal h2 h2, #aiSentenceModal h2, #wordSentencesModal h2,
             #conjugationModal h2,
             #vocabListModal label,
             #vocabListModal h2,
@@ -1145,10 +1147,10 @@
             #sentenceListModal .cs-btn,
             #sentenceListModal .cs-list,
             #vocabModal .cs-btn,
-            #ttsModal .cs-btn, #localAiModal .cs-btn, #aiSentenceModal .cs-btn, #wordSentencesModal .cs-btn,
+            #ttsModal .cs-btn, #localDataModal .cs-btn, #localAiModal .cs-btn .cs-btn, #aiSentenceModal .cs-btn, #wordSentencesModal .cs-btn,
             #conjugationModal .cs-btn,
             #vocabModal .cs-list,
-            #ttsModal .cs-list, #localAiModal .cs-list, #aiSentenceModal .cs-list, #wordSentencesModal .cs-list,
+            #ttsModal .cs-list, #localDataModal .cs-list, #localAiModal .cs-list .cs-list, #aiSentenceModal .cs-list, #wordSentencesModal .cs-list,
             #conjugationModal .cs-list,
             #editVocabModal .cs-btn,
             #editVocabModal .cs-list,
@@ -1162,7 +1164,7 @@
             #vocabListModal .cs-opt,
             #sentenceListModal .cs-opt,
             #vocabModal .cs-opt,
-            #ttsModal .cs-opt, #localAiModal .cs-opt, #aiSentenceModal .cs-opt, #wordSentencesModal .cs-opt,
+            #ttsModal .cs-opt, #localDataModal .cs-opt, #localAiModal .cs-opt .cs-opt, #aiSentenceModal .cs-opt, #wordSentencesModal .cs-opt,
             #conjugationModal .cs-opt,
             #editVocabModal .cs-opt,
             #editSentenceModal .cs-opt {
@@ -1183,7 +1185,7 @@
             #vocabListModal .cs-opt.selected,
             #sentenceListModal .cs-opt.selected,
             #vocabModal .cs-opt.selected,
-            #ttsModal .cs-opt.selected, #localAiModal .cs-opt.selected, #aiSentenceModal .cs-opt.selected, #wordSentencesModal .cs-opt.selected,
+            #ttsModal .cs-opt.selected, #localDataModal .cs-opt.selected, #localAiModal .cs-opt.selected .cs-opt.selected, #aiSentenceModal .cs-opt.selected, #wordSentencesModal .cs-opt.selected,
             #conjugationModal .cs-opt.selected,
             #editVocabModal .cs-opt.selected,
             #editSentenceModal .cs-opt.selected {
@@ -1194,7 +1196,7 @@
             #vocabListModal .cs-chevron,
             #sentenceListModal .cs-chevron,
             #vocabModal .cs-chevron,
-            #ttsModal .cs-chevron, #localAiModal .cs-chevron, #aiSentenceModal .cs-chevron, #wordSentencesModal .cs-chevron,
+            #ttsModal .cs-chevron, #localDataModal .cs-chevron, #localAiModal .cs-chevron .cs-chevron, #aiSentenceModal .cs-chevron, #wordSentencesModal .cs-chevron,
             #conjugationModal .cs-chevron,
             #editVocabModal .cs-chevron,
             #editSentenceModal .cs-chevron {
@@ -1205,7 +1207,7 @@
             #vocabListModal input,
             #sentenceListModal input,
             #vocabModal input,
-            #ttsModal input, #localAiModal input, #aiSentenceModal input, #wordSentencesModal input,
+            #ttsModal input, #localDataModal input, #localAiModal input input, #aiSentenceModal input, #wordSentencesModal input,
             #conjugationModal input,
             #editVocabModal input,
             #editSentenceModal input,
@@ -1567,7 +1569,7 @@
             div[id$="Modal"], 
             #authOverlay,
             #vocabModal,
-            #ttsModal, #localAiModal, #aiSentenceModal, #wordSentencesModal,
+            #ttsModal, #localDataModal, #localAiModal, #aiSentenceModal, #wordSentencesModal,
             #conjugationModal,
             #statsModal,
             #excelModal {
@@ -1935,6 +1937,7 @@
                         <li><a href="https://github.com/Bernardo-Castilho/dragdroptouch" target="_blank" rel="noopener" class="text-blue-600 hover:underline">DragDropTouch</a> – MIT</li>
                         <li><a href="https://capacitorjs.com" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Capacitor</a> – MIT</li>
                         <li><a href="https://github.com/capacitor-community/text-to-speech" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Capacitor Text-to-Speech</a> – MIT</li>
+                        <li><a href="https://github.com/ionic-team/capacitor-plugins" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Capacitor Filesystem &amp; Share</a> – MIT</li>
                         <li><a href="https://github.com/martinkasa/capacitor-secure-storage-plugin" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Capacitor Secure Storage Plugin</a> – MIT</li>
                         <li><a href="https://rsms.me/inter/" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Inter</a> <span data-i18n="imp_font">(Schrift)</span> – SIL Open Font License 1.1</li>
                         <li data-i18n="imp_license_server">Server: Express, Sequelize, PostgreSQL-Treiber u. a. – MIT, ISC, BSD, Apache-2.0 (Liste im Quellcode: THIRD_PARTY_LICENSES.md)</li>
@@ -2354,6 +2357,8 @@
                     class="block w-full text-left px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 border-b border-slate-100"><span data-i18n="menu_delete_account">Konto löschen</span></button>
                 <button id="changeServerBtn"
                     class="hidden w-full text-left px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100"><span data-i18n="menu_change_server">Server ändern</span> <span id="changeServerHost" class="block text-[10px] text-slate-400 font-normal truncate"></span></button>
+                <button id="goLocalBtn"
+                    class="hidden w-full text-left px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 border-b border-slate-100"><span data-i18n="golocal_menu">Lokal ohne Server lernen</span></button>
                 <button id="logoutBtn"
                     class="block w-full text-left px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 cursor-pointer border-b border-slate-100"><span data-i18n="menu_logout">Abmelden</span></button>
 
@@ -5705,6 +5710,24 @@
     </div>
 
     <!-- Sprachausgabe (Einstellungen) -->
+    <div id="localDataModal"
+        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4" role="dialog" aria-modal="true" aria-labelledby="localDataTitle">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="flex justify-between items-center mb-4 shrink-0">
+                <h2 id="localDataTitle" class="text-xl font-bold text-slate-800" data-i18n="data_title">Daten &amp; Server</h2>
+                <button id="closeLocalDataModalBtn" type="button" aria-label="Close" class="text-slate-400 hover:text-slate-800 text-2xl font-bold leading-none">&times;</button>
+            </div>
+            <div class="overflow-y-auto pr-1 flex-1 min-h-0">
+                <p class="text-xs text-slate-500 mb-4" data-i18n="data_intro"></p>
+                <button id="dataBackupBtn" type="button" class="block w-full text-left p-3 mb-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-100"><span class="block text-sm font-bold text-slate-800" data-i18n="data_backup">Sicherung speichern</span><span class="block text-[11px] text-slate-500" data-i18n="data_backup_hint"></span></button>
+                <button id="dataRestoreBtn" type="button" class="block w-full text-left p-3 mb-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-100"><span class="block text-sm font-bold text-slate-800" data-i18n="data_restore">Sicherung wiederherstellen</span><span class="block text-[11px] text-slate-500" data-i18n="data_restore_hint"></span></button>
+                <input type="file" id="dataRestoreInput" accept=".json,application/json" class="hidden">
+                <button id="dataConnectBtn" type="button" class="block w-full text-left p-3 mb-2 rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-100"><span class="block text-sm font-bold text-blue-700" data-i18n="data_connect">Mit Server verbinden</span><span class="block text-[11px] text-slate-500" data-i18n="data_connect_hint"></span></button>
+                <button id="dataDeleteBtn" type="button" class="block w-full text-left p-3 mb-2 rounded-xl bg-red-50 hover:bg-red-100 border border-red-100"><span class="block text-sm font-bold text-red-600" data-i18n="data_delete">Alle Daten löschen</span><span class="block text-[11px] text-slate-500" data-i18n="data_delete_hint"></span></button>
+            </div>
+        </div>
+    </div>
+
     <div id="localAiModal"
         class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4" role="dialog" aria-modal="true" aria-labelledby="localAiTitle">
         <div class="bg-white rounded-3xl p-6 md:p-8 max-w-xl w-full shadow-2xl flex flex-col max-h-[90vh]">
@@ -6936,11 +6959,15 @@
         const LOCAL_MODE = localStorage.getItem(LOCAL_MODE_KEY) === 'local';
         const netOnline = () => LOCAL_MODE || navigator.onLine; // im lokalen Betrieb gibt es keine Verbindung, auf die man wartet
         const needsServerSetup = isCapacitor && !API_BASE_URL && !LOCAL_MODE;
-        const localApi = LOCAL_MODE ? LocalApi.create({
+        const createLocalApi = () => LocalApi.create({
             store: LocalStore.createDefault(),
             createAi: (ctx) => LocalAi.create({ ...ctx, secrets: LocalAi.createSecrets(), http: LocalAi.createHttp() }),
             loadJson: async (path) => { const r = await fetch(path); if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); }
-        }) : null;
+        });
+        const localApi = LOCAL_MODE ? createLocalApi() : null;
+        let lazyLocalApi = null;
+        // Im Servermodus nur zum Übertragen von/zum Gerätespeicher gebraucht
+        const getLocalApi = () => localApi || lazyLocalApi || (lazyLocalApi = createLocalApi());
 
         console.log("App Info:", {
             protocol: window.location.protocol,
@@ -7707,12 +7734,38 @@
                 info_type_noun: "Bild",
                 setup_title: "Wie möchtest du lernen?",
                 setup_local_btn: "📱 Ohne Server starten",
+                menu_leave_local: "Daten & Server",
+                data_title: "Daten & Server",
+                data_intro: "Deine Daten liegen nur auf diesem Gerät. Hier kannst du sie sichern, auf ein anderes Gerät mitnehmen, mit einem Server verbinden oder löschen.",
+                data_backup: "Sicherung speichern",
+                data_backup_hint: "Speichert alle Wörter, Sätze und den Lernstand in einer Datei (ohne API-Schlüssel).",
+                data_restore: "Sicherung wiederherstellen",
+                data_restore_hint: "Ersetzt die Daten auf diesem Gerät durch eine gespeicherte Sicherung.",
+                data_restore_confirm: "Die Daten auf diesem Gerät werden durch die Sicherung ersetzt ({0} Wörter und Sätze). Fortfahren?",
+                data_restore_invalid: "Das ist keine gültige Sicherung der Lernapp.",
+                data_restored: "Sicherung wiederhergestellt",
+                data_connect: "Mit Server verbinden",
+                data_connect_hint: "Melde dich bei deinem Lernapp-Server an. Dein Lernstand wird übertragen und danach laufend abgeglichen.",
+                confirm_connect: "Du gelangst zur Anmeldung beim Server. Nach der Anmeldung kannst du deinen Lernstand vom Gerät auf den Server übertragen. Fortfahren?",
+                data_delete: "Alle Daten löschen",
+                data_delete_hint: "Entfernt Wörter, Sätze, Lernstand, Einstellungen und API-Schlüssel von diesem Gerät.",
+                data_delete_confirm: "Wirklich ALLE Daten auf diesem Gerät löschen? Das lässt sich nicht rückgängig machen. Speichere vorher eine Sicherung, wenn du sie behalten willst.",
+                migrate_title: "Lernstand übertragen",
+                migrate_confirm: "Du hast {0} Wörter und Sätze auf diesem Gerät. Sollen sie in dein Server-Konto übernommen werden? Vorhandenes wird nicht überschrieben, bei Wörtern in beiden gewinnt der neuere Lernstand.",
+                migrate_running: "Lernstand wird übertragen …",
+                migrate_done: "Übertragen: {0} neu, {1} bereits vorhanden",
+                migrate_failed: "Übertragung fehlgeschlagen:",
+                golocal_menu: "Lokal ohne Server lernen",
+                golocal_title: "Ohne Server weiterlernen",
+                golocal_msg: "Du wirst abgemeldet und lernst danach nur mit den Daten auf diesem Gerät. Soll dein Lernstand vom Server auf das Gerät kopiert werden? Dein Konto auf dem Server bleibt unverändert.",
+                golocal_copy: "Daten kopieren",
+                golocal_empty: "Ohne Kopie",
+                golocal_failed: "Kopieren fehlgeschlagen:",
+                imp_not_set_local: "Der Anbieter dieser App hat noch kein Impressum hinterlegt.",
                 onboarding_load_base: "📖 Basisliste laden",
                 onboarding_vocab_desc_local: "Damit du loslegen kannst, brauchst du Vokabeln. Lade die mitgelieferte <strong>Basisliste</strong> oder trage eigene Vokabeln ein (manuell über <strong>\"Vokabel hinzufügen\"</strong> oder per <strong>Excelliste</strong> im Menü). Es werden mindestens 10 Vokabeln benötigt.",
                 setup_local_desc: "Alles bleibt auf deinem Gerät, du brauchst weder Konto noch Server. Einen Server kannst du später jederzeit verbinden.",
                 setup_or: "oder mit eigenem Server",
-                menu_leave_local: "Lokaler Betrieb – Auswahl ändern",
-                confirm_leave_local: "Du kehrst zur Startauswahl zurück. Deine Daten bleiben auf dem Gerät gespeichert, solange du die App nicht löschst. Fortfahren?",
                 local_mode_label: "Daten nur auf diesem Gerät",
                 setup_desc: "Gib die Adresse deines Lernapp-Servers ein, z. B. https://lernapp.example.com oder im Heimnetz http://192.168.1.20:3001.",
                 setup_label: "Server-Adresse",
@@ -8623,12 +8676,38 @@
                 info_type_noun: "Picture",
                 setup_title: "How do you want to learn?",
                 setup_local_btn: "📱 Start without a server",
+                menu_leave_local: "Data & server",
+                data_title: "Data & server",
+                data_intro: "Your data is only stored on this device. Here you can back it up, take it to another device, connect it to a server or delete it.",
+                data_backup: "Save backup",
+                data_backup_hint: "Saves all words, sentences and your progress to a file (without API keys).",
+                data_restore: "Restore backup",
+                data_restore_hint: "Replaces the data on this device with a saved backup.",
+                data_restore_confirm: "The data on this device will be replaced by the backup ({0} words and sentences). Continue?",
+                data_restore_invalid: "This is not a valid Lernapp backup.",
+                data_restored: "Backup restored",
+                data_connect: "Connect to server",
+                data_connect_hint: "Sign in to your Lernapp server. Your progress is transferred and then kept in sync.",
+                confirm_connect: "You will go to the sign-in for the server. After signing in you can transfer your progress from this device to the server. Continue?",
+                data_delete: "Delete all data",
+                data_delete_hint: "Removes words, sentences, progress, settings and API keys from this device.",
+                data_delete_confirm: "Really delete ALL data on this device? This cannot be undone. Save a backup first if you want to keep it.",
+                migrate_title: "Transfer progress",
+                migrate_confirm: "You have {0} words and sentences on this device. Should they be added to your server account? Existing items are not overwritten; for words in both, the newer progress wins.",
+                migrate_running: "Transferring progress …",
+                migrate_done: "Transferred: {0} new, {1} already there",
+                migrate_failed: "Transfer failed:",
+                golocal_menu: "Learn locally without a server",
+                golocal_title: "Continue without a server",
+                golocal_msg: "You will be signed out and then learn only with the data on this device. Should your progress be copied from the server to this device? Your account on the server stays unchanged.",
+                golocal_copy: "Copy data",
+                golocal_empty: "No copy",
+                golocal_failed: "Copying failed:",
+                imp_not_set_local: "The provider of this app has not added a legal notice yet.",
                 onboarding_load_base: "📖 Load starter list",
                 onboarding_vocab_desc_local: "You need vocabulary to get started. Load the built-in <strong>starter list</strong> or add your own words (manually via <strong>\"Add vocabulary\"</strong> or from an <strong>Excel list</strong> in the menu). At least 10 words are needed.",
                 setup_local_desc: "Everything stays on your device – no account or server needed. You can connect a server any time later.",
                 setup_or: "or with your own server",
-                menu_leave_local: "Local mode – change selection",
-                confirm_leave_local: "You return to the start selection. Your data stays on this device as long as you do not delete the app. Continue?",
                 local_mode_label: "Data only on this device",
                 setup_desc: "Enter the address of your Lernapp server, e.g. https://lernapp.example.com or on your home network http://192.168.1.20:3001.",
                 setup_label: "Server address",
@@ -10754,6 +10833,7 @@
             if (needsServerSetup) show();
 
             document.getElementById('serverSetupLocalBtn').addEventListener('click', () => {
+                localStorage.removeItem('lernapp-migrate-local');
                 localStorage.setItem(LOCAL_MODE_KEY, 'local');
                 location.reload();
             });
@@ -10765,12 +10845,11 @@
                     changeBtn.querySelector('[data-i18n]').setAttribute('data-i18n', 'menu_leave_local');
                     changeBtn.querySelector('[data-i18n]').textContent = getI18n('menu_leave_local');
                     document.getElementById('changeServerHost').textContent = getI18n('local_mode_label');
-                    changeBtn.addEventListener('click', async () => {
-                        if (!(await showConfirm(getI18n('confirm_leave_local'), getI18n('menu_leave_local')))) return;
-                        localStorage.removeItem(LOCAL_MODE_KEY);
-                        location.reload();
-                    });
+                    changeBtn.addEventListener('click', () => { if (window.openLocalDataModal) window.openLocalDataModal(); });
                 } else {
+                const goLocalBtn = document.getElementById('goLocalBtn');
+                goLocalBtn.classList.remove('hidden'); goLocalBtn.classList.add('block');
+                goLocalBtn.addEventListener('click', () => { if (window.goLocalFromServer) window.goLocalFromServer(); });
                 document.getElementById('changeServerHost').textContent = (API_BASE_URL || '').replace(/^https?:\/\//, '');
                 changeBtn.addEventListener('click', async () => {
                     if (!(await showConfirm(getI18n('confirm_change_server'), getI18n('menu_change_server')))) return;
@@ -11177,6 +11256,7 @@
             }
 
             loadDataFromServer();
+            if (!LOCAL_MODE && localStorage.getItem('lernapp-migrate-local')) setTimeout(() => offerLocalMigration(), 1500);
 
             // Show version popup only once per device, after login (nicht beim allerersten Start: dann gibt es nichts Neues)
             if (!CURRENT_USER_NAME && !localStorage.getItem(vKey)) localStorage.setItem(vKey, 'true');
@@ -13830,7 +13910,9 @@
 
         async function renderLegalTexts() {
             let legal = safeJSONParse(localStorage.getItem('lernapp-legal'), null);
-            try {
+            if (LOCAL_MODE) { // ohne Server: mitgelieferte Datenschutzerklärung, Impressum aus der eigenen Konfiguration (app-config.local.js)
+                legal = { impressum: APP_CONFIG.impressumHtml || null, privacy: (LEGAL_LOCAL[APP_UI_LANG === 'en' ? 'en' : 'de']) };
+            } else try {
                 const res = await fetch(`${API_BASE_URL}/api/legal`);
                 if (res.ok) {
                     legal = await res.json();
@@ -13839,7 +13921,7 @@
             } catch (err) { /* offline: gespeicherte Fassung zeigen */ }
             const operator = document.getElementById('impressumOperator');
             const privacyBox = document.getElementById('privacyDetails');
-            operator.innerHTML = legal && legal.impressum ? cleanLegalHtml(legal.impressum) : `<p class="text-slate-400 italic">${getI18n('imp_not_set')}</p>`;
+            operator.innerHTML = legal && legal.impressum ? cleanLegalHtml(legal.impressum) : `<p class="text-slate-400 italic">${getI18n(LOCAL_MODE ? 'imp_not_set_local' : 'imp_not_set')}</p>`;
             if (legal && legal.privacy) {
                 document.getElementById('privacyContent').innerHTML = cleanLegalHtml(legal.privacy);
                 privacyBox.classList.remove('hidden');
@@ -17639,6 +17721,117 @@
         }));
 
 
+        // --- Daten & Server: Übertragen, Sicherung, Löschen ---
+        const MIGRATE_FLAG = 'lernapp-migrate-local';
+        let migrating = false;
+
+        // Nach der Anmeldung: lokalen Lernstand vom Gerät in das Server-Konto übernehmen (wenn zuvor "Mit Server verbinden" gewählt wurde)
+        async function offerLocalMigration() {
+            if (migrating || LOCAL_MODE || !API_TOKEN || !localStorage.getItem(MIGRATE_FLAG)) return;
+            migrating = true;
+            try {
+                const local = getLocalApi();
+                const data = await local.exportData();
+                const count = LocalSync.LANGUAGES.reduce((n, l) => n + LocalSync.localItems(data, l).length, 0);
+                if (count === 0) { localStorage.removeItem(MIGRATE_FLAG); return; }
+                const ok = await showConfirm(getI18n('migrate_confirm', count), getI18n('migrate_title'));
+                if (!ok) { localStorage.removeItem(MIGRATE_FLAG); return; }
+                showToast(getI18n('migrate_running'), 'info', 8000);
+                const r = await LocalSync.pushToServer({ data, api: apiFetch });
+                localStorage.removeItem(MIGRATE_FLAG);
+                showToast(getI18n('migrate_done', r.created, r.merged), 'success', 6000);
+                await loadDataFromServer();
+            } catch (err) {
+                showToast(`${getI18n('migrate_failed')} ${err.message}`, 'error', 8000); // Merker bleibt: nächster Start fragt erneut
+            } finally {
+                migrating = false;
+            }
+        }
+
+        // Server-Modus -> lokal: Lernstand optional auf das Gerät kopieren, abmelden, im lokalen Modus neu starten
+        window.goLocalFromServer = async function () {
+            dropdownMenu.classList.add('hidden');
+            const choice = await showChoice(getI18n('golocal_msg'), getI18n('golocal_title'), { confirmText: getI18n('golocal_copy'), toggleText: getI18n('golocal_empty'), cancelText: getI18n('btn_cancel') });
+            if (!choice) return;
+            try {
+                if (choice === 'replace') {
+                    if (!(await requireServer())) return;
+                    if (syncOutbox.length > 0) await processSyncOutbox();
+                    await LocalSync.pullFromServer({ local: getLocalApi(), api: apiFetch });
+                }
+                localStorage.setItem(LOCAL_MODE_KEY, 'local');
+                localStorage.removeItem(MIGRATE_FLAG);
+                logout();
+                location.reload();
+            } catch (err) {
+                showToast(`${getI18n('golocal_failed')} ${err.message}`, 'error', 8000);
+            }
+        };
+
+        if (LOCAL_MODE) (function setupLocalData() {
+            const modal = document.getElementById('localDataModal');
+            const $ = (id) => document.getElementById(id);
+            const closeData = setupModal(modal, null, $('closeLocalDataModalBtn'));
+            window.openLocalDataModal = () => {
+                closeAllModals(); dropdownMenu.classList.add('hidden');
+                modal.classList.remove('hidden'); modal.classList.add('flex');
+            };
+
+            $('dataBackupBtn').addEventListener('click', async () => {
+                try {
+                    const json = JSON.stringify(await localApi.exportData());
+                    const name = `lernapp-sicherung-${new Date().toISOString().slice(0, 10)}.json`;
+                    const plugins = window.Capacitor && window.Capacitor.Plugins;
+                    if (isCapacitor && plugins && plugins.Filesystem && plugins.Share) {
+                        const file = await plugins.Filesystem.writeFile({ path: name, data: json, directory: 'CACHE', encoding: 'utf8' });
+                        await plugins.Share.share({ title: name, url: file.uri }); // Teilen-Menü: "In Dateien sichern", AirDrop, Cloud …
+                    } else {
+                        const a = document.createElement('a');
+                        a.href = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
+                        a.download = name; document.body.appendChild(a); a.click(); a.remove();
+                        setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+                    }
+                } catch (err) {
+                    if (!/cancel/i.test(String(err && err.message))) showToast(err.message, 'error');
+                }
+            });
+
+            $('dataRestoreBtn').addEventListener('click', () => $('dataRestoreInput').click());
+            $('dataRestoreInput').addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                e.target.value = '';
+                if (!file) return;
+                let data;
+                try { data = JSON.parse(await file.text()); } catch (err) { data = null; }
+                if (!data || data.format !== 'lernapp-local') return showToast(getI18n('data_restore_invalid'), 'error');
+                const n = (data.vocab || []).filter(v => !v.deleted).length;
+                if (!(await showConfirm(getI18n('data_restore_confirm', n), getI18n('data_restore')))) return;
+                try {
+                    await localApi.importData(data);
+                    Object.keys(localStorage).filter(k => k.startsWith('ita-') && k !== 'ita-ui-lang').forEach(k => localStorage.removeItem(k)); // alte Zwischenspeicher
+                    showToast(getI18n('data_restored'), 'success');
+                    setTimeout(() => location.reload(), 600);
+                } catch (err) { showToast(err.message, 'error'); }
+            });
+
+            $('dataConnectBtn').addEventListener('click', async () => {
+                if (!(await showConfirm(getI18n('confirm_connect'), getI18n('data_connect')))) return;
+                localStorage.setItem(MIGRATE_FLAG, '1');
+                localStorage.removeItem(LOCAL_MODE_KEY);
+                location.reload();
+            });
+
+            $('dataDeleteBtn').addEventListener('click', async () => {
+                if (!(await showConfirm(getI18n('data_delete_confirm'), getI18n('data_delete')))) return;
+                try {
+                    await localApi.ai.clearSecrets();
+                    await localApi.wipe();
+                    localStorage.clear();
+                    location.reload();
+                } catch (err) { showToast(err.message, 'error'); }
+            });
+        })();
+
         // --- Lokaler Betrieb: KI und Cloudstimme mit eigenem Schlüssel einrichten ---
         const localAiModal = document.getElementById('localAiModal');
         let openLocalAiModal = () => { };
@@ -17795,7 +17988,12 @@
         userNameEl = document.getElementById('userName');
         userNameMobileEl = document.getElementById('userNameMobile');
         
-        if (API_TOKEN) {
+        if (LOCAL_MODE) {
+            // Der Name liegt im Gerätespeicher (z. B. nach dem Wiederherstellen einer Sicherung): vor dem Anzeigen übernehmen
+            localApi.handle('GET', '/auth/me').then(me => {
+                if (me && me.name) { CURRENT_USER_NAME = me.name; localStorage.setItem('ita-user-name', me.name); }
+            }).catch(() => { }).finally(() => { showApp(); refreshTokenIfDue(); });
+        } else if (API_TOKEN) {
             showApp();
             refreshTokenIfDue();
         }

@@ -7,8 +7,10 @@
     "@capacitor/android": "^8.2.0",
     "@capacitor/cli": "^8.2.0",
     "@capacitor/core": "^8.2.0",
+    "@capacitor/filesystem": "^8.1.4",
     "@capacitor/ios": "^8.2.0",
     "@capacitor/keyboard": "^8.0.1",
+    "@capacitor/share": "^8.0.3",
     "capacitor-secure-storage-plugin": "^0.13.0"
   },
   "license": "Apache-2.0",

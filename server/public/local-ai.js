@@ -608,6 +608,12 @@
             return { now: nowIso, verbs };
         }
 
+        // Alle gespeicherten API-Schlüssel entfernen (beim Löschen aller Daten)
+        async function clearSecrets() {
+            for (const id of Object.keys(P.AI)) await secrets.remove(keyName('ai', id));
+            for (const id of Object.keys(P.TTS)) await secrets.remove(keyName('tts', id));
+        }
+
         async function usageSummary() {
             const u = await usage();
             const c = await loadConfig();
@@ -617,7 +623,7 @@
         return {
             publicConfig, saveConfig, usageSummary, testAi, listModels, testTts,
             options, savePrefs, sentences, wordInfo, autoStatus, confirmBulk, backfill, runAuto,
-            ttsStatus, ttsAudio, verbStatus, verbCheckRun, verbForms
+            ttsStatus, ttsAudio, clearSecrets, verbStatus, verbCheckRun, verbForms
         };
     }
 

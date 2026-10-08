@@ -325,7 +325,30 @@
         }
         async function wipe() { return serial(() => store.destroy()); }
 
-        return { handle, exportData, importData, wipe, ai, LOCAL_TOKEN, LOCAL_USER_ID };
+        // Lernstand des Nutzers durch Daten vom Server ersetzen (Wörter samt Statistik, Name, Tagesaktivität).
+        // Mitgelieferte Sätze und KI-Einstellungen bleiben; selbst erzeugte KI-Sätze kommen vom Server als eigene Sätze.
+        async function replaceUserData({ vocab = [], dailyActivity = {}, name = null }) {
+            return serial(async () => {
+                await store.clear('vocab'); await store.clear('stats'); await store.clear('choices');
+                const sentences = await store.getAll('sentences');
+                await store.removeMany('sentences', sentences.filter(x => x.id >= USER_SENTENCE_START).map(x => x.id));
+                const t = iso();
+                const rows = vocab.map((v, i) => ({ ...newVocab(i + 1, v, v.language), createdAt: v.createdAt || t, updatedAt: v.updatedAt || t }));
+                await store.putMany('vocab', rows);
+                await store.putMany('stats', vocab.map((v, i) => {
+                    const st = v.Stat || v.Stats || v.Statistic || {};
+                    const z = zeroStat(i + 1);
+                    STAT_FIELDS.forEach(f => { if (st[f] !== undefined && st[f] !== null) z[f] = st[f]; });
+                    return z;
+                }));
+                await store.setMeta('seq-vocab', vocab.length + 1);
+                await store.setMeta('dailyActivity', dailyActivity || {});
+                if (name) await store.setMeta('name', name);
+                return { vocab: vocab.length };
+            });
+        }
+
+        return { handle, exportData, importData, wipe, replaceUserData, ai, LOCAL_TOKEN, LOCAL_USER_ID };
     }
 
     const api = { create, LOCAL_TOKEN, LOCAL_USER_ID, DATA_VERSION };
