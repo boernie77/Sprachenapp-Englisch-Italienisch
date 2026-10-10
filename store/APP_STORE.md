@@ -19,7 +19,9 @@ Alles, was für App Store Connect gebraucht wird. Screenshots liegen **außerhal
 | iPad | unterstützt (Hoch- und Querformat, Split View) |
 
 ## App-Datenschutz („Nährwertkennzeichen“)
-**Datenerhebung: „Es werden keine Daten erhoben“.** Begründung: Im lokalen Modus bleibt alles auf dem Gerät; KI/Cloudstimme gehen mit dem eigenen Schlüssel des Nutzers direkt an dessen gewählten Anbieter (nicht an den Entwickler); ein Server wird nur eingetragen, wenn der Nutzer einen eigenen verbindet. Kein Tracking, keine Drittanbieter-SDKs. Das Datenschutz-Manifest (`ios/App/App/PrivacyInfo.xcprivacy`) deklariert nur die Systemfunktionen UserDefaults (CA92.1) und Dateizeitstempel (C617.1).
+**Stand 2026-10-10 (veröffentlicht): „Daten werden erfasst, nicht mit der Identität verknüpft“ – Datentyp Nutzerinhalte → Sonstige Nutzerinhalte, Zweck App-Funktionalität, kein Tracking.** Grund: Beim Anlegen einer neuen Vokabel, die nicht in der Basisliste steht, schickt die App das eingegebene Wort samt Sprachpaar (und technisch die IP-Adresse) an den Übersetzungsdienst MyMemory (translated.net). Sonst überträgt die App nichts; KI/Cloudstimme laufen nur mit dem eigenen Schlüssel des Nutzers direkt zum gewählten Anbieter. Das Datenschutz-Manifest (`ios/App/App/PrivacyInfo.xcprivacy`) deklariert UserDefaults (CA92.1) und Dateizeitstempel (C617.1).
+
+**Option für später:** Abfrage nur nach Einwilligung oder ganz abschalten (dann Angabe wieder auf „keine Daten erfasst“ ändern, neues Build nötig).
 
 ## Links (Platzhalter bis zur Veröffentlichung)
 - Datenschutzerklärung (öffentliche Adresse, Pflicht): https://byboernie.de/lernapp-datenschutz.html (Englisch: `#en`); Quelle im Repo `~/Projekte/Homepage`, Text inhaltlich wie `server/public/legal-local.js` (bei Änderungen beide anpassen); Hosting: Hetzner-VPS `/var/www/byboernie.de/`, Upload per SCP
