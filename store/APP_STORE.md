@@ -1,5 +1,7 @@
 # App Store – Einreichung (Stand 2026-10-10, Version 2.2.32 / Build 54)
 
+**Status: am 2026-10-10 zur Prüfung eingereicht** (App Store Connect, App-ID 6821305339, SKU `vokabeln-sprachen-2026`). Veröffentlichung nach Freigabe **manuell**. Verfügbarkeit: 174 Länder, ohne Frankreich (Überseegebiete nicht gesondert ausgeschlossen). Preis: kostenlos. iPhone-Bilder wurden für App Store Connect auf 1206×2622 skaliert (`store-assets/*/iphone-6.3/`).
+
 Alles, was für App Store Connect gebraucht wird. Screenshots liegen **außerhalb des Repos** in `~/Projekte/Neue_Lernapp/store-assets/{de,en}/{iphone-6.9,ipad-13}/` (7 Bilder je Satz, 1320×2868 bzw. 2064×2752, ohne Transparenz; erzeugt mit `store/tools/`).
 
 ## Allgemein
@@ -20,8 +22,8 @@ Alles, was für App Store Connect gebraucht wird. Screenshots liegen **außerhal
 **Datenerhebung: „Es werden keine Daten erhoben“.** Begründung: Im lokalen Modus bleibt alles auf dem Gerät; KI/Cloudstimme gehen mit dem eigenen Schlüssel des Nutzers direkt an dessen gewählten Anbieter (nicht an den Entwickler); ein Server wird nur eingetragen, wenn der Nutzer einen eigenen verbindet. Kein Tracking, keine Drittanbieter-SDKs. Das Datenschutz-Manifest (`ios/App/App/PrivacyInfo.xcprivacy`) deklariert nur die Systemfunktionen UserDefaults (CA92.1) und Dateizeitstempel (C617.1).
 
 ## Links (Platzhalter bis zur Veröffentlichung)
-- Datenschutzerklärung (öffentliche Adresse, Pflicht): **[URL]** – Text: `server/public/legal-local.js`
-- Support-URL: **[URL]**
+- Datenschutzerklärung (öffentliche Adresse, Pflicht): https://boernie77.github.io/Sprachenapp-Englisch-Italienisch/datenschutz.html (Branch `gh-pages`; Text: `server/public/legal-local.js`, bei Änderungen dort neu erzeugen)
+- Support-URL: https://boernie77.github.io/Sprachenapp-Englisch-Italienisch/ (Impressum: `impressum.html`)
 - Marketing-URL: optional (Repository: https://github.com/boernie77/Sprachenapp-Englisch-Italienisch)
 
 ## Hinweise für die App-Prüfung (App Review Information)
