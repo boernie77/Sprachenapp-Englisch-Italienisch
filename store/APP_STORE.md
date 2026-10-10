@@ -22,9 +22,9 @@ Alles, was für App Store Connect gebraucht wird. Screenshots liegen **außerhal
 **Datenerhebung: „Es werden keine Daten erhoben“.** Begründung: Im lokalen Modus bleibt alles auf dem Gerät; KI/Cloudstimme gehen mit dem eigenen Schlüssel des Nutzers direkt an dessen gewählten Anbieter (nicht an den Entwickler); ein Server wird nur eingetragen, wenn der Nutzer einen eigenen verbindet. Kein Tracking, keine Drittanbieter-SDKs. Das Datenschutz-Manifest (`ios/App/App/PrivacyInfo.xcprivacy`) deklariert nur die Systemfunktionen UserDefaults (CA92.1) und Dateizeitstempel (C617.1).
 
 ## Links (Platzhalter bis zur Veröffentlichung)
-- Datenschutzerklärung (öffentliche Adresse, Pflicht): https://boernie77.github.io/Sprachenapp-Englisch-Italienisch/datenschutz.html (Branch `gh-pages`; Text: `server/public/legal-local.js`, bei Änderungen dort neu erzeugen)
-- Support-URL: https://boernie77.github.io/Sprachenapp-Englisch-Italienisch/ (Impressum: `impressum.html`)
-- Marketing-URL: optional (Repository: https://github.com/boernie77/Sprachenapp-Englisch-Italienisch)
+- Datenschutzerklärung (öffentliche Adresse, Pflicht): https://byboernie.de/lernapp-datenschutz.html (Englisch: `#en`); Quelle im Repo `~/Projekte/Homepage`, Text inhaltlich wie `server/public/legal-local.js` (bei Änderungen beide anpassen); Hosting: Hetzner-VPS `/var/www/byboernie.de/`, Upload per SCP
+- Support-URL: https://byboernie.de/lernapp.html#support (Impressum: https://byboernie.de/impressum.html)
+- Marketing-URL: https://byboernie.de/lernapp.html
 
 ## Hinweise für die App-Prüfung (App Review Information)
 Kein Anmeldedaten nötig.
