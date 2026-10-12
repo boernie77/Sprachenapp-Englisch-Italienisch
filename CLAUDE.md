@@ -6,8 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - **App-Review lehnte 2.2.32 (54) ab:** (1) Guideline 2.1(a): Absturz beim Start auf iOS 27.0 (`EXC_BREAKPOINT`, `___UIApplicationEvaluateRuntimeIssueForNoSceneLifecycleAdoption`) – iOS 27 verlangt den UIScene-Lebenszyklus. (2) Guideline 5 (China/KI-Genehmigung): „OpenAI“ in den Store-Metadaten.
 - **Fix Absturz:** `ios/App/App/SceneDelegate.swift` neu, `UIApplicationSceneManifest` in `Info.plist` (Storyboard `Main`, `UIMainStoryboardFile` entfernt), `AppDelegate.application(_:configurationForConnecting:options:)`. Im iOS-27-Simulator geprüft (Debug).
-- **Metadaten:** Anbieternamen aus `store/appstore-texts.json` und `store/APP_STORE.md` entfernt („KI-Anbieter deiner Wahl“). China-Storefront in App Store Connect abwählen.
+- **Metadaten:** Anbieternamen aus `store/appstore-texts.json` und `store/APP_STORE.md` entfernt („KI-Anbieter deiner Wahl“). China-Storefront in App Store Connect abgewählt (2026-10-12).
 - **Store-Build:** `server/public/app-config.local.js` (setzt `defaultServerUrl`) darf **nicht** vorhanden sein, sonst fehlt die Startauswahl und es erscheint der Login. Sie liegt gitignored; vor jedem Store-Build in `server/public/` und `ios/App/App/public/` prüfen/löschen.
+- **Stand 2026-10-12:** Build 2.2.33 (55) hochgeladen (CLI: `xcodebuild archive` + `-exportArchive`, `destination upload`), in App Store Connect der Version 2.2.33 zugeordnet (abgelehnte 2.2.32 umbenannt), Beschreibung DE/EN ohne Anbieternamen, Review Notes ergänzt, Antwort an App Review gesendet. Branch `feature/standalone` gepusht, Konfliktkopien aus dem Repo entfernt. Ergebnis der Prüfung steht aus.
 - **Nextcloud-Falle:** Das lokale Arbeitsverzeichnis war ein veralteter Stand (2.2.30, ohne PrivacyInfo/Plugins) – vor dem Bauen `git status`/Version prüfen.
 
 ## Übergabe / Aktueller Stand (2026-10-04) – zuerst lesen
