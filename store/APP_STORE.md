@@ -71,7 +71,7 @@ DATENSCHUTZ AN ERSTER STELLE
 • Sicherung und Wiederherstellung als Datei, jederzeit „Alle Daten löschen“.
 
 OPTIONAL
-• KI-Beispielsätze, Wortinfo und Cloudstimme: mit deinem eigenen API-Schlüssel (Anthropic, OpenAI oder Google). Die Texte gehen direkt an den von dir gewählten Anbieter, dessen Preise und Datenschutzbestimmungen gelten. Der Schlüssel wird im Schlüsselbund des Geräts gespeichert.
+• KI-Beispielsätze, Wortinfo und Cloudstimme: mit deinem eigenen API-Schlüssel eines KI-Anbieters deiner Wahl. Die Texte gehen direkt an den von dir gewählten Anbieter, dessen Preise und Datenschutzbestimmungen gelten. Der Schlüssel wird im Schlüsselbund des Geräts gespeichert.
 • Eigener Server: Wer einen Lernapp-Server betreibt, kann sich damit verbinden und seinen Lernstand dort ablegen.
 
 Die App ist freie Software (Apache-2.0). Fragen und Anregungen sind willkommen.
@@ -123,7 +123,7 @@ PRIVACY FIRST
 • Backup and restore as a file, and "Delete all data" at any time.
 
 OPTIONAL
-• AI example sentences, word info and cloud voice: with your own API key (Anthropic, OpenAI or Google). The texts go directly to the provider you chose; its prices and privacy terms apply. The key is stored in the device keychain.
+• AI example sentences, word info and cloud voice: with your own API key from an AI provider of your choice. The texts go directly to the provider you chose; its prices and privacy terms apply. The key is stored in the device keychain.
 • Your own server: if you run a Lernapp server you can connect to it and keep your progress there.
 
 The app is free software (Apache-2.0). Questions and suggestions are welcome.

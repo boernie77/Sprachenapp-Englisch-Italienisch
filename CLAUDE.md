@@ -2,6 +2,14 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Version 2.2.33 (2026-10-12) – iOS-27-Absturz behoben, Review-Ablehnung 2.2.32
+
+- **App-Review lehnte 2.2.32 (54) ab:** (1) Guideline 2.1(a): Absturz beim Start auf iOS 27.0 (`EXC_BREAKPOINT`, `___UIApplicationEvaluateRuntimeIssueForNoSceneLifecycleAdoption`) – iOS 27 verlangt den UIScene-Lebenszyklus. (2) Guideline 5 (China/KI-Genehmigung): „OpenAI“ in den Store-Metadaten.
+- **Fix Absturz:** `ios/App/App/SceneDelegate.swift` neu, `UIApplicationSceneManifest` in `Info.plist` (Storyboard `Main`, `UIMainStoryboardFile` entfernt), `AppDelegate.application(_:configurationForConnecting:options:)`. Im iOS-27-Simulator geprüft (Debug).
+- **Metadaten:** Anbieternamen aus `store/appstore-texts.json` und `store/APP_STORE.md` entfernt („KI-Anbieter deiner Wahl“). China-Storefront in App Store Connect abwählen.
+- **Store-Build:** `server/public/app-config.local.js` (setzt `defaultServerUrl`) darf **nicht** vorhanden sein, sonst fehlt die Startauswahl und es erscheint der Login. Sie liegt gitignored; vor jedem Store-Build in `server/public/` und `ios/App/App/public/` prüfen/löschen.
+- **Nextcloud-Falle:** Das lokale Arbeitsverzeichnis war ein veralteter Stand (2.2.30, ohne PrivacyInfo/Plugins) – vor dem Bauen `git status`/Version prüfen.
+
 ## Übergabe / Aktueller Stand (2026-10-04) – zuerst lesen
 
 - **2.2.25 live (2026-10-04):** Spanisch als dritte Lernsprache, Sprachwechsel-Fix, neues Hamburgermenü (scrollt, Fuß fest) und Admin-KI-Tab – Details im Abschnitt „Version 2.2.25“ unten. Sicherung davor: `/root/lernapp-db-20261004-vor-spanisch.sql.gz`; Zählstand IT/EN vor/nach Deploy identisch.
