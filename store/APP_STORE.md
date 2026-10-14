@@ -1,4 +1,4 @@
-# App Store – Einreichung (Stand 2026-10-12, Version 2.2.33 / Build 55; 2.2.32 abgelehnt: iOS-27-Absturz + KI-Anbieternamen, China abgewählt)
+# App Store – Einreichung (Stand 2026-10-14, Version 2.2.34 / Build 56; 2.2.33 war nach Ablehnung im Store)
 
 **Status: am 2026-10-10 zur Prüfung eingereicht** (App Store Connect, App-ID 6821305339, SKU `vokabeln-sprachen-2026`). Veröffentlichung nach Freigabe **manuell**. Verfügbarkeit: 174 Länder, ohne Frankreich (Überseegebiete nicht gesondert ausgeschlossen). Preis: kostenlos. iPhone-Bilder wurden für App Store Connect auf 1206×2622 skaliert (`store-assets/*/iphone-6.3/`).
 

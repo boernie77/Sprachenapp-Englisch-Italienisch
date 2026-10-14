@@ -2,6 +2,14 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Version 2.2.34 (2026-10-14) – Secure-Storage-Plugin ersetzt, Plugins wirklich eingebunden
+
+- **Befund:** Die Store-Version 2.2.33 (iOS 55) und das alte AAB enthielten die in `package.json` stehenden Plugins `secure-storage`, `filesystem`, `share` gar nicht, weil `npx cap sync` nach dem Hinzufügen nie lief. Folge: Schlüssel nur im lokalen Speicher der WebView, kein Teilen-Menü beim Export. `capacitor-secure-storage-plugin` 0.13.0 baut zudem auf Android nicht mehr (Proguard-Fehler, doppelte `androidx.core.ktx.R`).
+- **Änderung:** Ersatz durch `@aparajita/capacitor-secure-storage` 8.0.1. `createSecrets` in `server/public/local-ai.js` ruft die nativen Methoden `internalGetItem/internalSetItem/internalRemoveItem` (`prefixedKey`, `data`, `sync:false`) über `Capacitor.Plugins.SecureStorage` auf (kein gebündeltes JS im Projekt!) und zieht Schlüssel aus dem lokalen Speicher beim ersten Lesen in den sicheren Speicher um. Test in `server/test/local-ai.test.js` (74 Tests grün).
+- **Builds:** `npx cap sync` (beide Plattformen, 5 Plugins), iOS 2.2.34 (56) hochgeladen (Archiv `build/VokabelnMulti-2.2.34-56.xcarchive`), Android `app-release-v2.2.34-v56.aab` (versionCode 56).
+- **Regel:** Nach jeder Änderung an Plugins/`package.json` `npx cap sync` ausführen und prüfen, dass `ios/App/CapApp-SPM/Package.swift` und `android/capacitor.settings.gradle` alle Plugins nennen.
+- Die generierten Dateien `CapApp-SPM/Package.swift`, `capacitor.settings.gradle`, `capacitor.build.gradle` wurden nicht committet (siehe Hinweis oben).
+
 ## Version 2.2.33 (2026-10-12) – iOS-27-Absturz behoben, Review-Ablehnung 2.2.32
 
 - **App-Review lehnte 2.2.32 (54) ab:** (1) Guideline 2.1(a): Absturz beim Start auf iOS 27.0 (`EXC_BREAKPOINT`, `___UIApplicationEvaluateRuntimeIssueForNoSceneLifecycleAdoption`) – iOS 27 verlangt den UIScene-Lebenszyklus. (2) Guideline 5 (China/KI-Genehmigung): „OpenAI“ in den Store-Metadaten.

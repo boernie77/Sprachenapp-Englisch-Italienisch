@@ -313,3 +313,34 @@ test('Verbprüfung: bei Anbieterfehlern Abbruch mit verständlicher Meldung', as
     assert.strictEqual(calls.length, 3);
     assert.strictEqual((await api.handle('GET', '/verb-forms?language=it')).verbs.length, 0);
 });
+
+test('Sicherer Speicher: native Plugin-Methoden, Umzug alter Schlüssel aus dem lokalen Speicher', async () => {
+    const ls = new Map();
+    const native = new Map();
+    const calls = [];
+    const plugin = {
+        internalGetItem: async (o) => { calls.push(['get', o]); return { data: native.has(o.prefixedKey) ? native.get(o.prefixedKey) : null }; },
+        internalSetItem: async (o) => { calls.push(['set', o]); native.set(o.prefixedKey, o.data); },
+        internalRemoveItem: async (o) => { calls.push(['remove', o]); return { success: native.delete(o.prefixedKey) }; }
+    };
+    const env = {
+        Capacitor: { isNativePlatform: () => true, Plugins: { SecureStorage: plugin } },
+        localStorage: { getItem: (k) => (ls.has(k) ? ls.get(k) : null), setItem: (k, v) => ls.set(k, v), removeItem: (k) => ls.delete(k) }
+    };
+    const s = LocalAi.createSecrets(env);
+    ls.set('lernapp-secret-ai-key', 'alt-123'); // aus 2.2.33 (ohne Plugin) übrig
+    assert.strictEqual(await s.get('ai-key'), 'alt-123');
+    assert.strictEqual(native.get('lernapp-secret-ai-key'), 'alt-123');
+    assert.strictEqual(ls.has('lernapp-secret-ai-key'), false);
+    await s.set('ai-key', 'neu-456');
+    assert.strictEqual(await s.get('ai-key'), 'neu-456');
+    assert.ok(calls.every(([, o]) => o.sync === false));
+    await s.remove('ai-key');
+    assert.strictEqual(await s.get('ai-key'), null);
+    // ohne Plugin (Browser): lokaler Speicher
+    const b = LocalAi.createSecrets({ Capacitor: { isNativePlatform: () => false }, localStorage: env.localStorage });
+    await b.set('x', '1');
+    assert.strictEqual(await b.get('x'), '1');
+    await b.remove('x');
+    assert.strictEqual(await b.get('x'), null);
+});

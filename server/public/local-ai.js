@@ -31,28 +31,42 @@
     // ------------------------------------------------------------------------------------
     // Schlüssel liegen in der Keychain (iOS) bzw. dem Keystore (Android), wenn das Plugin da ist; sonst im lokalen Speicher des Browsers.
     function createSecrets(env = root) {
+        // Plugin @aparajita/capacitor-secure-storage: ohne gebündeltes JS werden die nativen internal*-Methoden direkt aufgerufen
+        // (so macht es auch der Plugin-Wrapper; Werte sind Zeichenketten, sync:false = nicht über iCloud abgleichen).
         const native = () => {
             try {
                 const c = env.Capacitor;
-                return (c && c.isNativePlatform && c.isNativePlatform() && c.Plugins && c.Plugins.SecureStoragePlugin) || null;
+                return (c && c.isNativePlatform && c.isNativePlatform() && c.Plugins && c.Plugins.SecureStorage) || null;
             } catch (e) { return null; }
         };
         const PREFIX = 'lernapp-secret-';
+        const lsGet = (name) => { try { return env.localStorage.getItem(PREFIX + name); } catch (e) { return null; } };
+        const lsRemove = (name) => { try { env.localStorage.removeItem(PREFIX + name); } catch (e) { /* ignorieren */ } };
         return {
             async get(name) {
                 const n = native();
-                if (n) { try { return (await n.get({ key: name })).value || null; } catch (e) { return null; } }
-                try { return env.localStorage.getItem(PREFIX + name); } catch (e) { return null; }
+                if (!n) return lsGet(name);
+                let value = null;
+                try { value = (await n.internalGetItem({ prefixedKey: PREFIX + name, sync: false })).data || null; } catch (e) { value = null; }
+                if (value === null) {
+                    // Schlüssel aus früheren Versionen (lokaler Speicher) in den sicheren Speicher umziehen
+                    const old = lsGet(name);
+                    if (old) {
+                        try { await n.internalSetItem({ prefixedKey: PREFIX + name, data: old, sync: false }); lsRemove(name); } catch (e) { /* bleibt im lokalen Speicher */ }
+                        return old;
+                    }
+                }
+                return value;
             },
             async set(name, value) {
                 const n = native();
-                if (n) return n.set({ key: name, value });
+                if (n) { await n.internalSetItem({ prefixedKey: PREFIX + name, data: value, sync: false }); lsRemove(name); return; }
                 env.localStorage.setItem(PREFIX + name, value);
             },
             async remove(name) {
                 const n = native();
-                if (n) { try { await n.remove({ key: name }); } catch (e) { /* war nicht gesetzt */ } return; }
-                try { env.localStorage.removeItem(PREFIX + name); } catch (e) { /* ignorieren */ }
+                if (n) { try { await n.internalRemoveItem({ prefixedKey: PREFIX + name, sync: false }); } catch (e) { /* war nicht gesetzt */ } }
+                lsRemove(name);
             }
         };
     }
