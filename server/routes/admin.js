@@ -58,7 +58,7 @@ router.get('/users', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const [users] = await Promise.all([
       User.findAll({
-        attributes: ['id', 'email', 'name', 'isAdmin', 'isActive', 'lastLogin', 'lastLearnAt', 'loginCount', 'createdAt'],
+        attributes: ['id', 'email', 'name', 'isAdmin', 'chatAllowed', 'isActive', 'lastLogin', 'lastLearnAt', 'loginCount', 'createdAt'],
         order: [['id', 'ASC']],
         include: [{
           model: Vocabulary,
@@ -125,6 +125,15 @@ router.put('/users/:id/toggle-active', authenticateToken, requireAdmin, async (r
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+// Gesprächsmodus für einen Nutzer freigeben/entziehen (wirkt nur, wenn der Serverschalter CHAT_ENABLED an ist)
+router.put('/users/:id/toggle-chat', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
+    const user = await User.findByPk(req.params.id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    user.chatAllowed = !user.chatAllowed;
+    await user.save();
+    res.json({ message: 'Freigabe aktualisiert', chatAllowed: user.chatAllowed });
+}));
 
 router.put('/users/:id/toggle-admin', authenticateToken, requireAdmin, async (req, res) => {
   try {
@@ -239,11 +248,11 @@ router.delete('/grammar-sentences', authenticateToken, requireAdmin, asyncHandle
 // Der API-Schlüssel wird nur geschrieben, nie zurückgegeben (nur "hinterlegt ••••1234").
 
 router.get('/ai-settings', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
-    res.json(ai.publicConfig(await ai.loadConfig()));
+    res.json({ ...ai.publicConfig(await ai.loadConfig()), chatServerEnabled: require('../utils/chatAccess').serverEnabled() });
 }));
 
 router.put('/ai-settings', authenticateToken, requireAdmin, asyncHandler(async (req, res) => {
-    const { provider, model, enabled, dailyLimit, lookupLimit, apiKey, clearKey, usdToEur } = req.body;
+    const { provider, model, chatModel, enabled, dailyLimit, chatLimit, lookupLimit, apiKey, clearKey, usdToEur } = req.body;
     const config = await ai.loadConfig();
 
     if (provider !== undefined) {
@@ -255,6 +264,15 @@ router.put('/ai-settings', authenticateToken, requireAdmin, asyncHandler(async (
     if (model !== undefined) {
         if (typeof model !== 'string' || !/^[\w.:\-\/]{1,100}$/.test(model.trim())) return res.status(400).json({ error: 'Ungültiger Modellname' });
         config.models[target] = model.trim();
+    }
+    if (chatModel !== undefined) {
+        if (typeof chatModel !== 'string' || !/^[\w.:\-\/]{1,100}$/.test(chatModel.trim())) return res.status(400).json({ error: 'Ungültiger Modellname' });
+        config.chatModels[target] = chatModel.trim();
+    }
+    if (chatLimit !== undefined) {
+        const limit = parseInt(chatLimit, 10);
+        if (!Number.isInteger(limit) || limit < 0 || limit > 2000) return res.status(400).json({ error: 'Limit für Gespräche muss zwischen 0 und 2000 liegen' });
+        config.chatLimit = limit;
     }
     if (enabled !== undefined) config.enabled = enabled === true;
     if (dailyLimit !== undefined) {
@@ -287,7 +305,7 @@ router.get('/ai-usage', authenticateToken, requireAdmin, asyncHandler(async (req
     const { AiUsage, User } = require('../models');
     const { fn, col, Op } = require('sequelize');
     const sums = [
-        [fn('SUM', col('AiUsage.count')), 'sentences'], [fn('SUM', col('AiUsage.calls')), 'calls'],
+        [fn('SUM', col('AiUsage.count')), 'sentences'], [fn('SUM', col('AiUsage.chatTurns')), 'chatTurns'], [fn('SUM', col('AiUsage.calls')), 'calls'],
         [fn('SUM', col('AiUsage.inputTokens')), 'inputTokens'], [fn('SUM', col('AiUsage.outputTokens')), 'outputTokens'],
         [fn('SUM', col('AiUsage.costUsd')), 'costUsd']
     ];
@@ -309,7 +327,7 @@ router.get('/ai-usage', authenticateToken, requireAdmin, asyncHandler(async (req
         today: await period(dayString(0)),
         last30: await period(dayString(29)),
         total: await period(null),
-        perUser: perUser.map(r => ({ email: r['User.email'], ...toNumbers({ sentences: r.sentences, calls: r.calls, inputTokens: r.inputTokens, outputTokens: r.outputTokens, costUsd: r.costUsd }) }))
+        perUser: perUser.map(r => ({ email: r['User.email'], ...toNumbers({ sentences: r.sentences, chatTurns: r.chatTurns, calls: r.calls, inputTokens: r.inputTokens, outputTokens: r.outputTokens, costUsd: r.costUsd }) }))
     });
 }));
 

@@ -13,6 +13,8 @@ const DEFAULTS = {
     enabled: false,
     dailyLimit: 50,
     models: Object.fromEntries(Object.entries(PROVIDERS).map(([id, p]) => [id, p.defaultModel])),
+    chatLimit: 100, // Gesprächsrunden pro Nutzer und Tag, Admins unbegrenzt (0 = unbegrenzt für alle)
+    chatModels: Object.fromEntries(Object.entries(PROVIDERS).map(([id, p]) => [id, p.chatModel || p.defaultModel])),
     lookupLimit: 200, // KI-Wortinfo-Abfragen (Wortart/Geschlecht) pro Nutzer und Tag, Admins unbegrenzt
     usdToEur: 0.86, // Umrechnung für die Kostenanzeige im Admin-Bereich
     keys: {} // provider -> verschlüsselter Schlüssel
@@ -28,6 +30,7 @@ async function loadConfig() {
         ...DEFAULTS,
         ...stored,
         models: { ...DEFAULTS.models, ...(stored.models || {}) },
+        chatModels: { ...DEFAULTS.chatModels, ...(stored.chatModels || {}) },
         keys: { ...(stored.keys || {}) }
     };
 }
@@ -50,13 +53,14 @@ function publicConfig(config) {
         providers[id] = {
             label: p.label,
             model: config.models[id],
+            chatModel: config.chatModels[id],
             suggestedModels: p.suggestedModels,
             keySet: !!stored,
             keyReadable: !!plain,
             keyHint: plain ? `••••${plain.slice(-4)}` : null
         };
     }
-    return { provider: config.provider, enabled: config.enabled, dailyLimit: config.dailyLimit, lookupLimit: config.lookupLimit, usdToEur: config.usdToEur, providers };
+    return { provider: config.provider, enabled: config.enabled, dailyLimit: config.dailyLimit, chatLimit: config.chatLimit, lookupLimit: config.lookupLimit, usdToEur: config.usdToEur, providers };
 }
 
 function getProvider(id) {
@@ -87,6 +91,23 @@ async function generateSentences({ word, translation, language, levels, categori
     return { sentences, usage: { input: usage.input, output: usage.output, costUsd: costUsd(model, usage.input, usage.output) } };
 }
 
+// Eine Gesprächsrunde: Antwort der KI mit Korrekturen zur letzten Nachricht und Wortvorschlägen
+async function chat({ language, level, topic, practiceWords, messages }) {
+    const config = await loadConfig();
+    if (!config.enabled) throw new AiError('Die KI-Funktion ist nicht aktiviert', 409);
+    const provider = getProvider(config.provider);
+    const apiKey = getApiKey(config, config.provider);
+    if (!apiKey) throw new AiError('Kein gültiger API-Schlüssel hinterlegt', 503);
+    const model = config.chatModels[config.provider];
+    const { data, usage } = await provider.chat({
+        apiKey, model, system: core.chatSystem({ language, level, topic, practiceWords }),
+        messages, schema: core.chatSchema, maxTokens: 4000
+    });
+    const result = core.parseChat(data, messages[messages.length - 1].content);
+    if (!result.reply) throw new AiError('Die KI hat keine verwertbare Antwort geliefert', 502);
+    return { result: { ...result, model }, usage: { input: usage.input, output: usage.output, costUsd: costUsd(model, usage.input, usage.output) } };
+}
+
 // Wortart (und bei italienischen und spanischen Substantiven Geschlecht) eines einzelnen Worts
 async function lookupWord({ word, translation, language }) {
     const config = await loadConfig();
@@ -104,4 +125,4 @@ async function lookupWord({ word, translation, language }) {
     return { info, usage: { input: usage.input, output: usage.output, costUsd: costUsd(model, usage.input, usage.output) } };
 }
 
-module.exports = { lookupWord, loadConfig, saveConfig, publicConfig, getApiKey, getProvider, generateSentences, encrypt, AiError, PROVIDERS };
+module.exports = { lookupWord, loadConfig, saveConfig, publicConfig, getApiKey, getProvider, generateSentences, chat, encrypt, AiError, PROVIDERS };

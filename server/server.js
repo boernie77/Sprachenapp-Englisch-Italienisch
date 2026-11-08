@@ -44,6 +44,7 @@ app.use('/api/base-vocab', baseVocabRoutes);
 app.use('/api/verb-forms', verbFormRoutes);
 app.use('/api/legal', legalRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api', require('./routes/chat')); // Gesprächsmodus: Standard aus (CHAT_ENABLED) + Freigabe je Nutzer
 app.use('/api/tts', ttsRoutes);
 
 // Serve frontend

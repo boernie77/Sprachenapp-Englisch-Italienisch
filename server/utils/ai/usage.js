@@ -36,4 +36,16 @@ async function remainingLookups(user, lookupLimit) {
     return Math.max(0, lookupLimit - (row ? row.lookups : 0));
 }
 
-module.exports = { remainingLookups, MAX_COUNT, DEFAULT_PREFS, parsePrefs, prefsForLanguage, remainingToday, addUsage };
+// Gesprächsrunden: Admins unbegrenzt, sonst Tageslimit (0 = unbegrenzt)
+async function remainingChat(user, chatLimit) {
+    if (user.isAdmin || !chatLimit) return null;
+    const row = await AiUsage.findOne({ where: { UserId: user.id, day: today() } });
+    return Math.max(0, chatLimit - (row ? row.chatTurns : 0));
+}
+
+async function addChatUsage(userId, usage) {
+    const [row] = await AiUsage.findOrCreate({ where: { UserId: userId, day: today() }, defaults: { count: 0 } });
+    await row.increment({ chatTurns: 1, calls: 1, inputTokens: usage.input, outputTokens: usage.output, costUsd: usage.costUsd || 0 });
+}
+
+module.exports = { remainingChat, addChatUsage, remainingLookups, MAX_COUNT, DEFAULT_PREFS, parsePrefs, prefsForLanguage, remainingToday, addUsage };

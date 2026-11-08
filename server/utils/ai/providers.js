@@ -28,20 +28,26 @@ const mapSdkError = (err, SdkModule) => {
 // Modelle, die den serverseitigen Fallback bei Ablehnungen unterstützen
 const ANTHROPIC_FALLBACK_MODELS = new Set(['claude-fable-5-1', 'claude-opus-5-5', 'claude-opus-5', 'claude-sonnet-5-5']);
 
-const ANTHROPIC_EFFORT_MODELS = /^claude-(opus|sonnet|fable|mythos)-5/;
+const ANTHROPIC_EFFORT_MODELS = /^claude-(opus|sonnet|fable|mythos|haiku)-5/;
 
 const anthropic = {
     label: 'Claude (Anthropic)',
     defaultModel: 'claude-opus-5-5',
-    suggestedModels: ['claude-opus-5-5', 'claude-sonnet-5-5', 'claude-haiku-4-5'],
+    chatModel: 'claude-haiku-5-5', // Standard fürs Gespräch: schnell und günstig
+    suggestedModels: ['claude-opus-5-5', 'claude-sonnet-5-5', 'claude-haiku-5-5', 'claude-haiku-4-5'],
 
-    async generateJson({ apiKey, model, system, prompt, schema }) {
+    generateJson({ apiKey, model, system, prompt, schema }) {
+        return this.chat({ apiKey, model, system, messages: [{ role: 'user', content: prompt }], schema });
+    },
+
+    // Wie generateJson, aber mit Nachrichtenliste (Gespräch)
+    async chat({ apiKey, model, system, messages, schema, maxTokens = 16000 }) {
         const client = new Anthropic({ apiKey, timeout: 120 * 1000, maxRetries: 1 });
         const params = {
             model,
-            max_tokens: 16000,
+            max_tokens: maxTokens,
             system,
-            messages: [{ role: 'user', content: prompt }],
+            messages,
             // Die Aufgabe ist einfach: bei den Modellen mit immer aktivem Nachdenken kostet niedrige Denktiefe deutlich weniger
             output_config: { format: { type: 'json_schema', schema }, ...(ANTHROPIC_EFFORT_MODELS.test(model) ? { effort: 'low' } : {}) }
         };
@@ -88,17 +94,19 @@ const OPENAI_EXCLUDED = /(audio|realtime|tts|transcribe|image|embedding|search|i
 const openai = {
     label: 'OpenAI (ChatGPT)',
     defaultModel: 'gpt-5-mini',
+    chatModel: 'gpt-5-mini',
     suggestedModels: ['gpt-5-mini', 'gpt-5'],
 
-    async generateJson({ apiKey, model, system, prompt, schema }) {
+    generateJson({ apiKey, model, system, prompt, schema }) {
+        return this.chat({ apiKey, model, system, messages: [{ role: 'user', content: prompt }], schema });
+    },
+
+    async chat({ apiKey, model, system, messages, schema }) {
         const client = new OpenAI({ apiKey, timeout: 120 * 1000, maxRetries: 1 });
         try {
             const completion = await client.chat.completions.create({
                 model,
-                messages: [
-                    { role: 'system', content: system },
-                    { role: 'user', content: prompt }
-                ],
+                messages: [{ role: 'system', content: system }, ...messages],
                 response_format: { type: 'json_schema', json_schema: { name: 'result', strict: true, schema } }
             });
             const choice = completion.choices[0];

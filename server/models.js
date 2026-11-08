@@ -67,6 +67,7 @@ const User = sequelize.define('User', {
     unique: true
   },
   aiPrefs: { type: DataTypes.TEXT, allowNull: true }, // JSON: Einstellungen der automatischen KI-Beispielsätze
+  chatAllowed: { type: DataTypes.BOOLEAN, defaultValue: false }, // Freigabe für den Gesprächsmodus (zusätzlich zum Serverschalter CHAT_ENABLED; Admins immer, wenn der Schalter an ist)
   sentenceMode: { type: DataTypes.STRING, defaultValue: 'auto' } // 'auto': KI-Sätze folgen den aktiven Wörtern, 'manual': eigene Auswahl
 });
 
@@ -148,6 +149,7 @@ const AiUsage = sequelize.define('AiUsage', {
   count: { type: DataTypes.INTEGER, defaultValue: 0 },
   calls: { type: DataTypes.INTEGER, defaultValue: 0 },
   ttsCalls: { type: DataTypes.INTEGER, defaultValue: 0 }, // neue (nicht zwischengespeicherte) Cloudstimmen-Aufrufe für das Tageslimit
+  chatTurns: { type: DataTypes.INTEGER, defaultValue: 0 }, // Gesprächsrunden (Antworten der KI) für das Tageslimit
   lookups: { type: DataTypes.INTEGER, defaultValue: 0 }, // KI-Wortinfo-Abfragen (Wortart/Geschlecht) für das Tageslimit
   inputTokens: { type: DataTypes.BIGINT, defaultValue: 0 },
   outputTokens: { type: DataTypes.BIGINT, defaultValue: 0 },
@@ -156,7 +158,22 @@ const AiUsage = sequelize.define('AiUsage', {
   indexes: [{ unique: true, fields: ['UserId', 'day'] }]
 });
 
+// Gespräche (Gesprächsmodus), je Nutzer; die ID vergibt die App (wie lokal), damit Abgleich und Wiederaufnahme gleich laufen
+const Chat = sequelize.define('Chat', {
+  id: { type: DataTypes.STRING(64), primaryKey: true },
+  language: { type: DataTypes.STRING(8), allowNull: false },
+  level: { type: DataTypes.STRING(4), defaultValue: 'A2' },
+  topic: { type: DataTypes.STRING(80), defaultValue: '' },
+  title: { type: DataTypes.STRING(120), defaultValue: '' },
+  messages: { type: DataTypes.TEXT, allowNull: false, defaultValue: '[]' }, // JSON-Liste
+  messageCount: { type: DataTypes.INTEGER, defaultValue: 0 }
+}, {
+  indexes: [{ fields: ['UserId', 'language'] }]
+});
+
 // Relationships
+User.hasMany(Chat, { onDelete: 'CASCADE' });
+Chat.belongsTo(User);
 User.hasMany(Vocabulary);
 Vocabulary.belongsTo(User);
 
@@ -173,4 +190,4 @@ SentenceChoice.belongsTo(User);
 SentenceChoice.belongsTo(GrammarSentence);
 AiUsage.belongsTo(User);
 
-module.exports = { sequelize, User, Vocabulary, Stats, BaseVocabulary, GrammarSentence, InviteCode, Setting, AiUsage, SentenceChoice, VerbForm };
+module.exports = { sequelize, User, Vocabulary, Stats, BaseVocabulary, GrammarSentence, InviteCode, Setting, AiUsage, SentenceChoice, VerbForm, Chat };
