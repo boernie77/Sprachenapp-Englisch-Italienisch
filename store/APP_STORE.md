@@ -1,4 +1,4 @@
-# App Store – Einreichung (Stand 2026-10-14, Version 2.2.34 / Build 56; 2.2.33 war nach Ablehnung im Store)
+# App Store – Einreichung (Stand 2026-11-08, Version 2.3.0 / Build 57 vorbereitet, noch nicht hochgeladen; 2.2.34 / Build 56 war zuletzt eingereicht)
 
 **Status: am 2026-10-10 zur Prüfung eingereicht** (App Store Connect, App-ID 6821305339, SKU `vokabeln-sprachen-2026`). Veröffentlichung nach Freigabe **manuell**. Verfügbarkeit: 174 Länder, ohne Frankreich (Überseegebiete nicht gesondert ausgeschlossen). Preis: kostenlos. iPhone-Bilder wurden für App Store Connect auf 1206×2622 skaliert (`store-assets/*/iphone-6.3/`).
 
@@ -19,7 +19,7 @@ Alles, was für App Store Connect gebraucht wird. Screenshots liegen **außerhal
 | iPad | unterstützt (Hoch- und Querformat, Split View) |
 
 ## App-Datenschutz („Nährwertkennzeichen“)
-**Stand 2026-10-10 (veröffentlicht): „Daten werden erfasst, nicht mit der Identität verknüpft“ – Datentyp Nutzerinhalte → Sonstige Nutzerinhalte, Zweck App-Funktionalität, kein Tracking.** Grund: Beim Anlegen einer neuen Vokabel, die nicht in der Basisliste steht, schickt die App das eingegebene Wort samt Sprachpaar (und technisch die IP-Adresse) an den Übersetzungsdienst MyMemory (translated.net). Sonst überträgt die App nichts; KI/Cloudstimme laufen nur mit dem eigenen Schlüssel des Nutzers direkt zum gewählten Anbieter. Das Datenschutz-Manifest (`ios/App/App/PrivacyInfo.xcprivacy`) deklariert UserDefaults (CA92.1) und Dateizeitstempel (C617.1).
+**Stand 2026-10-10 (veröffentlicht): „Daten werden erfasst, nicht mit der Identität verknüpft“ – Datentyp Nutzerinhalte → Sonstige Nutzerinhalte, Zweck App-Funktionalität, kein Tracking.** Grund: Beim Anlegen einer neuen Vokabel, die nicht in der Basisliste steht, schickt die App das eingegebene Wort samt Sprachpaar (und technisch die IP-Adresse) an den Übersetzungsdienst MyMemory (translated.net). Sonst überträgt die App nichts; KI/Gespräch/Cloudstimme laufen nur mit dem eigenen Schlüssel des Nutzers direkt zum gewählten Anbieter (Gesprächsnachrichten sind ebenfalls „Sonstige Nutzerinhalte“, Angabe bleibt gleich). Spracheingabe: Aufnahmen verarbeitet das Betriebssystem (Apple), die App erhält nur Text und speichert nichts – in der Angabe nichts ändern, im Zweifel „Audiodaten“ nicht angeben, da der Entwickler sie nicht erfasst. Das Datenschutz-Manifest (`ios/App/App/PrivacyInfo.xcprivacy`) deklariert UserDefaults (CA92.1) und Dateizeitstempel (C617.1).
 
 **Option für später:** Abfrage nur nach Einwilligung oder ganz abschalten (dann Angabe wieder auf „keine Daten erfasst“ ändern, neues Build nötig).
 
@@ -37,15 +37,15 @@ Kein Anmeldedaten nötig.
 
 **Untertitel** (27/30): Vokabeln und Grammatik üben
 
-**Werbetext** (139/170): Lerne Italienisch, Englisch und Spanisch mit Quiz, Karteikarten, Schreiben und Grammatiksätzen. Komplett offline, ohne Konto, ohne Werbung.
+**Werbetext** (145/170): Lerne Italienisch, Englisch und Spanisch mit Quiz, Karteikarten, Schreiben, Grammatiksätzen und Gespräch. Ohne Konto, ohne Werbung, auch offline.
 
-**Stichwörter** (95/100): `Italienisch,Englisch,Spanisch,Karteikarten,Grammatik,Wortschatz,Quiz,Verben,Konjugation,offline`
+**Stichwörter** (97/100): `Italienisch,Englisch,Spanisch,Karteikarten,Grammatik,Wortschatz,Quiz,Verben,Gespräch,Konversation`
 
-**Neu in dieser Version** (198): Neu: Die App funktioniert jetzt komplett ohne Server und ohne Konto. Optional mit eigenem KI-Schlüssel für Beispielsätze und Cloudstimme, Sicherung und Wiederherstellung, Unterstützung für das iPad.
+**Neu in dieser Version** (261): Neu: Reiter „Gespräch“ – unterhalte dich schreibend oder sprechend mit einer KI auf Italienisch, Englisch oder Spanisch. Du bekommst Korrekturen und Erklärungen auf Deutsch und übernimmst Wörter mit einem Tipp ins Wörterbuch. Optional, mit eigenem KI-Schlüssel.
 
-**Beschreibung** (1767/4000):
+**Beschreibung** (2326/4000):
 
-Vokabeln trainieren, Grammatik üben, Sprachen lernen – direkt auf deinem iPhone oder iPad, ohne Konto und ohne Internet.
+Vokabeln trainieren, Grammatik üben, Sprachen lernen – direkt auf deinem iPhone oder iPad, ohne Konto. Die Übungen laufen auch ohne Internet.
 
 DREI SPRACHEN
 Italienisch, Englisch und Spanisch (Spanien). Die Oberfläche gibt es auf Deutsch und Englisch.
@@ -63,6 +63,9 @@ GLEICH LOSLEGEN
 DEIN LERNSTAND
 Lernstatistik pro Wort, Tagesaktivität und Lernserie zeigen, wo du stehst. Wörter und Sätze lassen sich einzeln aktivieren oder abwählen, mit Filtern nach Wortart und Grammatik.
 
+GESPRÄCH MIT KI (OPTIONAL)
+Schreibe oder sprich auf Italienisch, Englisch oder Spanisch, wähle Niveau und Thema und lass dir die Antworten vorlesen. Die App korrigiert deine letzte Nachricht auf Deutsch und erklärt die Fehler. Wörter aus dem Gespräch übernimmst du mit einem Tipp ins Wörterbuch, auf Wunsch übt die KI gezielt deine eigenen Wörter. Dafür brauchst du einen eigenen KI-Schlüssel; die Gespräche bleiben auf deinem Gerät. Die Spracheingabe nutzt die Spracherkennung des Geräts. KI-Antworten können Fehler enthalten.
+
 SPRACHAUSGABE
 Wörter und Sätze werden mit den Stimmen deines Geräts vorgelesen. Optional gibt es eine Cloudstimme mit deinem eigenen Zugang.
 
@@ -71,7 +74,7 @@ DATENSCHUTZ AN ERSTER STELLE
 • Sicherung und Wiederherstellung als Datei, jederzeit „Alle Daten löschen“.
 
 OPTIONAL
-• KI-Beispielsätze, Wortinfo und Cloudstimme: mit deinem eigenen API-Schlüssel eines KI-Anbieters deiner Wahl. Die Texte gehen direkt an den von dir gewählten Anbieter, dessen Preise und Datenschutzbestimmungen gelten. Der Schlüssel wird im Schlüsselbund des Geräts gespeichert.
+• KI-Beispielsätze, Wortinfo, Gespräch und Cloudstimme: mit deinem eigenen API-Schlüssel eines KI-Anbieters deiner Wahl. Die Texte gehen direkt an den von dir gewählten Anbieter, dessen Preise und Datenschutzbestimmungen gelten. Der Schlüssel wird im Schlüsselbund des Geräts gespeichert.
 • Eigener Server: Wer einen Lernapp-Server betreibt, kann sich damit verbinden und seinen Lernstand dort ablegen.
 
 Die App ist freie Software (Apache-2.0). Fragen und Anregungen sind willkommen.
@@ -82,6 +85,8 @@ Die App benötigt kein Konto und keinen Server. Beim ersten Start „Ohne Server
 
 Optionale Funktionen (nicht nötig für die Prüfung): KI-Beispielsätze und Cloudstimme brauchen einen eigenen API-Schlüssel (Menü > KI & Stimme einrichten). Die Anbindung an einen eigenen Server (Menü > Daten & Server > Mit Server verbinden) ist für Betreiber gedacht, die einen Lernapp-Server selbst hosten; für die Prüfung ist sie nicht erforderlich.
 
+Reiter „Gespräch“ (optional): KI-Unterhaltung, nur mit eigenem API-Schlüssel nutzbar (ohne Schlüssel weist die App darauf hin; für die Prüfung nicht nötig). Die Nachrichten gehen direkt an den vom Nutzer gewählten KI-Anbieter, nicht an den Entwickler; Gespräche werden nur auf dem Gerät gespeichert. Antworten tragen den Hinweis „KI kann sich irren“. Der Mikrofon-Knopf im Gespräch nutzt die Spracherkennung von iOS; die Erlaubnis für Mikrofon und Spracherkennung wird erst beim ersten Tippen abgefragt, es werden keine Aufnahmen gespeichert.
+
 Es werden keine Nutzerdaten an den Entwickler übertragen. Verschlüsselung: nur die vom Betriebssystem bereitgestellte (HTTPS).
 
 ## Texte Englisch (en)
@@ -89,15 +94,15 @@ Es werden keine Nutzerdaten an den Entwickler übertragen. Verschlüsselung: nur
 
 **Untertitel** (26/30): Practice words and grammar
 
-**Werbetext** (123/170): Learn Italian, English and Spanish with quiz, flashcards, writing and grammar sentences. Fully offline, no account, no ads.
+**Werbetext** (141/170): Learn Italian, English and Spanish with quiz, flashcards, writing, grammar sentences and conversation. No account, no ads, works offline too.
 
-**Stichwörter** (93/100): `Italian,English,Spanish,flashcards,grammar,words,quiz,verbs,conjugation,offline,trainer,study`
+**Stichwörter** (92/100): `Italian,English,Spanish,flashcards,grammar,words,quiz,verbs,conversation,chat,speaking,study`
 
-**Neu in dieser Version** (169): New: the app now works completely without a server and without an account. Optional AI sentences and cloud voice with your own key, backup and restore, and iPad support.
+**Neu in dieser Version** (222): New: the “Conversation” tab – chat in writing or by voice with an AI in Italian, English or Spanish. Get corrections and explanations in German and add words to your dictionary with one tap. Optional, with your own AI key.
 
-**Beschreibung** (1642/4000):
+**Beschreibung** (2138/4000):
 
-Train vocabulary, practise grammar, learn languages – right on your iPhone or iPad, with no account and no internet needed.
+Train vocabulary, practise grammar, learn languages – right on your iPhone or iPad, with no account. The exercises work without internet.
 
 THREE LANGUAGES
 Italian, English and Spanish (Spain). The interface is available in German and English.
@@ -115,6 +120,9 @@ More than 3,500 base words and about 8,900 example sentences are already in the 
 YOUR PROGRESS
 Per-word statistics, daily activity and your learning streak show where you stand. Words and sentences can be switched on or off individually, with filters for word type and grammar.
 
+CONVERSATION WITH AI (OPTIONAL)
+Write or speak in Italian, English or Spanish, choose level and topic and have the answers read aloud. The app corrects your last message in German and explains the mistakes. Add words from the conversation to your dictionary with one tap; on request the AI practises your own words. You need your own AI key; conversations stay on your device. Speech input uses your device's speech recognition. AI answers may contain mistakes.
+
 SPEECH OUTPUT
 Words and sentences are read aloud with your device's voices. Optionally there is a cloud voice with your own access.
 
@@ -123,7 +131,7 @@ PRIVACY FIRST
 • Backup and restore as a file, and "Delete all data" at any time.
 
 OPTIONAL
-• AI example sentences, word info and cloud voice: with your own API key from an AI provider of your choice. The texts go directly to the provider you chose; its prices and privacy terms apply. The key is stored in the device keychain.
+• AI example sentences, word info, conversation and cloud voice: with your own API key from an AI provider of your choice. The texts go directly to the provider you chose; its prices and privacy terms apply. The key is stored in the device keychain.
 • Your own server: if you run a Lernapp server you can connect to it and keep your progress there.
 
 The app is free software (Apache-2.0). Questions and suggestions are welcome.
@@ -133,6 +141,8 @@ The app is free software (Apache-2.0). Questions and suggestions are welcome.
 The app needs no account and no server. On first launch choose "Start without a server", enter a name and tap "Load starter list" – all exercise modes are then usable immediately.
 
 Optional features (not needed for review): AI example sentences and the cloud voice require your own API key (menu > Set up AI & voice). Connecting to your own server (menu > Data & server > Connect to server) is meant for operators who host a Lernapp server themselves and is not required for review.
+
+“Conversation” tab (optional): AI chat that works only with your own API key (without a key the app says so; not needed for review). Messages go directly to the AI provider chosen by the user, not to the developer; conversations are stored on the device only. Answers carry the note “AI can make mistakes”. The microphone button uses iOS speech recognition; the microphone and speech-recognition permission is only requested on first tap, and no recordings are stored.
 
 No user data is transmitted to the developer. Encryption: only that provided by the operating system (HTTPS).
 
