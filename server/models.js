@@ -81,6 +81,7 @@ const Vocabulary = sequelize.define('Vocabulary', {
   isOwn: { type: DataTypes.BOOLEAN, defaultValue: false },
   level: { type: DataTypes.STRING, allowNull: true }, // Niveau eigener Sätze (A1–B2), z.B. von der KI erzeugt
   forWord: { type: DataTypes.STRING, allowNull: true }, // Fremdsprachiges Wort, zu dem die KI diesen Satz erzeugt hat
+  source: { type: DataTypes.STRING, allowNull: true }, // Herkunft: 'chat' = aus dem Gesprächsmodus übernommen
   language: { type: DataTypes.STRING, defaultValue: 'it' }
 });
 

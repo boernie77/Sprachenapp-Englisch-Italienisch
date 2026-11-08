@@ -39,7 +39,10 @@ const answer = {
         { original: 'ero a Brescia', corrected: 'ero a Brescia', explanation_de: 'Schein-Korrektur' },
         { original: 'da una settimana', corrected: 'per una settimana', explanation_de: 'da = seit' }
     ],
-    tip_de: '', new_words: [{ word: 'visitare', translation: 'besuchen', typ: 'Verb', gender: 'none', example: 'Hai visitato il museo?' }]
+    tip_de: '', new_words: [
+        { word: 'visitare', translation: 'besuchen', typ: 'Verb', gender: 'none', example: 'Hai visitato il museo?', example_de: 'Hast du das Museum besucht?' },
+        { word: 'città', translation: 'Stadt', typ: 'Substantiv', gender: 'f-sg', example: 'Una bella città.', example_de: '' }
+    ]
 };
 const messages = [
     { role: 'user', content: 'ciao' }, { role: 'assistant', content: 'Ciao! Dove sei stato?' },
@@ -53,6 +56,9 @@ test('Gespräch: Antwort gefiltert, Korrektur nur zur letzten Nachricht, Verbrau
     assert.strictEqual(r.reply, answer.reply);
     assert.deepStrictEqual(r.corrections.map(c => c.corrected), ['per una settimana']);
     assert.strictEqual(r.new_words[0].word, 'visitare');
+    assert.strictEqual(r.new_words[0].example_de, 'Hast du das Museum besucht?');
+    assert.strictEqual(r.new_words[1].grammatica, 'f-sg');
+    assert.strictEqual(r.new_words[1].example, ''); // Beispiel ohne Übersetzung wird verworfen
     assert.strictEqual(r.model, 'claude-haiku-5-5'); // Standardmodell fürs Gespräch
     assert.strictEqual(r.remaining, 199);
     const sent = calls[0].body;
@@ -132,4 +138,28 @@ test('Kern: Nachrichtenliste wird bereinigt', () => {
     assert.deepStrictEqual(core.normalizeChatMessages([{ role: 'assistant', content: 'a' }, { role: 'user', content: 'b' }, { role: 'user', content: 'c' }, { role: 'system', content: 'x' }]),
         [{ role: 'user', content: 'b\nc' }]);
     assert.strictEqual(core.normalizeChatMessages([{ role: 'user', content: 'x'.repeat(5000) }])[0].content.length, core.CHAT_MAX_TEXT);
+});
+
+test('Einstellungen: Chat-Modell und Chat-Limit sind einstellbar und werden zurückgegeben', async () => {
+    const { api } = setup(answer);
+    let cfg = await configure(api);
+    assert.strictEqual(cfg.chatLimit, 200);
+    assert.strictEqual(cfg.providers.anthropic.chatModel, 'claude-haiku-5-5');
+    cfg = await api.handle('PUT', '/local-ai/settings', { chatLimit: 50, chatModels: { anthropic: 'claude-sonnet-5-5' } });
+    assert.strictEqual(cfg.chatLimit, 50);
+    assert.strictEqual(cfg.providers.anthropic.chatModel, 'claude-sonnet-5-5');
+    cfg = await api.handle('PUT', '/local-ai/settings', { chatLimit: 'x', chatModels: { anthropic: '  ' } }); // ungültig: bleibt
+    assert.strictEqual(cfg.chatLimit, 50);
+    assert.strictEqual(cfg.providers.anthropic.chatModel, 'claude-sonnet-5-5');
+});
+
+test('Wörter aus dem Gespräch: Herkunft bleibt am Wort erhalten', async () => {
+    const { api } = setup(answer);
+    const w = await api.handle('POST', '/vocab', { de: 'besuchen', it: 'visitare', typ: 'Verb', language: 'it', source: 'chat', isOwn: true });
+    const s = await api.handle('POST', '/vocab', { de: 'Hast du das Museum besucht?', it: 'Hai visitato il museo?', typ: 'Satz', forWord: 'visitare', language: 'it', source: 'chat' });
+    const list = await api.handle('GET', '/vocab?language=it');
+    assert.strictEqual(list.find(v => v.id === w.id).source, 'chat');
+    assert.strictEqual(list.find(v => v.id === s.id).forWord, 'visitare');
+    const plain = await api.handle('POST', '/vocab', { de: 'Haus', it: 'casa', typ: 'Substantiv', language: 'it' });
+    assert.strictEqual(plain.source, null);
 });

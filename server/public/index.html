@@ -5784,6 +5784,10 @@
                     </div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1" for="laiAiLimit" data-i18n="lai_ai_limit">Tageslimit Sätze (0 = unbegrenzt)</label>
                     <input id="laiAiLimit" type="number" min="0" step="1" inputmode="numeric" class="w-full mb-3 bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
+                    <label class="block text-xs font-semibold text-slate-700 mb-1" for="laiChatModel" data-i18n="lai_chat_model">Modell fürs Gespräch</label>
+                    <input id="laiChatModel" list="laiAiModelList" autocomplete="off" autocapitalize="off" spellcheck="false" class="w-full mb-3 bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
+                    <label class="block text-xs font-semibold text-slate-700 mb-1" for="laiChatLimit" data-i18n="lai_chat_limit">Tageslimit Gespräch (Nachrichten, 0 = unbegrenzt)</label>
+                    <input id="laiChatLimit" type="number" min="0" step="1" inputmode="numeric" class="w-full mb-3 bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-800 outline-none focus:border-blue-400">
                     <div class="flex items-center gap-3">
                         <button type="button" id="laiAiTest" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl border border-slate-200 text-xs font-bold" data-i18n="lai_test">Verbindung testen</button>
                         <span id="laiAiTestResult" class="text-xs min-w-0"></span>
@@ -8055,6 +8059,9 @@
                 lai_model: "Modell",
                 lai_load_models: "Modelle laden",
                 lai_ai_limit: "Tageslimit Sätze (0 = unbegrenzt)",
+                lai_chat_model: "Modell fürs Gespräch",
+                lai_chat_limit: "Tageslimit Gespräch (Nachrichten, 0 = unbegrenzt)",
+                badge_chat: "Aus einem Gespräch",
                 lai_tts_limit: "Tageslimit neue Aufnahmen (0 = unbegrenzt)",
                 lai_test: "Verbindung testen",
                 lai_tts_test: "Stimme testen",
@@ -8883,6 +8890,9 @@
                 lai_model: "Model",
                 lai_load_models: "Load models",
                 lai_ai_limit: "Daily limit sentences (0 = unlimited)",
+                lai_chat_model: "Model for conversation",
+                lai_chat_limit: "Daily limit conversation (messages, 0 = unlimited)",
+                badge_chat: "From a conversation",
                 lai_tts_limit: "Daily limit new recordings (0 = unlimited)",
                 lai_test: "Test connection",
                 lai_tts_test: "Test voice",
@@ -13353,6 +13363,69 @@
             row.hidden = false;
         }
 
+        // ---- Gesprächsmodus: Wörter ins Wörterbuch übernehmen ----
+        function chatHasWord(w) {
+            const n = normalizeWord(w);
+            return !!n && fullDictionary.some(v => (v.language || 'it') === CURRENT_LANG && v.it && normalizeWord(v.it) === n);
+        }
+        // Speichert wie der Vokabel-Dialog: über die Schnittstelle, bei Fehler in die Warteschlange für den Abgleich
+        async function chatPostVocab(payload, forms) {
+            try {
+                const result = await apiFetch('/vocab', { method: 'POST', body: JSON.stringify(payload) });
+                if (!result) return 'invalid';
+                fullDictionary.push({ ...result, ...forms });
+                wordStats[result.id] = result.Stat || result.Statistic || result.Stats || { presented: 0, correct: 0, incorrect: 0, streak: 0 };
+                return 'added';
+            } catch (err) {
+                const tempId = newTempId();
+                fullDictionary.push({ ...payload, id: tempId, isOffline: true });
+                wordStats[tempId] = { presented: 0, correct: 0, incorrect: 0, streak: 0 };
+                addToSyncOutbox('addVocab', { ...payload, tempId });
+                return 'queued';
+            }
+        }
+        // w: { it, de, typ, grammatica, example, exampleDe, level } -> { status: 'added' | 'queued' | 'exists' | 'invalid' }
+        async function chatAddWord(w) {
+            const clean = (x) => String(x || '').replace(/[<>]/g, '').replace(/\s+/g, ' ').trim();
+            let itWord = clean(w.it).slice(0, 60), deWord = clean(w.de).slice(0, 80);
+            const typ = ['Substantiv', 'Verb', 'Adjektiv', 'Sonstiges'].includes(w.typ) ? w.typ : 'Sonstiges';
+            if (!itWord || !deWord) return { status: 'invalid' };
+            if (chatHasWord(itWord)) return { status: 'exists' };
+            let grammatica = typ === 'Substantiv' ? (w.grammatica || null) : null;
+            if (typ === 'Substantiv') {
+                if (CURRENT_LANG === 'es') {
+                    const n = normalizeSpanishNoun(itWord, grammatica || '');
+                    itWord = n.word; grammatica = n.grammatica || null;
+                } else if (CURRENT_LANG === 'it' && !grammatica) {
+                    grammatica = autoDetectGrammatica(itWord) || null;
+                }
+                if (!['der ', 'die ', 'das '].find(a => deWord.toLowerCase().startsWith(a))) {
+                    const art = detectGermanArticle(deWord);
+                    if (art) deWord = art + ' ' + deWord;
+                }
+            }
+            const forms = typ.toLowerCase().includes('verb') ? generateVerbForms(itWord, CURRENT_LANG) : {};
+            const base = { de: deWord, it: itWord, typ, emoji: null, grammatica, language: CURRENT_LANG, isOwn: true, source: 'chat' };
+            let status = await chatPostVocab({ ...base, ...forms }, forms);
+            if (status === 'invalid') return { status };
+            // Beispielsatz mit Übersetzung als eigener Satz zum Wort
+            const ex = clean(w.example).slice(0, 200), exDe = clean(w.exampleDe).slice(0, 200);
+            if (ex && exDe) {
+                await chatPostVocab({ de: exDe, it: ex, typ: 'Satz', emoji: '', grammatica: 'Eigene Sätze', level: w.level || null, forWord: itWord, language: CURRENT_LANG, isOwn: true, source: 'chat' }, {});
+                updateAdminGrammarCount();
+            }
+            renderVocabList();
+            saveAllDataLocally();
+            return { status };
+        }
+        // Antippen eines Wortes im Gespräch: derselbe Dialog wie „Vokabel hinzufügen“ (Übersetzung, Wortart, Geschlecht, Emoji, Duplikatprüfung)
+        function chatOpenWordDialog(word) {
+            openVocabModalBtn.click();
+            setVocabLang(CURRENT_LANG);
+            vocabInput.value = word;
+            vocabInput.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+
         // Gesprächsmodus: Oberfläche (chat-ui.js) wird beim ersten Öffnen angelegt
         var chatUiInstance = null;
         function getChatUi() {
@@ -13367,7 +13440,8 @@
                     .map(w => ({ w: w.it, wrong: (wordStats[w.id] && wordStats[w.id].incorrect) || 0, r: Math.random() }))
                     .sort((a, b) => b.wrong - a.wrong || a.r - b.r).slice(0, 8).map(x => x.w),
                 openSettings: () => { const b = document.getElementById('openLocalAiBtn'); if (b) b.click(); },
-                toast: (m, type) => showToast(m, type || 'info')
+                toast: (m, type) => showToast(m, type || 'info'),
+                hasWord: chatHasWord, addWord: chatAddWord, openWordDialog: chatOpenWordDialog
             });
             return chatUiInstance;
         }
@@ -14152,6 +14226,7 @@
                             <span class="text-slate-400 mx-1 text-xs md:text-sm">|</span>
                             <span class="font-bold text-blue-600 text-sm md:text-base">${secondary}</span>
                             ${word.typ ? `<span class="ml-1 text-xs text-slate-400 italic">${typLabel(word.typ)}</span>` : ''}
+                            ${word.source === 'chat' ? `<span class="ml-1 text-xs" title="${getI18n('badge_chat')}">💬</span>` : ''}
                             ${word.isOwn ? `<span class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[0.65rem] font-medium bg-blue-100 text-blue-800">${getI18n('badge_own_vocab')}</span>` : ''}
                         </div>
                     </div>
@@ -17919,6 +17994,7 @@
                 shownAi = id;
                 $('laiAiProvider').value = id;
                 $('laiAiModel').value = cfg.providers[id].model;
+                $('laiChatModel').value = cfg.providers[id].chatModel || '';
                 $('laiAiModelList').innerHTML = cfg.providers[id].suggestedModels.map(m => `<option value="${escapeHtml(m)}"></option>`).join('');
                 keyUi('ai', id);
             }
@@ -17929,7 +18005,7 @@
                 Object.keys(pending.ai).forEach(k => delete pending.ai[k]); Object.keys(pending.tts).forEach(k => delete pending.tts[k]);
                 removed.ai.clear(); removed.tts.clear();
                 setSwitch(aiSwitch, cfg.enabled); setSwitch(ttsSwitch, cfg.tts.enabled);
-                $('laiAiLimit').value = cfg.dailyLimit; $('laiTtsLimit').value = cfg.tts.dailyLimit;
+                $('laiAiLimit').value = cfg.dailyLimit; $('laiTtsLimit').value = cfg.tts.dailyLimit; $('laiChatLimit').value = cfg.chatLimit;
                 showAiProvider(cfg.provider); showTtsProvider(cfg.tts.provider);
                 $('laiAiTestResult').textContent = ''; $('laiTtsTestResult').textContent = '';
                 try {
@@ -17979,6 +18055,7 @@
                 const body = {
                     provider: $('laiAiProvider').value, enabled: isOn(aiSwitch), dailyLimit: parseInt($('laiAiLimit').value, 10),
                     models: { [$('laiAiProvider').value]: $('laiAiModel').value }, keys,
+                    chatLimit: parseInt($('laiChatLimit').value, 10), chatModels: { [$('laiAiProvider').value]: $('laiChatModel').value },
                     tts: { provider: $('laiTtsProvider').value, enabled: isOn(ttsSwitch), dailyLimit: parseInt($('laiTtsLimit').value, 10), keys: ttsKeys }
                 };
                 cfg = await apiFetch('/local-ai/settings', { method: 'PUT', body: JSON.stringify(body) });

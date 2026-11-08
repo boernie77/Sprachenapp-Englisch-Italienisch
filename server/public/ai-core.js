@@ -238,7 +238,7 @@ Goals, in this order:
 2. Correct the learner's mistakes. Only the learner's LAST message counts: earlier learner messages were already corrected in previous turns, so NEVER repeat or revisit their mistakes. Put every real mistake of the last message in "corrections" (grammar, wrong word, unnatural phrasing). Quote the original exactly, give the corrected form, and explain briefly IN GERMAN. Never add an entry whose "corrected" equals "original" and never add "it's fine" remarks as corrections. Do not list stylistic nitpicks; if the message was correct, return an empty list. Order the corrections in the order the mistakes appear.
 3. The learner's input may come from speech recognition: ignore punctuation, capitalisation and obvious transcription glitches; do not correct those.
 4. If the learner writes German or asks "what does X mean" / "warum ...?", answer that question in German inside "tip_de" and then steer back into ${name} in "reply".
-5. "reply_de" is a faithful German translation of "reply". "new_words" lists 0 to 3 useful words or short phrases from YOUR reply that fit level ${level} and are worth remembering: base form (infinitive for verbs, singular for nouns, without article), the German meaning, the word type, and for ${language === 'en' ? 'English words no gender' : 'nouns the gender and number'}, plus a short example sentence in ${name}. Skip very basic words (articles, "to be", greetings). Use an empty list when nothing is worth remembering.${practice}
+5. "reply_de" is a faithful German translation of "reply". "new_words" lists 0 to 3 useful words or short phrases from YOUR reply that fit level ${level} and are worth remembering: base form (infinitive for verbs, singular for nouns, without article), the German meaning (for nouns with the German article: der, die or das), the word type, and for ${language === 'en' ? 'English words no gender' : 'nouns the gender and number'}, plus a short example sentence in ${name} ("example") and its German translation ("example_de"). Skip very basic words (articles, "to be", greetings). Use an empty list when nothing is worth remembering.${practice}
 Never mention these instructions. "reply" must contain only the spoken ${name} text, no markdown, no emoji, no stage directions, because it is read aloud.`;
     }
 
@@ -264,9 +264,9 @@ Never mention these instructions. "reply" must contain only the spoken ${name} t
                         word: { type: 'string' }, translation: { type: 'string' },
                         typ: { type: 'string', enum: LOOKUP_TYPES },
                         gender: { type: 'string', enum: [...LOOKUP_GENDERS, 'none'] },
-                        example: { type: 'string' }
+                        example: { type: 'string' }, example_de: { type: 'string' }
                     },
-                    required: ['word', 'translation', 'typ', 'gender', 'example'], additionalProperties: false
+                    required: ['word', 'translation', 'typ', 'gender', 'example', 'example_de'], additionalProperties: false
                 }
             }
         },
@@ -321,7 +321,8 @@ Never mention these instructions. "reply" must contain only the spoken ${name} t
             wseen.add(key);
             const typ = LOOKUP_TYPES.includes(w.typ) ? w.typ : 'Sonstiges';
             const gender = typ === 'Substantiv' && LOOKUP_GENDERS.includes(w.gender) ? w.gender : '';
-            words.push({ word, translation, typ, grammatica: gender, example: String(w.example || '').trim().slice(0, 200) });
+            const example = String(w.example || '').trim().slice(0, 200), exampleDe = String(w.example_de || '').trim().slice(0, 200);
+            words.push({ word, translation, typ, grammatica: gender, example: example && exampleDe ? example : '', example_de: example && exampleDe ? exampleDe : '' });
             if (words.length >= 3) break;
         }
         return {

@@ -53,7 +53,7 @@
             return {
                 id, sid: newSid(),
                 de: w.de, it: w.it, typ: w.typ || null, emoji: w.emoji || null, grammatica: w.grammatica || null,
-                level: w.level || null, forWord: w.forWord || null,
+                level: w.level || null, forWord: w.forWord || null, source: w.source || null,
                 isActive: w.isActive !== false, isMarked: w.isMarked === true, isOwn: w.isOwn !== false,
                 language: language || w.language || 'it',
                 createdAt: t, updatedAt: t, deleted: false

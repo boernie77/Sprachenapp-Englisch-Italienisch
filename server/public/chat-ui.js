@@ -18,7 +18,12 @@
             ai_note: 'KI kann sich irren. Bei Zweifeln bitte nachschlagen.',
             need_ai_title: 'Gespräch einrichten', need_ai: 'Für das Gespräch brauchst du einen KI-Schlüssel. Er bleibt auf deinem Gerät.',
             need_ai_btn: 'KI & Stimme einrichten', no_server: 'Das Gespräch ist auf diesem Server nicht freigegeben.',
-            error: 'Fehler: {0}', topics: { travel: 'Reisen', daily: 'Alltag', food: 'Essen & Trinken', work: 'Arbeit' }, untitled: 'Gespräch'
+            error: 'Fehler: {0}', topics: { travel: 'Reisen', daily: 'Alltag', food: 'Essen & Trinken', work: 'Arbeit' }, untitled: 'Gespräch',
+            finish: 'Fertig', tap_hint: 'Tipp: Wörter antippen, um sie ins Wörterbuch zu übernehmen.',
+            added: '„{0}“ ins Wörterbuch übernommen', in_list: 'Schon in deiner Liste', add_error: 'Konnte nicht gespeichert werden.',
+            summary_title: 'Gespräch beendet', summary_sub: 'Deine Nachrichten: {0} · Korrekturen: {1}', summary_words: 'Neue Wörter übernehmen',
+            summary_none: 'In diesem Gespräch gab es keine neuen Wörter.', summary_btn: '{0} Wörter ins Wörterbuch', summary_btn_one: '1 Wort ins Wörterbuch',
+            summary_done: '{0} Wörter übernommen', continue: 'Weiter sprechen', close: 'Schließen', from_ai: 'KI'
         },
         en: {
             start_title: 'What shall we talk about?', start_sub: 'The AI answers at your level and corrects you.',
@@ -31,7 +36,12 @@
             ai_note: 'The AI can be wrong. Please double-check when in doubt.',
             need_ai_title: 'Set up conversation', need_ai: 'You need an AI key for conversations. It stays on your device.',
             need_ai_btn: 'Set up AI & voice', no_server: 'Conversation is not enabled on this server.',
-            error: 'Error: {0}', topics: { travel: 'Travel', daily: 'Daily life', food: 'Food & drink', work: 'Work' }, untitled: 'Conversation'
+            error: 'Error: {0}', topics: { travel: 'Travel', daily: 'Daily life', food: 'Food & drink', work: 'Work' }, untitled: 'Conversation',
+            finish: 'Done', tap_hint: 'Tip: tap a word to add it to your dictionary.',
+            added: '"{0}" added to your dictionary', in_list: 'Already in your list', add_error: 'Could not be saved.',
+            summary_title: 'Conversation finished', summary_sub: 'Your messages: {0} · Corrections: {1}', summary_words: 'Add new words',
+            summary_none: 'There were no new words in this conversation.', summary_btn: 'Add {0} words to dictionary', summary_btn_one: 'Add 1 word to dictionary',
+            summary_done: '{0} words added', continue: 'Keep talking', close: 'Close', from_ai: 'AI'
         }
     };
 
@@ -253,6 +263,9 @@
                 sp.addEventListener('click', () => { st.prefs.speak = !st.prefs.speak; savePrefs(); sp.setAttribute('aria-pressed', String(st.prefs.speak)); if (!st.prefs.speak) env.stopSpeech(); });
                 tools.appendChild(sp);
             }
+            const fin = h('button', 'chat-tool', t('finish'), { type: 'button' });
+            fin.addEventListener('click', async () => { env.stopSpeech(); await save(); renderSummary(); });
+            tools.appendChild(fin);
             bar.append(back, title, tools);
 
             const log = h('div', 'chat-log', null, { 'aria-live': 'polite' });
@@ -267,6 +280,7 @@
             wrap.append(bar, log, status, compose, h('div', 'chat-note', t('ai_note')));
             env.root.appendChild(wrap);
             view = { wrap, log, status, input, send };
+            status.textContent = t('tap_hint');
             st.messages.forEach(m => log.appendChild(renderMessage(m)));
             scroll();
             input.focus({ preventScroll: true });
@@ -274,9 +288,66 @@
 
         function scroll() { if (view) view.log.scrollTop = view.log.scrollHeight; }
 
+        // Wörter antippbar machen: öffnet den Vokabel-Dialog der App mit dem Wort
+        const WORD_RE = /[\p{L}\p{M}][\p{L}\p{M}'’-]*/gu;
+        function pickWord(token) {
+            let w = token.replace(/^['’-]+|['’-]+$/g, '');
+            if (lang() === 'it' && /['’]/.test(w)) w = w.split(/['’]/).pop(); // l'amico -> amico
+            return w;
+        }
+        function appendWords(parent, text) {
+            let last = 0, m;
+            WORD_RE.lastIndex = 0;
+            while ((m = WORD_RE.exec(text))) {
+                if (m.index > last) parent.appendChild(doc.createTextNode(text.slice(last, m.index)));
+                const word = pickWord(m[0]);
+                if (word.length >= 2 && env.openWordDialog) {
+                    const sp = h('span', 'chat-w', m[0], { role: 'button', tabindex: '0' });
+                    const open = () => env.openWordDialog(word);
+                    sp.addEventListener('click', open);
+                    sp.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+                    parent.appendChild(sp);
+                } else parent.appendChild(doc.createTextNode(m[0]));
+                last = m.index + m[0].length;
+            }
+            if (last < text.length) parent.appendChild(doc.createTextNode(text.slice(last)));
+        }
+
+        const isInList = (w) => !!(w.adopted || env.hasWord(w.word));
+        async function adopt(w) {
+            const r = await env.addWord({ it: w.word, de: w.translation, typ: w.typ, grammatica: w.grammatica, example: w.example, exampleDe: w.example_de, level: st.chat && st.chat.level });
+            if (r.status === 'added' || r.status === 'queued') { w.adopted = true; save(); }
+            return r;
+        }
+        function renderNewWords(m, parent) {
+            if (!(m.newWords || []).length) return;
+            const wrap = h('div', 'chat-newwords');
+            m.newWords.forEach(w => {
+                const chip = h('button', 'chat-nw' + (isInList(w) ? ' done' : ''), null, { type: 'button' });
+                const mark = h('b', '', isInList(w) ? '✓' : '＋');
+                chip.append(doc.createTextNode(w.word + ' · ' + w.translation + ' '), mark);
+                chip.addEventListener('click', async () => {
+                    if (isInList(w)) { env.toast(t('in_list'), 'info'); return; }
+                    chip.disabled = true;
+                    try {
+                        const r = await adopt(w);
+                        if (r.status === 'exists') env.toast(t('in_list'), 'info');
+                        else if (r.status === 'invalid') { env.toast(t('add_error'), 'error'); chip.disabled = false; return; }
+                        else env.toast(t('added', w.word), 'success');
+                        chip.classList.add('done'); mark.textContent = '✓';
+                    } catch (e) { env.toast(t('add_error'), 'error'); }
+                    chip.disabled = false;
+                });
+                wrap.appendChild(chip);
+            });
+            parent.appendChild(wrap);
+        }
+
         function renderMessage(m) {
             const e = h('div', 'chat-msg' + (m.role === 'user' ? ' me' : ''));
-            e.appendChild(h('span', '', m.content));
+            const body = h('span');
+            appendWords(body, m.content);
+            e.appendChild(body);
             if (m.role === 'assistant') {
                 if (env.ttsAvailable()) {
                     const p = h('button', 'chat-play', '🔊', { type: 'button', title: t('play'), 'aria-label': t('play') });
@@ -284,6 +355,7 @@
                     e.appendChild(p);
                 }
                 if (m.de) e.appendChild(h('div', 'de', m.de));
+                renderNewWords(m, e);
             } else if (m.checked) {
                 if ((m.corrections || []).length) {
                     m.corrections.forEach(c => {
@@ -295,6 +367,77 @@
                 if (m.tip) e.appendChild(h('div', 'chat-tip', t('tip') + ' ' + m.tip));
             }
             return e;
+        }
+
+        // ---------------------------------------------------------------------------------
+        // Zusammenfassung: alle neuen Wörter des Gesprächs auf einmal prüfen und übernehmen
+        // ---------------------------------------------------------------------------------
+        function collectNewWords() {
+            const seen = new Set(), out = [];
+            st.messages.forEach(m => (m.newWords || []).forEach(w => {
+                const k = String(w.word).toLowerCase();
+                if (!seen.has(k)) { seen.add(k); out.push(w); }
+            }));
+            return out;
+        }
+
+        function renderSummary() {
+            clear();
+            const userCount = st.messages.filter(m => m.role === 'user').length;
+            const corrCount = st.messages.reduce((n, m) => n + ((m.corrections || []).length), 0);
+            const card = h('div', 'chat-card');
+            card.appendChild(h('h2', '', t('summary_title')));
+            card.appendChild(h('div', 'chat-sub', t('summary_sub', userCount, corrCount)));
+            card.appendChild(h('div', 'chat-label', t('summary_words')));
+            const words = collectNewWords();
+            const boxes = [];
+            const go = h('button', 'chat-btn', '', { type: 'button' });
+            const refresh = () => {
+                const n = boxes.filter(b => b.cb.checked && !b.disabled).length;
+                go.textContent = n === 1 ? t('summary_btn_one') : t('summary_btn', n);
+                go.disabled = n === 0;
+            };
+            if (!words.length) card.appendChild(h('div', 'chat-sub', t('summary_none')));
+            const list = h('div');
+            words.forEach(w => {
+                const inList = isInList(w);
+                const row = h('label', 'chat-recent');
+                const cb = h('input', '', null, { type: 'checkbox' });
+                cb.checked = !inList; cb.disabled = inList;
+                cb.addEventListener('change', refresh);
+                const txt = h('span', 't');
+                txt.style.textAlign = 'left';
+                txt.append(h('b', '', w.word + ' · ' + w.translation), h('span', '', inList ? t('in_list') : (w.example || t('from_ai'))));
+                row.append(cb, txt);
+                list.appendChild(row);
+                boxes.push({ w, cb, disabled: inList, row });
+            });
+            card.appendChild(list);
+            if (words.length) {
+                go.style.marginTop = '1rem';
+                go.addEventListener('click', async () => {
+                    go.disabled = true;
+                    let added = 0;
+                    for (const b of boxes) {
+                        if (!b.cb.checked || b.disabled) continue;
+                        try { const r = await adopt(b.w); if (r.status === 'added' || r.status === 'queued') added++; } catch (e) { /* weiter mit dem nächsten */ }
+                        b.disabled = true; b.cb.checked = false; b.cb.disabled = true;
+                        b.row.querySelector('span span').textContent = t('in_list');
+                    }
+                    env.toast(t('summary_done', added), added ? 'success' : 'info');
+                    refresh();
+                });
+                card.appendChild(go);
+                refresh();
+            }
+            const more = h('button', 'chat-btn ghost', t('continue'), { type: 'button' });
+            more.style.marginTop = '.6rem';
+            more.addEventListener('click', renderChat);
+            const close = h('button', 'chat-btn ghost', t('close'), { type: 'button' });
+            close.style.marginTop = '.6rem';
+            close.addEventListener('click', async () => { await save(); st.chat = null; st.messages = []; show(); });
+            card.append(more, close);
+            env.root.appendChild(card);
         }
 
         async function submit() {
