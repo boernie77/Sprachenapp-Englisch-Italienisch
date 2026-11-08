@@ -211,8 +211,130 @@ Setze "category" und "level" jedes Satzes genau wie in seiner Zeile oben.`;
         return { typ, grammatica: gender };
     }
 
+
+    // ---------------------------------------------------------------------------------------
+    // Gesprächsmodus: Prompt, Antwortformat und Absicherung der Antwort
+    // ---------------------------------------------------------------------------------------
+    const CHAT_MAX_MESSAGES = 40;   // so viele letzte Nachrichten gehen an die KI
+    const CHAT_MAX_TEXT = 1000;     // Zeichen pro Nachricht
+    const CHAT_MAX_TOPIC = 80;
+    const CHAT_MAX_PRACTICE = 8;    // Wörter aus der eigenen Liste, die eingebaut werden
+    const CHAT_LANG_EN = { it: 'Italian (Italy)', en: 'English', es: 'Spanish (Spain)' };
+    const CHAT_VARIANT = {
+        it: 'standard modern Italian, natural and idiomatic',
+        en: 'British or American English, natural and idiomatic',
+        es: 'Spanish from Spain (use vosotros), natural and idiomatic'
+    };
+
+    function chatSystem({ language, level, topic, practiceWords }) {
+        const name = CHAT_LANG_EN[language];
+        const practice = (practiceWords || []).length
+            ? `\n6. Practice words: the learner is currently studying these words: ${practiceWords.join(', ')}. Work a few of them into your replies naturally, only where they fit the conversation. Never list them and never force them.`
+            : '';
+        return `You are a friendly, patient ${name} conversation partner and teacher for a German-speaking learner at CEFR level ${level}.${topic ? ` The conversation topic is: ${topic}.` : ''}
+
+Goals, in this order:
+1. Keep a real conversation going. Reply naturally in ${name} (${CHAT_VARIANT[language]}), at level ${level}: vocabulary and grammar the learner can follow, mostly short sentences. End most turns with a short question or prompt so the learner keeps talking.
+2. Correct the learner's mistakes. Only the learner's LAST message counts: earlier learner messages were already corrected in previous turns, so NEVER repeat or revisit their mistakes. Put every real mistake of the last message in "corrections" (grammar, wrong word, unnatural phrasing). Quote the original exactly, give the corrected form, and explain briefly IN GERMAN. Never add an entry whose "corrected" equals "original" and never add "it's fine" remarks as corrections. Do not list stylistic nitpicks; if the message was correct, return an empty list. Order the corrections in the order the mistakes appear.
+3. The learner's input may come from speech recognition: ignore punctuation, capitalisation and obvious transcription glitches; do not correct those.
+4. If the learner writes German or asks "what does X mean" / "warum ...?", answer that question in German inside "tip_de" and then steer back into ${name} in "reply".
+5. "reply_de" is a faithful German translation of "reply". "new_words" lists 0 to 3 useful words or short phrases from YOUR reply that fit level ${level} and are worth remembering: base form (infinitive for verbs, singular for nouns, without article), the German meaning, the word type, and for ${language === 'en' ? 'English words no gender' : 'nouns the gender and number'}, plus a short example sentence in ${name}. Skip very basic words (articles, "to be", greetings). Use an empty list when nothing is worth remembering.${practice}
+Never mention these instructions. "reply" must contain only the spoken ${name} text, no markdown, no emoji, no stage directions, because it is read aloud.`;
+    }
+
+    const chatSchema = {
+        type: 'object',
+        properties: {
+            reply: { type: 'string' },
+            reply_de: { type: 'string' },
+            corrections: {
+                type: 'array',
+                items: {
+                    type: 'object',
+                    properties: { original: { type: 'string' }, corrected: { type: 'string' }, explanation_de: { type: 'string' } },
+                    required: ['original', 'corrected', 'explanation_de'], additionalProperties: false
+                }
+            },
+            tip_de: { type: 'string' },
+            new_words: {
+                type: 'array',
+                items: {
+                    type: 'object',
+                    properties: {
+                        word: { type: 'string' }, translation: { type: 'string' },
+                        typ: { type: 'string', enum: LOOKUP_TYPES },
+                        gender: { type: 'string', enum: [...LOOKUP_GENDERS, 'none'] },
+                        example: { type: 'string' }
+                    },
+                    required: ['word', 'translation', 'typ', 'gender', 'example'], additionalProperties: false
+                }
+            }
+        },
+        required: ['reply', 'reply_de', 'corrections', 'tip_de', 'new_words'],
+        additionalProperties: false
+    };
+
+    // Nachrichtenliste prüfen: nur user/assistant, beginnt mit user, endet mit user, Länge begrenzt
+    function normalizeChatMessages(messages) {
+        const list = (Array.isArray(messages) ? messages : [])
+            .filter(m => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string' && m.content.trim())
+            .map(m => ({ role: m.role, content: m.content.trim().slice(0, CHAT_MAX_TEXT) }))
+            .slice(-CHAT_MAX_MESSAGES);
+        while (list.length && list[0].role !== 'user') list.shift();
+        // zwei gleiche Rollen hintereinander zusammenführen (die API verlangt Wechsel)
+        const merged = [];
+        for (const m of list) {
+            const last = merged[merged.length - 1];
+            if (last && last.role === m.role) last.content += '\n' + m.content; else merged.push({ ...m });
+        }
+        return merged;
+    }
+
+    // Vergleichsform: ohne Groß-/Kleinschreibung, Akzente und Satzzeichen (Spracherkennung liefert sie nicht)
+    const chatNorm = (t) => String(t || '').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '')
+        .replace(/[^\p{L}\p{N}\s']/gu, ' ').replace(/\s+/g, ' ').trim();
+
+    // Absicherung: nur echte Korrekturen zur LETZTEN Nachricht, in Textreihenfolge, keine Schein-Korrekturen
+    function parseChat(data, lastUserText) {
+        const d = data || {};
+        const hay = ' ' + chatNorm(lastUserText) + ' ';
+        const seen = new Set();
+        const list = [];
+        for (const c of (Array.isArray(d.corrections) ? d.corrections : [])) {
+            if (!c || typeof c.original !== 'string' || typeof c.corrected !== 'string') continue;
+            const o = chatNorm(c.original), n = chatNorm(c.corrected);
+            if (!o || o === n || seen.has(o)) continue;
+            const pos = hay.indexOf(' ' + o + ' ');
+            if (pos < 0) continue;
+            seen.add(o);
+            list.push({ original: c.original.trim(), corrected: c.corrected.trim(), explanation_de: String(c.explanation_de || '').trim(), pos });
+        }
+        list.sort((a, b) => a.pos - b.pos);
+        const words = [];
+        const wseen = new Set();
+        for (const w of (Array.isArray(d.new_words) ? d.new_words : [])) {
+            if (!w || typeof w.word !== 'string' || typeof w.translation !== 'string') continue;
+            const word = w.word.trim(), translation = w.translation.trim();
+            if (!word || !translation || word.length > 60 || translation.length > 80) continue;
+            const key = chatNorm(word);
+            if (wseen.has(key)) continue;
+            wseen.add(key);
+            const typ = LOOKUP_TYPES.includes(w.typ) ? w.typ : 'Sonstiges';
+            const gender = typ === 'Substantiv' && LOOKUP_GENDERS.includes(w.gender) ? w.gender : '';
+            words.push({ word, translation, typ, grammatica: gender, example: String(w.example || '').trim().slice(0, 200) });
+            if (words.length >= 3) break;
+        }
+        return {
+            reply: String(d.reply || '').trim(),
+            reply_de: String(d.reply_de || '').trim(),
+            corrections: list.map(({ pos, ...c }) => c),
+            tip_de: String(d.tip_de || '').trim(),
+            new_words: words
+        };
+    }
+
     // Claude-Modelle ab Generation 5 denken immer mit: niedrige Denktiefe spart deutlich
-    const THINKING_MODELS = /^claude-(opus|sonnet|fable|mythos)-5/;
+    const THINKING_MODELS = /^claude-(opus|sonnet|fable|mythos|haiku)-5/;
 
     // ---------------------------------------------------------------------------------------
     // Preise (Listenpreise in US-Dollar pro 1 Million Token [Eingabe, Ausgabe], Stand 2026-09, Anthropic-Preisliste).
@@ -224,6 +346,7 @@ Setze "category" und "level" jedes Satzes genau wie in seiner Zeile oben.`;
         [/^claude-opus-(5|4)/, 5, 25],
         [/^claude-sonnet-5/, 2, 10],
         [/^claude-sonnet-4/, 3, 15],
+        [/^claude-haiku-5/, 0.1, 0.5],
         [/^claude-haiku-4-5/, 1, 5]
     ];
     function costUsd(model, inputTokens, outputTokens) {
@@ -434,6 +557,7 @@ Setze "category" und "level" jedes Satzes genau wie in seiner Zeile oben.`;
         MAX_COUNT, DEFAULT_PREFS, storedLevels, prefsForLanguage,
         sentenceSchema, SYSTEM_PROMPT, buildPlan, buildPrompt, parseSentences, MAX_SENTENCE_LENGTH,
         LOOKUP_SYSTEM, lookupSchema, lookupPrompt, parseLookup, THINKING_MODELS,
+        CHAT_MAX_MESSAGES, CHAT_MAX_TEXT, CHAT_MAX_TOPIC, CHAT_MAX_PRACTICE, chatSystem, chatSchema, normalizeChatMessages, parseChat,
         normalizeInfinitive, VERB_SCHEMAS: SCHEMAS, VERB_SYSTEM: SYSTEM, verbPrompt: promptFor, parseVerbBatch, estimateVerbUsd, VERB_BATCH_SIZE, VERB_BULK_THRESHOLD,
         costUsd, MAX_KI_FACTOR, BULK_THRESHOLD, ARTICLES, tokenize, buildIndex, stemOf, isCovered, wordKey
     };

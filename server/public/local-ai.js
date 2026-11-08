@@ -130,8 +130,10 @@
 
         // ---- Einstellungen ----
         const defaultConfig = () => ({
-            provider: 'anthropic', enabled: false, dailyLimit: 50, lookupLimit: 200,
+            provider: 'anthropic', enabled: false, dailyLimit: 50, lookupLimit: 200, chatLimit: 200,
             models: Object.fromEntries(Object.entries(P.AI).map(([id, p]) => [id, p.defaultModel])),
+            // Gespräch: eigenes (schnelles, günstiges) Modell je Anbieter
+            chatModels: Object.fromEntries(Object.entries(P.AI).map(([id, p]) => [id, p.chatModel || p.defaultModel])),
             tts: {
                 provider: 'google', enabled: false, dailyLimit: 300,
                 voices: Object.fromEntries(Object.entries(P.TTS).map(([id, p]) => [id, { ...p.defaultVoices }]))
@@ -142,7 +144,7 @@
             const s = await store.getMeta(CONFIG_KEY, {});
             const voices = {};
             for (const id of Object.keys(P.TTS)) voices[id] = { ...d.tts.voices[id], ...(((s.tts || {}).voices || {})[id] || {}) };
-            return { ...d, ...s, models: { ...d.models, ...(s.models || {}) }, tts: { ...d.tts, ...(s.tts || {}), voices } };
+            return { ...d, ...s, models: { ...d.models, ...(s.models || {}) }, chatModels: { ...d.chatModels, ...(s.chatModels || {}) }, tts: { ...d.tts, ...(s.tts || {}), voices } };
         }
         const aiKey = (provider) => secrets.get(keyName('ai', provider));
         const ttsKey = async (config) => (await secrets.get(keyName('tts', config.tts.provider)))
@@ -154,14 +156,14 @@
             const ai = {}, tts = {};
             for (const [id, p] of Object.entries(P.AI)) {
                 const k = await aiKey(id);
-                ai[id] = { label: p.label, model: c.models[id], suggestedModels: p.suggestedModels, keySet: !!k, keyHint: keyHint(k) };
+                ai[id] = { label: p.label, model: c.models[id], chatModel: c.chatModels[id], suggestedModels: p.suggestedModels, keySet: !!k, keyHint: keyHint(k) };
             }
             for (const [id, p] of Object.entries(P.TTS)) {
                 const k = await secrets.get(keyName('tts', id));
                 tts[id] = { label: p.label, voices: c.tts.voices[id], keySet: !!k, keyHint: keyHint(k), sharesAiKey: id === 'openai' && !k && !!(await aiKey('openai')) };
             }
             return {
-                provider: c.provider, enabled: c.enabled, dailyLimit: c.dailyLimit, lookupLimit: c.lookupLimit, providers: ai,
+                provider: c.provider, enabled: c.enabled, dailyLimit: c.dailyLimit, lookupLimit: c.lookupLimit, chatLimit: c.chatLimit, providers: ai,
                 tts: { provider: c.tts.provider, enabled: c.tts.enabled, dailyLimit: c.tts.dailyLimit, providers: tts, maxText: TTS_MAX_TEXT }
             };
         }
@@ -177,6 +179,10 @@
             if (typeof body.enabled === 'boolean') c.enabled = body.enabled;
             c.dailyLimit = num(body.dailyLimit, c.dailyLimit);
             c.lookupLimit = num(body.lookupLimit, c.lookupLimit);
+            c.chatLimit = num(body.chatLimit, c.chatLimit);
+            for (const [id, model] of Object.entries(body.chatModels || {})) {
+                if (P.AI[id] && typeof model === 'string' && model.trim()) c.chatModels[id] = model.trim();
+            }
             for (const [id, model] of Object.entries(body.models || {})) {
                 if (P.AI[id] && typeof model === 'string' && model.trim()) c.models[id] = model.trim();
             }
@@ -207,11 +213,11 @@
         async function usage() {
             const u = await store.getMeta(USAGE_KEY, null);
             if (u && u.day === today()) return u;
-            return { day: today(), count: 0, lookups: 0, ttsCalls: 0, calls: 0, inputTokens: 0, outputTokens: 0, costUsd: 0 };
+            return { day: today(), count: 0, lookups: 0, chatTurns: 0, ttsCalls: 0, calls: 0, inputTokens: 0, outputTokens: 0, costUsd: 0 };
         }
-        async function addUsage({ sentences = 0, lookups = 0, ttsCalls = 0, tokens, model }) {
+        async function addUsage({ sentences = 0, lookups = 0, chatTurns = 0, ttsCalls = 0, tokens, model }) {
             const u = await usage();
-            u.count += sentences; u.lookups += lookups; u.ttsCalls += ttsCalls;
+            u.count += sentences; u.lookups += lookups; u.chatTurns = (u.chatTurns || 0) + chatTurns; u.ttsCalls += ttsCalls;
             if (tokens) {
                 u.calls += 1; u.inputTokens += tokens.input; u.outputTokens += tokens.output; u.costUsd += tokens.costUsd || 0;
                 const totals = await store.getMeta(TOTALS_KEY, {});
@@ -311,6 +317,35 @@
             const r = await generateSentences({ word: word.trim(), translation: translation ? translation.trim() : null, language, levels, categories: chosen, count });
             await addUsage({ sentences: r.sentences.length, tokens: r.tokens, model: r.model });
             return { sentences: r.sentences, remaining: remaining === null ? null : remaining - r.sentences.length };
+        }
+
+
+        // ---- Gespräch ----
+        // body: { language, level, topic, practiceWords[], messages[{role, content}] }; die letzte Nachricht ist die des Nutzers
+        async function chat(body) {
+            const { language } = body;
+            if (!core.isSupportedLanguage(language)) throw err(400, 'Sprache nicht unterstützt');
+            const level = core.LEVELS.includes(body.level) ? body.level : 'A2';
+            const topic = typeof body.topic === 'string' ? body.topic.trim().slice(0, core.CHAT_MAX_TOPIC) : '';
+            const practiceWords = (Array.isArray(body.practiceWords) ? body.practiceWords : [])
+                .filter(w => typeof w === 'string' && w.trim() && w.length <= 60).map(w => w.trim()).slice(0, core.CHAT_MAX_PRACTICE);
+            const messages = core.normalizeChatMessages(body.messages);
+            if (messages.length === 0 || messages[messages.length - 1].role !== 'user') throw err(400, 'Bitte eine Nachricht schreiben');
+            const { config, key, ready } = await readyAi();
+            if (!config.enabled) throw new AiError('Die KI-Funktion ist nicht aktiviert', 409);
+            if (!ready) throw new AiError('Kein gültiger API-Schlüssel hinterlegt', 503);
+            const remaining = remainingOf(config.chatLimit, (await usage()).chatTurns || 0);
+            if (remaining !== null && remaining < 1) throw err(429, 'Tageslimit für Gespräche erreicht');
+            const model = config.chatModels[config.provider];
+            const { data, usage: tok } = await P.AI[config.provider].chat({
+                apiKey: key, model, system: core.chatSystem({ language, level, topic, practiceWords }),
+                messages, schema: core.chatSchema, maxTokens: 4000
+            });
+            const result = core.parseChat(data, messages[messages.length - 1].content);
+            if (!result.reply) throw new AiError('Die KI hat keine verwertbare Antwort geliefert', 502);
+            const tokens = { input: tok.input, output: tok.output, costUsd: core.costUsd(model, tok.input, tok.output) };
+            await addUsage({ chatTurns: 1, tokens, model });
+            return { ...result, model, remaining: remaining === null ? null : remaining - 1 };
         }
 
         async function wordInfo(body) {
@@ -631,12 +666,12 @@
         async function usageSummary() {
             const u = await usage();
             const c = await loadConfig();
-            return { ...u, costEur: u.costUsd * USD_TO_EUR, dailyLimit: c.dailyLimit, ttsDailyLimit: c.tts.dailyLimit };
+            return { ...u, costEur: u.costUsd * USD_TO_EUR, dailyLimit: c.dailyLimit, chatLimit: c.chatLimit, ttsDailyLimit: c.tts.dailyLimit };
         }
 
         return {
             publicConfig, saveConfig, usageSummary, testAi, listModels, testTts,
-            options, savePrefs, sentences, wordInfo, autoStatus, confirmBulk, backfill, runAuto,
+            options, savePrefs, sentences, wordInfo, chat, autoStatus, confirmBulk, backfill, runAuto,
             ttsStatus, ttsAudio, clearSecrets, verbStatus, verbCheckRun, verbForms
         };
     }

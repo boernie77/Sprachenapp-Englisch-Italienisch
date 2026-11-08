@@ -1,12 +1,12 @@
 // Lokaler Speicher für den Betrieb ohne Server (Standalone-Modus).
 // IndexedDB im Browser/der App, ein Arbeitsspeicher-Ersatz für Tests in Node (window.LocalStore bzw. require()).
-// Alle Zugriffe sind asynchron. Schlüsselfelder: vocab.id, stats.vocabId, sentences.id, choices.sentenceId, meta.key
+// Alle Zugriffe sind asynchron. Schlüsselfelder: vocab.id, stats.vocabId, sentences.id, choices.sentenceId, meta.key, chats.id
 (function (root) {
     'use strict';
 
     const DB_NAME = 'lernapp-local';
-    const DB_VERSION = 2; // 2: + audio (Zwischenspeicher der Cloudstimme)
-    const STORES = { vocab: 'id', stats: 'vocabId', sentences: 'id', choices: 'sentenceId', meta: 'key', audio: 'key' };
+    const DB_VERSION = 3; // 2: + audio (Zwischenspeicher der Cloudstimme), 3: + chats (Gespräche)
+    const STORES = { vocab: 'id', stats: 'vocabId', sentences: 'id', choices: 'sentenceId', meta: 'key', audio: 'key', chats: 'id' };
 
     function wrap(req) {
         return new Promise((resolve, reject) => {

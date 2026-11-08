@@ -45,12 +45,18 @@
         const anthropic = {
             label: 'Claude (Anthropic)',
             defaultModel: 'claude-opus-5-5',
-            suggestedModels: ['claude-opus-5-5', 'claude-sonnet-5-5', 'claude-haiku-4-5'],
+            suggestedModels: ['claude-opus-5-5', 'claude-sonnet-5-5', 'claude-haiku-5-5', 'claude-haiku-4-5'],
+            chatModel: 'claude-haiku-5-5', // Gespräch: schnell und günstig
 
             async generateJson({ apiKey, model, system, prompt, schema }) {
+                return this.chat({ apiKey, model, system, messages: [{ role: 'user', content: prompt }], schema });
+            },
+
+            // Antwort nach Schema auf eine ganze Nachrichtenliste (Gespräch); generateJson ist der Sonderfall mit einer Nachricht
+            async chat({ apiKey, model, system, messages, schema, maxTokens = 16000 }) {
                 const body = {
-                    model, max_tokens: 16000, system,
-                    messages: [{ role: 'user', content: prompt }],
+                    model, max_tokens: maxTokens, system,
+                    messages,
                     output_config: { format: { type: 'json_schema', schema }, ...(core.THINKING_MODELS.test(model) ? { effort: 'low' } : {}) }
                 };
                 const fallback = ANTHROPIC_FALLBACK_MODELS.has(model);
@@ -94,13 +100,18 @@
             label: 'OpenAI (ChatGPT)',
             defaultModel: 'gpt-5-mini',
             suggestedModels: ['gpt-5-mini', 'gpt-5'],
+            chatModel: 'gpt-5-mini',
 
             async generateJson({ apiKey, model, system, prompt, schema }) {
+                return this.chat({ apiKey, model, system, messages: [{ role: 'user', content: prompt }], schema });
+            },
+
+            async chat({ apiKey, model, system, messages, schema, maxTokens }) {
                 const res = await call(http, 'https://api.openai.com/v1/chat/completions', {
                     method: 'POST', headers: openaiHeaders(apiKey),
                     body: JSON.stringify({
                         model,
-                        messages: [{ role: 'system', content: system }, { role: 'user', content: prompt }],
+                        messages: [{ role: 'system', content: system }, ...messages],
                         response_format: { type: 'json_schema', json_schema: { name: 'result', strict: true, schema } }
                     })
                 });

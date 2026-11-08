@@ -201,6 +201,49 @@
             return { message: 'Deleted' };
         }));
 
+
+        // Gespräche (Gesprächsmodus): liegen nur im Gerät. Beim Betrieb mit Server übernimmt der Server dieselben Routen.
+        const CHAT_ID = /^[A-Za-z0-9_-]{8,64}$/;
+        const CHAT_MAX_BYTES = 400000;
+        const chatSummary = (c) => ({ id: c.id, language: c.language, level: c.level, topic: c.topic || '', title: c.title || '', updatedAt: c.updatedAt, createdAt: c.createdAt, messageCount: (c.messages || []).length });
+        route('GET', '/chats', async ({ q }) => {
+            const language = q.get('language');
+            return (await store.getAll('chats')).filter(c => !c.deleted && (!language || c.language === language))
+                .sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt))).map(chatSummary);
+        });
+        route('DELETE', '/chats/clear/all', ({ q }) => serial(async () => {
+            const language = q.get('language');
+            const list = (await store.getAll('chats')).filter(c => !language || c.language === language);
+            await store.removeMany('chats', list.map(c => c.id));
+            return { message: 'Cleared', count: list.length };
+        }));
+        route('GET', '/chats/([^/]+)', async ({ params }) => {
+            const c = await store.get('chats', params[0]);
+            if (!c || c.deleted) throw httpError(404);
+            return c;
+        });
+        route('PUT', '/chats/([^/]+)', ({ params, body }) => serial(async () => {
+            const id = params[0];
+            if (!CHAT_ID.test(id)) throw httpError(400, 'Ungültige Gesprächs-ID');
+            if (!['it', 'en', 'es'].includes(body.language)) throw httpError(400, 'Sprache nicht unterstützt');
+            if (!Array.isArray(body.messages) || body.messages.length > 500) throw httpError(400, 'Ungültiger Verlauf');
+            const messages = body.messages.filter(m => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string');
+            const old = await store.get('chats', id);
+            const t = iso();
+            const chat = {
+                id, language: body.language, level: ['A1', 'A2', 'B1', 'B2'].includes(body.level) ? body.level : 'A2',
+                topic: String(body.topic || '').slice(0, 80), title: String(body.title || '').slice(0, 120),
+                messages, createdAt: (old && old.createdAt) || t, updatedAt: t
+            };
+            if (JSON.stringify(chat).length > CHAT_MAX_BYTES) throw httpError(413, 'Gespräch zu groß');
+            await store.put('chats', chat);
+            return chatSummary(chat);
+        }));
+        route('DELETE', '/chats/([^/]+)', ({ params }) => serial(async () => {
+            await store.removeMany('chats', [params[0]]);
+            return { message: 'Deleted' };
+        }));
+
         // Basisliste und Grammatiksätze
         route('GET', '/base-vocab', ({ q }) => baseVocab(q.get('language') || 'it'));
         route('GET', '/grammar-sentences', ({ q }) => sentenceList(q.get('language')));
@@ -274,6 +317,7 @@
             route('POST', '/ai/backfill', ({ body }) => ai.backfill(body.language));
             route('POST', '/ai/word-info', ({ body }) => ai.wordInfo(body));
             route('POST', '/ai/sentences', ({ body }) => ai.sentences(body));
+            route('POST', '/ai/chat', ({ body }) => ai.chat(body));
             route('GET', '/tts/status', () => ai.ttsStatus());
             route('GET', '/local-ai/settings', () => ai.publicConfig());
             route('PUT', '/local-ai/settings', ({ body }) => ai.saveConfig(body));
@@ -309,7 +353,7 @@
         // Sicherung / Wiederherstellung des gesamten lokalen Bestands (auch Grundlage für den Serverabgleich)
         async function exportData() {
             const out = { format: 'lernapp-local', version: 1, exportedAt: iso() };
-            for (const s of ['vocab', 'stats', 'sentences', 'choices', 'meta']) { // ohne audio (nur Zwischenspeicher)
+            for (const s of ['vocab', 'stats', 'sentences', 'choices', 'meta', 'chats']) { // ohne audio (nur Zwischenspeicher)
                 out[s] = await store.getAll(s);
             }
             return out;
@@ -317,7 +361,7 @@
         async function importData(data) {
             if (!data || data.format !== 'lernapp-local') throw httpError(400, 'Keine Lernapp-Sicherung');
             return serial(async () => {
-                for (const s of ['vocab', 'stats', 'sentences', 'choices', 'meta']) {
+                for (const s of ['vocab', 'stats', 'sentences', 'choices', 'meta', 'chats']) {
                     await store.clear(s);
                     await store.putMany(s, data[s] || []);
                 }
