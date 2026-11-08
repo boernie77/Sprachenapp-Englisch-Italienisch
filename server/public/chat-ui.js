@@ -56,6 +56,9 @@
         en: { travel: 'Do you like travelling? Where have you been lately?', daily: 'How was your day?', food: 'What do you like to eat?', work: 'What do you do for a living?', free: 'What would you like to talk about?' },
         es: { travel: '¿Te gusta viajar? ¿Dónde has estado últimamente?', daily: '¿Cómo ha ido tu día?', food: '¿Qué te gusta comer?', work: '¿A qué te dedicas?', free: '¿De qué te apetece hablar?' }
     };
+    // Deutsche Übersetzung der festen Begrüßung (damit der Schalter „DE“ auch bei der ersten Nachricht etwas zeigt)
+    const HELLO_DE = 'Hallo! ';
+    const OPENER_DE = { travel: 'Reist du gern? Wo warst du in letzter Zeit?', daily: 'Wie war dein Tag?', food: 'Was isst du gern?', work: 'Was machst du beruflich?', free: 'Worüber möchtest du sprechen?' };
     const LEVELS = ['A1', 'A2', 'B1', 'B2'];
 
     function newId() {
@@ -235,7 +238,7 @@
             const l = lang();
             const opener = (OPENER[l] || OPENER.en)[st.prefs.topic] || (OPENER[l] || OPENER.en).free;
             st.chat = { id: newId(), level: st.prefs.level, topic: topicLabel(), topicAi: topicForAi() };
-            st.messages = [{ role: 'assistant', content: (HELLO[l] || '') + opener, greeting: true, ts: Date.now() }];
+            st.messages = [{ role: 'assistant', content: (HELLO[l] || '') + opener, de: HELLO_DE + (OPENER_DE[st.prefs.topic] || OPENER_DE.free), greeting: true, ts: Date.now() }];
             renderChat();
             if (st.prefs.speak && env.ttsAvailable()) env.speak(st.messages[0].content, l);
         }
