@@ -31,6 +31,10 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Das Mikrofon wird nur für die Spracheingabe im Gespräch benutzt, wenn du den Mikrofon-Knopf tippst.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Die Spracherkennung wandelt deine gesprochenen Sätze im Gespräch in Text um.</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Die App verbindet sich mit deinem Lernapp-Server im Heimnetz.</string>
 	<key>UILaunchStoryboardName</key>

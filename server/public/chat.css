@@ -65,6 +65,9 @@
 #chatContainer .chat-compose { display: flex; align-items: flex-end; gap: .5rem; padding: .6rem .1rem calc(.4rem + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--c-line); }
 #chatContainer .chat-compose textarea { flex: 1; resize: none; max-height: 7rem; border: 1px solid var(--c-line); background: var(--c-soft); color: var(--c-text); border-radius: .85rem; padding: .55rem .75rem; font: inherit; }
 #chatContainer .chat-compose .chat-btn { width: auto; padding: .6rem .9rem; }
+#chatContainer .chat-mic { flex: none; width: 2.6rem; height: 2.6rem; border-radius: 50%; border: 1px solid var(--c-line); background: var(--c-soft); font-size: 1.15rem; cursor: pointer; }
+#chatContainer .chat-mic[aria-pressed="true"] { background: var(--c-bad); border-color: var(--c-bad); animation: chatPulse 1.2s infinite; }
+@keyframes chatPulse { 50% { opacity: .55; } }
 #chatContainer .chat-note { color: var(--c-muted); font-size: .72rem; text-align: center; padding-bottom: .3rem; }
 
 /* Wörter antippen und Wortvorschläge */

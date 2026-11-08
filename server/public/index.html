@@ -36,6 +36,7 @@
     <script src="app-config.local.js" onerror="this.remove()"></script>
     <script src="grammar-help.js"></script>
     <script src="tts.js"></script>
+    <script src="stt.js"></script>
     <script src="ui-messages.js"></script>
     <script src="ai-core.js"></script>
     <script src="ai-providers.js"></script>
@@ -13434,6 +13435,7 @@
                 root: chatContainer, apiFetch: (e, o) => apiFetch(e, o), isLocal: LOCAL_MODE,
                 lang: () => CURRENT_LANG, uiLang: () => APP_UI_LANG,
                 speak: (text, lang) => Tts.speak(text, lang), ttsAvailable: () => Tts.available(), stopSpeech: () => Tts.stop(),
+                sttAvailable: () => Stt.available(), listen: (l, cb) => Stt.listen(l, cb),
                 // Wörter, die der Nutzer gerade lernt: bevorzugt oft falsch beantwortete, aktive Einzelwörter der Lernsprache
                 practiceWords: (lang) => fullDictionary
                     .filter(w => (w.language || 'it') === lang && w.isActive !== false && w.typ !== 'Satz' && w.it && w.it.length <= 40)

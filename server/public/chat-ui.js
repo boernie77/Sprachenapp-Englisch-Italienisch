@@ -19,6 +19,7 @@
             need_ai_title: 'Gespräch einrichten', need_ai: 'Für das Gespräch brauchst du einen KI-Schlüssel. Er bleibt auf deinem Gerät.',
             need_ai_btn: 'KI & Stimme einrichten', no_server: 'Das Gespräch ist auf diesem Server nicht freigegeben.',
             error: 'Fehler: {0}', topics: { travel: 'Reisen', daily: 'Alltag', food: 'Essen & Trinken', work: 'Arbeit' }, untitled: 'Gespräch',
+            mic_title: 'Sprechen (Diktat)', mic_listening: 'Ich höre zu … Tippe nochmal zum Beenden.', mic_denied: 'Mikrofon oder Spracherkennung ist nicht erlaubt. Bitte in den Geräte-Einstellungen freigeben.', mic_none: 'Nichts verstanden. Bitte nochmal versuchen.', mic_error: 'Spracheingabe nicht möglich.',
             finish: 'Fertig', tap_hint: 'Tipp: Wörter antippen, um sie ins Wörterbuch zu übernehmen.',
             added: '„{0}“ ins Wörterbuch übernommen', in_list: 'Schon in deiner Liste', add_error: 'Konnte nicht gespeichert werden.',
             summary_title: 'Gespräch beendet', summary_sub: 'Deine Nachrichten: {0} · Korrekturen: {1}', summary_words: 'Neue Wörter übernehmen',
@@ -37,6 +38,7 @@
             need_ai_title: 'Set up conversation', need_ai: 'You need an AI key for conversations. It stays on your device.',
             need_ai_btn: 'Set up AI & voice', no_server: 'Conversation is not enabled on this server.',
             error: 'Error: {0}', topics: { travel: 'Travel', daily: 'Daily life', food: 'Food & drink', work: 'Work' }, untitled: 'Conversation',
+            mic_title: 'Speak (dictation)', mic_listening: 'Listening … tap again to stop.', mic_denied: 'Microphone or speech recognition is not allowed. Please allow it in the device settings.', mic_none: 'Nothing understood. Please try again.', mic_error: 'Speech input is not possible.',
             finish: 'Done', tap_hint: 'Tip: tap a word to add it to your dictionary.',
             added: '"{0}" added to your dictionary', in_list: 'Already in your list', add_error: 'Could not be saved.',
             summary_title: 'Conversation finished', summary_sub: 'Your messages: {0} · Corrections: {1}', summary_words: 'Add new words',
@@ -276,6 +278,28 @@
             input.addEventListener('input', () => { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 112) + 'px'; });
             input.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); send.click(); } });
             send.addEventListener('click', () => submit());
+            if (env.sttAvailable && env.sttAvailable()) {
+                const mic = h('button', 'chat-mic', '🎤', { type: 'button', title: t('mic_title'), 'aria-label': t('mic_title'), 'aria-pressed': 'false' });
+                let session = null;
+                const stopMic = () => { if (session) session.stop(); };
+                mic.addEventListener('click', async () => {
+                    if (session) { stopMic(); return; }
+                    env.stopSpeech();
+                    const base = input.value ? input.value.replace(/\s+$/, '') + ' ' : '';
+                    mic.setAttribute('aria-pressed', 'true'); view.status.textContent = t('mic_listening');
+                    session = {};
+                    const s = await env.listen(lang(), {
+                        onPartial: (txt) => { input.value = (base + txt).slice(0, 1000); input.dispatchEvent(new Event('input')); },
+                        onEnd: (txt, err) => {
+                            session = null; mic.setAttribute('aria-pressed', 'false');
+                            view.status.textContent = err === 'denied' ? t('mic_denied') : err === 'none' ? t('mic_none') : err ? t('mic_error') : t('tap_hint');
+                            input.focus({ preventScroll: true });
+                        }
+                    });
+                    if (session) session = s;
+                });
+                compose.append(mic);
+            }
             compose.append(input, send);
             wrap.append(bar, log, status, compose, h('div', 'chat-note', t('ai_note')));
             env.root.appendChild(wrap);
