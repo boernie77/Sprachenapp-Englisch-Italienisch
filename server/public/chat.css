@@ -84,3 +84,13 @@
 #modeTabsBar { overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
 #modeTabsBar::-webkit-scrollbar { display: none; }
 #modeTabsBar > button { flex-shrink: 0; }
+
+/* Reiter kompakt: auf dem Telefon kurze Namen, enge Abstände, eine Zeile; Desktop unverändert */
+@media (min-width: 768px) { #modeTabsBar .tab-s { display: none; } }
+@media (max-width: 767px) {
+    #modeTabsBar .tab-l { display: none; }
+    #modeTabsBar { gap: 2px; padding: 3px; }
+    #modeTabsBar > button:not(.hidden) { padding: .45rem .2rem; font-size: 11.5px; white-space: nowrap; min-width: 0; flex: 1 1 auto; display: flex; align-items: center; justify-content: center; font-size: 11.5px !important; line-height: 1.2; }
+    #modeTabsBar > button span { font-size: inherit !important; }
+    #modeTabsBar > button:not(.bg-white) { color: rgba(255, 255, 255, .6) !important; } /* alle nicht gewählten Reiter gleich (Karteikarten war heller) */
+}

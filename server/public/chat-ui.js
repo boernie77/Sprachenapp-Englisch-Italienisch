@@ -129,7 +129,29 @@
             renderStart();
         }
 
+        // Tastatur: Die Seite hat eine feste Höhe und schrumpft nicht. Darum den Gesprächsbereich um die Tastaturhöhe verkürzen,
+        // damit das Eingabefeld über der Tastatur bleibt (Capacitor-Tastatur-Plugin, im Browser visualViewport).
+        function setKeyboard(px) {
+            px = Math.max(0, Math.round(px) || 0);
+            env.root.style.marginBottom = px ? px + 'px' : '';
+            if (px && view) { scroll(); try { view.input.scrollIntoView({ block: 'nearest' }); } catch (e) { /* egal */ } }
+        }
+        (function bindKeyboard() {
+            try {
+                const kb = root.Capacitor && root.Capacitor.Plugins && root.Capacitor.Plugins.Keyboard;
+                if (kb && kb.addListener) {
+                    kb.addListener('keyboardWillShow', (e) => setKeyboard(e && e.keyboardHeight));
+                    kb.addListener('keyboardDidShow', (e) => setKeyboard(e && e.keyboardHeight));
+                    kb.addListener('keyboardWillHide', () => setKeyboard(0));
+                } else if (root.visualViewport) {
+                    const vv = root.visualViewport;
+                    vv.addEventListener('resize', () => setKeyboard(root.innerHeight - vv.height - vv.offsetTop));
+                }
+            } catch (e) { /* ohne Tastatur-Anpassung weiter */ }
+        })();
+
         function hide() {
+            setKeyboard(0);
             env.stopSpeech();
             if (st.chat && st.messages.length > 1) save();
         }
