@@ -61,3 +61,21 @@ test('Spracheingabe: Web Speech API', withWindow({
     const r = await new Promise((resolve) => S.listen('en', { onEnd: (t, err) => resolve({ t, err }) }));
     assert.deepStrictEqual(r, { t: 'hello there', err: null });
 }));
+
+test('Spracheingabe: nach dem Ende kommen keine Ergebnisse mehr an', withWindow({
+    webkitSpeechRecognition: function () {
+        let me = this;
+        this.start = () => setTimeout(() => { me.onresult({ results: [[{ transcript: 'ciao' }]] }); }, 5);
+        this.stop = () => { me.onend(); me.onresult({ results: [[{ transcript: 'Nachzügler' }]] }); };
+        global.__rec = this;
+    }
+}, async () => {
+    const S = load();
+    const seen = [];
+    let session;
+    const done = new Promise(async (resolve) => { session = await S.listen('it', { onPartial: (t) => seen.push(t), onEnd: (t) => resolve(t) }); });
+    await new Promise(r => setTimeout(r, 20));
+    session.stop();
+    assert.strictEqual(await done, 'ciao');
+    assert.deepStrictEqual(seen, ['ciao']);
+}));

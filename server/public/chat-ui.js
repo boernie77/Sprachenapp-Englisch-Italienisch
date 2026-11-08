@@ -151,6 +151,7 @@
         })();
 
         function hide() {
+            if (view) view.stopMic();
             setKeyboard(0);
             env.stopSpeech();
             if (st.chat && st.messages.length > 1) save();
@@ -279,7 +280,7 @@
             const wrap = h('div', 'chat-view');
             const bar = h('div', 'chat-bar');
             const back = h('button', 'chat-tool', t('back'), { type: 'button' });
-            back.addEventListener('click', async () => { env.stopSpeech(); await save(); st.chat = null; st.messages = []; show(); });
+            back.addEventListener('click', async () => { if (view) view.stopMic(); env.stopSpeech(); await save(); st.chat = null; st.messages = []; show(); });
             const title = h('b', '', [st.chat.topic, st.chat.level].filter(Boolean).join(' · '));
             const tools = h('div', 'chat-tools');
             const tr = h('button', 'chat-tool', t('translation'), { type: 'button', 'aria-pressed': String(!!st.prefs.showDe), title: t('translation_title') });
@@ -291,7 +292,7 @@
                 tools.appendChild(sp);
             }
             const fin = h('button', 'chat-tool', t('finish'), { type: 'button' });
-            fin.addEventListener('click', async () => { env.stopSpeech(); await save(); renderSummary(); });
+            fin.addEventListener('click', async () => { if (view) view.stopMic(); env.stopSpeech(); await save(); renderSummary(); });
             tools.appendChild(fin);
             bar.append(back, title, tools);
 
@@ -303,32 +304,42 @@
             input.addEventListener('input', () => { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 112) + 'px'; });
             input.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); send.click(); } });
             send.addEventListener('click', () => submit());
+            let micStop = null, view_mic = null;
             if (env.sttAvailable && env.sttAvailable()) {
                 const mic = h('button', 'chat-mic', '🎤', { type: 'button', title: t('mic_title'), 'aria-label': t('mic_title'), 'aria-pressed': 'false' });
-                let session = null;
-                const stopMic = () => { if (session) session.stop(); };
+                let session = null, muted = false;
+                // silent = vom Senden: danach nichts mehr ins Textfeld schreiben, Status und Fokus nicht anfassen
+                const stopMic = (silent) => {
+                    if (!session) return;
+                    if (silent) muted = true;
+                    if (session.stop) session.stop(); else session.stopRequested = true; // Aufnahme startet noch
+                };
+                micStop = () => stopMic(true);
                 mic.addEventListener('click', async () => {
-                    if (session) { stopMic(); return; }
+                    if (session) { stopMic(false); return; }
                     env.stopSpeech();
+                    muted = false;
                     const base = input.value ? input.value.replace(/\s+$/, '') + ' ' : '';
                     mic.setAttribute('aria-pressed', 'true'); view.status.textContent = t('mic_listening');
                     session = {};
                     const s = await env.listen(lang(), {
-                        onPartial: (txt) => { input.value = (base + txt).slice(0, 1000); input.dispatchEvent(new Event('input')); },
+                        onPartial: (txt) => { if (muted) return; input.value = (base + txt).slice(0, 1000); input.dispatchEvent(new Event('input')); },
                         onEnd: (txt, err) => {
                             session = null; mic.setAttribute('aria-pressed', 'false');
+                            if (muted) { muted = false; return; }
                             view.status.textContent = err === 'denied' ? t('mic_denied') : err === 'none' ? t('mic_none') : err ? t('mic_error') : t('tap_hint');
                             input.focus({ preventScroll: true });
                         }
                     });
-                    if (session) session = s;
+                    if (session) { const wasStopRequested = session.stopRequested; session = s; if (wasStopRequested) s.stop(); }
                 });
-                compose.append(mic);
+                view_mic = mic;
             }
+            if (view_mic) compose.append(view_mic);
             compose.append(input, send);
             wrap.append(bar, log, status, compose, h('div', 'chat-note', t('ai_note')));
             env.root.appendChild(wrap);
-            view = { wrap, log, status, input, send };
+            view = { wrap, log, status, input, send, stopMic: () => { if (micStop) micStop(); } };
             status.textContent = t('tap_hint');
             st.messages.forEach(m => log.appendChild(renderMessage(m)));
             scroll();
@@ -494,6 +505,7 @@
             const text = view.input.value.trim();
             if (!text) return;
             st.busy = true;
+            view.stopMic(); // Mikrofon aus: sonst nimmt es die Stimme der KI auf. Fürs nächste Sprechen neu antippen.
             env.stopSpeech();
             view.send.disabled = true;
             view.input.value = ''; view.input.style.height = 'auto';

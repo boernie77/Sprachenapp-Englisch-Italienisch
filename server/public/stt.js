@@ -30,7 +30,7 @@
         const locale = LOCALES[lang] || LOCALES.en;
         let last = '', ended = false;
         const finish = (err) => { if (ended) return; ended = true; cb.onEnd && cb.onEnd(last.trim(), err || null); };
-        const part = (t) => { last = String(t || ''); cb.onPartial && cb.onPartial(last); };
+        const part = (t) => { if (ended) return; /* nach dem Ende nichts mehr annehmen (z.B. Stimme der KI) */ last = String(t || ''); cb.onPartial && cb.onPartial(last); };
 
         const plugin = nativePlugin();
         if (plugin) {
