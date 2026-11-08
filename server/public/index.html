@@ -42,6 +42,7 @@
     <script src="local-store.js"></script>
     <script src="local-ai.js"></script>
     <script src="local-sync.js"></script>
+    <script src="chat-ui.js"></script>
     <script src="legal-local.js"></script>
     <script src="local-api.js"></script>
 
@@ -1002,6 +1003,7 @@
             #modeQuizBtn,
             #modeWriteBtn,
             #modeGrammarBtn,
+            #modeChatBtn,
             #modeInfoBtn {
                 font-size: 0.65rem !important;
                 padding: 0.4rem 0.6rem !important;
@@ -1015,6 +1017,7 @@
             #modeQuizBtn.bg-white,
             #modeWriteBtn.bg-white,
             #modeGrammarBtn.bg-white,
+            #modeChatBtn.bg-white,
             #modeInfoBtn.bg-white {
                 background: rgba(255, 255, 255, 0.2) !important;
                 color: #ffffff !important;
@@ -1756,6 +1759,7 @@
     </style>
     <!-- Tailwind-Stylesheet bewusst nach den eigenen Styles (gleiche Rangfolge wie früher beim Laden per Skript) -->
     <link rel="stylesheet" href="tailwind.css">
+    <link rel="stylesheet" href="chat.css">
 <style id="menuAdminLayout">
     /* Hamburger-Menü: Einträge scrollen, Fußbereich (Sync/Verbindung/Version) bleibt immer sichtbar */
     #dropdownMenu {
@@ -2402,7 +2406,7 @@
             </h1>
 
             <div class="flex justify-center items-center gap-1 mt-1 mb-1">
-                <div
+                <div id="modeTabsBar"
                     class="bg-slate-200 p-1 md:p-1.5 rounded-xl inline-flex gap-1 shadow-inner text-xs md:text-sm w-full sm:w-auto">
                     <button id="modeDragDropBtn"
                         class="flex-1 md:flex-none px-3 md:px-5 py-1.5 rounded-lg bg-white shadow-sm text-slate-800 font-semibold transition-all"><span data-i18n="mode_dragdrop">Drag
@@ -2417,6 +2421,10 @@
                     <button id="modeGrammarBtn"
                         class="hidden md:flex flex-1 md:flex-none px-3 md:px-5 py-1.5 rounded-lg text-slate-500 font-medium hover:text-slate-800 transition-all gap-2 items-center">
                         <span data-i18n="mode_grammar">Grammatik Sätze</span>
+                    </button>
+                    <button id="modeChatBtn"
+                        class="flex flex-1 md:flex-none px-3 md:px-5 py-1.5 rounded-lg text-slate-500 font-medium hover:text-slate-800 transition-all items-center justify-center">
+                        <span data-i18n="mode_chat">Gespräch</span>
                     </button>
                     <button id="modeInfoBtn" class="hidden md:flex flex-1 md:flex-none px-3 md:px-5 py-1.5 rounded-lg text-slate-500 font-medium hover:text-slate-800 transition-all items-center">
                         <span data-i18n="mode_info">Info</span>
@@ -2780,6 +2788,10 @@
                 </div>
             </div>
         </main>
+
+        <!-- === GESPRÄCH BEREICH === -->
+        <main id="chatContainer"
+            class="w-full max-w-2xl hidden flex-col items-center justify-start gap-3 pb-4 mx-auto px-2 flex-1 min-h-0 overflow-y-auto ios-smooth-scroll"></main>
 
         <!-- === INFO (GRAMMATIK-ÜBERSICHT) BEREICH === -->
         <main id="infoTabContainer"
@@ -7663,6 +7675,7 @@
                 mode_cards: "Karteikarten",
                 mode_write: "Schreiben",
                 mode_grammar: "Grammatik Sätze",
+                mode_chat: "Gespräch",
                 mode_info: "Info",
                 
                 // Menu
@@ -8501,6 +8514,7 @@
                 mode_cards: "Flashcards",
                 mode_write: "Write",
                 mode_grammar: "Grammar Sentences",
+                mode_chat: "Conversation",
                 mode_info: "Info",
                 
                 // Menu
@@ -9805,6 +9819,8 @@
         const modeWriteBtn = document.getElementById('modeWriteBtn');
         const modeGrammarBtn = document.getElementById('modeGrammarBtn');
         const modeInfoBtn = document.getElementById('modeInfoBtn');
+        const modeChatBtn = document.getElementById('modeChatBtn');
+        const chatContainer = document.getElementById('chatContainer');
         const filterContainer = document.getElementById('filterContainer');
         const mobileFilterModal = document.getElementById('mobileFilterModal');
         const grammarExplanation = document.getElementById('grammarExplanation');
@@ -12465,6 +12481,7 @@
                 'cards': modeCardsBtn, 
                 'write': modeWriteBtn, 
                 'grammar': modeGrammarBtn,
+                'chat': modeChatBtn,
                 'info': modeInfoBtn 
             };
             Object.keys(tabs).forEach(m => {
@@ -12472,6 +12489,8 @@
                     if (m === activeMode) {
                         tabs[m].classList.add('bg-white', 'shadow-sm', 'font-semibold');
                         tabs[m].classList.remove('text-slate-500');
+                        // Reiterleiste ist bei vielen Reitern seitlich wischbar: aktiven Reiter ins Bild holen
+                        try { const bar = tabs[m].parentElement; if (bar && bar.scrollWidth > bar.clientWidth) bar.scrollTo({ left: tabs[m].offsetLeft - (bar.clientWidth - tabs[m].offsetWidth) / 2, behavior: 'smooth' }); } catch (e) { /* ältere WebView */ }
                     } else {
                         tabs[m].classList.remove('bg-white', 'shadow-sm', 'font-semibold');
                         tabs[m].classList.add('text-slate-500');
@@ -13324,7 +13343,7 @@
         function updateMobileFilterRow() {
             const row = document.getElementById('mobileFilterRow');
             if (!row) return;
-            if (currentMode === 'info') { row.hidden = true; return; }
+            if (currentMode === 'info' || currentMode === 'chat') { row.hidden = true; return; }
             const text = (id) => (document.getElementById(id)?.textContent || '').replace(/\s+/g, ' ').trim();
             const isGrammar = currentMode === 'grammar';
             document.getElementById('mobileFilterSummary').textContent = isGrammar
@@ -13332,6 +13351,25 @@
                 : `${text('directionFilterLabel').split(' ').filter(Boolean).join(' → ')} · ${text('typeFilterLabel')}`; // Pfeil im Label ist ein Bild, daher hier als Text
             document.getElementById('mobileWordSearchBtn').hidden = !isGrammar;
             row.hidden = false;
+        }
+
+        // Gesprächsmodus: Oberfläche (chat-ui.js) wird beim ersten Öffnen angelegt
+        var chatUiInstance = null;
+        function getChatUi() {
+            if (chatUiInstance) return chatUiInstance;
+            chatUiInstance = ChatUi.create({
+                root: chatContainer, apiFetch: (e, o) => apiFetch(e, o), isLocal: LOCAL_MODE,
+                lang: () => CURRENT_LANG, uiLang: () => APP_UI_LANG,
+                speak: (text, lang) => Tts.speak(text, lang), ttsAvailable: () => Tts.available(), stopSpeech: () => Tts.stop(),
+                // Wörter, die der Nutzer gerade lernt: bevorzugt oft falsch beantwortete, aktive Einzelwörter der Lernsprache
+                practiceWords: (lang) => fullDictionary
+                    .filter(w => (w.language || 'it') === lang && w.isActive !== false && w.typ !== 'Satz' && w.it && w.it.length <= 40)
+                    .map(w => ({ w: w.it, wrong: (wordStats[w.id] && wordStats[w.id].incorrect) || 0, r: Math.random() }))
+                    .sort((a, b) => b.wrong - a.wrong || a.r - b.r).slice(0, 8).map(x => x.w),
+                openSettings: () => { const b = document.getElementById('openLocalAiBtn'); if (b) b.click(); },
+                toast: (m, type) => showToast(m, type || 'info')
+            });
+            return chatUiInstance;
         }
 
         function switchMode(mode) {
@@ -13425,11 +13463,13 @@
             writeContainer.classList.add('hidden'); writeContainer.classList.remove('flex');
             grammarContainer.classList.add('hidden'); grammarContainer.classList.remove('flex');
             infoTabContainer.classList.add('hidden'); infoTabContainer.classList.remove('flex');
+            chatContainer.classList.add('hidden'); chatContainer.classList.remove('flex');
+            if (mode !== 'chat' && chatUiInstance) chatUiInstance.hide();
             scoreBar.classList.add('hidden');
             cardsContainer.classList.add('hidden'); cardsContainer.classList.remove('flex');
 
             // Toggle filters and grammar explanation
-            if (mode === 'grammar' || mode === 'info') {
+            if (mode === 'grammar' || mode === 'info' || mode === 'chat') {
                 filterContainer.classList.add('hidden');
                 if (mode === 'grammar') {
                     grammarExplanation.classList.remove('hidden');
@@ -13463,6 +13503,9 @@
             } else if (mode === 'grammar') {
                 grammarContainer.classList.remove('hidden'); grammarContainer.classList.add('flex');
                 startGrammarRound();
+            } else if (mode === 'chat') {
+                chatContainer.classList.remove('hidden'); chatContainer.classList.add('flex');
+                getChatUi().show();
             }
 
             // --- Toggle Example Sentence buttons visibility (Hidden in Flashcards) ---
@@ -13584,6 +13627,7 @@
         modeCardsBtn.addEventListener('click', () => switchMode('cards'));
         modeWriteBtn.addEventListener('click', () => switchMode('write'));
         modeGrammarBtn.addEventListener('click', () => switchMode('grammar'));
+        modeChatBtn.addEventListener('click', () => switchMode('chat'));
         if (modeInfoBtn) modeInfoBtn.addEventListener('click', () => switchMode('info'));
         nextBtn.addEventListener('click', startDragDropRound);
         writeSubmitBtn.addEventListener('click', handleWriteSubmit);
