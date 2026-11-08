@@ -24,6 +24,8 @@ jobs:
           OIDC_CLIENT_SECRET: ${{ secrets.OIDC_CLIENT_SECRET }}
           STATIC_INVITE_CODES: ${{ secrets.STATIC_INVITE_CODES }}
           CONTACT_EMAIL: ${{ secrets.CONTACT_EMAIL }}
+          # Gesprächsmodus: Standard AUS; GitHub-Variable CHAT_ENABLED_LIVE=true schaltet ihn auf diesem eigenen Server ein (Nutzer zusätzlich im Admin-Bereich freigeben)
+          CHAT_ENABLED_LIVE: ${{ vars.CHAT_ENABLED_LIVE || 'false' }}
         run: |
           ssh -i ~/.ssh/hetzner_key root@178.104.130.161 bash -s << EOF
             cd /opt/lernapp
@@ -55,6 +57,7 @@ jobs:
             echo "SMTP_PORT=587" >> .env
             echo "STATIC_INVITE_CODES=${STATIC_INVITE_CODES}" >> .env
             echo "CONTACT_EMAIL=${CONTACT_EMAIL}" >> .env
+            echo "CHAT_ENABLED=${CHAT_ENABLED_LIVE}" >> .env
             echo "APP_URL=https://vokabeln.bernauer24.com" >> .env
             echo "OIDC_ISSUER_URL=https://auth.bernauer24.com/application/o/lernapp/" >> .env
             echo "OIDC_CLIENT_ID=${OIDC_CLIENT_ID}" >> .env
