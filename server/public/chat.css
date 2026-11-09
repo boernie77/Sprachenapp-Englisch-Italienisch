@@ -146,3 +146,8 @@
 }
 
 #vocabListContainer .vl-row, #sentenceListContainer .vl-row { cursor: pointer; }
+
+/* Listenfilter „Nur aktive anzeigen“ (Vokabel- und Satzliste) */
+.list-active-only { display: flex; align-items: center; gap: .55rem; margin: .1rem 0 .6rem; font-size: .9rem; font-weight: 600; color: #334155; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.list-active-only input { width: 1.15rem; height: 1.15rem; accent-color: #2563eb; flex: none; }
+@media (max-width: 1024px) { .list-active-only { color: #cbd5e1; } }

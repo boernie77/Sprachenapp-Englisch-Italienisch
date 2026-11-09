@@ -1,6 +1,6 @@
 {
   "name": "italien-app-mobile",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "Vokabeln – Sprachen lernen (Italienisch, Englisch, Spanisch): Mobile App Wrapper",
   "dependencies": {
     "@aparajita/capacitor-secure-storage": "^8.0.1",

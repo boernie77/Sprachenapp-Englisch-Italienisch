@@ -1962,13 +1962,13 @@
                         Lizenz: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"
                             class="text-blue-600 hover:underline">CC BY-SA 4.0</a>
                     </p>
-                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.3.2</p>
+                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.3.3</p>
                     <p class="text-[10px] text-slate-400" data-i18n="imp_rights">© 2026 Christian Bernauer – Apache License 2.0</p>
                 </div>
             </div>
             <!-- App-Style Bottom Section -->
             <div class="mt-8 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.3.2</p>
+                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.3.3</p>
             </div>
         </div>
     </div>
@@ -2236,7 +2236,7 @@
             <div class="w-16 h-16 shrink-0 bg-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
                 <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3"><span data-i18n="version_modal_pre">Version</span> 2.3.2 <span data-i18n="version_modal_post">ist da!</span> <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
+            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3"><span data-i18n="version_modal_pre">Version</span> 2.3.3 <span data-i18n="version_modal_post">ist da!</span> <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
             <div class="text-left space-y-3 mb-6 overflow-y-auto min-h-0 flex-1 pr-1">
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
@@ -2391,7 +2391,7 @@
                 </div>
                 <div class="px-4 py-1.5 text-[10px] text-slate-400 bg-slate-50/50 flex items-center justify-between border-t border-slate-100/50">
                     <span data-i18n="app_version_label">App-Version:</span>
-                    <span class="font-mono font-medium text-slate-500">2.3.2</span>
+                    <span class="font-mono font-medium text-slate-500">2.3.3</span>
                 </div>
                 </div>
                 <input type="file" id="excelUploadEl" accept=".xlsx, .xls" class="hidden">
@@ -5465,6 +5465,8 @@
                 </div>
             </div>
 
+            <label class="list-active-only"><input type="checkbox" id="vocabListActiveOnly"><span data-i18n="list_active_only">Nur aktive anzeigen</span></label>
+
             <div class="overflow-y-auto flex-1 border border-slate-200 rounded-xl bg-slate-50 max-h-[55vh]">
                 <ul id="vocabListContainer" class="divide-y divide-slate-200"></ul>
             </div>
@@ -5555,6 +5557,8 @@
                     </div>
                 </div>
             </div>
+
+            <label class="list-active-only"><input type="checkbox" id="sentenceListActiveOnly"><span data-i18n="list_active_only">Nur aktive anzeigen</span></label>
 
             <div class="overflow-y-auto flex-1 border border-slate-200 rounded-xl bg-slate-50 max-h-[55vh]">
                 <ul id="sentenceListContainer" class="divide-y divide-slate-200"></ul>
@@ -8167,6 +8171,7 @@
                 type_sentence: "Eigene Sätze",
                 type_own_vocab: "Eigene Vokabeln",
                 type_from_chat: "💬 Aus Gesprächen",
+                list_active_only: "Nur aktive anzeigen",
                 grammar_focus_label: "Übungs-Focus",
                 grammar_focus_all: "Focus Alle Sätze",
                 grammar_level_label: "Sprachniveau",
@@ -8717,6 +8722,7 @@
                 type_sentence: "Own Sentences",
                 type_own_vocab: "Own Vocabulary",
                 type_from_chat: "💬 From conversations",
+                list_active_only: "Show active only",
                 
                 // Vocab & Sentence Modals
                 vocab_direction: "I know the word in…",
@@ -14197,6 +14203,16 @@
             sentenceSearchTimeout = setTimeout(renderSentenceList, 300);
         });
         document.getElementById('sentenceListSortDir').addEventListener('change', renderSentenceList);
+        // „Nur aktive anzeigen“: Auswahl wird gemerkt (nur dieses Gerät/dieser Browser)
+        [['vocabListActiveOnly', renderVocabList], ['sentenceListActiveOnly', renderSentenceList]].forEach(([id, render]) => {
+            const box = document.getElementById(id);
+            try { box.checked = localStorage.getItem('lernapp-' + id) === '1'; } catch (e) { /* ohne Speicher: aus */ }
+            box.addEventListener('change', () => {
+                try { localStorage.setItem('lernapp-' + id, box.checked ? '1' : '0'); } catch (e) { /* egal */ }
+                if (id === 'sentenceListActiveOnly') window.sentenceListShowAll = false;
+                render();
+            });
+        });
         document.getElementById('sentenceListCatFilter').addEventListener('change', renderSentenceList);
 
         function stripArticles(text, lang) {
@@ -14279,6 +14295,7 @@
             } else if (catFilter !== 'Alle') {
                 words = words.filter(w => w.typ && w.typ.toLowerCase().includes(catFilter.toLowerCase()));
             }
+            if (document.getElementById('vocabListActiveOnly').checked) words = words.filter(w => w.isActive !== false); // nur aktive (zum Lernen ausgewählte)
 
             // Search filter
             if (searchVal) {
@@ -14409,6 +14426,7 @@
             } else if (catFilter !== 'Alle') {
                 words = words.filter(w => w.category && w.category.includes(catFilter));
             }
+            if (document.getElementById('sentenceListActiveOnly').checked) words = words.filter(w => w.isActive !== false); // nur aktive (zum Lernen ausgewählte)
 
             // Search filter
             if (searchVal) {
