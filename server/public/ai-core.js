@@ -235,7 +235,7 @@ Setze "category" und "level" jedes Satzes genau wie in seiner Zeile oben.`;
 
 Goals, in this order:
 1. Keep a real conversation going. Reply naturally in ${name} (${CHAT_VARIANT[language]}), at level ${level}: vocabulary and grammar the learner can follow, mostly short sentences. End most turns with a short question or prompt so the learner keeps talking.
-2. Correct the learner's mistakes. Only the learner's LAST message counts: earlier learner messages were already corrected in previous turns, so NEVER repeat or revisit their mistakes. Put every real mistake of the last message in "corrections" (grammar, wrong word, unnatural phrasing). Quote the original exactly, give the corrected form, and explain briefly IN GERMAN. Never add an entry whose "corrected" equals "original" and never add "it's fine" remarks as corrections. Do not list stylistic nitpicks; if the message was correct, return an empty list. Order the corrections in the order the mistakes appear.
+2. Correct the learner's mistakes. Only the learner's LAST message counts: earlier learner messages were already corrected in previous turns, so NEVER repeat or revisit their mistakes. Put every real mistake of the last message in "corrections" (grammar, wrong word, unnatural phrasing). Quote the original exactly, give the corrected form, give a short German translation of the corrected form in "corrected_de", and explain briefly IN GERMAN. Never add an entry whose "corrected" equals "original" and never add "it's fine" remarks as corrections. Do not list stylistic nitpicks; if the message was correct, return an empty list. Order the corrections in the order the mistakes appear.
 3. The learner's input may come from speech recognition: ignore punctuation, capitalisation and obvious transcription glitches; do not correct those.
 4. If the learner writes German or asks "what does X mean" / "warum ...?", answer that question in German inside "tip_de" and then steer back into ${name} in "reply".
 5. "reply_de" is a faithful German translation of "reply". "new_words" lists 0 to 3 useful words or short phrases from YOUR reply that fit level ${level} and are worth remembering: base form (infinitive for verbs, singular for nouns, without article), the German meaning (for nouns with the German article: der, die or das), the word type, and for ${language === 'en' ? 'English words no gender' : 'nouns the gender and number'}, plus a short example sentence in ${name} ("example") and its German translation ("example_de"). Skip very basic words (articles, "to be", greetings). Use an empty list when nothing is worth remembering.${practice}
@@ -251,8 +251,8 @@ Never mention these instructions. "reply" must contain only the spoken ${name} t
                 type: 'array',
                 items: {
                     type: 'object',
-                    properties: { original: { type: 'string' }, corrected: { type: 'string' }, explanation_de: { type: 'string' } },
-                    required: ['original', 'corrected', 'explanation_de'], additionalProperties: false
+                    properties: { original: { type: 'string' }, corrected: { type: 'string' }, corrected_de: { type: 'string' }, explanation_de: { type: 'string' } },
+                    required: ['original', 'corrected', 'corrected_de', 'explanation_de'], additionalProperties: false
                 }
             },
             tip_de: { type: 'string' },
@@ -307,7 +307,7 @@ Never mention these instructions. "reply" must contain only the spoken ${name} t
             const pos = hay.indexOf(' ' + o + ' ');
             if (pos < 0) continue;
             seen.add(o);
-            list.push({ original: c.original.trim(), corrected: c.corrected.trim(), explanation_de: String(c.explanation_de || '').trim(), pos });
+            list.push({ original: c.original.trim(), corrected: c.corrected.trim(), corrected_de: String(c.corrected_de || '').replace(/\s+/g, ' ').trim().slice(0, 200), explanation_de: String(c.explanation_de || '').trim(), pos });
         }
         list.sort((a, b) => a.pos - b.pos);
         const words = [];

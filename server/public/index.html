@@ -1962,13 +1962,13 @@
                         Lizenz: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"
                             class="text-blue-600 hover:underline">CC BY-SA 4.0</a>
                     </p>
-                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.3.0</p>
+                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.3.1</p>
                     <p class="text-[10px] text-slate-400" data-i18n="imp_rights">© 2026 Christian Bernauer – Apache License 2.0</p>
                 </div>
             </div>
             <!-- App-Style Bottom Section -->
             <div class="mt-8 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.3.0</p>
+                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.3.1</p>
             </div>
         </div>
     </div>
@@ -2236,7 +2236,7 @@
             <div class="w-16 h-16 shrink-0 bg-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
                 <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3"><span data-i18n="version_modal_pre">Version</span> 2.3.0 <span data-i18n="version_modal_post">ist da!</span> <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
+            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3"><span data-i18n="version_modal_pre">Version</span> 2.3.1 <span data-i18n="version_modal_post">ist da!</span> <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
             <div class="text-left space-y-3 mb-6 overflow-y-auto min-h-0 flex-1 pr-1">
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
@@ -2391,7 +2391,7 @@
                 </div>
                 <div class="px-4 py-1.5 text-[10px] text-slate-400 bg-slate-50/50 flex items-center justify-between border-t border-slate-100/50">
                     <span data-i18n="app_version_label">App-Version:</span>
-                    <span class="font-mono font-medium text-slate-500">2.3.0</span>
+                    <span class="font-mono font-medium text-slate-500">2.3.1</span>
                 </div>
                 </div>
                 <input type="file" id="excelUploadEl" accept=".xlsx, .xls" class="hidden">
@@ -5442,6 +5442,7 @@
                         <option value="Favoriten">Favoriten</option>
                         <option value="Satz">Eigene Sätze</option>
                         <option value="EigeneVokabeln">Eigene Vokabeln</option>
+                        <option value="AusGespraechen">💬 Aus Gesprächen</option>
                     </select>
                     <button type="button" class="cs-btn w-full" id="vocabListCatFilterBtn">
                         <span id="vocabListCatFilterLabel" data-i18n="sentence_cat_all">Alle Kategorien</span>
@@ -5459,6 +5460,7 @@
                         <div class="cs-opt" data-value="Favoriten" data-i18n="type_fav">Favoriten</div>
                         <div class="cs-opt" data-value="Satz" data-i18n="type_sentence">Eigene Sätze</div>
                         <div class="cs-opt" data-value="EigeneVokabeln" data-i18n="type_own_vocab">Eigene Vokabeln</div>
+                        <div class="cs-opt" data-value="AusGespraechen" data-i18n="type_from_chat">💬 Aus Gesprächen</div>
                     </div>
                 </div>
             </div>
@@ -8164,6 +8166,7 @@
                 type_fav: "Favoriten",
                 type_sentence: "Eigene Sätze",
                 type_own_vocab: "Eigene Vokabeln",
+                type_from_chat: "💬 Aus Gesprächen",
                 grammar_focus_label: "Übungs-Focus",
                 grammar_focus_all: "Focus Alle Sätze",
                 grammar_level_label: "Sprachniveau",
@@ -8713,6 +8716,7 @@
                 type_fav: "Favorites",
                 type_sentence: "Own Sentences",
                 type_own_vocab: "Own Vocabulary",
+                type_from_chat: "💬 From conversations",
                 
                 // Vocab & Sentence Modals
                 vocab_direction: "I know the word in…",
@@ -13451,6 +13455,20 @@
             saveAllDataLocally();
             return { status };
         }
+        // Korrigierte Wendung aus dem Gespräch als eigenen Satz merken (Übersetzung liefert die KI mit)
+        async function chatAddPhrase(p) {
+            const clean = (x) => String(x || '').replace(/[<>]/g, '').replace(/\s+/g, ' ').trim();
+            const it = clean(p.it).slice(0, 200), de = clean(p.de).slice(0, 200);
+            if (!it || !de) return { status: 'invalid' };
+            const key = it.toLowerCase();
+            if (fullDictionary.some(w => (w.language || 'it') === CURRENT_LANG && w.typ === 'Satz' && String(w.it || '').toLowerCase() === key)) return { status: 'exists' };
+            const status = await chatPostVocab({ de, it, typ: 'Satz', emoji: '', grammatica: 'Eigene Sätze', language: CURRENT_LANG, isOwn: true, source: 'chat' }, {});
+            if (status === 'invalid') return { status };
+            updateAdminGrammarCount();
+            renderVocabList();
+            saveAllDataLocally();
+            return { status };
+        }
         // Antippen eines Wortes im Gespräch: derselbe Dialog wie „Vokabel hinzufügen“ (Übersetzung, Wortart, Geschlecht, Emoji, Duplikatprüfung)
         function chatOpenWordDialog(word) {
             openVocabModalBtn.click();
@@ -13475,7 +13493,7 @@
                     .sort((a, b) => b.wrong - a.wrong || a.r - b.r).slice(0, 8).map(x => x.w),
                 openSettings: () => { const b = document.getElementById('openLocalAiBtn'); if (b) b.click(); },
                 toast: (m, type) => showToast(m, type || 'info'),
-                hasWord: chatHasWord, addWord: chatAddWord, openWordDialog: chatOpenWordDialog
+                hasWord: chatHasWord, addWord: chatAddWord, addPhrase: chatAddPhrase, openWordDialog: chatOpenWordDialog
             });
             return chatUiInstance;
         }
@@ -14215,13 +14233,15 @@
             const catFilter = document.getElementById('vocabListCatFilter').value;
             const searchVal = document.getElementById('vocabListSearch').value.toLowerCase().trim();
 
-            let words = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && (catFilter === 'Satz' ? w.typ === 'Satz' : w.typ !== 'Satz'));
+            let words = fullDictionary.filter(w => (w.language || 'it') === CURRENT_LANG && (catFilter === 'Satz' ? w.typ === 'Satz' : (catFilter === 'AusGespraechen' || w.typ !== 'Satz')));
 
             // Category filter
             if (catFilter === 'Favoriten') {
                 words = words.filter(w => w.isMarked === true);
             } else if (catFilter === 'EigeneVokabeln') {
                 words = words.filter(w => w.isOwn === true);
+            } else if (catFilter === 'AusGespraechen') {
+                words = words.filter(w => w.source === 'chat');
             } else if (catFilter !== 'Alle') {
                 words = words.filter(w => w.typ && w.typ.toLowerCase().includes(catFilter.toLowerCase()));
             }

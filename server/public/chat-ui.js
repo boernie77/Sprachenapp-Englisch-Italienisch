@@ -20,6 +20,7 @@
             need_ai_btn: 'KI & Stimme einrichten', no_server: 'Das Gespräch ist auf diesem Server nicht freigegeben.',
             error: 'Fehler: {0}', topics: { travel: 'Reisen', daily: 'Alltag', food: 'Essen & Trinken', work: 'Arbeit' }, untitled: 'Gespräch',
             mic_title: 'Sprechen (Diktat)', mic_listening: 'Ich höre zu … Tippe nochmal zum Beenden.', mic_denied: 'Mikrofon oder Spracherkennung ist nicht erlaubt. Bitte in den Geräte-Einstellungen freigeben.', mic_none: 'Nichts verstanden. Bitte nochmal versuchen.', mic_error: 'Spracheingabe nicht möglich.',
+            remember: '＋ Als Satz merken', remembered: '✓ gemerkt', remember_exists: '✓ schon vorhanden',
             finish: 'Fertig', tap_hint: 'Tipp: Wörter antippen, um sie ins Wörterbuch zu übernehmen.',
             added: '„{0}“ ins Wörterbuch übernommen', in_list: 'Schon in deiner Liste', add_error: 'Konnte nicht gespeichert werden.',
             summary_title: 'Gespräch beendet', summary_sub: 'Deine Nachrichten: {0} · Korrekturen: {1}', summary_words: 'Neue Wörter übernehmen',
@@ -39,6 +40,7 @@
             need_ai_btn: 'Set up AI & voice', no_server: 'Conversation is not enabled on this server.',
             error: 'Error: {0}', topics: { travel: 'Travel', daily: 'Daily life', food: 'Food & drink', work: 'Work' }, untitled: 'Conversation',
             mic_title: 'Speak (dictation)', mic_listening: 'Listening … tap again to stop.', mic_denied: 'Microphone or speech recognition is not allowed. Please allow it in the device settings.', mic_none: 'Nothing understood. Please try again.', mic_error: 'Speech input is not possible.',
+            remember: '＋ Save as sentence', remembered: '✓ saved', remember_exists: '✓ already saved',
             finish: 'Done', tap_hint: 'Tip: tap a word to add it to your dictionary.',
             added: '"{0}" added to your dictionary', in_list: 'Already in your list', add_error: 'Could not be saved.',
             summary_title: 'Conversation finished', summary_sub: 'Your messages: {0} · Corrections: {1}', summary_words: 'Add new words',
@@ -421,6 +423,22 @@
                     m.corrections.forEach(c => {
                         const box = h('div', 'chat-corr');
                         box.append(h('s', '', c.original), doc.createTextNode(' → '), h('strong', '', c.corrected), h('br'), doc.createTextNode(c.explanation_de));
+                        // korrigierte Wendung samt deutscher Übersetzung als eigenen Satz merken
+                        if (c.corrected_de && env.addPhrase) {
+                            const rb = h('button', 'chat-nw', t('remember'), { type: 'button' });
+                            rb.style.marginTop = '.4rem';
+                            rb.addEventListener('click', async () => {
+                                if (rb.disabled) return;
+                                rb.disabled = true;
+                                try {
+                                    const r = await env.addPhrase({ it: c.corrected, de: c.corrected_de });
+                                    if (r.status === 'added' || r.status === 'queued') { rb.textContent = t('remembered'); rb.classList.add('done'); }
+                                    else if (r.status === 'exists') { rb.textContent = t('remember_exists'); rb.classList.add('done'); }
+                                    else rb.disabled = false;
+                                } catch (e) { rb.disabled = false; env.toast(e.message, 'error'); }
+                            });
+                            box.append(h('br'), rb);
+                        }
                         e.appendChild(box);
                     });
                 } else e.appendChild(h('div', 'chat-ok', t('all_ok')));

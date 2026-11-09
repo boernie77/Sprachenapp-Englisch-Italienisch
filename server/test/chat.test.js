@@ -37,7 +37,7 @@ const answer = {
     corrections: [
         { original: 'sul il mio vacance', corrected: 'sulle mie vacanze', explanation_de: 'alter Fehler aus früherer Nachricht' },
         { original: 'ero a Brescia', corrected: 'ero a Brescia', explanation_de: 'Schein-Korrektur' },
-        { original: 'da una settimana', corrected: 'per una settimana', explanation_de: 'da = seit' }
+        { original: 'da una settimana', corrected: 'per una settimana', corrected_de: '  für  eine Woche ', explanation_de: 'da = seit' }
     ],
     tip_de: '', new_words: [
         { word: 'visitare', translation: 'besuchen', typ: 'Verb', gender: 'none', example: 'Hai visitato il museo?', example_de: 'Hast du das Museum besucht?' },
@@ -55,6 +55,8 @@ test('Gespräch: Antwort gefiltert, Korrektur nur zur letzten Nachricht, Verbrau
     const r = await api.handle('POST', '/ai/chat', { language: 'it', level: 'A2', topic: 'Reisen', messages });
     assert.strictEqual(r.reply, answer.reply);
     assert.deepStrictEqual(r.corrections.map(c => c.corrected), ['per una settimana']);
+    assert.strictEqual(r.corrections[0].corrected_de, 'für eine Woche'); // Übersetzung der Wendung wird bereinigt mitgegeben
+    assert.ok(core.chatSchema.properties.corrections.items.required.includes('corrected_de'));
     assert.strictEqual(r.new_words[0].word, 'visitare');
     assert.strictEqual(r.new_words[0].example_de, 'Hast du das Museum besucht?');
     assert.strictEqual(r.new_words[1].grammatica, 'f-sg');
