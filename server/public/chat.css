@@ -99,3 +99,50 @@
     /* nicht gewählte Reiter: eigenes, leicht abgesetztes Feld, alle gleich (Karteikarten war heller) */
     #modeTabsBar > button:not(.bg-white) { color: rgba(255, 255, 255, .65) !important; background: rgba(255, 255, 255, .07) !important; }
 }
+
+/* Detailfenster für Zeilen der Vokabel- und Satzliste (eigene Stile, da Tailwind vorkompiliert ist) */
+.ed-overlay { position: fixed; inset: 0; z-index: 30000; background: rgba(15, 23, 42, .55); display: flex; align-items: center; justify-content: center; padding: 1rem; }
+.ed-overlay[hidden] { display: none; }
+.ed-card { position: relative; width: 100%; max-width: 32rem; max-height: 85vh; overflow-y: auto; background: #fff; color: #0f172a; border-radius: 1.25rem; padding: 1.5rem 1.25rem 1.25rem; box-shadow: 0 20px 50px rgba(0, 0, 0, .35); }
+.ed-close { position: absolute; top: .5rem; right: .6rem; width: 2rem; height: 2rem; border: 0; border-radius: 50%; background: rgba(100, 116, 139, .15); color: inherit; font-size: 1rem; cursor: pointer; }
+.ed-block { margin-bottom: 1.1rem; }
+.ed-flag { margin-bottom: .2rem; }
+.ed-flag svg { width: 1.4rem; height: 1.4rem; display: inline-block; vertical-align: middle; border-radius: 2px; }
+.ed-text { font-size: 1.7rem; line-height: 1.25; font-weight: 800; overflow-wrap: anywhere; }
+.ed-fl { color: #2563eb; }
+.ed-meta { color: #64748b; font-size: .85rem; margin-top: -.3rem; min-height: 1rem; }
+.ed-tts { margin-top: .9rem; }
+.ed-tts .tts-btn { width: 2.6rem; height: 2.6rem; }
+@media (max-width: 1024px) {
+    .ed-card { background: #141d38; color: #e8ecf8; border: 1px solid #2b3658; }
+    .ed-fl { color: #7aa2ff; }
+    .ed-meta { color: #8f9ab8; }
+}
+
+/* Telefon: Symbole in den Listenzeilen kompakter, damit mehr vom Text sichtbar bleibt */
+@media (max-width: 767px) {
+    /* Text: Deutsch und Fremdsprache untereinander statt in einer abgeschnittenen Zeile */
+    #vocabListContainer .vl-row .truncate, #sentenceListContainer .vl-row .truncate { white-space: normal !important; overflow: visible !important; text-overflow: clip !important; min-width: 0; }
+    #vocabListContainer .vl-row .truncate > span:nth-child(2), #sentenceListContainer .vl-row .truncate > span:nth-child(2) { display: none; }
+    #vocabListContainer .vl-row .truncate > span:nth-child(1), #vocabListContainer .vl-row .truncate > span:nth-child(3),
+    #sentenceListContainer .vl-row .truncate > span:nth-child(1), #sentenceListContainer .vl-row .truncate > span:nth-child(3) {
+        display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; margin: 0 !important;
+    }
+    #vocabListContainer .vl-row .truncate > span:nth-child(n+4), #sentenceListContainer .vl-row .truncate > span:nth-child(n+4) { margin-left: 0 !important; margin-right: .4rem; }
+    #vocabListContainer .vl-row, #sentenceListContainer .vl-row { padding: .5rem .6rem; cursor: pointer; flex-wrap: wrap; row-gap: 3px; }
+    /* Text bekommt die volle Breite, die Symbole stehen in einer schmalen Zeile darunter */
+    #vocabListContainer .vl-row > div:first-child, #sentenceListContainer .vl-row > div:first-child { flex: 1 1 100%; min-width: 0; }
+    #vocabListContainer .vl-actions, #sentenceListContainer .vl-actions { gap: 6px !important; margin-left: 0 !important; flex: 1 1 100%; justify-content: flex-end; }
+    #vocabListContainer .vl-actions .edit-btn, #vocabListContainer .vl-actions .delete-btn,
+    #sentenceListContainer .vl-actions .edit-btn, #sentenceListContainer .vl-actions .delete-btn { padding: 2px !important; }
+    #vocabListContainer .vl-actions .edit-btn svg, #vocabListContainer .vl-actions .delete-btn svg,
+    #sentenceListContainer .vl-actions .edit-btn svg, #sentenceListContainer .vl-actions .delete-btn svg { width: 16px !important; height: 16px !important; }
+    #vocabListContainer .vl-actions .star-icon, #sentenceListContainer .vl-actions .star-icon { width: 19px !important; height: 19px !important; }
+    #vocabListContainer .vl-actions .tts-btn, #sentenceListContainer .vl-actions .tts-btn { width: 24px !important; height: 24px !important; }
+    #vocabListContainer .vl-actions .tts-btn svg, #sentenceListContainer .vl-actions .tts-btn svg { width: 14px !important; height: 14px !important; }
+    #vocabListContainer .vl-actions label > div, #sentenceListContainer .vl-actions label > div { width: 30px !important; height: 17px !important; }
+    #vocabListContainer .vl-actions label > div::after, #sentenceListContainer .vl-actions label > div::after { width: 13px !important; height: 13px !important; top: 2px !important; left: 2px !important; }
+    #vocabListContainer .vl-actions label > input:checked + div::after, #sentenceListContainer .vl-actions label > input:checked + div::after { transform: translateX(13px) !important; }
+}
+
+#vocabListContainer .vl-row, #sentenceListContainer .vl-row { cursor: pointer; }

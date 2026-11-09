@@ -1962,13 +1962,13 @@
                         Lizenz: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank"
                             class="text-blue-600 hover:underline">CC BY-SA 4.0</a>
                     </p>
-                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.3.1</p>
+                    <p class="text-[10px] text-slate-400 mt-4 border-t pt-2">Version 2.3.2</p>
                     <p class="text-[10px] text-slate-400" data-i18n="imp_rights">© 2026 Christian Bernauer – Apache License 2.0</p>
                 </div>
             </div>
             <!-- App-Style Bottom Section -->
             <div class="mt-8 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.3.1</p>
+                <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase">Version 2.3.2</p>
             </div>
         </div>
     </div>
@@ -2236,7 +2236,7 @@
             <div class="w-16 h-16 shrink-0 bg-blue-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
                 <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3"><span data-i18n="version_modal_pre">Version</span> 2.3.1 <span data-i18n="version_modal_post">ist da!</span> <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
+            <h3 class="shrink-0 text-2xl font-black text-slate-800 mb-3"><span data-i18n="version_modal_pre">Version</span> 2.3.2 <span data-i18n="version_modal_post">ist da!</span> <svg class="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></h3>
             <div class="text-left space-y-3 mb-6 overflow-y-auto min-h-0 flex-1 pr-1">
                 <div class="flex items-start gap-3">
                     <div class="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
@@ -2391,7 +2391,7 @@
                 </div>
                 <div class="px-4 py-1.5 text-[10px] text-slate-400 bg-slate-50/50 flex items-center justify-between border-t border-slate-100/50">
                     <span data-i18n="app_version_label">App-Version:</span>
-                    <span class="font-mono font-medium text-slate-500">2.3.1</span>
+                    <span class="font-mono font-medium text-slate-500">2.3.2</span>
                 </div>
                 </div>
                 <input type="file" id="excelUploadEl" accept=".xlsx, .xls" class="hidden">
@@ -14227,6 +14227,40 @@
             el.textContent = getI18n('vocab_active_count', active, all.length);
         }
 
+        // Detailfenster: Tippen auf eine Zeile der Vokabel- oder Satzliste zeigt Deutsch und Fremdsprache groß
+        function showEntryDetail(word, sortDir, src) {
+            let ov = document.getElementById('entryDetailModal');
+            if (!ov) {
+                ov = document.createElement('div');
+                ov.id = 'entryDetailModal';
+                ov.className = 'ed-overlay';
+                ov.hidden = true;
+                ov.innerHTML = '<div class="ed-card" role="dialog" aria-modal="true"><button type="button" class="ed-close" aria-label="×">✕</button>' +
+                    '<div class="ed-block"><div class="ed-flag" data-k="f1"></div><div class="ed-text ed-1" data-k="t1"></div></div>' +
+                    '<div class="ed-block"><div class="ed-flag" data-k="f2"></div><div class="ed-text ed-2" data-k="t2"></div></div>' +
+                    '<div class="ed-meta" data-k="meta"></div><div class="ed-tts" data-k="tts"></div></div>';
+                const close = () => { ov.hidden = true; };
+                ov.addEventListener('click', (e) => { if (e.target === ov || e.target.closest('.ed-close')) close(); });
+                document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !ov.hidden) close(); });
+                document.body.appendChild(ov);
+            }
+            const q = (k) => ov.querySelector(`[data-k="${k}"]`);
+            const deFirst = sortDir === 'de';
+            q('f1').innerHTML = deFirst ? deFlagSVG : langConf().flag;
+            q('f2').innerHTML = deFirst ? langConf().flag : deFlagSVG;
+            q('t1').textContent = (deFirst ? word.de : word.it) || '';
+            q('t2').textContent = (deFirst ? word.it : word.de) || '';
+            q('t1').className = 'ed-text ' + (deFirst ? 'ed-de' : 'ed-fl');
+            q('t2').className = 'ed-text ' + (deFirst ? 'ed-fl' : 'ed-de');
+            const meta = [];
+            if (word.typ) meta.push(typLabel(word.typ));
+            if (word.forWord) meta.push('KI · ' + word.forWord);
+            if (word.source === 'chat') meta.push('💬 ' + getI18n('badge_chat'));
+            q('meta').textContent = meta.join(' · ');
+            q('tts').innerHTML = Tts.buttonHtml({ src, id: word.id }, '');
+            ov.hidden = false;
+        }
+
         function renderVocabList() {
             updateVocabActiveCount();
             const sortDir = document.getElementById('vocabListSortDir').value;
@@ -14264,8 +14298,9 @@
             vocabListContainer.innerHTML = '';
             words.forEach((word) => {
                 const li = document.createElement('li');
-                li.className = 'flex items-center justify-between p-3 transition-colors';
+                li.className = 'vl-row flex items-center justify-between p-3 transition-colors';
                 const isChecked = word.isActive !== false;
+                li.addEventListener('click', (e) => { if (!e.target.closest('button, label, input, svg, .tts-btn')) showEntryDetail(word, sortDir, 'vocab'); });
 
                 // Determine display order based on sort direction
                 const primary = sortDir === 'de' ? word.de : word.it;
@@ -14284,7 +14319,7 @@
                             ${word.isOwn ? `<span class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[0.65rem] font-medium bg-blue-100 text-blue-800">${getI18n('badge_own_vocab')}</span>` : ''}
                         </div>
                     </div>
-                    <div class="flex items-center gap-1.5 ml-2 flex-shrink-0">
+                    <div class="vl-actions flex items-center gap-1.5 ml-2 flex-shrink-0">
                         ${Tts.buttonHtml({ src: 'vocab', id: word.id }, 'tts-btn-sm')}
                         <button class="edit-btn text-slate-400 hover:text-blue-500 transition-colors p-1" data-id="${word.id}" title="${getI18n('btn_edit')}">
                             <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
@@ -14414,8 +14449,9 @@
 
             wordsToRender.forEach((word) => {
                 const li = document.createElement('li');
-                li.className = 'flex items-center justify-between p-3 transition-colors';
+                li.className = 'vl-row flex items-center justify-between p-3 transition-colors';
                 const isChecked = word.isActive !== false;
+                li.addEventListener('click', (e) => { if (!e.target.closest('button, label, input, svg, .tts-btn')) showEntryDetail(word, sortDir, 'sentence'); });
 
                 const primary = sortDir === 'de' ? word.de : word.it;
                 const secondary = sortDir === 'de' ? word.it : word.de;
@@ -14430,7 +14466,7 @@
                             ${word.forWord ? `<span class="ml-1 text-[10px] font-semibold text-purple-600">KI · ${escapeHtml(word.forWord)}</span>` : ''}
                         </div>
                     </div>
-                    <div class="flex items-center gap-1.5 ml-2 flex-shrink-0">
+                    <div class="vl-actions flex items-center gap-1.5 ml-2 flex-shrink-0">
                         ${Tts.buttonHtml({ src: 'sentence', id: word.id }, 'tts-btn-sm')}
                         ${word.isOwn ? `
                         <button class="edit-btn text-slate-400 hover:text-blue-500 transition-colors p-1" data-id="${word.id}" title="${getI18n('btn_edit')}">
